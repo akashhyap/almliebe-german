@@ -12,8 +12,34 @@
       {% render 'icon-menu' %}
     </button>
 
-    {%- comment -%} Main Navigation - Left Side {%- endcomment -%}
-    <nav class="header__nav header__nav--left hidden-mobile" role="navigation">
+    {%- comment -%} Logo - Left {%- endcomment -%}
+    <div class="header__logo">
+      <a href="{{ routes.root_url }}" class="logo">
+        {% if section.settings.logo != blank %}
+          <img
+            src="{{ section.settings.logo | image_url: width: 300 }}"
+            srcset="{{ section.settings.logo | image_url: width: 300 }} 1x, {{ section.settings.logo | image_url: width: 600 }} 2x"
+            alt="{{ shop.name }}"
+            width="{{ section.settings.logo_width }}"
+            height="auto"
+            loading="eager"
+            class="logo__image"
+          >
+        {% else %}
+          <img
+            src="{{ 'almliebe_logo.svg' | asset_url }}"
+            alt="{{ shop.name }}"
+            width="150"
+            height="auto"
+            loading="eager"
+            class="logo__image"
+          >
+        {% endif %}
+      </a>
+    </div>
+
+    {%- comment -%} Main Navigation {%- endcomment -%}
+    <nav class="header__nav hidden-mobile" role="navigation">
       <ul class="nav-list">
         {% for link in linklists[section.settings.main_menu].links %}
           <li class="nav-item{% if link.active %} nav-item--active{% endif %}{% if link.links.size > 0 %} nav-item--has-dropdown{% endif %}">
@@ -60,32 +86,6 @@
         {% endfor %}
       </ul>
     </nav>
-
-    {%- comment -%} Logo - Centered {%- endcomment -%}
-    <div class="header__logo">
-      <a href="{{ routes.root_url }}" class="logo">
-        {% if section.settings.logo != blank %}
-          <img
-            src="{{ section.settings.logo | image_url: width: 300 }}"
-            srcset="{{ section.settings.logo | image_url: width: 300 }} 1x, {{ section.settings.logo | image_url: width: 600 }} 2x"
-            alt="{{ shop.name }}"
-            width="{{ section.settings.logo_width }}"
-            height="auto"
-            loading="eager"
-            class="logo__image"
-          >
-        {% else %}
-          <img
-            src="{{ 'almliebe_logo.svg' | asset_url }}"
-            alt="{{ shop.name }}"
-            width="150"
-            height="auto"
-            loading="eager"
-            class="logo__image"
-          >
-        {% endif %}
-      </a>
-    </div>
 
     {%- comment -%} Header Actions - Right Side {%- endcomment -%}
     <div class="header__actions">
@@ -184,28 +184,25 @@
     max-width: 1600px;
     margin: 0 auto;
     padding: 0 2rem;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    display: flex;
     align-items: center;
+    justify-content: space-between;
     height: 70px;
     gap: 2rem;
   }
 
   @media (max-width: 1023px) {
     .header__inner {
-      display: flex;
-      justify-content: space-between;
       padding: 0 1rem;
       height: 60px;
     }
   }
 
-  /* Logo - Centered */
+  /* Logo - Left */
   .header__logo {
-    grid-column: 2;
     display: flex;
-    justify-content: center;
     align-items: center;
+    flex-shrink: 0;
   }
 
   @media (max-width: 1023px) {
