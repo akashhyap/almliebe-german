@@ -21,14 +21,22 @@
       "recent": "Letzte Suchen",
       "popular": "Beliebte Suchen",
       "no_results": "Keine Ergebnisse gefunden für",
-      "try_again": "Versuchen Sie es mit anderen Suchbegriffen."
+      "try_again": "Versuchen Sie es mit anderen Suchbegriffen.",
+      "view_all": "Alle Ergebnisse anzeigen"
+    },
+    "social": {
+      "share": "Teilen",
+      "share_on": "Teilen auf {{ platform }}"
     }
   },
   "accessibility": {
     "skip_to_content": "Zum Inhalt springen",
     "close": "Schließen",
     "previous_slide": "Vorheriges Bild",
-    "next_slide": "Nächstes Bild"
+    "next_slide": "Nächstes Bild",
+    "loading": "Wird geladen...",
+    "decrease_quantity": "Menge verringern",
+    "increase_quantity": "Menge erhöhen"
   },
   "products": {
     "product": {
@@ -41,15 +49,40 @@
       "choose_options": "Optionen wählen",
       "add_to_wishlist": "Zur Wunschliste hinzufügen",
       "vat_included": "inkl. MwSt.",
-      "shipping_note": "zzgl. Versandkosten",
+      "shipping_info": "zzgl. Versandkosten",
       "quantity": "Menge",
       "sku": "Artikelnummer",
       "in_stock": "Auf Lager",
+      "only_x_left": "Nur noch",
       "low_stock_warning": "Nur noch {{ count }} verfügbar",
       "price": "Preis",
       "sale_price": "Angebotspreis",
       "regular_price": "Normalpreis",
-      "vendor": "Hersteller"
+      "vendor": "Hersteller",
+      "type": "Produkttyp",
+      "share": "Teilen",
+      "description": "Beschreibung",
+      "details": "Details",
+      "sizing": "Größenberatung",
+      "shipping": "Versand & Rückgabe",
+      "size_guide": "Größentabelle",
+      "free_shipping": "Kostenloser Versand ab 99€",
+      "returns": "14 Tage Rückgaberecht",
+      "secure": "Sichere Bezahlung",
+      "shipping_estimate": "Lieferung in 1-3 Werktagen",
+      "color": "Farbe",
+      "size": "Größe",
+      "material": "Material",
+      "care": "Pflegehinweise",
+      "you_may_also_like": "Das könnte Ihnen auch gefallen",
+      "recently_viewed": "Zuletzt angesehen",
+      "compare_at": "Statt",
+      "save": "Sie sparen",
+      "from_price": "Ab",
+      "unit_price": "Stückpreis",
+      "taxes_included": "inkl. MwSt.",
+      "taxes_excluded": "zzgl. MwSt.",
+      "shipping_calculated": "Versand wird an der Kasse berechnet"
     },
     "size_guide": {
       "title": "Größentabelle",
@@ -60,7 +93,19 @@
       "height": "Körpergröße",
       "inseam": "Schrittlänge",
       "need_help": "Brauchen Sie Hilfe?",
-      "contact_us": "Kontaktieren Sie uns"
+      "contact_us": "Kontaktieren Sie uns",
+      "dirndl": "Dirndl",
+      "lederhosen": "Lederhosen",
+      "men": "Herren",
+      "women": "Damen",
+      "children": "Kinder",
+      "german_size": "Deutsche Größe",
+      "eu_size": "EU-Größe",
+      "us_size": "US-Größe",
+      "uk_size": "UK-Größe",
+      "tip": "Tipp",
+      "measure_tip": "Messen Sie am besten in Unterwäsche oder eng anliegender Kleidung.",
+      "between_sizes": "Wenn Sie zwischen zwei Größen liegen, empfehlen wir die größere Größe."
     }
   },
   "collections": {
@@ -72,36 +117,50 @@
       "no_products": "Keine Produkte gefunden",
       "no_products_text": "Versuchen Sie, Ihre Filter anzupassen oder durchsuchen Sie unsere anderen Kollektionen.",
       "browse_all": "Alle Produkte durchstöbern",
-      "load_more": "Mehr laden"
+      "load_more": "Mehr laden",
+      "view_all": "Alle anzeigen"
     },
     "filtering": {
       "filter": "Filter",
+      "filters": "Filter",
       "filters_active": "Filter aktiv",
       "clear_all": "Alle Filter löschen",
+      "clear": "Löschen",
       "apply": "Filter anwenden",
       "price": "Preis",
       "color": "Farbe",
       "size": "Größe",
       "brand": "Marke",
-      "dirndl_length": "Dirndllänge"
+      "availability": "Verfügbarkeit",
+      "in_stock": "Auf Lager",
+      "out_of_stock": "Ausverkauft",
+      "dirndl_length": "Dirndllänge",
+      "mini": "Mini",
+      "midi": "Midi",
+      "lang": "Lang"
     },
     "sorting": {
       "title": "Sortieren",
+      "sort_by": "Sortieren nach",
       "best_selling": "Bestseller",
       "title_ascending": "Alphabetisch, A-Z",
       "title_descending": "Alphabetisch, Z-A",
       "price_ascending": "Preis aufsteigend",
       "price_descending": "Preis absteigend",
       "created_ascending": "Älteste zuerst",
-      "created_descending": "Neueste zuerst"
+      "created_descending": "Neueste zuerst",
+      "featured": "Empfohlen",
+      "manual": "Manuell"
     }
   },
   "cart": {
     "general": {
       "title": "Warenkorb",
       "empty": "Ihr Warenkorb ist leer",
+      "empty_text": "Fügen Sie Produkte hinzu, um mit dem Einkauf zu beginnen.",
       "continue_shopping": "Weiter einkaufen",
       "subtotal": "Zwischensumme",
+      "total": "Gesamtsumme",
       "view_cart": "Warenkorb ansehen",
       "checkout": "Zur Kasse",
       "remove": "Entfernen",
@@ -109,7 +168,10 @@
       "note_placeholder": "Besondere Hinweise zu Ihrer Bestellung...",
       "shipping_note": "Versandkosten werden an der Kasse berechnet",
       "payment_methods": "Zahlungsmethoden",
-      "you_may_also_like": "Das könnte Ihnen auch gefallen"
+      "you_may_also_like": "Das könnte Ihnen auch gefallen",
+      "update": "Aktualisieren",
+      "quantity": "Menge",
+      "item_added": "Artikel wurde hinzugefügt"
     },
     "free_shipping": {
       "qualified": "Kostenloser Versand!",
@@ -122,7 +184,32 @@
       "title": "Mein Konto",
       "login": "Anmelden",
       "logout": "Abmelden",
-      "register": "Registrieren"
+      "register": "Registrieren",
+      "forgot_password": "Passwort vergessen?",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "first_name": "Vorname",
+      "last_name": "Nachname",
+      "orders": "Bestellungen",
+      "addresses": "Adressen",
+      "no_orders": "Sie haben noch keine Bestellungen aufgegeben."
+    },
+    "order": {
+      "title": "Bestellung",
+      "order_number": "Bestellnummer",
+      "date": "Datum",
+      "status": "Status",
+      "total": "Gesamtsumme",
+      "details": "Details",
+      "track": "Sendung verfolgen"
+    },
+    "addresses": {
+      "title": "Adressen",
+      "add_new": "Neue Adresse hinzufügen",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "default": "Standardadresse",
+      "set_default": "Als Standard festlegen"
     }
   },
   "layout": {
@@ -131,6 +218,41 @@
       "cart": "Warenkorb",
       "search": "Suche",
       "account": "Konto"
+    },
+    "footer": {
+      "payment_methods": "Zahlungsmethoden",
+      "copyright": "Alle Rechte vorbehalten"
+    }
+  },
+  "gift_cards": {
+    "issued": {
+      "title": "Ihr Geschenkgutschein",
+      "subtext": "Ihr Geschenkgutschein",
+      "gift_card_code": "Gutscheincode",
+      "shop_link": "Jetzt einkaufen",
+      "remaining_html": "Verbleibendes Guthaben: {{ balance }}",
+      "add_to_apple_wallet": "Zu Apple Wallet hinzufügen",
+      "qr_image_alt": "QR-Code",
+      "copy_code": "Code kopieren",
+      "expired": "Abgelaufen",
+      "copy_code_success": "Code erfolgreich kopiert"
+    }
+  },
+  "date_formats": {
+    "month_day_year": "%d. %B %Y"
+  },
+  "pagefly": {
+    "products": {
+      "product": {
+        "regular_price": "Normalpreis",
+        "sold_out": "Ausverkauft",
+        "unavailable": "Nicht verfügbar",
+        "on_sale": "Sale",
+        "quantity": "Menge",
+        "add_to_cart": "In den Warenkorb",
+        "back_to_collection": "Zurück zur Kollektion",
+        "view_details": "Details anzeigen"
+      }
     }
   }
 }
