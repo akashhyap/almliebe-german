@@ -338,15 +338,16 @@
               class="product__add-btn btn btn--primary btn--large"
               data-add-to-cart
               {% unless current_variant.available %}disabled{% endunless %}
+              style="background-color: #000000 !important; border-color: #000000 !important;"
             >
               <span data-add-to-cart-text>
                 {%- if current_variant.available -%}
-                  {{ 'products.product.add_to_cart' | t }}
+                  {{ 'products.product.add_to_cart' | t | default: 'In den Warenkorb' }}
                 {%- else -%}
-                  {{ 'products.product.sold_out' | t }}
+                  {{ 'products.product.sold_out' | t | default: 'Ausverkauft' }}
                 {%- endif -%}
               </span>
-              <span class="product__add-btn-loading" hidden>
+              <span class="product__add-btn-loading" hidden style="display: none;">
                 <span class="spinner spinner--small"></span>
               </span>
             </button>
@@ -1006,9 +1007,19 @@
 </style>
 
 <script>
+console.log('🔍 [ALMLIEBE DEBUG] main-product.liquid script starting...');
+
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('🔍 [ALMLIEBE DEBUG] DOMContentLoaded fired');
+  
   const page = document.querySelector('[data-product-page]');
-  if (!page) return;
+  console.log('🔍 [ALMLIEBE DEBUG] Product page element:', page ? 'FOUND' : 'NOT FOUND');
+  
+  if (!page) {
+    console.error('❌ [ALMLIEBE DEBUG] Product page element NOT FOUND - looking for [data-product-page]');
+    console.log('🔍 [ALMLIEBE DEBUG] Available elements with data attributes:', document.querySelectorAll('[data-product-form]'));
+    return;
+  }
 
   // Gallery functionality
   const mainContainer = page.querySelector('[data-main-image-container]');
@@ -1109,6 +1120,24 @@ document.addEventListener('DOMContentLoaded', function() {
   const addToCartText = page.querySelector('[data-add-to-cart-text]');
   const skuElement = page.querySelector('[data-product-sku]');
 
+  console.log('🔍 [ALMLIEBE DEBUG] Form elements:', {
+    form: form ? 'FOUND' : 'NOT FOUND',
+    productId: productId,
+    variantIdInput: variantIdInput ? variantIdInput.value : 'NOT FOUND',
+    addToCartBtn: addToCartBtn ? 'FOUND' : 'NOT FOUND',
+    addToCartText: addToCartText ? addToCartText.textContent.trim() : 'NOT FOUND',
+    addToCartBtnDisabled: addToCartBtn?.disabled,
+    addToCartBtnHTML: addToCartBtn?.innerHTML.substring(0, 100)
+  });
+  
+  // Check the loading spinner state
+  const loadingSpinner = page.querySelector('.product__add-btn-loading');
+  console.log('🔍 [ALMLIEBE DEBUG] Loading spinner:', {
+    element: loadingSpinner ? 'FOUND' : 'NOT FOUND',
+    hidden: loadingSpinner?.hidden,
+    display: loadingSpinner ? getComputedStyle(loadingSpinner).display : 'N/A'
+  });
+
   if (optionInputs && productId) {
     optionInputs.forEach(input => {
       input.addEventListener('change', async function() {
@@ -1205,33 +1234,56 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // ADD TO CART FORM SUBMISSION
+  console.log('🔍 [ALMLIEBE DEBUG] Setting up form submission. Form:', form ? 'EXISTS' : 'NULL');
+  
   if (form) {
+    console.log('🔍 [ALMLIEBE DEBUG] Adding submit event listener');
+    
     form.addEventListener('submit', async function(e) {
+      console.log('🔍 [ALMLIEBE DEBUG] ======= FORM SUBMIT EVENT =======');
       e.preventDefault();
       
       const submitBtn = form.querySelector('[data-add-to-cart]');
       const submitText = form.querySelector('[data-add-to-cart-text]');
       const submitLoading = form.querySelector('.product__add-btn-loading');
       
+      console.log('🔍 [ALMLIEBE DEBUG] Submit elements in handler:', {
+        submitBtn: !!submitBtn,
+        submitText: !!submitText,
+        submitTextValue: submitText?.textContent?.trim(),
+        submitLoading: !!submitLoading,
+        submitLoadingHidden: submitLoading?.hidden
+      });
+      
       // Show loading state
+      console.log('🔍 [ALMLIEBE DEBUG] Setting loading state...');
       if (submitText) submitText.hidden = true;
       if (submitLoading) submitLoading.hidden = false;
       if (submitBtn) submitBtn.disabled = true;
       
       const formData = new FormData(form);
+      console.log('🔍 [ALMLIEBE DEBUG] FormData created. Entries:');
+      for (let [key, value] of formData.entries()) {
+        console.log(`   ${key}: ${value}`);
+      }
       
       try {
+        console.log('🔍 [ALMLIEBE DEBUG] Fetching /cart/add.js...');
         const response = await fetch('/cart/add.js', {
           method: 'POST',
           body: formData
         });
         
+        console.log('🔍 [ALMLIEBE DEBUG] Response received:', response.status, response.statusText);
+        
         if (response.ok) {
           const item = await response.json();
+          console.log('🔍 [ALMLIEBE DEBUG] ✅ SUCCESS - Item added:', item);
           
           // Dispatch events for cart drawer
           document.dispatchEvent(new CustomEvent('cart:item-added', { detail: item }));
           document.dispatchEvent(new CustomEvent('cart:updated'));
+          console.log('🔍 [ALMLIEBE DEBUG] Cart events dispatched');
           
           // Show success state briefly
           if (submitText) {
@@ -1242,6 +1294,7 @@ document.addEventListener('DOMContentLoaded', function() {
           
           // Reset button after 2 seconds
           setTimeout(() => {
+            console.log('🔍 [ALMLIEBE DEBUG] Resetting button after success');
             if (submitText) {
               submitText.textContent = '{{ "products.product.add_to_cart" | t | default: "In den Warenkorb" }}';
             }
@@ -1249,12 +1302,13 @@ document.addEventListener('DOMContentLoaded', function() {
           }, 2000);
           
         } else {
-          const error = await response.json();
-          throw new Error(error.description || 'Error adding to cart');
+          const errorData = await response.json();
+          console.error('❌ [ALMLIEBE DEBUG] Response error:', errorData);
+          throw new Error(errorData.description || 'Error adding to cart');
         }
         
       } catch (error) {
-        console.error('Add to cart error:', error);
+        console.error('❌ [ALMLIEBE DEBUG] Add to cart error:', error);
         
         // Show error state
         if (submitText) {
@@ -1265,6 +1319,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Reset after 3 seconds
         setTimeout(() => {
+          console.log('🔍 [ALMLIEBE DEBUG] Resetting button after error');
           if (submitText) {
             submitText.textContent = '{{ "products.product.add_to_cart" | t | default: "In den Warenkorb" }}';
           }
@@ -1272,7 +1327,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 3000);
       }
     });
+    console.log('🔍 [ALMLIEBE DEBUG] ✅ Form submit listener attached');
+  } else {
+    console.error('❌ [ALMLIEBE DEBUG] FORM NOT FOUND - Cannot attach submit handler');
   }
+  
+  console.log('🔍 [ALMLIEBE DEBUG] ====== Script initialization complete ======');
 });
 </script>
 
