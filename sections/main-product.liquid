@@ -828,38 +828,34 @@
     cursor: not-allowed;
   }
   
-  /* Stock Alert Bell Icon */
+  /* Stock Alert Bell Icon - Clean minimal style */
   .stock-alert-bell {
     position: absolute;
-    top: -10px;
+    top: -6px;
     left: 50%;
     transform: translateX(-50%);
-    width: 22px;
-    height: 22px;
+    width: 16px;
+    height: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ffffff;
-    border: 1px solid #e5e5e5;
-    border-radius: 50%;
+    background: transparent;
+    border: none;
     cursor: pointer;
     z-index: 5;
-    transition: all 0.2s ease;
-  }
-  
-  .stock-alert-bell:hover {
-    background: #000000;
-    border-color: #000000;
+    padding: 0;
   }
   
   .stock-alert-bell:hover svg {
-    stroke: #ffffff;
+    stroke: #000000;
+    transform: scale(1.1);
   }
   
   .stock-alert-bell svg {
-    width: 12px;
-    height: 12px;
-    stroke: #000000;
+    width: 14px;
+    height: 14px;
+    stroke: #666666;
+    transition: all 0.2s ease;
   }
 
   /* Color swatches */
@@ -1054,12 +1050,17 @@
 </style>
 
 <script>
+console.log('🔍 [ALMLIEBE DEBUG] main-product.liquid script starting...');
 
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('🔍 [ALMLIEBE DEBUG] DOMContentLoaded fired');
   
   const page = document.querySelector('[data-product-page]');
+  console.log('🔍 [ALMLIEBE DEBUG] Product page element:', page ? 'FOUND' : 'NOT FOUND');
   
   if (!page) {
+    console.error('❌ [ALMLIEBE DEBUG] Product page element NOT FOUND - looking for [data-product-page]');
+    console.log('🔍 [ALMLIEBE DEBUG] Available elements with data attributes:', document.querySelectorAll('[data-product-form]'));
     return;
   }
 
@@ -1138,11 +1139,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Stock Alert Bell - Open drawer when clicking on bell icon
   const stockAlertBells = page.querySelectorAll('[data-stock-alert-trigger]');
+  console.log('Stock alert bells found:', stockAlertBells.length);
   
   stockAlertBells.forEach(bell => {
     bell.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
+      
+      console.log('Bell clicked!');
       
       const clickedSize = this.dataset.stockAlertTrigger;
       
@@ -1182,9 +1186,15 @@ document.addEventListener('DOMContentLoaded', function() {
         productData.unavailableVariants.unshift(clicked);
       }
       
+      console.log('Product data:', productData);
+      
       // Open the drawer
       if (typeof window.openStockAlertDrawer === 'function') {
+        console.log('Opening drawer...');
         window.openStockAlertDrawer(productData);
+      } else {
+        console.error('Stock alert drawer not found! Make sure to add {% render "back-in-stock-drawer" %} to theme.liquid before </body>');
+        alert('Benachrichtigungs-Funktion wird geladen... Bitte fügen Sie back-in-stock-drawer.liquid hinzu.');
       }
     });
   });
@@ -1215,6 +1225,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const addToCartText = page.querySelector('[data-add-to-cart-text]');
   const skuElement = page.querySelector('[data-product-sku]');
 
+  console.log('🔍 [ALMLIEBE DEBUG] Form elements:', {
     form: form ? 'FOUND' : 'NOT FOUND',
     productId: productId,
     variantIdInput: variantIdInput ? variantIdInput.value : 'NOT FOUND',
@@ -1226,6 +1237,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Check the loading spinner state
   const loadingSpinner = page.querySelector('.product__add-btn-loading');
+  console.log('🔍 [ALMLIEBE DEBUG] Loading spinner:', {
     element: loadingSpinner ? 'FOUND' : 'NOT FOUND',
     hidden: loadingSpinner?.hidden,
     display: loadingSpinner ? getComputedStyle(loadingSpinner).display : 'N/A'
@@ -1327,16 +1339,20 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // ADD TO CART FORM SUBMISSION
+  console.log('🔍 [ALMLIEBE DEBUG] Setting up form submission. Form:', form ? 'EXISTS' : 'NULL');
   
   if (form) {
+    console.log('🔍 [ALMLIEBE DEBUG] Adding submit event listener');
     
     form.addEventListener('submit', async function(e) {
+      console.log('🔍 [ALMLIEBE DEBUG] ======= FORM SUBMIT EVENT =======');
       e.preventDefault();
       
       const submitBtn = form.querySelector('[data-add-to-cart]');
       const submitText = form.querySelector('[data-add-to-cart-text]');
       const submitLoading = form.querySelector('.product__add-btn-loading');
       
+      console.log('🔍 [ALMLIEBE DEBUG] Submit elements in handler:', {
         submitBtn: !!submitBtn,
         submitText: !!submitText,
         submitTextValue: submitText?.textContent?.trim(),
@@ -1345,28 +1361,34 @@ document.addEventListener('DOMContentLoaded', function() {
       });
       
       // Show loading state
+      console.log('🔍 [ALMLIEBE DEBUG] Setting loading state...');
       if (submitText) submitText.hidden = true;
       if (submitLoading) submitLoading.hidden = false;
       if (submitBtn) submitBtn.disabled = true;
       
       const formData = new FormData(form);
+      console.log('🔍 [ALMLIEBE DEBUG] FormData created. Entries:');
       for (let [key, value] of formData.entries()) {
         console.log(`   ${key}: ${value}`);
       }
       
       try {
+        console.log('🔍 [ALMLIEBE DEBUG] Fetching /cart/add.js...');
         const response = await fetch('/cart/add.js', {
           method: 'POST',
           body: formData
         });
         
+        console.log('🔍 [ALMLIEBE DEBUG] Response received:', response.status, response.statusText);
         
         if (response.ok) {
           const item = await response.json();
+          console.log('🔍 [ALMLIEBE DEBUG] ✅ SUCCESS - Item added:', item);
           
           // Dispatch events for cart drawer
           document.dispatchEvent(new CustomEvent('cart:item-added', { detail: item }));
           document.dispatchEvent(new CustomEvent('cart:updated'));
+          console.log('🔍 [ALMLIEBE DEBUG] Cart events dispatched');
           
           // Show success state briefly
           if (submitText) {
@@ -1377,6 +1399,7 @@ document.addEventListener('DOMContentLoaded', function() {
           
           // Reset button after 2 seconds
           setTimeout(() => {
+            console.log('🔍 [ALMLIEBE DEBUG] Resetting button after success');
             if (submitText) {
               submitText.textContent = '{{ "products.product.add_to_cart" | t | default: "In den Warenkorb" }}';
             }
@@ -1385,10 +1408,12 @@ document.addEventListener('DOMContentLoaded', function() {
           
         } else {
           const errorData = await response.json();
+          console.error('❌ [ALMLIEBE DEBUG] Response error:', errorData);
           throw new Error(errorData.description || 'Error adding to cart');
         }
         
       } catch (error) {
+        console.error('❌ [ALMLIEBE DEBUG] Add to cart error:', error);
         
         // Show error state
         if (submitText) {
@@ -1399,6 +1424,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Reset after 3 seconds
         setTimeout(() => {
+          console.log('🔍 [ALMLIEBE DEBUG] Resetting button after error');
           if (submitText) {
             submitText.textContent = '{{ "products.product.add_to_cart" | t | default: "In den Warenkorb" }}';
           }
@@ -1406,9 +1432,12 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 3000);
       }
     });
+    console.log('🔍 [ALMLIEBE DEBUG] ✅ Form submit listener attached');
   } else {
+    console.error('❌ [ALMLIEBE DEBUG] FORM NOT FOUND - Cannot attach submit handler');
   }
   
+  console.log('🔍 [ALMLIEBE DEBUG] ====== Script initialization complete ======');
 });
 </script>
 
