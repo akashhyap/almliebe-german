@@ -643,39 +643,52 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // Quantity minus buttons
-  drawer.addEventListener('click', async (e) => {
+  drawer.addEventListener('click', async function(e) {
     const btn = e.target.closest('[data-quantity-minus]');
     if (!btn) return;
+    
+    e.preventDefault();
+    e.stopPropagation();
 
-    const key = btn.dataset.quantityMinus;
-    const valueEl = drawer.querySelector(`[data-quantity-value="${key}"]`);
+    const key = btn.getAttribute('data-quantity-minus');
+    const item = btn.closest('.cart-drawer__item');
+    const valueEl = item.querySelector('.cart-drawer__qty-value');
     let quantity = parseInt(valueEl.textContent);
 
     if (quantity > 1) {
       quantity--;
+      valueEl.textContent = quantity;
       await updateCartItem(key, quantity);
     }
   });
 
   // Quantity plus buttons
-  drawer.addEventListener('click', async (e) => {
+  drawer.addEventListener('click', async function(e) {
     const btn = e.target.closest('[data-quantity-plus]');
     if (!btn) return;
+    
+    e.preventDefault();
+    e.stopPropagation();
 
-    const key = btn.dataset.quantityPlus;
-    const valueEl = drawer.querySelector(`[data-quantity-value="${key}"]`);
+    const key = btn.getAttribute('data-quantity-plus');
+    const item = btn.closest('.cart-drawer__item');
+    const valueEl = item.querySelector('.cart-drawer__qty-value');
     let quantity = parseInt(valueEl.textContent);
 
     quantity++;
+    valueEl.textContent = quantity;
     await updateCartItem(key, quantity);
   });
 
   // Remove item
-  drawer.addEventListener('click', async (e) => {
+  drawer.addEventListener('click', async function(e) {
     const btn = e.target.closest('[data-cart-item-remove]');
     if (!btn) return;
+    
+    e.preventDefault();
+    e.stopPropagation();
 
-    const key = btn.dataset.cartItemRemove;
+    const key = btn.getAttribute('data-cart-item-remove');
     await updateCartItem(key, 0);
   });
 

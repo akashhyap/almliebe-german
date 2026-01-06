@@ -188,7 +188,10 @@
       "not_reserved": "Ihre Artikel sind nicht reserviert",
       "checkout_quickly": "bestellen Sie schnell, damit Sie nichts verpassen.",
       "shipping": "Versand",
-      "shipping_at_checkout": "Versandkosten werden an der Kasse berechnet"
+      "shipping_at_checkout": "Versandkosten werden an der Kasse berechnet",
+      "order_summary": "BESTELLÜBERSICHT",
+      "checkout_securely": "SICHER ZUR KASSE",
+      "standard_shipping": "Standardversand"
     },
     "free_shipping": {
       "qualified": "Kostenloser Versand!",
