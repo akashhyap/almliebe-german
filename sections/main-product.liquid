@@ -1203,6 +1203,76 @@ document.addEventListener('DOMContentLoaded', function() {
     return window.almliebe?.formatMoney?.(cents) || 
       new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(cents / 100);
   }
+
+  // ADD TO CART FORM SUBMISSION
+  if (form) {
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const submitBtn = form.querySelector('[data-add-to-cart]');
+      const submitText = form.querySelector('[data-add-to-cart-text]');
+      const submitLoading = form.querySelector('.product__add-btn-loading');
+      
+      // Show loading state
+      if (submitText) submitText.hidden = true;
+      if (submitLoading) submitLoading.hidden = false;
+      if (submitBtn) submitBtn.disabled = true;
+      
+      const formData = new FormData(form);
+      
+      try {
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          body: formData
+        });
+        
+        if (response.ok) {
+          const item = await response.json();
+          
+          // Dispatch events for cart drawer
+          document.dispatchEvent(new CustomEvent('cart:item-added', { detail: item }));
+          document.dispatchEvent(new CustomEvent('cart:updated'));
+          
+          // Show success state briefly
+          if (submitText) {
+            submitText.hidden = false;
+            submitText.textContent = '✓ Hinzugefügt';
+          }
+          if (submitLoading) submitLoading.hidden = true;
+          
+          // Reset button after 2 seconds
+          setTimeout(() => {
+            if (submitText) {
+              submitText.textContent = '{{ "products.product.add_to_cart" | t | default: "In den Warenkorb" }}';
+            }
+            if (submitBtn) submitBtn.disabled = false;
+          }, 2000);
+          
+        } else {
+          const error = await response.json();
+          throw new Error(error.description || 'Error adding to cart');
+        }
+        
+      } catch (error) {
+        console.error('Add to cart error:', error);
+        
+        // Show error state
+        if (submitText) {
+          submitText.hidden = false;
+          submitText.textContent = 'Fehler - Bitte erneut versuchen';
+        }
+        if (submitLoading) submitLoading.hidden = true;
+        
+        // Reset after 3 seconds
+        setTimeout(() => {
+          if (submitText) {
+            submitText.textContent = '{{ "products.product.add_to_cart" | t | default: "In den Warenkorb" }}';
+          }
+          if (submitBtn) submitBtn.disabled = false;
+        }, 3000);
+      }
+    });
+  }
 });
 </script>
 
