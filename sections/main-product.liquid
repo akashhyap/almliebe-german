@@ -1135,63 +1135,59 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Stock Alert Bell - Open drawer when clicking on bell icon
   const stockAlertBells = page.querySelectorAll('[data-stock-alert-trigger]');
-  console.log('Found bells', stockAlertBells.length);
   
-  stockAlertBells.forEach(bell => {
-    bell.addEventListener('click', function(e) {
-      e.preventDefault();
-      e.stopPropagation();
-      console.log('Bell clicked');
-      
-      const clickedSize = this.dataset.stockAlertTrigger;
-      
-      // Get product data - built safely
-      const productData = {
-        productId: String({{ product.id }}),
-        title: {{ product.title | json }},
-        image: "{{ product.featured_image | image_url: width: 200 | default: '' }}",
-        color: "",
-        unavailableVariants: []
-      };
-      
-      // Find color option if exists
-      {%- for option in product.options_with_values -%}
-        {%- assign opt_name = option.name | downcase -%}
-        {%- if opt_name == 'color' or opt_name == 'colour' or opt_name == 'farbe' -%}
-      productData.color = {{ option.selected_value | json }};
-        {%- endif -%}
-      {%- endfor -%}
-      
-      // Get all unavailable variants
+  const stockAlertProductData = {
+    productId: {{ product.id | json }},
+    title: {{ product.title | json }},
+    image: {{ product.featured_image | image_url: width: 200 | json }},
+    unavailableVariants: [
       {%- for variant in product.variants -%}
         {%- unless variant.available -%}
-      productData.unavailableVariants.push({
-        id: String({{ variant.id }}),
-        title: {{ variant.title | json }},
-        option: {{ variant.option1 | default: variant.option2 | default: variant.option3 | json }}
-      });
+          {
+            id: {{ variant.id | json }},
+            title: {{ variant.title | json }},
+            option: {{ variant.option1 | default: variant.option2 | default: variant.option3 | json }}
+          },
         {%- endunless -%}
       {%- endfor -%}
+    ]
+  };
+  
+  stockAlertBells.forEach(function(bell) {
+    console.log('Attaching click listener to bell');
+    bell.addEventListener('click', function(e) {
+      console.log('BELL CLICKED');
+      e.preventDefault();
+      e.stopPropagation();
       
-      console.log('Product data built');
+      var clickedSize = this.dataset.stockAlertTrigger;
+      console.log('Clicked size:', clickedSize);
+      
+      var productData = JSON.parse(JSON.stringify(stockAlertProductData));
+      console.log('Product data:', productData);
       
       // Pre-select the clicked size
-      const clickedVariantIndex = productData.unavailableVariants.findIndex(v => v.option === clickedSize);
+      var clickedVariantIndex = productData.unavailableVariants.findIndex(function(v) { 
+        return v.option === clickedSize; 
+      });
       if (clickedVariantIndex > 0) {
-        const clicked = productData.unavailableVariants.splice(clickedVariantIndex, 1)[0];
+        var clicked = productData.unavailableVariants.splice(clickedVariantIndex, 1)[0];
         productData.unavailableVariants.unshift(clicked);
       }
       
       // Open the drawer
+      console.log('openStockAlertDrawer type:', typeof window.openStockAlertDrawer);
       if (typeof window.openStockAlertDrawer === 'function') {
-        console.log('Opening drawer');
+        console.log('Calling openStockAlertDrawer now...');
         window.openStockAlertDrawer(productData);
+        console.log('openStockAlertDrawer called');
       } else {
-        console.error('Drawer function not found');
+        console.log('openStockAlertDrawer NOT FOUND');
         alert('Benachrichtigungs-Funktion nicht verfügbar.');
       }
     });
   });
+  console.log('Total bells with listeners:', stockAlertBells.length);
 
   // Tabs
   const tabBtns = page.querySelectorAll('[data-tab]');
@@ -1320,7 +1316,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
           }
         } catch (error) {
-          console.error('Error updating variant:', error);
+          console.error('Error updating variant', error);
         }
       };
       
