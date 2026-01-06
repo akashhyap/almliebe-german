@@ -100,11 +100,15 @@
         {% render 'icon-account' %}
       </a>
 
-      {%- comment -%} Cart {%- endcomment -%}
-      <a href="{{ routes.cart_url }}" class="header__action header__cart" aria-label="Cart">
-        {% render 'icon-cart' %}
-        <span class="header__cart-count" data-cart-count>{{ cart.item_count }}</span>
-      </a>
+      {%- comment -%} Cart - Opens Cart Drawer {%- endcomment -%}
+      <button type="button" class="header__action header__cart" data-cart-trigger aria-label="Warenkorb">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"/>
+          <circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <span class="header__cart-count{% if cart.item_count == 0 %} is-hidden{% endif %}" data-cart-count>{{ cart.item_count }}</span>
+      </button>
     </div>
 
   </div>
@@ -415,6 +419,10 @@
     color: #000000;
     text-decoration: none;
     transition: opacity var(--duration-short);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
   }
 
   .header__action:hover {
@@ -433,8 +441,8 @@
 
   .header__cart-count {
     position: absolute;
-    top: 8px;
-    right: 8px;
+    top: 4px;
+    right: 2px;
     min-width: 18px;
     height: 18px;
     display: flex;
@@ -446,6 +454,10 @@
     background: #000000;
     color: #FFFFFF;
     border-radius: 9px;
+  }
+
+  .header__cart-count.is-hidden {
+    display: none;
   }
 
   .header__menu-toggle {
@@ -575,6 +587,59 @@
     visibility: visible;
   }
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Cart drawer trigger
+  const cartTrigger = document.querySelector('[data-cart-trigger]');
+  if (cartTrigger) {
+    cartTrigger.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (typeof window.openCartDrawer === 'function') {
+        window.openCartDrawer();
+      } else {
+        // Fallback to cart page if drawer not available
+        window.location.href = '/cart';
+      }
+    });
+  }
+
+  // Mobile menu toggle
+  const mobileMenuToggles = document.querySelectorAll('[data-mobile-menu-toggle]');
+  const mobileMenu = document.querySelector('[data-mobile-menu]');
+  const mobileMenuOverlay = document.querySelector('[data-mobile-menu-overlay]');
+  
+  function toggleMobileMenu() {
+    mobileMenu?.classList.toggle('is-active');
+    mobileMenuOverlay?.classList.toggle('is-active');
+    document.body.classList.toggle('mobile-menu-open');
+  }
+  
+  mobileMenuToggles.forEach(toggle => {
+    toggle.addEventListener('click', toggleMobileMenu);
+  });
+  
+  mobileMenuOverlay?.addEventListener('click', toggleMobileMenu);
+
+  // Sticky header scroll behavior
+  const header = document.querySelector('[data-header]');
+  let lastScroll = 0;
+  
+  if (header?.classList.contains('header--sticky')) {
+    window.addEventListener('scroll', function() {
+      const currentScroll = window.pageYOffset;
+      
+      if (currentScroll > 100) {
+        header.classList.add('is-scrolled');
+      } else {
+        header.classList.remove('is-scrolled');
+      }
+      
+      lastScroll = currentScroll;
+    }, { passive: true });
+  }
+});
+</script>
 
 {% schema %}
 {

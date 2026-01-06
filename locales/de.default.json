@@ -182,7 +182,13 @@
       "you_may_also_like": "Das könnte Ihnen auch gefallen",
       "update": "Aktualisieren",
       "quantity": "Menge",
-      "item_added": "Artikel wurde hinzugefügt"
+      "item_added": "Artikel wurde hinzugefügt",
+      "free_shipping_unlocked": "Kostenloser Versand freigeschaltet!",
+      "free_shipping_qualified": "Kostenloser Versand!",
+      "not_reserved": "Ihre Artikel sind nicht reserviert",
+      "checkout_quickly": "bestellen Sie schnell, damit Sie nichts verpassen.",
+      "shipping": "Versand",
+      "shipping_at_checkout": "Versandkosten werden an der Kasse berechnet"
     },
     "free_shipping": {
       "qualified": "Kostenloser Versand!",

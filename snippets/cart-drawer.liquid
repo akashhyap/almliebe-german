@@ -1,9 +1,6 @@
 {% comment %}
   Cart Drawer - Gymshark Style
-  Slide-in cart from the right with:
-  - Free shipping progress bar
-  - Cart items with quantity controls
-  - Upsell section (optional)
+  Clean slide-in cart from the right
 {% endcomment %}
 
 <div class="cart-drawer" data-cart-drawer aria-hidden="true">
@@ -13,19 +10,11 @@
     {%- comment -%} Header {%- endcomment -%}
     <div class="cart-drawer__header">
       <h2 class="cart-drawer__title">{{ 'cart.general.title' | t | default: 'WARENKORB' }}</h2>
-      <div class="cart-drawer__header-actions">
-        <button type="button" class="cart-drawer__icon-btn cart-drawer__icon-btn--active" aria-label="Warenkorb">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" stroke="none">
-            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-            <line x1="3" y1="6" x2="21" y2="6" stroke="white" stroke-width="2"/>
-          </svg>
-        </button>
-        <button type="button" class="cart-drawer__close" data-cart-drawer-close aria-label="Schließen">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-          </svg>
-        </button>
-      </div>
+      <button type="button" class="cart-drawer__close" data-cart-drawer-close aria-label="Schließen">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
     </div>
 
     {%- comment -%} Free Shipping Progress {%- endcomment -%}
@@ -35,24 +24,15 @@
           <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
           <polyline points="22 4 12 14.01 9 11.01"/>
         </svg>
-        <span>{{ 'cart.general.free_shipping_qualified' | t | default: 'Kostenloser Versand!' }}</span>
+        <span>Kostenloser Versand!</span>
       </div>
       <div class="shipping-progress__bar">
         <div class="shipping-progress__fill" data-shipping-fill style="width: 100%"></div>
       </div>
     </div>
 
-    {%- comment -%} Urgency Notice {%- endcomment -%}
-    <div class="cart-drawer__notice" data-cart-notice>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/>
-      </svg>
-      <span><strong>{{ 'cart.general.not_reserved' | t | default: 'Ihre Artikel sind nicht reserviert' }}</strong>, {{ 'cart.general.checkout_quickly' | t | default: 'bestellen Sie schnell, damit Sie nichts verpassen.' }}</span>
-    </div>
-
     {%- comment -%} Cart Items {%- endcomment -%}
     <div class="cart-drawer__items" data-cart-items>
-      {%- comment -%} Items will be populated by JavaScript {%- endcomment -%}
       <div class="cart-drawer__empty" data-cart-empty>
         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
           <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
@@ -66,23 +46,40 @@
       </div>
     </div>
 
-    {%- comment -%} Footer with Totals and Checkout {%- endcomment -%}
+    {%- comment -%} Footer {%- endcomment -%}
     <div class="cart-drawer__footer" data-cart-footer hidden>
-      <div class="cart-drawer__totals">
-        <div class="cart-drawer__subtotal">
+      {%- comment -%} Order Summary {%- endcomment -%}
+      <div class="cart-drawer__summary">
+        <div class="cart-drawer__summary-row">
           <span>{{ 'cart.general.subtotal' | t | default: 'Zwischensumme' }}</span>
           <span data-cart-subtotal>€0,00</span>
         </div>
-        <p class="cart-drawer__shipping-note">{{ 'cart.general.shipping_at_checkout' | t | default: 'Versandkosten werden an der Kasse berechnet' }}</p>
+        <div class="cart-drawer__summary-row">
+          <span>{{ 'cart.general.shipping' | t | default: 'Versand' }}</span>
+          <span data-cart-shipping>Wird berechnet</span>
+        </div>
+        <div class="cart-drawer__summary-row cart-drawer__summary-row--total">
+          <span>{{ 'cart.general.total' | t | default: 'Gesamt' }}</span>
+          <span data-cart-total>€0,00</span>
+        </div>
       </div>
       
       <a href="/checkout" class="cart-drawer__checkout-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
         {{ 'cart.general.checkout' | t | default: 'ZUR KASSE' }}
       </a>
       
-      <a href="/cart" class="cart-drawer__view-cart">
-        {{ 'cart.general.view_cart' | t | default: 'Warenkorb ansehen' }}
-      </a>
+      {%- comment -%} Payment Icons {%- endcomment -%}
+      <div class="cart-drawer__payment-icons">
+        <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/visa.sxIq5Dot.svg" alt="Visa" width="38" height="24">
+        <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/mastercard.1c4_lyMp.svg" alt="Mastercard" width="38" height="24">
+        <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/amex.Csr7hRoy.svg" alt="Amex" width="38" height="24">
+        <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/paypal.CyTEpVgk.svg" alt="PayPal" width="38" height="24">
+        <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/apple-pay.C8USXC27.svg" alt="Apple Pay" width="38" height="24">
+      </div>
     </div>
   </div>
 </div>
@@ -139,45 +136,14 @@
     justify-content: space-between;
     padding: 1.25rem 1.5rem;
     border-bottom: 1px solid #e5e7eb;
+    flex-shrink: 0;
   }
   
   .cart-drawer__title {
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-weight: 700;
     letter-spacing: 0.05em;
     margin: 0;
-  }
-  
-  .cart-drawer__header-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .cart-drawer__icon-btn {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  
-  .cart-drawer__icon-btn:hover {
-    background: #f3f4f6;
-  }
-  
-  .cart-drawer__icon-btn--active {
-    background: #111827;
-    color: white;
-  }
-  
-  .cart-drawer__icon-btn--active:hover {
-    background: #000000;
   }
   
   .cart-drawer__close {
@@ -201,6 +167,7 @@
   .cart-drawer__shipping-progress {
     padding: 1rem 1.5rem;
     background: #f9fafb;
+    flex-shrink: 0;
   }
   
   .shipping-progress__message {
@@ -215,6 +182,7 @@
   
   .shipping-progress__message svg {
     stroke: #059669;
+    flex-shrink: 0;
   }
   
   .shipping-progress__message--incomplete {
@@ -237,23 +205,6 @@
     background: #059669;
     border-radius: 2px;
     transition: width 0.3s ease;
-  }
-  
-  /* Notice */
-  .cart-drawer__notice {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
-    padding: 1rem 1.5rem;
-    background: #f3f4f6;
-    font-size: 0.8125rem;
-    color: #374151;
-    line-height: 1.5;
-  }
-  
-  .cart-drawer__notice svg {
-    flex-shrink: 0;
-    margin-top: 2px;
   }
   
   /* Cart Items */
@@ -284,13 +235,13 @@
   
   .cart-drawer__continue-btn {
     display: inline-block;
-    padding: 0.75rem 2rem;
+    padding: 0.875rem 2rem;
     background: #111827;
     color: #ffffff;
     text-decoration: none;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     font-weight: 600;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.05em;
     border-radius: 9999px;
     transition: background 0.2s;
   }
@@ -325,6 +276,8 @@
   .cart-item__details {
     flex: 1;
     min-width: 0;
+    display: flex;
+    flex-direction: column;
   }
   
   .cart-item__header {
@@ -336,7 +289,7 @@
   }
   
   .cart-item__title {
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     font-weight: 600;
     color: #111827;
     margin: 0;
@@ -354,8 +307,8 @@
   
   .cart-item__remove {
     flex-shrink: 0;
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -364,22 +317,24 @@
     cursor: pointer;
     color: #9ca3af;
     transition: color 0.2s;
+    padding: 0;
   }
   
   .cart-item__remove:hover {
-    color: #ef4444;
+    color: #111827;
   }
   
   .cart-item__variant {
     font-size: 0.8125rem;
     color: #6b7280;
-    margin: 0 0 0.75rem;
+    margin: 0 0 auto;
   }
   
   .cart-item__footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-top: 0.75rem;
   }
   
   .cart-item__price {
@@ -403,9 +358,11 @@
     background: transparent;
     border: none;
     cursor: pointer;
-    color: #374151;
-    font-size: 1.25rem;
+    color: #111827;
+    font-size: 1.125rem;
+    font-weight: 300;
     transition: color 0.2s;
+    padding: 0;
   }
   
   .cart-item__qty-btn:hover {
@@ -413,10 +370,11 @@
   }
   
   .cart-item__qty-value {
-    width: 32px;
+    min-width: 32px;
     text-align: center;
     font-size: 0.9375rem;
     font-weight: 500;
+    color: #111827;
   }
   
   /* Footer */
@@ -424,41 +382,46 @@
     padding: 1.5rem;
     border-top: 1px solid #e5e7eb;
     background: #ffffff;
+    flex-shrink: 0;
   }
   
-  .cart-drawer__totals {
-    margin-bottom: 1rem;
+  .cart-drawer__summary {
+    margin-bottom: 1.25rem;
   }
   
-  .cart-drawer__subtotal {
+  .cart-drawer__summary-row {
     display: flex;
     justify-content: space-between;
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
+    font-size: 0.875rem;
+    color: #374151;
+    padding: 0.375rem 0;
   }
   
-  .cart-drawer__shipping-note {
-    font-size: 0.75rem;
-    color: #6b7280;
-    margin: 0;
+  .cart-drawer__summary-row--total {
+    font-weight: 600;
+    color: #111827;
+    font-size: 1rem;
+    padding-top: 0.75rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid #e5e7eb;
   }
   
   .cart-drawer__checkout-btn {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 0.5rem;
     width: 100%;
     padding: 1rem 2rem;
     background: #111827;
     color: #ffffff;
     text-decoration: none;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
     font-weight: 600;
     letter-spacing: 0.05em;
     border-radius: 9999px;
     transition: all 0.2s;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
   }
   
   .cart-drawer__checkout-btn:hover {
@@ -467,24 +430,23 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
   
-  .cart-drawer__view-cart {
-    display: block;
-    text-align: center;
-    font-size: 0.875rem;
-    color: #374151;
-    text-decoration: underline;
-    text-underline-offset: 2px;
+  .cart-drawer__checkout-btn svg {
+    flex-shrink: 0;
   }
   
-  .cart-drawer__view-cart:hover {
-    color: #000000;
+  .cart-drawer__payment-icons {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    opacity: 0.7;
+  }
+  
+  .cart-drawer__payment-icons img {
+    height: 20px;
+    width: auto;
   }
   
   /* Hide empty when has items */
-  .cart-drawer__items:not(:empty) .cart-drawer__empty {
-    display: none;
-  }
-  
   .cart-drawer__items.has-items .cart-drawer__empty {
     display: none;
   }
@@ -500,10 +462,11 @@
   const emptyState = drawer.querySelector('[data-cart-empty]');
   const footer = drawer.querySelector('[data-cart-footer]');
   const subtotalEl = drawer.querySelector('[data-cart-subtotal]');
+  const totalEl = drawer.querySelector('[data-cart-total]');
+  const shippingEl = drawer.querySelector('[data-cart-shipping]');
   const shippingProgress = drawer.querySelector('[data-shipping-progress]');
   const shippingMessage = drawer.querySelector('[data-shipping-message]');
   const shippingFill = drawer.querySelector('[data-shipping-fill]');
-  const notice = drawer.querySelector('[data-cart-notice]');
   
   // Free shipping threshold in cents
   const FREE_SHIPPING_THRESHOLD = 9900; // €99
@@ -562,6 +525,7 @@
         `;
         shippingMessage.classList.remove('shipping-progress__message--incomplete');
         if (shippingFill) shippingFill.style.background = '#059669';
+        if (shippingEl) shippingEl.textContent = 'Kostenlos';
       } else {
         shippingMessage.innerHTML = `
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -572,6 +536,7 @@
         `;
         shippingMessage.classList.add('shipping-progress__message--incomplete');
         if (shippingFill) shippingFill.style.background = '#111827';
+        if (shippingEl) shippingEl.textContent = 'Wird berechnet';
       }
     }
   }
@@ -588,7 +553,6 @@
       itemsContainer.classList.remove('has-items');
       if (emptyState) emptyState.hidden = false;
       if (footer) footer.hidden = true;
-      if (notice) notice.hidden = true;
       updateShippingProgress(0);
       return;
     }
@@ -596,7 +560,6 @@
     itemsContainer.classList.add('has-items');
     if (emptyState) emptyState.hidden = true;
     if (footer) footer.hidden = false;
-    if (notice) notice.hidden = false;
     
     // Render items
     cart.items.forEach(item => {
@@ -619,7 +582,8 @@
             </h3>
             <button type="button" class="cart-item__remove" data-remove-item="${item.key}" aria-label="Entfernen">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
               </svg>
             </button>
           </div>
@@ -642,9 +606,12 @@
       }
     });
     
-    // Update subtotal
+    // Update totals
     if (subtotalEl) {
       subtotalEl.textContent = formatMoney(cart.total_price);
+    }
+    if (totalEl) {
+      totalEl.textContent = formatMoney(cart.total_price);
     }
     
     // Update shipping progress
