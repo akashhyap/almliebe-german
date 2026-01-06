@@ -1,0 +1,187 @@
+{% comment %}
+  TRUST BADGES - Trust indicators for product pages and footer
+  
+  Usage: {% render 'trust-badges' %}
+  Usage: {% render 'trust-badges', layout: 'horizontal' %}
+{% endcomment %}
+
+{%- liquid
+  assign layout = layout | default: 'grid'
+-%}
+
+<div class="trust-badges trust-badges--{{ layout }}">
+  {%- comment -%} Free Shipping {%- endcomment -%}
+  {%- if settings.trust_free_shipping -%}
+    <div class="trust-badge">
+      <div class="trust-badge__icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="1" y="3" width="15" height="13" rx="1"/>
+          <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+          <circle cx="5.5" cy="18.5" r="2.5"/>
+          <circle cx="18.5" cy="18.5" r="2.5"/>
+        </svg>
+      </div>
+      <div class="trust-badge__content">
+        <span class="trust-badge__title">{{ settings.trust_shipping_title | default: 'Kostenloser Versand' }}</span>
+        <span class="trust-badge__text">{{ settings.trust_shipping_text | default: 'Ab 99€ Bestellwert' }}</span>
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Returns {%- endcomment -%}
+  {%- if settings.trust_returns -%}
+    <div class="trust-badge">
+      <div class="trust-badge__icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <polyline points="1 4 1 10 7 10"/>
+          <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+        </svg>
+      </div>
+      <div class="trust-badge__content">
+        <span class="trust-badge__title">{{ settings.trust_returns_title | default: '14 Tage Rückgabe' }}</span>
+        <span class="trust-badge__text">{{ settings.trust_returns_text | default: 'Kostenlose Retoure' }}</span>
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Secure Payment {%- endcomment -%}
+  {%- if settings.trust_secure -%}
+    <div class="trust-badge">
+      <div class="trust-badge__icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          <path d="M9 12l2 2 4-4"/>
+        </svg>
+      </div>
+      <div class="trust-badge__content">
+        <span class="trust-badge__title">{{ settings.trust_secure_title | default: 'Sichere Zahlung' }}</span>
+        <span class="trust-badge__text">{{ settings.trust_secure_text | default: 'SSL verschlüsselt' }}</span>
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Quality {%- endcomment -%}
+  {%- if settings.trust_quality -%}
+    <div class="trust-badge">
+      <div class="trust-badge__icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="8" r="7"/>
+          <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
+        </svg>
+      </div>
+      <div class="trust-badge__content">
+        <span class="trust-badge__title">{{ settings.trust_quality_title | default: 'Premium Qualität' }}</span>
+        <span class="trust-badge__text">{{ settings.trust_quality_text | default: 'Authentische Tracht' }}</span>
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Support {%- endcomment -%}
+  {%- if settings.trust_support -%}
+    <div class="trust-badge">
+      <div class="trust-badge__icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <div class="trust-badge__content">
+        <span class="trust-badge__title">{{ settings.trust_support_title | default: 'Persönliche Beratung' }}</span>
+        <span class="trust-badge__text">{{ settings.trust_support_text | default: 'Mo-Fr 9-17 Uhr' }}</span>
+      </div>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} Trusted Shops (German) {%- endcomment -%}
+  {%- if settings.trusted_shops_id != blank -%}
+    <div class="trust-badge trust-badge--trusted-shops">
+      <a href="https://www.trustedshops.de/bewertung/info_{{ settings.trusted_shops_id }}.html" target="_blank" rel="noopener">
+        <img 
+          src="{{ 'trusted-shops-logo.png' | asset_url }}" 
+          alt="Trusted Shops" 
+          width="80" 
+          height="80"
+          loading="lazy"
+        >
+      </a>
+    </div>
+  {%- endif -%}
+</div>
+
+<style>
+  .trust-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .trust-badges--grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .trust-badges--grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .trust-badges--horizontal {
+    flex-wrap: nowrap;
+    justify-content: center;
+    overflow-x: auto;
+    padding: 0.5rem 0;
+  }
+
+  .trust-badge {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: var(--color-background);
+    border-radius: var(--border-radius);
+  }
+
+  .trust-badges--horizontal .trust-badge {
+    flex-shrink: 0;
+    min-width: 180px;
+  }
+
+  .trust-badge__icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(30, 86, 49, 0.1);
+    border-radius: 50%;
+    color: var(--color-primary);
+  }
+
+  .trust-badge__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .trust-badge__title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .trust-badge__text {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+  }
+
+  .trust-badge--trusted-shops {
+    justify-content: center;
+    padding: 0.5rem;
+  }
+
+  .trust-badge--trusted-shops img {
+    display: block;
+  }
+</style>

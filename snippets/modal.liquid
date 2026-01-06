@@ -1,0 +1,256 @@
+{% comment %}
+  MODAL - Reusable modal dialog component
+  
+  Usage:
+  {% render 'modal', id: 'SizeGuideModal', title: 'Größentabelle' %}
+  
+  Open with: data-modal-open="SizeGuideModal"
+  Close with: data-modal-close or clicking overlay
+{% endcomment %}
+
+{%- liquid
+  assign modal_id = id | default: 'Modal'
+  assign modal_title = title | default: ''
+  assign modal_size = size | default: 'medium'
+-%}
+
+<div 
+  class="modal modal--{{ modal_size }}" 
+  id="{{ modal_id }}"
+  data-modal="{{ modal_id }}"
+  aria-hidden="true"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="{{ modal_id }}-title"
+>
+  <div class="modal__overlay" data-modal-close></div>
+  
+  <div class="modal__container">
+    <div class="modal__header">
+      {%- if modal_title != blank -%}
+        <h2 class="modal__title" id="{{ modal_id }}-title">{{ modal_title }}</h2>
+      {%- endif -%}
+      <button type="button" class="modal__close" data-modal-close aria-label="{{ 'accessibility.close' | t | default: 'Schließen' }}">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    
+    <div class="modal__content">
+      {%- if content -%}
+        {{ content }}
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .modal.is-active {
+    pointer-events: auto;
+    visibility: visible;
+  }
+
+  .modal__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .modal.is-active .modal__overlay {
+    opacity: 1;
+  }
+
+  .modal__container {
+    position: relative;
+    width: 100%;
+    max-height: calc(100vh - 2rem);
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.95) translateY(20px);
+    opacity: 0;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+  }
+
+  .modal.is-active .modal__container {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+
+  /* Sizes */
+  .modal--small .modal__container {
+    max-width: 400px;
+  }
+
+  .modal--medium .modal__container {
+    max-width: 600px;
+  }
+
+  .modal--large .modal__container {
+    max-width: 900px;
+  }
+
+  .modal--full .modal__container {
+    max-width: calc(100vw - 2rem);
+    max-height: calc(100vh - 2rem);
+    height: 100%;
+  }
+
+  .modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+  }
+
+  .modal__title {
+    font-size: 1.25rem;
+    margin: 0;
+  }
+
+  .modal__close {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-right: -0.5rem;
+    color: var(--color-text-secondary);
+    transition: color 0.2s;
+  }
+
+  .modal__close:hover {
+    color: var(--color-text);
+  }
+
+  .modal__content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Mobile full screen for large modals */
+  @media (max-width: 767px) {
+    .modal--large .modal__container,
+    .modal--full .modal__container {
+      max-width: 100%;
+      max-height: 100%;
+      height: 100%;
+      border-radius: 0;
+    }
+
+    .modal--large,
+    .modal--full {
+      padding: 0;
+    }
+  }
+</style>
+
+<script>
+(function() {
+  'use strict';
+
+  // Initialize on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initModals);
+  } else {
+    initModals();
+  }
+
+  function initModals() {
+    // Open modal triggers
+    document.addEventListener('click', function(e) {
+      const trigger = e.target.closest('[data-modal-open]');
+      if (trigger) {
+        e.preventDefault();
+        const modalId = trigger.dataset.modalOpen;
+        openModal(modalId);
+      }
+    });
+
+    // Close modal triggers
+    document.addEventListener('click', function(e) {
+      const closeTrigger = e.target.closest('[data-modal-close]');
+      if (closeTrigger) {
+        const modal = closeTrigger.closest('[data-modal]');
+        if (modal) {
+          closeModal(modal.id);
+        }
+      }
+    });
+
+    // Close on escape
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        const activeModal = document.querySelector('.modal.is-active');
+        if (activeModal) {
+          closeModal(activeModal.id);
+        }
+      }
+    });
+  }
+
+  function openModal(id) {
+    const modal = document.getElementById(id);
+    if (!modal) return;
+
+    modal.classList.add('is-active');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+
+    // Focus first focusable element
+    const focusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (focusable) {
+      setTimeout(() => focusable.focus(), 100);
+    }
+
+    // Dispatch event
+    modal.dispatchEvent(new CustomEvent('modal:opened', { detail: { id } }));
+  }
+
+  function closeModal(id) {
+    const modal = document.getElementById(id);
+    if (!modal) return;
+
+    modal.classList.remove('is-active');
+    modal.setAttribute('aria-hidden', 'true');
+    
+    // Only restore scroll if no other modals are open
+    const otherActiveModal = document.querySelector('.modal.is-active');
+    if (!otherActiveModal) {
+      document.body.style.overflow = '';
+    }
+
+    // Dispatch event
+    modal.dispatchEvent(new CustomEvent('modal:closed', { detail: { id } }));
+  }
+
+  // Expose functions globally
+  window.almliebe = window.almliebe || {};
+  window.almliebe.openModal = openModal;
+  window.almliebe.closeModal = closeModal;
+})();
+</script>

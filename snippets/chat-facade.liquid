@@ -1,0 +1,386 @@
+{% comment %}
+  CHAT FACADE - Performance-first GHL chat widget
+  
+  This implements the "facade pattern" for third-party scripts:
+  - Shows a lightweight 2KB button immediately
+  - Only loads the heavy 400KB+ GHL widget when user clicks
+  - Preserves Core Web Vitals (LCP, TBT, CLS)
+  
+  Usage: 
+  Referenced in theme.liquid when settings.ghl_chat_enabled is true
+{% endcomment %}
+
+{%- if settings.ghl_chat_enabled and settings.ghl_widget_url != blank -%}
+  <div 
+    class="chat-facade{% if settings.ghl_chat_position == 'bottom-left' %} chat-facade--left{% endif %}" 
+    data-chat-facade
+    data-widget-url="{{ settings.ghl_widget_url }}"
+  >
+    {%- comment -%} Facade Button (always visible) {%- endcomment -%}
+    <button 
+      type="button" 
+      class="chat-facade__button"
+      data-chat-trigger
+      aria-label="{{ settings.ghl_chat_tooltip | default: 'Chat öffnen' }}"
+    >
+      <span class="chat-facade__icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </span>
+      <span class="chat-facade__label">{{ settings.ghl_chat_label | default: 'Hilfe' }}</span>
+      <span class="chat-facade__close" hidden>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </span>
+    </button>
+
+    {%- comment -%} Tooltip {%- endcomment -%}
+    <div class="chat-facade__tooltip" data-chat-tooltip>
+      <p>{{ settings.ghl_chat_tooltip | default: 'Haben Sie Fragen? Wir helfen gerne!' }}</p>
+      <button type="button" class="chat-facade__tooltip-close" data-tooltip-close aria-label="Schließen">×</button>
+    </div>
+
+    {%- comment -%} Chat Container (loads on demand) {%- endcomment -%}
+    <div class="chat-facade__container" data-chat-container hidden>
+      <div class="chat-facade__loading">
+        <span class="spinner"></span>
+        <p>{{ 'general.chat.loading' | t | default: 'Chat wird geladen...' }}</p>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+<style>
+  .chat-facade {
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    z-index: calc(var(--z-modal) - 10);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.75rem;
+  }
+
+  .chat-facade--left {
+    right: auto;
+    left: 1.25rem;
+    align-items: flex-start;
+  }
+
+  /* Facade Button */
+  .chat-facade__button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.25rem;
+    background: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: 2rem;
+    cursor: pointer;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(30, 86, 49, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .chat-facade__button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 24px rgba(30, 86, 49, 0.5);
+  }
+
+  .chat-facade__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .chat-facade__close {
+    display: none;
+  }
+
+  .chat-facade.is-open .chat-facade__icon,
+  .chat-facade.is-open .chat-facade__label {
+    display: none;
+  }
+
+  .chat-facade.is-open .chat-facade__close {
+    display: flex;
+  }
+
+  /* Mobile: icon only */
+  @media (max-width: 767px) {
+    .chat-facade__button {
+      padding: 1rem;
+      border-radius: 50%;
+    }
+
+    .chat-facade__label {
+      display: none;
+    }
+  }
+
+  /* Tooltip */
+  .chat-facade__tooltip {
+    position: relative;
+    max-width: 280px;
+    padding: 0.875rem 1rem;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    animation: fadeInUp 0.3s ease-out;
+  }
+
+  .chat-facade__tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    right: 24px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid white;
+  }
+
+  .chat-facade--left .chat-facade__tooltip::after {
+    right: auto;
+    left: 24px;
+  }
+
+  .chat-facade__tooltip p {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  .chat-facade__tooltip-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+  }
+
+  .chat-facade__tooltip.is-hidden {
+    display: none;
+  }
+
+  /* Chat Container */
+  .chat-facade__container {
+    position: fixed;
+    bottom: 5rem;
+    right: 1.25rem;
+    width: 380px;
+    height: 600px;
+    max-height: calc(100vh - 8rem);
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transform-origin: bottom right;
+    animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .chat-facade--left .chat-facade__container {
+    right: auto;
+    left: 1.25rem;
+    transform-origin: bottom left;
+  }
+
+  @media (max-width: 767px) {
+    .chat-facade__container {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      max-height: none;
+      border-radius: 0;
+    }
+  }
+
+  .chat-facade__loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .chat-facade__loading .spinner {
+    width: 32px;
+    height: 32px;
+  }
+
+  .chat-facade__loading p {
+    margin: 0;
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+  }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  /* Hide GHL's own button when loaded */
+  .chat-facade.is-loaded iframe + * {
+    display: none !important;
+  }
+</style>
+
+<script>
+(function() {
+  'use strict';
+
+  const facade = document.querySelector('[data-chat-facade]');
+  if (!facade) return;
+
+  const trigger = facade.querySelector('[data-chat-trigger]');
+  const tooltip = facade.querySelector('[data-chat-tooltip]');
+  const tooltipClose = facade.querySelector('[data-tooltip-close]');
+  const container = facade.querySelector('[data-chat-container]');
+  const widgetUrl = facade.dataset.widgetUrl;
+
+  let isLoaded = false;
+  let isOpen = false;
+
+  // Show tooltip after 10 seconds (once per session)
+  if (!sessionStorage.getItem('chatTooltipShown')) {
+    setTimeout(() => {
+      if (!isOpen && tooltip) {
+        tooltip.classList.remove('is-hidden');
+        sessionStorage.setItem('chatTooltipShown', 'true');
+        
+        // Auto-hide after 8 seconds
+        setTimeout(() => {
+          tooltip.classList.add('is-hidden');
+        }, 8000);
+      }
+    }, 10000);
+  } else {
+    tooltip?.classList.add('is-hidden');
+  }
+
+  // Close tooltip
+  tooltipClose?.addEventListener('click', () => {
+    tooltip.classList.add('is-hidden');
+  });
+
+  // Main trigger
+  trigger?.addEventListener('click', () => {
+    if (isOpen) {
+      closeChat();
+    } else {
+      openChat();
+    }
+  });
+
+  function openChat() {
+    isOpen = true;
+    facade.classList.add('is-open');
+    container.hidden = false;
+    tooltip?.classList.add('is-hidden');
+    document.body.style.overflow = window.innerWidth <= 767 ? 'hidden' : '';
+
+    if (!isLoaded) {
+      loadWidget();
+    }
+  }
+
+  function closeChat() {
+    isOpen = false;
+    facade.classList.remove('is-open');
+    container.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  function loadWidget() {
+    if (!widgetUrl) {
+      console.error('Chat widget URL not configured');
+      return;
+    }
+
+    // Create script element
+    const script = document.createElement('script');
+    script.src = widgetUrl;
+    script.async = true;
+    
+    script.onload = () => {
+      isLoaded = true;
+      facade.classList.add('is-loaded');
+      
+      // Hide loading state
+      const loading = container.querySelector('.chat-facade__loading');
+      if (loading) loading.hidden = true;
+
+      // GHL widget should auto-initialize
+      // If it creates its own container, we may need to move it
+      setTimeout(() => {
+        // Look for GHL's widget and move it into our container if needed
+        const ghlWidget = document.querySelector('[class*="ghl"], [id*="ghl"], .lc-widget');
+        if (ghlWidget && ghlWidget.parentElement !== container) {
+          container.appendChild(ghlWidget);
+        }
+      }, 500);
+    };
+
+    script.onerror = () => {
+      console.error('Failed to load chat widget');
+      container.innerHTML = `
+        <div class="chat-facade__error">
+          <p>Chat konnte nicht geladen werden.</p>
+          <a href="mailto:${window.Shopify?.shop?.email || 'info@almliebe.de'}">E-Mail senden</a>
+        </div>
+      `;
+    };
+
+    document.body.appendChild(script);
+  }
+
+  // Close on escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen) {
+      closeChat();
+    }
+  });
+
+  // Close when clicking outside on mobile
+  container?.addEventListener('click', (e) => {
+    if (e.target === container && window.innerWidth <= 767) {
+      closeChat();
+    }
+  });
+})();
+</script>

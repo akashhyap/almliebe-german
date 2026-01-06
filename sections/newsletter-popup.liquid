@@ -1,0 +1,444 @@
+{% comment %}
+  NEWSLETTER POPUP - Exit-intent or timed popup for email capture
+  
+  Features:
+  - Configurable delay or exit intent
+  - Cookie-based display control
+  - Discount incentive
+  - Mobile-friendly
+{% endcomment %}
+
+{%- if settings.newsletter_popup_enabled -%}
+<div 
+  class="newsletter-popup" 
+  data-newsletter-popup
+  data-delay="{{ settings.newsletter_popup_delay | default: 5000 }}"
+  data-exit-intent="{{ settings.newsletter_popup_exit_intent }}"
+  aria-hidden="true"
+>
+  <div class="newsletter-popup__overlay" data-newsletter-close></div>
+  
+  <div class="newsletter-popup__container">
+    <button type="button" class="newsletter-popup__close" data-newsletter-close aria-label="{{ 'accessibility.close' | t | default: 'Schließen' }}">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+
+    <div class="newsletter-popup__content">
+      {%- if settings.newsletter_popup_image -%}
+        <div class="newsletter-popup__image">
+          <img
+            src="{{ settings.newsletter_popup_image | image_url: width: 600 }}"
+            alt="{{ settings.newsletter_popup_image.alt | escape | default: 'Newsletter' }}"
+            width="300"
+            height="300"
+            loading="lazy"
+          >
+        </div>
+      {%- endif -%}
+
+      <div class="newsletter-popup__body">
+        {%- if settings.newsletter_popup_discount != blank -%}
+          <div class="newsletter-popup__discount">
+            {{ settings.newsletter_popup_discount }}
+          </div>
+        {%- endif -%}
+
+        <h2 class="newsletter-popup__title">
+          {{ settings.newsletter_popup_title | default: 'Willkommen bei Almliebe!' }}
+        </h2>
+
+        <p class="newsletter-popup__text">
+          {{ settings.newsletter_popup_text | default: 'Melden Sie sich für unseren Newsletter an und erhalten Sie exklusive Angebote und Styling-Tipps für Ihre Tracht.' }}
+        </p>
+
+        <form 
+          method="post" 
+          action="/contact#contact_form" 
+          accept-charset="UTF-8"
+          class="newsletter-popup__form"
+          data-newsletter-form
+        >
+          <input type="hidden" name="form_type" value="customer">
+          <input type="hidden" name="utf8" value="✓">
+          <input type="hidden" name="contact[tags]" value="newsletter,popup">
+          
+          <div class="newsletter-popup__field">
+            <label for="NewsletterPopupEmail" class="visually-hidden">
+              {{ 'general.newsletter.email' | t | default: 'E-Mail' }}
+            </label>
+            <input
+              type="email"
+              id="NewsletterPopupEmail"
+              name="contact[email]"
+              placeholder="{{ 'general.newsletter.email_placeholder' | t | default: 'Ihre E-Mail-Adresse' }}"
+              required
+              autocomplete="email"
+              class="newsletter-popup__input"
+            >
+            <button type="submit" class="newsletter-popup__submit btn btn--primary">
+              {{ 'general.newsletter.submit' | t | default: 'Anmelden' }}
+            </button>
+          </div>
+
+          <p class="newsletter-popup__privacy">
+            {{ 'general.newsletter.privacy' | t | default: 'Mit der Anmeldung akzeptieren Sie unsere' }}
+            <a href="{{ pages[settings.page_datenschutz].url | default: '/policies/privacy-policy' }}">{{ 'general.newsletter.privacy_link' | t | default: 'Datenschutzerklärung' }}</a>
+          </p>
+        </form>
+
+        <button type="button" class="newsletter-popup__decline" data-newsletter-close>
+          {{ 'general.newsletter.no_thanks' | t | default: 'Nein danke' }}
+        </button>
+      </div>
+    </div>
+
+    {%- comment -%} Success Message {%- endcomment -%}
+    <div class="newsletter-popup__success" data-newsletter-success hidden>
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+      <h3>{{ 'general.newsletter.success_title' | t | default: 'Vielen Dank!' }}</h3>
+      <p>{{ 'general.newsletter.success_text' | t | default: 'Sie erhalten in Kürze eine Bestätigungs-E-Mail.' }}</p>
+      {%- if settings.newsletter_popup_discount != blank -%}
+        <p class="newsletter-popup__success-code">
+          {{ 'general.newsletter.discount_code' | t | default: 'Ihr Rabattcode:' }}
+          <strong>{{ settings.newsletter_popup_discount_code | default: 'WELCOME10' }}</strong>
+        </p>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+{%- endif -%}
+
+<style>
+  .newsletter-popup {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .newsletter-popup.is-active {
+    pointer-events: auto;
+    visibility: visible;
+  }
+
+  .newsletter-popup__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .newsletter-popup.is-active .newsletter-popup__overlay {
+    opacity: 1;
+  }
+
+  .newsletter-popup__container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    transform: scale(0.9) translateY(30px);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+  }
+
+  .newsletter-popup.is-active .newsletter-popup__container {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+
+  .newsletter-popup__close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+
+  .newsletter-popup__content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (min-width: 600px) {
+    .newsletter-popup__container {
+      max-width: 700px;
+    }
+
+    .newsletter-popup__content {
+      flex-direction: row;
+    }
+
+    .newsletter-popup__image {
+      flex: 0 0 280px;
+    }
+  }
+
+  .newsletter-popup__image {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+  }
+
+  .newsletter-popup__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .newsletter-popup__body {
+    flex: 1;
+    padding: 2rem;
+    text-align: center;
+  }
+
+  @media (min-width: 600px) {
+    .newsletter-popup__body {
+      text-align: left;
+      padding: 2.5rem;
+    }
+  }
+
+  .newsletter-popup__discount {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    background: rgba(30, 86, 49, 0.1);
+    border-radius: var(--border-radius);
+    margin-bottom: 1rem;
+  }
+
+  .newsletter-popup__title {
+    font-size: 1.5rem;
+    margin: 0 0 0.75rem;
+  }
+
+  .newsletter-popup__text {
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary);
+    margin: 0 0 1.5rem;
+    line-height: 1.6;
+  }
+
+  .newsletter-popup__field {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  @media (max-width: 599px) {
+    .newsletter-popup__field {
+      flex-direction: column;
+    }
+  }
+
+  .newsletter-popup__input {
+    flex: 1;
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+  }
+
+  .newsletter-popup__input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+  }
+
+  .newsletter-popup__submit {
+    padding: 0.875rem 1.5rem;
+    white-space: nowrap;
+  }
+
+  .newsletter-popup__privacy {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    margin: 0 0 1rem;
+  }
+
+  .newsletter-popup__privacy a {
+    color: var(--color-primary);
+  }
+
+  .newsletter-popup__decline {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .newsletter-popup__decline:hover {
+    color: var(--color-text);
+  }
+
+  /* Success State */
+  .newsletter-popup__success {
+    padding: 3rem 2rem;
+    text-align: center;
+  }
+
+  .newsletter-popup__success svg {
+    color: var(--color-success);
+    margin-bottom: 1rem;
+  }
+
+  .newsletter-popup__success h3 {
+    font-size: 1.5rem;
+    margin: 0 0 0.5rem;
+  }
+
+  .newsletter-popup__success p {
+    color: var(--color-text-secondary);
+    margin: 0 0 1rem;
+  }
+
+  .newsletter-popup__success-code {
+    padding: 1rem;
+    background: var(--color-background);
+    border-radius: var(--border-radius);
+  }
+
+  .newsletter-popup__success-code strong {
+    display: block;
+    font-size: 1.25rem;
+    color: var(--color-primary);
+    margin-top: 0.25rem;
+  }
+</style>
+
+<script>
+(function() {
+  'use strict';
+
+  const popup = document.querySelector('[data-newsletter-popup]');
+  if (!popup) return;
+
+  const COOKIE_NAME = 'newsletter_popup_shown';
+  const delay = parseInt(popup.dataset.delay) || 5000;
+  const exitIntent = popup.dataset.exitIntent === 'true';
+
+  // Check if popup should be shown
+  if (getCookie(COOKIE_NAME)) return;
+
+  // Show popup
+  function showPopup() {
+    popup.classList.add('is-active');
+    popup.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    
+    // Set cookie for 7 days
+    setCookie(COOKIE_NAME, 'true', 7);
+  }
+
+  // Close popup
+  function closePopup() {
+    popup.classList.remove('is-active');
+    popup.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  // Timed display
+  if (!exitIntent) {
+    setTimeout(showPopup, delay);
+  }
+
+  // Exit intent (desktop only)
+  if (exitIntent && window.innerWidth >= 1024) {
+    let triggered = false;
+    
+    document.addEventListener('mouseleave', function(e) {
+      if (e.clientY < 10 && !triggered && !getCookie(COOKIE_NAME)) {
+        triggered = true;
+        showPopup();
+      }
+    });
+  }
+
+  // Close handlers
+  popup.querySelectorAll('[data-newsletter-close]').forEach(el => {
+    el.addEventListener('click', closePopup);
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && popup.classList.contains('is-active')) {
+      closePopup();
+    }
+  });
+
+  // Form submission
+  const form = popup.querySelector('[data-newsletter-form]');
+  const content = popup.querySelector('.newsletter-popup__content');
+  const success = popup.querySelector('[data-newsletter-success]');
+
+  form?.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(form);
+    
+    try {
+      const response = await fetch('/contact', {
+        method: 'POST',
+        body: formData
+      });
+
+      if (response.ok) {
+        // Show success message
+        content.hidden = true;
+        success.hidden = false;
+        
+        // Close after 5 seconds
+        setTimeout(closePopup, 5000);
+      }
+    } catch (error) {
+      console.error('Newsletter form error:', error);
+    }
+  });
+
+  // Cookie helpers
+  function setCookie(name, value, days) {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = `${name}=${value};expires=${expires};path=/`;
+  }
+
+  function getCookie(name) {
+    return document.cookie.split('; ').reduce((r, c) => {
+      const [key, val] = c.split('=');
+      return key === name ? val : r;
+    }, null);
+  }
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Newsletter Popup",
+  "settings": []
+}
+{% endschema %}

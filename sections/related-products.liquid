@@ -1,25 +1,73 @@
-<div class="related-products section">
-  <div class="container">
-    <h2 class="text-center">You may also like</h2>
-    <div class="product-grid grid grid--2-col grid--3-col-tablet grid--4-col-desktop">
-      {% for product in product.related_products limit: 4 %}
-        <div class="product-card">
-          <a href="{{ product.url }}">
-            {% if product.featured_image %}
-              <img src="{{ product.featured_image | image_url: width: 500 }}" alt="{{ product.title | escape }}" loading="lazy">
-            {% endif %}
-            <h3>{{ product.title }}</h3>
-            <p>{{ product.price | money }}</p>
-          </a>
-        </div>
-      {% endfor %}
+{% comment %}
+  RELATED PRODUCTS - Cross-sell section for product pages
+  
+  Uses Shopify's product recommendations API
+{% endcomment %}
+
+{%- if recommendations.performed and recommendations.products_count > 0 -%}
+  <section class="related-products section">
+    <div class="container">
+      <h2 class="section-title">{{ section.settings.heading | default: 'Das könnte Ihnen auch gefallen' }}</h2>
+      
+      <div class="related-products__grid grid grid--2-col grid--4-col-desktop">
+        {%- for product in recommendations.products limit: section.settings.products_to_show -%}
+          {% render 'product-card', product: product, lazy: true, card_index: forloop.index %}
+        {%- endfor -%}
+      </div>
     </div>
-  </div>
-</div>
+  </section>
+{%- endif -%}
+
+<style>
+  .related-products {
+    padding: 3rem 0;
+    background: var(--color-background);
+  }
+
+  .related-products .section-title {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .related-products__grid {
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 1024px) {
+    .related-products {
+      padding: 4rem 0;
+    }
+
+    .related-products__grid {
+      gap: 2rem;
+    }
+  }
+</style>
 
 {% schema %}
 {
   "name": "Related Products",
-  "settings": []
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Das könnte Ihnen auch gefallen"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 8,
+      "step": 1,
+      "default": 4,
+      "label": "Products to show"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Related Products"
+    }
+  ]
 }
 {% endschema %}

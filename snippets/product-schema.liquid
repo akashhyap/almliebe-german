@@ -1,0 +1,209 @@
+{% comment %}
+  PRODUCT SCHEMA - JSON-LD for rich results
+  
+  Usage: {% render 'product-schema', product: product %}
+  
+  Generates:
+  - Product schema with price, availability, brand
+  - Aggregate rating (if reviews available)
+  - Breadcrumb schema
+{% endcomment %}
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  
+  # Price validity - 30 days from now
+  assign price_valid_until = 'now' | date: '%s' | plus: 2592000 | date: '%Y-%m-%d'
+  
+  # Check for reviews (Judge.me or Shopify)
+  assign review_count = product.metafields.judgeme.review_count | default: 0
+  assign review_rating = product.metafields.judgeme.average_rating | default: 0
+  
+  # Fallback to Shopify reviews
+  if review_count == 0
+    assign review_count = product.metafields.reviews.rating_count | default: 0
+    if product.metafields.reviews.rating.value != blank
+      assign review_rating = product.metafields.reviews.rating.value | times: 1.0
+    endif
+  endif
+  
+  # Availability
+  if current_variant.available
+    assign availability = 'https://schema.org/InStock'
+  else
+    assign availability = 'https://schema.org/OutOfStock'
+  endif
+  
+  # Item condition
+  assign item_condition = 'https://schema.org/NewCondition'
+  
+  # Get primary image
+  assign primary_image = product.featured_media | default: product.images.first
+-%}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": {{ product.title | json }},
+  "description": {{ product.description | strip_html | truncate: 5000 | json }},
+  "url": {{ request.origin | append: product.url | json }},
+  "sku": {{ current_variant.sku | default: product.id | json }},
+  "mpn": {{ current_variant.barcode | default: current_variant.sku | json }},
+  {%- if primary_image -%}
+  "image": [
+    {{ primary_image | image_url: width: 1200 | json }}
+    {%- for media in product.media offset: 1 limit: 4 -%}
+    ,{{ media | image_url: width: 1200 | json }}
+    {%- endfor -%}
+  ],
+  {%- endif -%}
+  {%- if product.vendor != blank -%}
+  "brand": {
+    "@type": "Brand",
+    "name": {{ product.vendor | json }}
+  },
+  {%- endif -%}
+  {%- if product.metafields.custom.gtin != blank -%}
+  "gtin13": {{ product.metafields.custom.gtin | json }},
+  {%- elsif current_variant.barcode != blank and current_variant.barcode.size == 13 -%}
+  "gtin13": {{ current_variant.barcode | json }},
+  {%- endif -%}
+  {%- if product.metafields.custom.color != blank -%}
+  "color": {{ product.metafields.custom.color | json }},
+  {%- endif -%}
+  {%- if product.metafields.custom.material != blank -%}
+  "material": {{ product.metafields.custom.material | json }},
+  {%- endif -%}
+  {%- if product.type != blank -%}
+  "category": {{ product.type | json }},
+  {%- endif -%}
+  {%- if review_count > 0 and review_rating > 0 -%}
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": {{ review_rating }},
+    "reviewCount": {{ review_count }},
+    "bestRating": 5,
+    "worstRating": 1
+  },
+  {%- endif -%}
+  "offers": {
+    "@type": "Offer",
+    "url": {{ request.origin | append: product.url | json }},
+    "priceCurrency": {{ cart.currency.iso_code | json }},
+    "price": {{ current_variant.price | divided_by: 100.0 | json }},
+    {%- if current_variant.compare_at_price > current_variant.price -%}
+    "priceSpecification": {
+      "@type": "PriceSpecification",
+      "price": {{ current_variant.price | divided_by: 100.0 | json }},
+      "priceCurrency": {{ cart.currency.iso_code | json }},
+      "valueAddedTaxIncluded": true
+    },
+    {%- endif -%}
+    "priceValidUntil": {{ price_valid_until | json }},
+    "availability": {{ availability | json }},
+    "itemCondition": {{ item_condition | json }},
+    "seller": {
+      "@type": "Organization",
+      "name": {{ shop.name | json }}
+    },
+    "shippingDetails": {
+      "@type": "OfferShippingDetails",
+      "shippingDestination": {
+        "@type": "DefinedRegion",
+        "addressCountry": "DE"
+      },
+      "deliveryTime": {
+        "@type": "ShippingDeliveryTime",
+        "handlingTime": {
+          "@type": "QuantitativeValue",
+          "minValue": 1,
+          "maxValue": 2,
+          "unitCode": "d"
+        },
+        "transitTime": {
+          "@type": "QuantitativeValue",
+          "minValue": 1,
+          "maxValue": 3,
+          "unitCode": "d"
+        }
+      }
+      {%- if settings.free_shipping_threshold > 0 -%}
+      ,"shippingRate": {
+        "@type": "MonetaryAmount",
+        "value": {% if current_variant.price >= settings.free_shipping_threshold | times: 100 %}0{% else %}4.95{% endif %},
+        "currency": {{ cart.currency.iso_code | json }}
+      }
+      {%- endif -%}
+    },
+    "hasMerchantReturnPolicy": {
+      "@type": "MerchantReturnPolicy",
+      "applicableCountry": "DE",
+      "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+      "merchantReturnDays": 14,
+      "returnMethod": "https://schema.org/ReturnByMail",
+      "returnFees": "https://schema.org/FreeReturn"
+    }
+  }
+}
+</script>
+
+{%- comment -%} Breadcrumb Schema {%- endcomment -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": {{ 'general.breadcrumbs.home' | t | default: 'Home' | json }},
+      "item": {{ request.origin | json }}
+    }
+    {%- if product.collections.size > 0 -%}
+    ,{
+      "@type": "ListItem",
+      "position": 2,
+      "name": {{ product.collections.first.title | json }},
+      "item": {{ request.origin | append: product.collections.first.url | json }}
+    }
+    ,{
+      "@type": "ListItem",
+      "position": 3,
+      "name": {{ product.title | json }},
+      "item": {{ request.origin | append: product.url | json }}
+    }
+    {%- else -%}
+    ,{
+      "@type": "ListItem",
+      "position": 2,
+      "name": {{ product.title | json }},
+      "item": {{ request.origin | append: product.url | json }}
+    }
+    {%- endif -%}
+  ]
+}
+</script>
+
+{%- comment -%} FAQ Schema if product has FAQ metafield {%- endcomment -%}
+{%- if product.metafields.custom.faq != blank -%}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {%- assign faqs = product.metafields.custom.faq.value -%}
+    {%- for faq in faqs -%}
+    {
+      "@type": "Question",
+      "name": {{ faq.question | json }},
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": {{ faq.answer | json }}
+      }
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor -%}
+  ]
+}
+</script>
+{%- endif -%}
