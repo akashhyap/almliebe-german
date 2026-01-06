@@ -66,23 +66,34 @@
       "sizing": "Größenberatung",
       "shipping": "Versand & Rückgabe",
       "size_guide": "Größentabelle",
+      "view_size_guide": "Größentabelle ansehen",
       "free_shipping": "Kostenloser Versand ab 99€",
       "returns": "14 Tage Rückgaberecht",
       "secure": "Sichere Bezahlung",
       "shipping_estimate": "Lieferung in 1-3 Werktagen",
+      "shipping_text": "Versand innerhalb von 1-3 Werktagen. Kostenlose Lieferung ab 99€ Bestellwert.",
+      "more_shipping_info": "Mehr Versandinformationen",
       "color": "Farbe",
       "size": "Größe",
       "material": "Material",
+      "materials": "Materialien",
       "care": "Pflegehinweise",
       "you_may_also_like": "Das könnte Ihnen auch gefallen",
       "recently_viewed": "Zuletzt angesehen",
+      "complete_look": "Komplettieren Sie Ihren Look",
       "compare_at": "Statt",
       "save": "Sie sparen",
       "from_price": "Ab",
       "unit_price": "Stückpreis",
       "taxes_included": "inkl. MwSt.",
       "taxes_excluded": "zzgl. MwSt.",
-      "shipping_calculated": "Versand wird an der Kasse berechnet"
+      "shipping_calculated": "Versand wird an der Kasse berechnet",
+      "zoom": "Vergrößern",
+      "includes": "Enthält",
+      "composition": "Zusammensetzung",
+      "fit": "Passform",
+      "model_info": "Model trägt Größe",
+      "country_of_origin": "Herkunftsland"
     },
     "size_guide": {
       "title": "Größentabelle",
@@ -240,19 +251,5 @@
   },
   "date_formats": {
     "month_day_year": "%d. %B %Y"
-  },
-  "pagefly": {
-    "products": {
-      "product": {
-        "regular_price": "Normalpreis",
-        "sold_out": "Ausverkauft",
-        "unavailable": "Nicht verfügbar",
-        "on_sale": "Sale",
-        "quantity": "Menge",
-        "add_to_cart": "In den Warenkorb",
-        "back_to_collection": "Zurück zur Kollektion",
-        "view_details": "Details anzeigen"
-      }
-    }
   }
 }
