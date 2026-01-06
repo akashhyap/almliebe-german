@@ -1,0 +1,102 @@
+/* ALMLIEBE BUTTON FIX - Add to base.css or create as separate file */
+/* This CSS uses !important and high specificity to override any existing styles */
+
+/* =============================================
+   FORCE BLACK ADD TO CART BUTTON
+   ============================================= */
+
+/* Target all possible add-to-cart button selectors */
+.product__add-btn,
+.btn--primary,
+button[type="submit"].btn--primary,
+button[data-add-to-cart],
+.product-form__submit,
+.product__form button[type="submit"],
+form[action="/cart/add"] button[type="submit"] {
+  background-color: #000000 !important;
+  background: #000000 !important;
+  border-color: #000000 !important;
+  color: #ffffff !important;
+  border-radius: 0 !important;
+}
+
+.product__add-btn:hover,
+.btn--primary:hover,
+button[type="submit"].btn--primary:hover,
+button[data-add-to-cart]:hover,
+.product-form__submit:hover,
+.product__form button[type="submit"]:hover,
+form[action="/cart/add"] button[type="submit"]:hover {
+  background-color: #333333 !important;
+  background: #333333 !important;
+  border-color: #333333 !important;
+}
+
+/* =============================================
+   FIX LOADING SPINNER - ENSURE HIDDEN BY DEFAULT
+   ============================================= */
+
+/* The loading spinner should be hidden by default */
+.product__add-btn-loading,
+.product__add-btn .spinner,
+[data-add-to-cart] .spinner,
+.btn--loading .spinner {
+  display: none !important;
+}
+
+/* Only show spinner when button has loading class */
+.product__add-btn.is-loading .product__add-btn-loading,
+.product__add-btn.is-loading .spinner,
+.btn--loading .product__add-btn-loading {
+  display: inline-flex !important;
+}
+
+/* Ensure button text is visible by default */
+[data-add-to-cart-text] {
+  display: inline !important;
+}
+
+/* Hide text only when loading */
+.product__add-btn.is-loading [data-add-to-cart-text] {
+  display: none !important;
+}
+
+/* =============================================
+   FORCE WHITE BACKGROUNDS
+   ============================================= */
+
+body,
+main,
+.main-content,
+.page-wrapper,
+.shopify-section,
+.product-page,
+.product__info,
+.product__details {
+  background-color: #ffffff !important;
+}
+
+/* =============================================
+   SHOPIFY PAYMENT BUTTONS (Buy Now, etc.)
+   ============================================= */
+
+.shopify-payment-button button,
+.shopify-payment-button__button,
+.shopify-payment-button .shopify-payment-button__button {
+  background-color: #000000 !important;
+  border-color: #000000 !important;
+  color: #ffffff !important;
+  border-radius: 0 !important;
+}
+
+.shopify-payment-button button:hover,
+.shopify-payment-button__button:hover {
+  background-color: #333333 !important;
+  border-color: #333333 !important;
+}
+
+/* Alternative payment button text color */
+.shopify-payment-button__button--unbranded {
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
