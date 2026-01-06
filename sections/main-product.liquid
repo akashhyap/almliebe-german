@@ -1057,7 +1057,7 @@
     background: #111827;
     color: #ffffff;
     border: none;
-    border-radius: 9999px;
+    border-radius: 9999px !important;
     font-size: 0.875rem;
     font-weight: 600;
     letter-spacing: 0.05em;
@@ -1505,6 +1505,8 @@ document.addEventListener('DOMContentLoaded', function() {
     
     form.addEventListener('submit', async function(e) {
       e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
       
       const submitBtn = form.querySelector('[data-add-to-cart]');
       const submitText = form.querySelector('[data-add-to-cart-text]');
@@ -1515,43 +1517,62 @@ document.addEventListener('DOMContentLoaded', function() {
       if (submitLoading) submitLoading.hidden = false;
       if (submitBtn) submitBtn.disabled = true;
       
-      const formData = new FormData(form);
+      // Get form data
+      const variantId = form.querySelector('[data-variant-id]')?.value;
+      const quantity = form.querySelector('[name="quantity"]')?.value || 1;
+      
+      if (!variantId) {
+        console.error('No variant ID found');
+        if (submitText) {
+          submitText.hidden = false;
+          submitText.textContent = 'FEHLER - VARIANTE WÄHLEN';
+        }
+        if (submitLoading) submitLoading.hidden = true;
+        if (submitBtn) submitBtn.disabled = false;
+        return;
+      }
       
       try {
         const response = await fetch('/cart/add.js', {
           method: 'POST',
-          body: formData
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            id: parseInt(variantId),
+            quantity: parseInt(quantity)
+          })
         });
         
-        
-        if (response.ok) {
-          const item = await response.json();
-          
-          // Dispatch events for cart drawer
-          document.dispatchEvent(new CustomEvent('cart:item-added', { detail: item }));
-          document.dispatchEvent(new CustomEvent('cart:updated'));
-          
-          // Show success state briefly
-          if (submitText) {
-            submitText.hidden = false;
-            submitText.textContent = '✓ HINZUGEFÜGT';
-          }
-          if (submitLoading) submitLoading.hidden = true;
-          
-          // Reset button after 2 seconds
-          setTimeout(() => {
-            if (submitText) {
-              submitText.textContent = 'IN DEN WARENKORB';
-            }
-            if (submitBtn) submitBtn.disabled = false;
-          }, 2000);
-          
-        } else {
+        if (!response.ok) {
           const errorData = await response.json();
           throw new Error(errorData.description || 'Error adding to cart');
         }
         
+        const item = await response.json();
+        
+        // Dispatch events for cart drawer
+        document.dispatchEvent(new CustomEvent('cart:item-added', { detail: item }));
+        document.dispatchEvent(new CustomEvent('cart:updated'));
+        
+        // Show success state briefly
+        if (submitText) {
+          submitText.hidden = false;
+          submitText.textContent = '✓ HINZUGEFÜGT';
+        }
+        if (submitLoading) submitLoading.hidden = true;
+        
+        // Reset button after 2 seconds
+        setTimeout(() => {
+          if (submitText) {
+            submitText.textContent = 'IN DEN WARENKORB';
+          }
+          if (submitBtn) submitBtn.disabled = false;
+        }, 2000);
+        
       } catch (error) {
+        console.error('Add to cart error:', error);
         
         // Show error state
         if (submitText) {
@@ -1568,7 +1589,9 @@ document.addEventListener('DOMContentLoaded', function() {
           if (submitBtn) submitBtn.disabled = false;
         }, 3000);
       }
-    });
+      
+      return false;
+    }, { capture: true });
   } else {
   }
   
