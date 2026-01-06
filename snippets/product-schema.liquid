@@ -129,9 +129,14 @@
         }
       }
       {%- if settings.free_shipping_threshold > 0 -%}
+      {%- assign threshold_in_cents = settings.free_shipping_threshold | times: 100 -%}
+      {%- assign qualifies_for_free_shipping = false -%}
+      {%- if current_variant.price >= threshold_in_cents -%}
+        {%- assign qualifies_for_free_shipping = true -%}
+      {%- endif -%}
       ,"shippingRate": {
         "@type": "MonetaryAmount",
-        "value": {% if current_variant.price >= settings.free_shipping_threshold | times: 100 %}0{% else %}4.95{% endif %},
+        "value": {% if qualifies_for_free_shipping %}0{% else %}4.95{% endif %},
         "currency": {{ cart.currency.iso_code | json }}
       }
       {%- endif -%}

@@ -496,8 +496,11 @@
   </div>
 </section>
 
-{%- comment -%} Related Products {%- endcomment -%}
-{% section 'related-products' %}
+{%- comment -%} 
+  Related Products - Add this section in your product.json template instead:
+  "related-products": { "type": "related-products" }
+  Cannot render sections inside sections in Shopify.
+{%- endcomment -%}
 
 {%- comment -%} Product Schema {%- endcomment -%}
 {% render 'product-schema', product: product %}
