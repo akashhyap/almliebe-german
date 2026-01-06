@@ -1149,7 +1149,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const productData = {
         productId: String({{ product.id }}),
         title: {{ product.title | json }},
-        image: "{{ product.featured_image | image_url: width: 200 | default: '' }}",
+        image: {{ product.featured_image | image_url: width: 200 | default: '' }},
         color: "",
         unavailableVariants: []
       };
