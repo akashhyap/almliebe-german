@@ -695,6 +695,42 @@
     });
   }
   
+  // Hook into header cart icon - intercept clicks on cart links
+  function setupCartIconTriggers() {
+    // Common cart link selectors
+    const cartSelectors = [
+      'a[href="/cart"]',
+      'a[href*="/cart"]',
+      '.header__icon--cart',
+      '[data-cart-trigger]',
+      '[data-action="open-cart"]',
+      '.cart-icon-bubble',
+      '.site-header__cart',
+      '.header-cart-btn',
+      '#cart-icon-bubble'
+    ];
+    
+    cartSelectors.forEach(selector => {
+      document.querySelectorAll(selector).forEach(el => {
+        // Skip if it's inside the cart drawer itself
+        if (el.closest('[data-cart-drawer]')) return;
+        
+        el.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          openCartDrawer();
+        });
+      });
+    });
+  }
+  
+  // Run setup after DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupCartIconTriggers);
+  } else {
+    setupCartIconTriggers();
+  }
+  
   // Listen for cart updates
   document.addEventListener('cart:item-added', function() {
     openCartDrawer();
