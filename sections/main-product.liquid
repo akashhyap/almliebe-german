@@ -56,7 +56,9 @@
 -%}
 
 {%- comment -%} Breadcrumbs {%- endcomment -%}
-{% render 'breadcrumbs', type: 'product', product: product %}
+<div class="container">
+  {% render 'breadcrumbs', type: 'product', product: product %}
+</div>
 
 <section class="product-page section" data-product-page>
   <div class="container">
@@ -903,13 +905,13 @@
     margin-top: 0.5rem;
   }
 
-  /* Quantity Selector - Modern Sleek Design */
+  /* Quantity Selector - Clean Minimal Style */
   .product__quantity {
     display: inline-flex;
     align-items: center;
-    height: 52px;
-    border: 1px solid #1a1a1a;
-    border-radius: 0;
+    border: 1.5px solid #e5e5e5;
+    border-radius: 8px;
+    background: #ffffff;
     overflow: hidden;
   }
   
@@ -917,45 +919,43 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 52px;
-    height: 100%;
-    background: transparent;
+    width: 44px;
+    height: 44px;
+    background: #fafafa;
     border: none;
     cursor: pointer;
     transition: all 0.15s ease;
-    color: #1a1a1a;
+    color: #374151;
   }
   
   .quantity__button:hover {
-    background: #1a1a1a;
-    color: #ffffff;
+    background: #f3f4f6;
+    color: #111827;
   }
   
   .quantity__button:active {
-    transform: scale(0.95);
+    background: #e5e7eb;
   }
   
   .quantity__button svg {
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
     stroke-width: 2;
   }
   
   .quantity__input {
-    width: 60px;
-    height: 100%;
+    width: 56px;
+    height: 44px;
     text-align: center;
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-weight: 500;
-    color: #1a1a1a;
-    background: transparent;
+    color: #111827;
+    background: #ffffff;
     border: none;
-    border-left: 1px solid #1a1a1a;
-    border-right: 1px solid #1a1a1a;
+    border-left: 1.5px solid #e5e5e5;
+    border-right: 1.5px solid #e5e5e5;
     -moz-appearance: textfield;
     appearance: textfield;
-    font-family: inherit;
-    letter-spacing: 0.02em;
   }
   
   .quantity__input::-webkit-outer-spin-button,
@@ -966,22 +966,7 @@
   
   .quantity__input:focus {
     outline: none;
-  }
-  
-  /* Mobile adjustments */
-  @media (max-width: 767px) {
-    .product__quantity {
-      height: 48px;
-    }
-    
-    .quantity__button {
-      width: 48px;
-    }
-    
-    .quantity__input {
-      width: 52px;
-      font-size: 0.9375rem;
-    }
+    background: #f9fafb;
   }
 
   .product__add-btn {
