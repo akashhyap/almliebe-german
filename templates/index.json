@@ -20,7 +20,7 @@
         "button_label": "",
         "button_link": "",
         "button_style": "primary",
-        "overlay_opacity": 30,
+        "overlay_opacity": 0,
         "text_color": "#ffffff"
       }
     },
