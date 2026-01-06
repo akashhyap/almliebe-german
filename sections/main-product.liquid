@@ -291,6 +291,14 @@
                           endfor
                         -%}
                         <label class="product__option-btn{% unless variant_available %} product__option-btn--unavailable{% endunless %}" data-option-value="{{ value | escape }}">
+                          {%- unless variant_available -%}
+                            <span class="stock-alert-bell" data-stock-alert-trigger="{{ value | escape }}" title="Benachrichtigung bei Verfügbarkeit">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                              </svg>
+                            </span>
+                          {%- endunless -%}
                           <input 
                             type="radio" 
                             name="option{{ option.position }}" 
@@ -808,12 +816,50 @@
   }
 
   .product__option-btn--unavailable {
-    opacity: 0.5;
+    opacity: 0.7;
+    position: relative;
   }
 
-  .product__option-btn--unavailable span {
+  .product__option-btn--unavailable span:not(.stock-alert-bell) {
     text-decoration: line-through;
+  }
+  
+  .product__option-btn--unavailable input {
     cursor: not-allowed;
+  }
+  
+  /* Stock Alert Bell Icon */
+  .stock-alert-bell {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 1px solid #e5e5e5;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 5;
+    transition: all 0.2s ease;
+  }
+  
+  .stock-alert-bell:hover {
+    background: #000000;
+    border-color: #000000;
+  }
+  
+  .stock-alert-bell:hover svg {
+    stroke: #ffffff;
+  }
+  
+  .stock-alert-bell svg {
+    width: 12px;
+    height: 12px;
+    stroke: #000000;
   }
 
   /* Color swatches */
@@ -1088,6 +1134,59 @@ document.addEventListener('DOMContentLoaded', function() {
   plusBtn?.addEventListener('click', () => {
     const current = parseInt(quantityInput.value) || 1;
     quantityInput.value = current + 1;
+  });
+
+  // Stock Alert Bell - Open drawer when clicking on bell icon
+  const stockAlertBells = page.querySelectorAll('[data-stock-alert-trigger]');
+  
+  stockAlertBells.forEach(bell => {
+    bell.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const clickedSize = this.dataset.stockAlertTrigger;
+      
+      // Get product data
+      const productData = {
+        productId: '{{ product.id }}',
+        title: '{{ product.title | escape }}',
+        image: '{{ product.featured_image | image_url: width: 200 }}',
+        color: '',
+        unavailableVariants: []
+      };
+      
+      // Find color option if exists
+      {%- for option in product.options_with_values -%}
+        {%- assign opt_name = option.name | downcase -%}
+        {%- if opt_name == 'color' or opt_name == 'colour' or opt_name == 'farbe' -%}
+          productData.color = '{{ option.selected_value | escape }}';
+        {%- endif -%}
+      {%- endfor -%}
+      
+      // Get all unavailable variants
+      {%- for variant in product.variants -%}
+        {%- unless variant.available -%}
+          productData.unavailableVariants.push({
+            id: '{{ variant.id }}',
+            title: '{{ variant.title | escape }}',
+            option: '{{ variant.option1 | default: variant.option2 | default: variant.option3 | escape }}'
+          });
+        {%- endunless -%}
+      {%- endfor -%}
+      
+      // Pre-select the clicked size
+      const clickedVariantIndex = productData.unavailableVariants.findIndex(v => v.option === clickedSize);
+      if (clickedVariantIndex > 0) {
+        // Move clicked variant to front
+        const clicked = productData.unavailableVariants.splice(clickedVariantIndex, 1)[0];
+        productData.unavailableVariants.unshift(clicked);
+      }
+      
+      // Open the drawer
+      if (typeof window.openStockAlertDrawer === 'function') {
+        window.openStockAlertDrawer(productData);
+      }
+    });
   });
 
   // Tabs
