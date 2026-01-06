@@ -267,6 +267,7 @@
     letter-spacing: 0.1em;
     cursor: pointer;
     transition: background 0.2s ease;
+    position: relative;
   }
   
   .stock-alert-drawer__submit:hover {
@@ -274,9 +275,26 @@
   }
   
   .stock-alert-drawer__submit-loading {
+    display: none;
+  }
+  
+  .stock-alert-drawer__submit-loading:not([hidden]) {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+  }
+  
+  .stock-alert-drawer__submit .spinner--small {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
   }
   
   .stock-alert-drawer__success {
@@ -312,14 +330,9 @@
 </style>
 
 <script>
-console.log('Back-in-stock drawer script loading...');
 (function() {
   const drawer = document.querySelector('[data-stock-alert-drawer]');
-  console.log('Drawer element found:', !!drawer);
-  if (!drawer) {
-    console.error('Stock alert drawer element not found!');
-    return;
-  }
+  if (!drawer) return;
   
   const closeButtons = drawer.querySelectorAll('[data-stock-alert-close]');
   const form = drawer.querySelector('[data-stock-alert-form]');
@@ -332,12 +345,10 @@ console.log('Back-in-stock drawer script loading...');
   const variantTitleInput = drawer.querySelector('[data-stock-alert-variant-title]');
   const productIdInput = drawer.querySelector('[data-stock-alert-product-id]');
   
-  // Store product data when drawer opens
   let currentProduct = null;
   
-  // Open drawer - assign to window so it's globally accessible
+  // Open drawer
   window.openStockAlertDrawer = function(productData) {
-    console.log('openStockAlertDrawer called with:', productData);
     currentProduct = productData;
     
     // Set product info
@@ -383,13 +394,9 @@ console.log('Back-in-stock drawer script loading...');
     successMessage.hidden = true;
     
     // Open drawer
-    console.log('Opening drawer - adding is-open class');
     drawer.classList.add('is-open');
     document.body.style.overflow = 'hidden';
-    console.log('Drawer should now be visible');
   };
-  
-  console.log('openStockAlertDrawer function registered on window:', typeof window.openStockAlertDrawer);
   
   // Close drawer
   function closeDrawer() {

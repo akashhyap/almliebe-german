@@ -1154,17 +1154,12 @@ document.addEventListener('DOMContentLoaded', function() {
   };
   
   stockAlertBells.forEach(function(bell) {
-    console.log('Attaching click listener to bell');
     bell.addEventListener('click', function(e) {
-      console.log('BELL CLICKED');
       e.preventDefault();
       e.stopPropagation();
       
       var clickedSize = this.dataset.stockAlertTrigger;
-      console.log('Clicked size:', clickedSize);
-      
       var productData = JSON.parse(JSON.stringify(stockAlertProductData));
-      console.log('Product data:', productData);
       
       // Pre-select the clicked size
       var clickedVariantIndex = productData.unavailableVariants.findIndex(function(v) { 
@@ -1176,18 +1171,13 @@ document.addEventListener('DOMContentLoaded', function() {
       }
       
       // Open the drawer
-      console.log('openStockAlertDrawer type:', typeof window.openStockAlertDrawer);
       if (typeof window.openStockAlertDrawer === 'function') {
-        console.log('Calling openStockAlertDrawer now...');
         window.openStockAlertDrawer(productData);
-        console.log('openStockAlertDrawer called');
       } else {
-        console.log('openStockAlertDrawer NOT FOUND');
         alert('Benachrichtigungs-Funktion nicht verfügbar.');
       }
     });
   });
-  console.log('Total bells with listeners:', stockAlertBells.length);
 
   // Tabs
   const tabBtns = page.querySelectorAll('[data-tab]');
