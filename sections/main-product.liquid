@@ -791,7 +791,7 @@
     cursor: pointer;
   }
 
-  .product__option-btn span {
+  .product__option-btn > span:last-child {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -805,13 +805,14 @@
     transition: all 0.2s;
   }
 
-  .product__option-btn input:checked + span {
+  .product__option-btn input:checked + span,
+  .product__option-btn input:checked ~ span:last-child {
     border-color: #000000;
     background: #000000;
     color: white;
   }
 
-  .product__option-btn:hover:not(.product__option-btn--unavailable) span {
+  .product__option-btn:hover:not(.product__option-btn--unavailable) > span:last-child {
     border-color: #000000;
   }
 
@@ -820,7 +821,7 @@
     position: relative;
   }
 
-  .product__option-btn--unavailable span:not(.stock-alert-bell) {
+  .product__option-btn--unavailable > span:last-child {
     text-decoration: line-through;
   }
   
@@ -1134,13 +1135,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Stock Alert Bell - Open drawer when clicking on bell icon
   const stockAlertBells = page.querySelectorAll('[data-stock-alert-trigger]');
+  console.log('Found stock alert bells:', stockAlertBells.length);
   
   stockAlertBells.forEach(bell => {
     bell.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
+      console.log('Bell clicked!');
       
       const clickedSize = this.dataset.stockAlertTrigger;
+      console.log('Clicked size:', clickedSize);
       
       // Get product data
       const productData = {
@@ -1170,6 +1174,8 @@ document.addEventListener('DOMContentLoaded', function() {
         {%- endunless -%}
       {%- endfor -%}
       
+      console.log('Product data:', productData);
+      
       // Pre-select the clicked size
       const clickedVariantIndex = productData.unavailableVariants.findIndex(v => v.option === clickedSize);
       if (clickedVariantIndex > 0) {
@@ -1178,9 +1184,10 @@ document.addEventListener('DOMContentLoaded', function() {
         productData.unavailableVariants.unshift(clicked);
       }
       
-      
       // Open the drawer
+      console.log('openStockAlertDrawer exists:', typeof window.openStockAlertDrawer);
       if (typeof window.openStockAlertDrawer === 'function') {
+        console.log('Calling openStockAlertDrawer...');
         window.openStockAlertDrawer(productData);
       } else {
         console.error('Stock alert drawer not found! Add back-in-stock-drawer snippet to theme.');
@@ -1233,7 +1240,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (optionInputs && productId) {
     optionInputs.forEach(input => {
-      input.addEventListener('change', async function() {
+      // Use both click and change events for better compatibility
+      const handleOptionChange = async function() {
         // Update selected value display
         const optionPosition = this.closest('[data-option-position]')?.dataset.optionPosition;
         const selectedDisplay = page.querySelector(`[data-selected-option="${optionPosition}"]`);
@@ -1316,6 +1324,14 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         } catch (error) {
           console.error('Error updating variant:', error);
+        }
+      };
+      
+      input.addEventListener('change', handleOptionChange);
+      input.addEventListener('click', function() {
+        if (!this.disabled) {
+          this.checked = true;
+          handleOptionChange.call(this);
         }
       });
     });

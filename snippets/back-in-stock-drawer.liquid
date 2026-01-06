@@ -312,9 +312,14 @@
 </style>
 
 <script>
+console.log('Back-in-stock drawer script loading...');
 (function() {
   const drawer = document.querySelector('[data-stock-alert-drawer]');
-  if (!drawer) return;
+  console.log('Drawer element found:', !!drawer);
+  if (!drawer) {
+    console.error('Stock alert drawer element not found!');
+    return;
+  }
   
   const closeButtons = drawer.querySelectorAll('[data-stock-alert-close]');
   const form = drawer.querySelector('[data-stock-alert-form]');
@@ -330,8 +335,9 @@
   // Store product data when drawer opens
   let currentProduct = null;
   
-  // Open drawer
+  // Open drawer - assign to window so it's globally accessible
   window.openStockAlertDrawer = function(productData) {
+    console.log('openStockAlertDrawer called with:', productData);
     currentProduct = productData;
     
     // Set product info
@@ -377,9 +383,13 @@
     successMessage.hidden = true;
     
     // Open drawer
+    console.log('Opening drawer - adding is-open class');
     drawer.classList.add('is-open');
     document.body.style.overflow = 'hidden';
+    console.log('Drawer should now be visible');
   };
+  
+  console.log('openStockAlertDrawer function registered on window:', typeof window.openStockAlertDrawer);
   
   // Close drawer
   function closeDrawer() {
