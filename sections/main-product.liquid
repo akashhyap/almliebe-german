@@ -282,8 +282,9 @@
                       {%- for value in option.values -%}
                         {%- liquid
                           assign variant_available = false
+                          assign option_index = option.position | minus: 1
                           for variant in product.variants
-                            if variant.options[forloop.parentloop.index0] == value and variant.available
+                            if variant.options[option_index] == value and variant.available
                               assign variant_available = true
                               break
                             endif
