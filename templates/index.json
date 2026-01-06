@@ -1,13 +1,35 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "image-banner",
       "settings": {
+        "image": "shopify://shop_images/2512_almliebe_website_header_winter_3200x1660_353f2b3f-f105-444c-9ad7-86b7c98f960d.webp",
+        "banner_height": "medium",
+        "heading": "",
+        "text": "",
+        "text_alignment": "center",
+        "button_label": "",
+        "button_link": "",
+        "button_style": "primary",
+        "overlay_opacity": 30,
+        "text_color": "#ffffff"
       }
     },
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
+        "title": "Featured Collection",
+        "collection": "",
+        "products_to_show": 8
       }
     }
   },
