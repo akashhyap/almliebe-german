@@ -419,19 +419,19 @@
         {%- comment -%} Trust Badges {%- endcomment -%}
         <div class="product__trust-badges">
           <div class="trust-badge">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect x="1" y="3" width="15" height="13" rx="2"/><path d="m16 8 5 3-5 3z"/>
             </svg>
             <span>{{ 'products.product.free_shipping' | t | default: 'Kostenloser Versand ab 99€' }}</span>
           </div>
           <div class="trust-badge">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
             </svg>
             <span>{{ 'products.product.returns' | t | default: '14 Tage Rückgaberecht' }}</span>
           </div>
           <div class="trust-badge">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
             </svg>
             <span>{{ 'products.product.secure' | t | default: 'Sichere Zahlung' }}</span>
@@ -895,14 +895,14 @@
   
   .product__size-text {
     font-size: 0.9375rem;
-    font-weight: 500;
+    font-weight: 400;
     color: #111827;
     transition: all 0.15s ease;
   }
   
   .product__size-btn:hover .product__size-text {
     color: #000000;
-    font-weight: 600;
+    font-weight: 500;
   }
   
   .product__size-btn.is-selected .product__size-text {
@@ -1126,6 +1126,7 @@
     gap: 0.5rem;
     font-size: 0.8125rem;
     color: var(--color-text-secondary);
+    margin-bottom: 3px;
   }
 
   .trust-badge svg {
