@@ -1,0 +1,82 @@
+<div id="cookie-consent" class="cookie-consent">
+  <div class="cookie-consent__content">
+    <p class="cookie-consent__text">
+      Wir verwenden Cookies, um Ihnen die bestmögliche Erfahrung auf unserer Website zu bieten. 
+      Durch die weitere Nutzung dieser Website stimmen Sie der Verwendung von Cookies zu.
+      <a href="{{ pages[settings.page_datenschutz].url }}" class="cookie-consent__link">Mehr erfahren</a>
+    </p>
+    <div class="cookie-consent__actions">
+      <button type="button" class="btn btn--small btn--primary" onclick="acceptCookies()">
+        Akzeptieren
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cookie-consent {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--color-background-secondary);
+    border-top: 1px solid var(--color-border);
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.1);
+    z-index: var(--z-modal);
+    transform: translateY(100%);
+    transition: transform var(--duration-default) var(--ease-out);
+  }
+
+  .cookie-consent.is-visible {
+    transform: translateY(0);
+  }
+
+  .cookie-consent__content {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .cookie-consent__text {
+    flex: 1;
+    margin: 0;
+    font-size: 0.875rem;
+  }
+
+  .cookie-consent__link {
+    text-decoration: underline;
+    color: var(--color-primary);
+  }
+
+  .cookie-consent__actions {
+    flex-shrink: 0;
+  }
+</style>
+
+<script>
+  (function() {
+    // Check if user has already accepted cookies
+    if (!localStorage.getItem('cookieConsent')) {
+      setTimeout(function() {
+        document.getElementById('cookie-consent').classList.add('is-visible');
+      }, 1000);
+    }
+
+    window.acceptCookies = function() {
+      localStorage.setItem('cookieConsent', 'accepted');
+      document.getElementById('cookie-consent').classList.remove('is-visible');
+    };
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Cookie Consent",
+  "settings": []
+}
+{% endschema %}

@@ -1,0 +1,356 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}" dir="{{ settings.text_direction | default: 'ltr' }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0">
+  <meta name="theme-color" content="{{ settings.color_primary }}">
+
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+  {%- endif -%}
+
+  <title>
+    {%- if request.page_type == 'index' -%}
+      {{ shop.name }} - {{ shop.description | default: 'Trachtenmode online kaufen' }}
+    {%- elsif page_title contains shop.name -%}
+      {{ page_title }}
+    {%- else -%}
+      {{ page_title }} – {{ shop.name }}
+    {%- endif -%}
+  </title>
+
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- endif -%}
+
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  {%- if request.page_type == 'index' -%}
+    <link rel="preload" as="image" href="{{ 'hero-placeholder.jpg' | asset_url }}" fetchpriority="high">
+  {%- endif -%}
+
+  {%- comment -%} Preconnect to critical third-parties {%- endcomment -%}
+  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+  <link rel="dns-prefetch" href="https://productreviews.shopifycdn.com">
+
+  {%- comment -%} Critical CSS - Inlined for performance {%- endcomment -%}
+  <style>
+    :root {
+      /* Colors */
+      --color-primary: {{ settings.color_primary }};
+      --color-secondary: {{ settings.color_secondary }};
+      --color-accent: {{ settings.color_accent }};
+      --color-background: {{ settings.color_background }};
+      --color-background-secondary: {{ settings.color_background_secondary }};
+      --color-text: {{ settings.color_text }};
+      --color-text-secondary: {{ settings.color_text_secondary }};
+      --color-border: {{ settings.color_border }};
+      --color-success: {{ settings.color_success }};
+      --color-error: {{ settings.color_error }};
+      --color-sale: {{ settings.color_sale }};
+
+      /* Typography - Poppins */
+      --font-heading: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-body: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-size-base: {{ settings.font_size_base }}px;
+      --font-heading-scale: {{ settings.font_heading_scale | divided_by: 100.0 }};
+
+      /* Layout */
+      --page-width: {{ settings.page_width }}px;
+      --grid-gap: {{ settings.grid_gap }}px;
+      --border-radius: {{ settings.border_radius }}px;
+      --section-spacing: {{ settings.section_spacing }}px;
+
+      /* Header */
+      --header-height: 70px;
+      --header-height-mobile: 60px;
+      --announcement-height: 40px;
+
+      /* Transitions */
+      --duration-short: 150ms;
+      --duration-default: 250ms;
+      --duration-long: 400ms;
+      --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+      /* Z-index scale */
+      --z-header: 100;
+      --z-drawer: 200;
+      --z-modal: 300;
+      --z-toast: 400;
+    }
+
+    /* Critical above-fold styles */
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html {
+      font-size: var(--font-size-base);
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--color-text);
+      background-color: var(--color-background);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Prevent layout shift from scrollbar */
+    html { overflow-y: scroll; }
+
+    /* Skip link for accessibility */
+    .skip-to-content {
+      position: absolute;
+      top: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--color-primary);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      z-index: 9999;
+      transition: top var(--duration-default) var(--ease-out);
+    }
+    .skip-to-content:focus {
+      top: 10px;
+    }
+
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: var(--page-width);
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    @media (min-width: 768px) {
+      .container { padding: 0 2rem; }
+    }
+
+    /* Visually hidden (for screen readers) */
+    .visually-hidden {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    /* Loading placeholder */
+    .loading-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--color-background);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      transition: opacity var(--duration-long) var(--ease-out);
+    }
+    .loading-overlay.is-hidden { opacity: 0; pointer-events: none; }
+
+    /* Header placeholder to prevent CLS */
+    .header-placeholder {
+      height: calc(var(--header-height) + {% if settings.show_announcement %}var(--announcement-height){% else %}0px{% endif %});
+    }
+
+    @media (max-width: 767px) {
+      .header-placeholder {
+        height: calc(var(--header-height-mobile) + {% if settings.show_announcement %}var(--announcement-height){% else %}0px{% endif %});
+      }
+    }
+  </style>
+
+  {%- comment -%} Poppins Font Preloading {%- endcomment -%}
+  <link rel="preload" as="font" href="{{ 'Poppins-SemiBold-subset.woff2' | asset_url }}" type="font/woff2" crossorigin>
+  <link rel="preload" as="font" href="{{ 'Poppins-Medium-subset.woff2' | asset_url }}" type="font/woff2" crossorigin>
+  <link rel="preload" as="font" href="{{ 'Poppins-Regular-subset.woff2' | asset_url }}" type="font/woff2" crossorigin>
+
+  {%- comment -%} Poppins Font Declarations {%- endcomment -%}
+  <style>
+    @font-face {
+      font-family: 'Poppins';
+      src: url('{{ "Poppins-Light-subset.woff2" | asset_url }}') format('woff2');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Poppins';
+      src: url('{{ "Poppins-Regular-subset.woff2" | asset_url }}') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Poppins';
+      src: url('{{ "Poppins-Medium-subset.woff2" | asset_url }}') format('woff2');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Poppins';
+      src: url('{{ "Poppins-SemiBold-subset.woff2" | asset_url }}') format('woff2');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: 'Poppins';
+      src: url('{{ "Poppins-Bold-subset.woff2" | asset_url }}') format('woff2');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+  </style>
+
+  {%- comment -%} Main stylesheet (non-critical, loaded async) {%- endcomment -%}
+  <link rel="stylesheet" href="{{ 'base.css' | asset_url }}" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="{{ 'base.css' | asset_url }}"></noscript>
+
+  {%- comment -%} Theme JS configuration {%- endcomment -%}
+  <script>
+    document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
+
+    window.Shopify = window.Shopify || {};
+    window.Shopify.theme = {
+      name: 'Almliebe Theme',
+      version: '1.0.0'
+    };
+
+    window.almliebe = {
+      routes: {
+        cart_url: '{{ routes.cart_url }}',
+        cart_add_url: '{{ routes.cart_add_url }}',
+        cart_change_url: '{{ routes.cart_change_url }}',
+        cart_update_url: '{{ routes.cart_update_url }}',
+        search_url: '{{ routes.search_url }}',
+        predictive_search_url: '{{ routes.predictive_search_url }}'
+      },
+      settings: {
+        cartType: '{{ settings.cart_type }}',
+        freeShippingThreshold: {{ settings.free_shipping_threshold | default: 99 }},
+        showQuickAdd: {{ settings.show_quick_add | default: true }},
+        currency: '{{ cart.currency.iso_code }}',
+        moneyFormat: {{ shop.money_format | json }}
+      },
+      strings: {
+        addToCart: {{ 'products.product.add_to_cart' | t | json }},
+        soldOut: {{ 'products.product.sold_out' | t | json }},
+        unavailable: {{ 'products.product.unavailable' | t | json }},
+        itemAdded: {{ 'cart.general.item_added' | t | json }},
+        viewCart: {{ 'cart.general.view_cart' | t | json }},
+        freeShipping: {{ 'cart.general.free_shipping_unlocked' | t | json }},
+        shippingRemaining: {{ 'cart.general.shipping_remaining' | t | json }}
+      }
+    };
+  </script>
+
+  {{ content_for_header }}
+
+  {%- comment -%} Schema.org Organization {%- endcomment -%}
+  {% render 'seo-schema-organization' %}
+</head>
+
+<body class="template-{{ template.name | handle }}{% if template.suffix %} template-{{ template.name }}-{{ template.suffix | handle }}{% endif %}">
+  <a class="skip-to-content" href="#MainContent">
+    {{ 'accessibility.skip_to_content' | t }}
+  </a>
+
+  {%- comment -%} Announcement Bar {%- endcomment -%}
+  {% if settings.show_announcement %}
+    {% section 'announcement-bar' %}
+  {% endif %}
+
+  {%- comment -%} Header {%- endcomment -%}
+  {% section 'header' %}
+
+  {%- comment -%} Cart Drawer {%- endcomment -%}
+  {% if settings.cart_type == 'drawer' %}
+    {% section 'cart-drawer' %}
+  {% endif %}
+
+  {%- comment -%} Main Content {%- endcomment -%}
+  <main id="MainContent" class="main-content" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+
+  {%- comment -%} Footer {%- endcomment -%}
+  {% section 'footer' %}
+
+  {%- comment -%} Cookie Consent (German compliance) {%- endcomment -%}
+  {% section 'cookie-consent' %}
+
+  {%- comment -%} GHL Chat Widget (lazy loaded) {%- endcomment -%}
+  {% if settings.ghl_chat_enabled %}
+    {% render 'chat-facade' %}
+  {% endif %}
+
+  {%- comment -%} Quick View Modal {%- endcomment -%}
+  <div id="QuickViewModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal__overlay" data-modal-close></div>
+    <div class="modal__content">
+      <button type="button" class="modal__close" data-modal-close aria-label="{{ 'accessibility.close' | t }}">
+        {% render 'icon-close' %}
+      </button>
+      <div class="modal__body" id="QuickViewContent"></div>
+    </div>
+  </div>
+
+  {%- comment -%} Size Guide Modal {%- endcomment -%}
+  {% if settings.enable_size_guide %}
+    <div id="SizeGuideModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+      <div class="modal__overlay" data-modal-close></div>
+      <div class="modal__content modal__content--large">
+        <button type="button" class="modal__close" data-modal-close aria-label="{{ 'accessibility.close' | t }}">
+          {% render 'icon-close' %}
+        </button>
+        <div class="modal__body" id="SizeGuideContent">
+          {% render 'size-guide-modal' %}
+        </div>
+      </div>
+    </div>
+  {% endif %}
+
+  {%- comment -%} Toast notifications {%- endcomment -%}
+  <div id="ToastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  {%- comment -%} Theme JavaScript - deferred for performance {%- endcomment -%}
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
+
+  {%- comment -%} Trusted Shops integration {%- endcomment -%}
+  {% if settings.trusted_shops_id != blank and settings.show_trusted_shops_badge %}
+    <script defer>
+      document.addEventListener('DOMContentLoaded', function() {
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(function() { loadTrustedShops(); });
+        } else {
+          setTimeout(loadTrustedShops, 2000);
+        }
+      });
+
+      function loadTrustedShops() {
+        var script = document.createElement('script');
+        script.src = 'https://widgets.trustedshops.com/js/{{ settings.trusted_shops_id }}.js';
+        script.async = true;
+        document.body.appendChild(script);
+      }
+    </script>
+  {% endif %}
+</body>
+</html>

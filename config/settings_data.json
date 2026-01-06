@@ -1,0 +1,72 @@
+{
+  "current": {
+    "logo_width": 150,
+    "logo_width_mobile": 100,
+    "color_primary": "#1E5631",
+    "color_secondary": "#8B2635",
+    "color_accent": "#C8A96A",
+    "color_background": "#F5F2ED",
+    "color_background_secondary": "#FFFFFF",
+    "color_text": "#2C2417",
+    "color_text_secondary": "#6B6355",
+    "color_border": "#E5E0D8",
+    "color_success": "#2E7D32",
+    "color_error": "#C62828",
+    "color_sale": "#8B2635",
+    "font_size_base": 16,
+    "font_heading_scale": 100,
+    "page_width": 1400,
+    "grid_gap": 16,
+    "border_radius": 4,
+    "section_spacing": 60,
+    "header_sticky": true,
+    "header_transparent": false,
+    "header_style": "standard",
+    "show_announcement": true,
+    "announcement_text": "🎉 Kostenloser Versand ab 99€",
+    "announcement_bg": "#1E5631",
+    "announcement_text_color": "#FFFFFF",
+    "show_vendor": false,
+    "show_sku": true,
+    "enable_size_guide": true,
+    "enable_kiwi_sizing": false,
+    "show_stock_level": true,
+    "low_stock_threshold": 5,
+    "show_secondary_image": true,
+    "show_quick_add": true,
+    "show_mobile_size_overlay": true,
+    "product_card_aspect": "portrait",
+    "cart_type": "drawer",
+    "cart_notes": true,
+    "show_free_shipping_bar": true,
+    "free_shipping_threshold": 99,
+    "show_cart_upsells": true,
+    "share_facebook": true,
+    "share_twitter": false,
+    "share_pinterest": true,
+    "share_whatsapp": true,
+    "show_vat_included": true,
+    "show_shipping_note": true,
+    "show_trusted_shops_badge": false,
+    "ghl_chat_enabled": false,
+    "ghl_chat_label": "Hilfe",
+    "ghl_chat_tooltip": "Haben Sie Fragen? Wir helfen gerne!",
+    "ghl_chat_position": "bottom-right",
+    "image_loading": "lazy",
+    "defer_third_party": true,
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {}
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {}
+      },
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "settings": {}
+      }
+    }
+  }
+}

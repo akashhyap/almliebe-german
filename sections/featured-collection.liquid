@@ -1,0 +1,56 @@
+<div class="featured-collection section">
+  <div class="container">
+    {% if section.settings.title != blank %}
+      <h2 class="section-heading text-center">{{ section.settings.title }}</h2>
+    {% endif %}
+    
+    {% if section.settings.collection != blank %}
+      <div class="product-grid grid grid--2-col grid--3-col-tablet grid--4-col-desktop">
+        {% for product in section.settings.collection.products limit: section.settings.products_to_show %}
+          <div class="product-card">
+            <a href="{{ product.url }}">
+              {% if product.featured_image %}
+                <img src="{{ product.featured_image | image_url: width: 500 }}" alt="{{ product.title | escape }}" loading="lazy">
+              {% endif %}
+              <h3>{{ product.title }}</h3>
+              <p>{{ product.price | money }}</p>
+            </a>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Featured Collection",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Featured Collection"
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "label": "Products to show",
+      "default": 8
+    }
+  ],
+  "presets": [
+    {
+      "name": "Featured Collection"
+    }
+  ]
+}
+{% endschema %}

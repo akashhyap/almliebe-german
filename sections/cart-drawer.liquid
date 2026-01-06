@@ -1,0 +1,101 @@
+<div class="cart-drawer" data-cart-drawer>
+  <div class="cart-drawer__header">
+    <h2>{{ 'cart.general.title' | t }}</h2>
+    <button type="button" class="cart-drawer__close" onclick="closeCartDrawer()">
+      {% render 'icon-close' %}
+    </button>
+  </div>
+
+  <div class="cart-drawer__content" data-cart-drawer-content>
+    {% if cart.item_count > 0 %}
+      <div class="cart-drawer__items">
+        {% for item in cart.items %}
+          <div class="cart-drawer__item">
+            <img src="{{ item.image | image_url: width: 100 }}" alt="{{ item.title | escape }}">
+            <div class="cart-drawer__item-details">
+              <p>{{ item.product.title }}</p>
+              <p>{{ item.price | money }}</p>
+              <input type="number" value="{{ item.quantity }}" min="1" data-cart-item-quantity="{{ forloop.index }}">
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      <div class="cart-drawer__footer">
+        <p><strong>{{ 'cart.general.subtotal' | t }}:</strong> {{ cart.total_price | money }}</p>
+        <a href="/checkout" class="btn btn--primary btn--full">{{ 'cart.general.checkout' | t }}</a>
+      </div>
+    {% else %}
+      <p class="text-center">{{ 'cart.general.empty' | t }}</p>
+    {% endif %}
+  </div>
+</div>
+
+<style>
+  .cart-drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 400px;
+    max-width: 90vw;
+    height: 100vh;
+    background: var(--color-background-secondary);
+    box-shadow: -4px 0 16px rgba(0,0,0,0.1);
+    z-index: var(--z-drawer);
+    transform: translateX(100%);
+    transition: transform var(--duration-default) var(--ease-out);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .cart-drawer.is-active {
+    transform: translateX(0);
+  }
+
+  .cart-drawer__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .cart-drawer__close {
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .cart-drawer__content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+  }
+
+  .cart-drawer__item {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .cart-drawer__footer {
+    padding: 1.5rem;
+    border-top: 1px solid var(--color-border);
+  }
+</style>
+
+<script>
+  function closeCartDrawer() {
+    document.querySelector('[data-cart-drawer]').classList.remove('is-active');
+    document.body.style.overflow = '';
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Cart Drawer",
+  "settings": []
+}
+{% endschema %}

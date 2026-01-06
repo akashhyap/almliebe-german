@@ -1,0 +1,72 @@
+<div class="product-page section">
+  <div class="container">
+    <div class="product-page__grid grid grid--2-col">
+      
+      {%- comment -%} Product Images {%- endcomment -%}
+      <div class="product__media">
+        {% if product.featured_media %}
+          <img
+            src="{{ product.featured_media | image_url: width: 800 }}"
+            alt="{{ product.featured_media.alt | escape }}"
+            width="800"
+            height="auto"
+            loading="eager"
+          >
+        {% endif %}
+      </div>
+
+      {%- comment -%} Product Info {%- endcomment -%}
+      <div class="product__info">
+        <h1 class="product__title">{{ product.title }}</h1>
+        
+        <div class="product__price">
+          <span class="price__regular">{{ product.price | money }}</span>
+          {% if product.compare_at_price > product.price %}
+            <span class="price__compare">{{ product.compare_at_price | money }}</span>
+          {% endif %}
+        </div>
+
+        {% if product.description != blank %}
+          <div class="product__description">
+            {{ product.description }}
+          </div>
+        {% endif %}
+
+        <form method="post" action="/cart/add" id="product-form">
+          <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+          
+          {% unless product.has_only_default_variant %}
+            <div class="product__variants">
+              {% for option in product.options_with_values %}
+                <div class="product__option">
+                  <label>{{ option.name }}</label>
+                  <select name="options[{{ option.name | escape }}]">
+                    {% for value in option.values %}
+                      <option value="{{ value | escape }}">{{ value }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              {% endfor %}
+            </div>
+          {% endunless %}
+
+          <button type="submit" class="btn btn--primary btn--full" data-add-to-cart>
+            {% if product.available %}
+              {{ 'products.product.add_to_cart' | t }}
+            {% else %}
+              {{ 'products.product.sold_out' | t }}
+            {% endif %}
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Information",
+  "settings": []
+}
+{% endschema %}

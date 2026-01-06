@@ -1,0 +1,25 @@
+<div class="related-products section">
+  <div class="container">
+    <h2 class="text-center">You may also like</h2>
+    <div class="product-grid grid grid--2-col grid--3-col-tablet grid--4-col-desktop">
+      {% for product in product.related_products limit: 4 %}
+        <div class="product-card">
+          <a href="{{ product.url }}">
+            {% if product.featured_image %}
+              <img src="{{ product.featured_image | image_url: width: 500 }}" alt="{{ product.title | escape }}" loading="lazy">
+            {% endif %}
+            <h3>{{ product.title }}</h3>
+            <p>{{ product.price | money }}</p>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Related Products",
+  "settings": []
+}
+{% endschema %}
