@@ -1,82 +1,99 @@
 {
   "general": {
-    "accessibility": {
-      "skip_to_content": "Zum Inhalt springen",
-      "close": "Schließen"
+    "breadcrumbs": {
+      "home": "Startseite"
     },
-    "meta": {
-      "tags": "Schlagwörter \"{{ tags }}\"",
-      "page": "Seite {{ page }}"
-    },
-    "404": {
-      "title": "404 Seite nicht gefunden",
-      "subtext": "Die angeforderte Seite existiert nicht."
-    },
-    "pagination": {
-      "previous": "Zurück",
-      "next": "Weiter",
-      "page": "Seite {{ current }} von {{ total }}"
+    "newsletter": {
+      "email": "E-Mail",
+      "email_placeholder": "Ihre E-Mail-Adresse",
+      "submit": "Anmelden",
+      "privacy": "Mit der Anmeldung akzeptieren Sie unsere",
+      "privacy_link": "Datenschutzerklärung",
+      "no_thanks": "Nein danke",
+      "success_title": "Vielen Dank!",
+      "success_text": "Sie erhalten in Kürze eine Bestätigungs-E-Mail.",
+      "discount_code": "Ihr Rabattcode:"
     },
     "search": {
       "title": "Suche",
-      "placeholder": "Suche...",
-      "no_results": "Keine Ergebnisse für \"{{ terms }}\"",
-      "results_count": {
-        "one": "{{ count }} Ergebnis",
-        "other": "{{ count }} Ergebnisse"
-      }
-    },
-    "social": {
-      "share": "Teilen"
+      "placeholder": "Suchen...",
+      "cancel": "Abbrechen",
+      "recent": "Letzte Suchen",
+      "popular": "Beliebte Suchen",
+      "no_results": "Keine Ergebnisse gefunden für",
+      "try_again": "Versuchen Sie es mit anderen Suchbegriffen."
     }
+  },
+  "accessibility": {
+    "skip_to_content": "Zum Inhalt springen",
+    "close": "Schließen",
+    "previous_slide": "Vorheriges Bild",
+    "next_slide": "Nächstes Bild"
   },
   "products": {
     "product": {
+      "add_to_cart": "In den Warenkorb",
       "sold_out": "Ausverkauft",
       "unavailable": "Nicht verfügbar",
-      "add_to_cart": "In den Warenkorb",
+      "new": "Neu",
+      "low_stock": "Nur noch wenige",
+      "select_size": "Größe wählen",
+      "choose_options": "Optionen wählen",
+      "add_to_wishlist": "Zur Wunschliste hinzufügen",
+      "vat_included": "inkl. MwSt.",
+      "shipping_note": "zzgl. Versandkosten",
       "quantity": "Menge",
-      "price": {
-        "from_price_html": "Ab {{ price }}",
-        "regular_price": "Normalpreis",
-        "sale_price": "Angebotspreis"
-      },
-      "vendor": "Hersteller",
-      "sku": "SKU",
-      "size_guide": "Größentabelle",
-      "view_full_details": "Vollständige Details anzeigen",
-      "include_taxes": "inkl. MwSt.",
-      "shipping_policy_html": "zzgl. <a href=\"{{ link }}\">Versandkosten</a>",
-      "low_stock": "Nur noch {{ quantity }} auf Lager!"
+      "sku": "Artikelnummer",
+      "in_stock": "Auf Lager",
+      "low_stock_warning": "Nur noch {{ count }} verfügbar",
+      "price": "Preis",
+      "sale_price": "Angebotspreis",
+      "regular_price": "Normalpreis",
+      "vendor": "Hersteller"
+    },
+    "size_guide": {
+      "title": "Größentabelle",
+      "how_to_measure": "So messen Sie richtig",
+      "bust": "Brustumfang",
+      "waist": "Taillenumfang",
+      "hips": "Hüftumfang",
+      "height": "Körpergröße",
+      "inseam": "Schrittlänge",
+      "need_help": "Brauchen Sie Hilfe?",
+      "contact_us": "Kontaktieren Sie uns"
     }
   },
   "collections": {
     "general": {
-      "title": "Kollektionen",
-      "no_products": "Keine Produkte in dieser Kollektion",
-      "link_title": "Alle {{ title }} Produkte ansehen",
-      "items_with_count": {
-        "one": "{{ count }} Produkt",
-        "other": "{{ count }} Produkte"
-      }
+      "products": "Produkte",
+      "product_count": "{{ count }} Produkte",
+      "of": "von",
+      "showing": "Zeigt {{ current }} von {{ total }}",
+      "no_products": "Keine Produkte gefunden",
+      "no_products_text": "Versuchen Sie, Ihre Filter anzupassen oder durchsuchen Sie unsere anderen Kollektionen.",
+      "browse_all": "Alle Produkte durchstöbern",
+      "load_more": "Mehr laden"
+    },
+    "filtering": {
+      "filter": "Filter",
+      "filters_active": "Filter aktiv",
+      "clear_all": "Alle Filter löschen",
+      "apply": "Filter anwenden",
+      "price": "Preis",
+      "color": "Farbe",
+      "size": "Größe",
+      "brand": "Marke",
+      "dirndl_length": "Dirndllänge"
     },
     "sorting": {
-      "title": "Sortieren nach",
-      "featured": "Empfohlen",
-      "best_selling": "Meistverkauft",
+      "title": "Sortieren",
+      "best_selling": "Bestseller",
       "title_ascending": "Alphabetisch, A-Z",
       "title_descending": "Alphabetisch, Z-A",
-      "price_ascending": "Preis, niedrig nach hoch",
-      "price_descending": "Preis, hoch nach niedrig",
-      "date_ascending": "Datum, alt nach neu",
-      "date_descending": "Datum, neu nach alt"
-    },
-    "filters": {
-      "title": "Filter",
-      "clear_all": "Alle löschen",
-      "apply": "Anwenden",
-      "from": "Von",
-      "to": "Bis"
+      "price_ascending": "Preis aufsteigend",
+      "price_descending": "Preis absteigend",
+      "created_ascending": "Älteste zuerst",
+      "created_descending": "Neueste zuerst"
     }
   },
   "cart": {
@@ -85,84 +102,35 @@
       "empty": "Ihr Warenkorb ist leer",
       "continue_shopping": "Weiter einkaufen",
       "subtotal": "Zwischensumme",
-      "taxes_and_shipping_at_checkout": "Steuern und Versandkosten werden an der Kasse berechnet",
+      "view_cart": "Warenkorb ansehen",
       "checkout": "Zur Kasse",
       "remove": "Entfernen",
-      "update": "Aktualisieren",
-      "note": "Bestellnotiz",
-      "item_added": "Artikel wurde hinzugefügt",
-      "view_cart": "Warenkorb ansehen",
-      "free_shipping_unlocked": "Kostenloser Versand freigeschaltet!",
-      "shipping_remaining": "Noch {{ amount }} bis kostenloser Versand"
+      "note": "Anmerkungen zur Bestellung",
+      "note_placeholder": "Besondere Hinweise zu Ihrer Bestellung...",
+      "shipping_note": "Versandkosten werden an der Kasse berechnet",
+      "payment_methods": "Zahlungsmethoden",
+      "you_may_also_like": "Das könnte Ihnen auch gefallen"
+    },
+    "free_shipping": {
+      "qualified": "Kostenloser Versand!",
+      "remaining": "Nur noch {{ remaining }} bis zum kostenlosen Versand",
+      "progress": "Kostenloser Versand ab {{ threshold }}"
     }
   },
   "customer": {
     "account": {
       "title": "Mein Konto",
-      "log_out": "Abmelden",
-      "details": "Kontodetails",
-      "view_addresses": "Adressen anzeigen"
-    },
-    "login": {
-      "title": "Anmelden",
-      "email": "E-Mail",
-      "password": "Passwort",
-      "forgot_password": "Passwort vergessen?",
-      "sign_in": "Anmelden",
-      "create_account": "Konto erstellen"
-    },
-    "register": {
-      "title": "Konto erstellen",
-      "first_name": "Vorname",
-      "last_name": "Nachname",
-      "email": "E-Mail",
-      "password": "Passwort",
-      "submit": "Erstellen"
-    },
-    "orders": {
-      "title": "Bestellverlauf",
-      "order_number": "Bestellung",
-      "date": "Datum",
-      "payment_status": "Zahlungsstatus",
-      "fulfillment_status": "Versandstatus",
-      "total": "Summe",
-      "none": "Sie haben noch keine Bestellungen aufgegeben."
-    },
-    "addresses": {
-      "title": "Adressen",
-      "default": "Standard",
-      "add_new": "Neue Adresse hinzufügen",
-      "edit": "Bearbeiten",
-      "delete": "Löschen",
-      "first_name": "Vorname",
-      "last_name": "Nachname",
-      "company": "Firma",
-      "address1": "Adresse 1",
-      "address2": "Adresse 2",
-      "city": "Stadt",
-      "country": "Land",
-      "province": "Bundesland",
-      "zip": "PLZ",
-      "phone": "Telefon",
-      "set_default": "Als Standardadresse festlegen",
-      "update": "Adresse aktualisieren",
-      "cancel": "Abbrechen"
+      "login": "Anmelden",
+      "logout": "Abmelden",
+      "register": "Registrieren"
     }
   },
-  "gift_cards": {
-    "issued": {
-      "title": "Ihr {{ value }} Geschenkgutschein für {{ shop }}!",
-      "subtext": "Hier ist Ihr Geschenkgutschein!",
-      "disabled": "Deaktiviert",
-      "expired": "Abgelaufen am {{ expiry }}",
-      "active": "Gültig bis {{ expiry }}",
-      "redeem": "Verwenden Sie diesen Code an der Kasse, um Ihren Geschenkgutschein einzulösen",
-      "shop_link": "Online-Shop besuchen",
-      "print": "Drucken",
-      "add_to_apple_wallet": "Zu Apple Wallet hinzufügen"
+  "layout": {
+    "header": {
+      "menu": "Menü",
+      "cart": "Warenkorb",
+      "search": "Suche",
+      "account": "Konto"
     }
-  },
-  "date_formats": {
-    "month_day_year": "%d. %B %Y"
   }
 }
