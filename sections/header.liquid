@@ -41,14 +41,26 @@
     {%- comment -%} Logo - Centered {%- endcomment -%}
     <div class="header__logo">
       <a href="{{ routes.root_url }}" class="logo">
-        <img
-          src="{{ 'almliebe_logo.svg' | asset_url }}"
-          alt="{{ shop.name }}"
-          width="150"
-          height="auto"
-          loading="eager"
-          class="logo__image"
-        >
+        {% if section.settings.logo != blank %}
+          <img
+            src="{{ section.settings.logo | image_url: width: 300 }}"
+            srcset="{{ section.settings.logo | image_url: width: 300 }} 1x, {{ section.settings.logo | image_url: width: 600 }} 2x"
+            alt="{{ shop.name }}"
+            width="{{ section.settings.logo_width }}"
+            height="auto"
+            loading="eager"
+            class="logo__image"
+          >
+        {% else %}
+          <img
+            src="{{ 'almliebe_logo.svg' | asset_url }}"
+            alt="{{ shop.name }}"
+            width="150"
+            height="auto"
+            loading="eager"
+            class="logo__image"
+          >
+        {% endif %}
       </a>
     </div>
 
@@ -481,6 +493,30 @@
 {
   "name": "Header",
   "settings": [
+    {
+      "type": "header",
+      "content": "Logo"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo Image",
+      "info": "Upload your logo (SVG, PNG, or JPG). Falls back to assets/almliebe_logo.svg if not set."
+    },
+    {
+      "type": "range",
+      "id": "logo_width",
+      "min": 80,
+      "max": 300,
+      "step": 10,
+      "unit": "px",
+      "label": "Logo Width (Desktop)",
+      "default": 150
+    },
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
     {
       "type": "link_list",
       "id": "main_menu",
