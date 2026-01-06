@@ -229,7 +229,7 @@
           action="/cart/add" 
           id="ProductForm-{{ section.id }}"
           class="product__form"
-          data-product-form
+          data-pform
           data-product-id="{{ product.id }}"
           onsubmit="return false;"
         >
@@ -393,10 +393,10 @@
             <button 
               type="button" 
               class="product__add-btn"
-              data-add-to-cart
+              data-atc-btn
               {% unless current_variant.available %}disabled{% endunless %}
             >
-              <span data-add-to-cart-text>
+              <span data-atc-text>
                 {%- if current_variant.available -%}
                   {{ 'products.product.add_to_cart' | t | default: 'IN DEN WARENKORB' | upcase }}
                 {%- else -%}
@@ -1375,13 +1375,13 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Variant selector
-  const form = page.querySelector('[data-product-form]');
+  const form = page.querySelector('[data-pform]');
   const productId = form?.dataset.productId;
   const variantIdInput = form?.querySelector('[data-variant-id]');
   const optionInputs = form?.querySelectorAll('[data-single-option-selector]');
   const priceContainer = page.querySelector('[data-product-price]');
-  const addToCartBtn = page.querySelector('[data-add-to-cart]');
-  const addToCartText = page.querySelector('[data-add-to-cart-text]');
+  const addToCartBtn = page.querySelector('[data-atc-btn]');
+  const addToCartText = page.querySelector('[data-atc-text]');
   const skuElement = page.querySelector('[data-product-sku]');
 
   if (optionInputs && productId) {
@@ -1511,7 +1511,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // ADD TO CART - Button click handler (bypasses theme.js form interception)
-  const addToCartBtn = page.querySelector('[data-add-to-cart]');
   
   if (addToCartBtn && form) {
     
@@ -1520,7 +1519,7 @@ document.addEventListener('DOMContentLoaded', function() {
       e.stopPropagation();
       
       const submitBtn = this;
-      const submitText = form.querySelector('[data-add-to-cart-text]');
+      const submitText = form.querySelector('[data-atc-text]');
       const submitLoading = form.querySelector('.product__add-btn-loading');
       
       // Show loading state
