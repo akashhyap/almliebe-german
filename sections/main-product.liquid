@@ -1140,14 +1140,13 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
       e.stopPropagation();
       
-      
       const clickedSize = this.dataset.stockAlertTrigger;
       
       // Get product data
       const productData = {
-        productId: '{{ product.id }}',
-        title: '{{ product.title | escape }}',
-        image: '{{ product.featured_image | image_url: width: 200 }}',
+        productId: {{ product.id | json }},
+        title: {{ product.title | json }},
+        image: {{ product.featured_image | image_url: width: 200 | json }},
         color: '',
         unavailableVariants: []
       };
@@ -1156,7 +1155,7 @@ document.addEventListener('DOMContentLoaded', function() {
       {%- for option in product.options_with_values -%}
         {%- assign opt_name = option.name | downcase -%}
         {%- if opt_name == 'color' or opt_name == 'colour' or opt_name == 'farbe' -%}
-          productData.color = '{{ option.selected_value | escape }}';
+          productData.color = {{ option.selected_value | json }};
         {%- endif -%}
       {%- endfor -%}
       
@@ -1164,9 +1163,9 @@ document.addEventListener('DOMContentLoaded', function() {
       {%- for variant in product.variants -%}
         {%- unless variant.available -%}
           productData.unavailableVariants.push({
-            id: '{{ variant.id }}',
-            title: '{{ variant.title | escape }}',
-            option: '{{ variant.option1 | default: variant.option2 | default: variant.option3 | escape }}'
+            id: {{ variant.id | json }},
+            title: {{ variant.title | json }},
+            option: {{ variant.option1 | default: variant.option2 | default: variant.option3 | json }}
           });
         {%- endunless -%}
       {%- endfor -%}
