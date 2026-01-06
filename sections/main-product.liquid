@@ -903,86 +903,59 @@
     margin-top: 0.5rem;
   }
 
-  /* Quantity Selector - Professional Minimal Design */
+  /* Quantity Selector - Modern Sleek Design */
   .product__quantity {
     display: inline-flex;
-    align-items: stretch;
-    gap: 0;
-    background: #FFFFFF;
-    border: 1.5px solid #E5E5E5;
-    border-radius: 8px;
-    height: 48px;
+    align-items: center;
+    height: 52px;
+    border: 1px solid #1a1a1a;
+    border-radius: 0;
     overflow: hidden;
-    transition: border-color 0.2s ease;
-  }
-  
-  .product__quantity:hover {
-    border-color: #000000;
-  }
-  
-  .product__quantity:focus-within {
-    border-color: #000000;
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
   }
   
   .quantity__button {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-width: 48px;
-    background: #FFFFFF;
+    width: 52px;
+    height: 100%;
+    background: transparent;
     border: none;
     cursor: pointer;
-    transition: all 0.2s ease;
-    color: #000000;
-    position: relative;
-  }
-  
-  .quantity__button::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    right: 0;
-    transform: translateY(-50%);
-    width: 1px;
-    height: 20px;
-    background: #E5E5E5;
-  }
-  
-  .quantity__button:last-child::after {
-    display: none;
-  }
-  
-  .quantity__button[data-quantity-minus]::after {
-    display: block;
+    transition: all 0.15s ease;
+    color: #1a1a1a;
   }
   
   .quantity__button:hover {
-    background: #F8F8F8;
+    background: #1a1a1a;
+    color: #ffffff;
   }
   
   .quantity__button:active {
-    background: #F0F0F0;
+    transform: scale(0.95);
   }
   
   .quantity__button svg {
-    width: 16px;
-    height: 16px;
-    stroke-width: 2.5;
+    width: 14px;
+    height: 14px;
+    stroke-width: 2;
   }
   
   .quantity__input {
-    min-width: 56px;
-    max-width: 64px;
+    width: 60px;
     height: 100%;
     text-align: center;
-    font-size: 0.9375rem;
-    font-weight: 600;
-    color: #000000;
-    background: #FFFFFF;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #1a1a1a;
+    background: transparent;
     border: none;
+    border-left: 1px solid #1a1a1a;
+    border-right: 1px solid #1a1a1a;
     -moz-appearance: textfield;
     appearance: textfield;
+    font-family: inherit;
+    letter-spacing: 0.02em;
   }
   
   .quantity__input::-webkit-outer-spin-button,
@@ -993,22 +966,21 @@
   
   .quantity__input:focus {
     outline: none;
-    background: #FAFAFA;
   }
   
   /* Mobile adjustments */
   @media (max-width: 767px) {
     .product__quantity {
-      height: 44px;
+      height: 48px;
     }
     
     .quantity__button {
-      min-width: 44px;
+      width: 48px;
     }
     
     .quantity__input {
-      min-width: 48px;
-      font-size: 0.875rem;
+      width: 52px;
+      font-size: 0.9375rem;
     }
   }
 
