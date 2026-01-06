@@ -1215,22 +1215,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const addToCartText = page.querySelector('[data-add-to-cart-text]');
   const skuElement = page.querySelector('[data-product-sku]');
 
-    form: form ? 'FOUND' : 'NOT FOUND',
-    productId: productId,
-    variantIdInput: variantIdInput ? variantIdInput.value : 'NOT FOUND',
-    addToCartBtn: addToCartBtn ? 'FOUND' : 'NOT FOUND',
-    addToCartText: addToCartText ? addToCartText.textContent.trim() : 'NOT FOUND',
-    addToCartBtnDisabled: addToCartBtn?.disabled,
-    addToCartBtnHTML: addToCartBtn?.innerHTML.substring(0, 100)
-  });
-  
-  // Check the loading spinner state
-  const loadingSpinner = page.querySelector('.product__add-btn-loading');
-    element: loadingSpinner ? 'FOUND' : 'NOT FOUND',
-    hidden: loadingSpinner?.hidden,
-    display: loadingSpinner ? getComputedStyle(loadingSpinner).display : 'N/A'
-  });
-
   if (optionInputs && productId) {
     optionInputs.forEach(input => {
       // Use both click and change events for better compatibility
@@ -1345,13 +1329,6 @@ document.addEventListener('DOMContentLoaded', function() {
       const submitBtn = form.querySelector('[data-add-to-cart]');
       const submitText = form.querySelector('[data-add-to-cart-text]');
       const submitLoading = form.querySelector('.product__add-btn-loading');
-      
-        submitBtn: !!submitBtn,
-        submitText: !!submitText,
-        submitTextValue: submitText?.textContent?.trim(),
-        submitLoading: !!submitLoading,
-        submitLoadingHidden: submitLoading?.hidden
-      });
       
       // Show loading state
       if (submitText) submitText.hidden = true;
