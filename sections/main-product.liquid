@@ -903,38 +903,66 @@
     margin-top: 0.5rem;
   }
 
-  /* Quantity Selector - Modern Chic Style */
+  /* Quantity Selector - Professional Minimal Design */
   .product__quantity {
     display: inline-flex;
-    align-items: center;
+    align-items: stretch;
     gap: 0;
-    background: #000000;
-    border-radius: 50px;
-    padding: 4px;
+    background: #FFFFFF;
+    border: 1.5px solid #E5E5E5;
+    border-radius: 8px;
     height: 48px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+  }
+  
+  .product__quantity:hover {
+    border-color: #000000;
+  }
+  
+  .product__quantity:focus-within {
+    border-color: #000000;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
   }
   
   .quantity__button {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
-    background: transparent;
+    min-width: 48px;
+    background: #FFFFFF;
     border: none;
-    border-radius: 50%;
     cursor: pointer;
     transition: all 0.2s ease;
-    color: #ffffff;
+    color: #000000;
+    position: relative;
+  }
+  
+  .quantity__button::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 20px;
+    background: #E5E5E5;
+  }
+  
+  .quantity__button:last-child::after {
+    display: none;
+  }
+  
+  .quantity__button[data-quantity-minus]::after {
+    display: block;
   }
   
   .quantity__button:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: #F8F8F8;
   }
   
   .quantity__button:active {
-    background: rgba(255, 255, 255, 0.25);
-    transform: scale(0.95);
+    background: #F0F0F0;
   }
   
   .quantity__button svg {
@@ -944,13 +972,14 @@
   }
   
   .quantity__input {
-    width: 48px;
-    height: 40px;
+    min-width: 56px;
+    max-width: 64px;
+    height: 100%;
     text-align: center;
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-weight: 600;
-    color: #ffffff;
-    background: transparent;
+    color: #000000;
+    background: #FFFFFF;
     border: none;
     -moz-appearance: textfield;
     appearance: textfield;
@@ -964,6 +993,23 @@
   
   .quantity__input:focus {
     outline: none;
+    background: #FAFAFA;
+  }
+  
+  /* Mobile adjustments */
+  @media (max-width: 767px) {
+    .product__quantity {
+      height: 44px;
+    }
+    
+    .quantity__button {
+      min-width: 44px;
+    }
+    
+    .quantity__input {
+      min-width: 48px;
+      font-size: 0.875rem;
+    }
   }
 
   .product__add-btn {
