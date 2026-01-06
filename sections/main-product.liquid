@@ -231,6 +231,7 @@
           class="product__form"
           data-product-form
           data-product-id="{{ product.id }}"
+          onsubmit="return false;"
         >
           <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id>
 
@@ -390,7 +391,7 @@
             <input type="hidden" name="quantity" value="1">
 
             <button 
-              type="submit" 
+              type="button" 
               class="product__add-btn"
               data-add-to-cart
               {% unless current_variant.available %}disabled{% endunless %}
@@ -589,7 +590,7 @@
   @media (min-width: 1024px) {
     .product-page__grid {
       grid-template-columns: 1fr 1fr;
-      gap: 3rem;
+      gap: 5rem;
     }
   }
 
@@ -895,18 +896,18 @@
   
   .product__size-text {
     font-size: 0.9375rem;
-    font-weight: 500;
+    font-weight: 300;
     color: #111827;
     transition: all 0.15s ease;
   }
   
   .product__size-btn:hover .product__size-text {
     color: #000000;
-    font-weight: 600;
+    font-weight: 400;
   }
   
   .product__size-btn.is-selected .product__size-text {
-    font-weight: 700;
+    font-weight: 500;
     color: #000000;
   }
   
@@ -1499,16 +1500,26 @@ document.addEventListener('DOMContentLoaded', function() {
       new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(cents / 100);
   }
 
-  // ADD TO CART FORM SUBMISSION
-  
+  // Prevent form submission completely (stops theme.js interception)
   if (form) {
-    
-    form.addEventListener('submit', async function(e) {
+    form.addEventListener('submit', function(e) {
       e.preventDefault();
       e.stopPropagation();
       e.stopImmediatePropagation();
+      return false;
+    }, true);
+  }
+
+  // ADD TO CART - Button click handler (bypasses theme.js form interception)
+  const addToCartBtn = page.querySelector('[data-add-to-cart]');
+  
+  if (addToCartBtn && form) {
+    
+    addToCartBtn.addEventListener('click', async function(e) {
+      e.preventDefault();
+      e.stopPropagation();
       
-      const submitBtn = form.querySelector('[data-add-to-cart]');
+      const submitBtn = this;
       const submitText = form.querySelector('[data-add-to-cart-text]');
       const submitLoading = form.querySelector('.product__add-btn-loading');
       
@@ -1589,10 +1600,7 @@ document.addEventListener('DOMContentLoaded', function() {
           if (submitBtn) submitBtn.disabled = false;
         }, 3000);
       }
-      
-      return false;
-    }, { capture: true });
-  } else {
+    });
   }
   
 });
