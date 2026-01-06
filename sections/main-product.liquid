@@ -56,7 +56,7 @@
 -%}
 
 {%- comment -%} Breadcrumbs {%- endcomment -%}
-<div class="container">
+<div class="breadcrumb-wrapper">
   {% render 'breadcrumbs', type: 'product', product: product %}
 </div>
 
@@ -190,7 +190,7 @@
               <span class="price__regular">{{ current_variant.price | money }}</span>
             {%- endif -%}
           {%- else -%}
-            <span class="price__soldout">{{ 'products.product.sold_out' | t }}</span>
+            <span class="price__soldout">{{ 'products.product.sold_out' | t | default: 'AUSVERKAUFT' | upcase }}</span>
           {%- endif -%}
           
           {%- if settings.show_vat_included -%}
@@ -240,30 +240,15 @@
               {%- for option in product.options_with_values -%}
                 {%- assign option_name_lower = option.name | downcase -%}
                 
-                <div class="product__option" data-option-position="{{ option.position }}">
-                  <div class="product__option-header">
-                    <label class="product__option-label">
-                      {{ option.name }}:
-                      <span class="product__option-value" data-selected-option="{{ option.position }}">{{ option.selected_value }}</span>
-                    </label>
-                    
-                    {%- comment -%} Size Guide Link {%- endcomment -%}
-                    {%- if option_name_lower == 'size' or option_name_lower == 'größe' -%}
-                      {%- if settings.enable_size_guide -%}
-                        <button type="button" class="product__size-guide-link" data-modal-open="SizeGuideModal">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
-                            <line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
-                          </svg>
-                          {{ 'products.product.size_guide' | t | default: 'Größentabelle' }}
-                        </button>
-                      {%- endif -%}
-                    {%- endif -%}
-                  </div>
-
-                  {%- comment -%} Color swatches vs regular options {%- endcomment -%}
-                  {%- if option_name_lower == 'color' or option_name_lower == 'colour' or option_name_lower == 'farbe' -%}
+                {%- comment -%} Color swatches {%- endcomment -%}
+                {%- if option_name_lower == 'color' or option_name_lower == 'colour' or option_name_lower == 'farbe' -%}
+                  <div class="product__option" data-option-position="{{ option.position }}">
+                    <div class="product__option-header">
+                      <label class="product__option-label">
+                        {{ option.name }}:
+                        <span class="product__option-value" data-selected-option="{{ option.position }}">{{ option.selected_value }}</span>
+                      </label>
+                    </div>
                     <div class="product__option-swatches">
                       {%- for value in option.values -%}
                         {%- assign swatch_color = value | handleize -%}
@@ -279,7 +264,70 @@
                         </label>
                       {%- endfor -%}
                     </div>
-                  {%- else -%}
+                  </div>
+                
+                {%- comment -%} Size selector - Gymshark style box {%- endcomment -%}
+                {%- elsif option_name_lower == 'size' or option_name_lower == 'größe' -%}
+                  <div class="product__size-selector" data-option-position="{{ option.position }}">
+                    <div class="product__size-header">
+                      <span class="product__size-label">{{ 'products.product.select_size' | t | default: 'Größe wählen' }}</span>
+                      <button type="button" class="product__size-guide-link" data-modal-open="SizeGuideModal">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                          <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
+                          <line x1="16" y1="17" x2="8" y2="17"/>
+                        </svg>
+                        {{ 'products.product.size_guide' | t | default: 'Größentabelle' }}
+                      </button>
+                    </div>
+                    <div class="product__size-box">
+                      <div class="product__size-options">
+                        {%- for value in option.values -%}
+                          {%- liquid
+                            assign variant_available = false
+                            assign option_index = option.position | minus: 1
+                            for variant in product.variants
+                              if variant.options[option_index] == value and variant.available
+                                assign variant_available = true
+                                break
+                              endif
+                            endfor
+                          -%}
+                          <label class="product__size-btn{% if option.selected_value == value %} is-selected{% endif %}{% unless variant_available %} is-unavailable{% endunless %}" data-option-value="{{ value | escape }}">
+                            {%- unless variant_available -%}
+                              <span class="product__size-bell" data-stock-alert-trigger="{{ value | escape }}" title="Benachrichtigung bei Verfügbarkeit">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                                  <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                                </svg>
+                              </span>
+                            {%- endunless -%}
+                            <input 
+                              type="radio" 
+                              name="option{{ option.position }}" 
+                              value="{{ value | escape }}"
+                              {% if option.selected_value == value %}checked{% endif %}
+                              {% unless variant_available %}disabled{% endunless %}
+                              data-single-option-selector
+                            >
+                            <span class="product__size-text">{{ value }}</span>
+                          </label>
+                        {%- endfor -%}
+                      </div>
+                    </div>
+                    {%- comment -%} Hidden span to track selected value {%- endcomment -%}
+                    <span class="product__option-value visually-hidden" data-selected-option="{{ option.position }}">{{ option.selected_value }}</span>
+                  </div>
+                
+                {%- comment -%} Other options - default buttons {%- endcomment -%}
+                {%- else -%}
+                  <div class="product__option" data-option-position="{{ option.position }}">
+                    <div class="product__option-header">
+                      <label class="product__option-label">
+                        {{ option.name }}:
+                        <span class="product__option-value" data-selected-option="{{ option.position }}">{{ option.selected_value }}</span>
+                      </label>
+                    </div>
                     <div class="product__option-buttons">
                       {%- for value in option.values -%}
                         {%- liquid
@@ -293,14 +341,6 @@
                           endfor
                         -%}
                         <label class="product__option-btn{% unless variant_available %} product__option-btn--unavailable{% endunless %}" data-option-value="{{ value | escape }}">
-                          {%- unless variant_available -%}
-                            <span class="stock-alert-bell" data-stock-alert-trigger="{{ value | escape }}" title="Benachrichtigung bei Verfügbarkeit">
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                              </svg>
-                            </span>
-                          {%- endunless -%}
                           <input 
                             type="radio" 
                             name="option{{ option.position }}" 
@@ -313,14 +353,15 @@
                         </label>
                       {%- endfor -%}
                     </div>
-                  {%- endif -%}
-                </div>
+                  </div>
+                {%- endif -%}
               {%- endfor -%}
             </div>
           {%- endunless -%}
 
-          {%- comment -%} Quantity & Add to Cart {%- endcomment -%}
+          {%- comment -%} Add to Cart - Full width pill button {%- endcomment -%}
           <div class="product__actions">
+            {%- comment -%} Quantity selector - commented out for now
             <div class="product__quantity">
               <label class="visually-hidden" for="Quantity-{{ section.id }}">{{ 'products.product.quantity' | t }}</label>
               <button type="button" class="quantity__button" data-quantity-minus aria-label="Decrease quantity">
@@ -343,22 +384,25 @@
                 </svg>
               </button>
             </div>
+            {%- endcomment -%}
+            
+            {%- comment -%} Hidden quantity input to maintain form functionality {%- endcomment -%}
+            <input type="hidden" name="quantity" value="1">
 
             <button 
               type="submit" 
-              class="product__add-btn btn btn--primary btn--large"
+              class="product__add-btn"
               data-add-to-cart
               {% unless current_variant.available %}disabled{% endunless %}
-              style="background-color: #000000 !important; border-color: #000000 !important;"
             >
               <span data-add-to-cart-text>
                 {%- if current_variant.available -%}
-                  {{ 'products.product.add_to_cart' | t | default: 'In den Warenkorb' }}
+                  {{ 'products.product.add_to_cart' | t | default: 'IN DEN WARENKORB' | upcase }}
                 {%- else -%}
-                  {{ 'products.product.sold_out' | t | default: 'Ausverkauft' }}
+                  {{ 'products.product.sold_out' | t | default: 'AUSVERKAUFT' | upcase }}
                 {%- endif -%}
               </span>
-              <span class="product__add-btn-loading" hidden style="display: none;">
+              <span class="product__add-btn-loading" hidden>
                 <span class="spinner spinner--small"></span>
               </span>
             </button>
@@ -518,6 +562,25 @@
 {% render 'product-schema', product: product %}
 
 <style>
+  /* Breadcrumb wrapper */
+  .breadcrumb-wrapper {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 1rem 1rem 0.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .breadcrumb-wrapper {
+      padding: 1rem 2rem 0.5rem;
+    }
+  }
+  
+  /* Reduce top spacing */
+  .product-page.section {
+    padding-top: 0;
+    margin-top: 0;
+  }
+  
   .product-page__grid {
     display: grid;
     gap: 2rem;
@@ -738,7 +801,7 @@
   .product__variants {
     display: flex;
     flex-direction: column;
-    gap: 1.25rem;
+    gap: 1.5rem;
   }
 
   .product__option-header {
@@ -759,22 +822,133 @@
     margin-left: 0.25rem;
   }
 
+  /* Size Selector - Gymshark Style */
+  .product__size-selector {
+    margin-top: 0.5rem;
+  }
+  
+  .product__size-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+  
+  .product__size-label {
+    font-size: 0.9375rem;
+    font-weight: 400;
+    color: #6b7280;
+  }
+
   .product__size-guide-link {
     display: flex;
     align-items: center;
     gap: 0.375rem;
-    font-size: 0.8125rem;
-    color: #000000;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #111827;
     background: none;
     border: none;
     cursor: pointer;
     padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
 
   .product__size-guide-link:hover {
-    text-decoration: underline;
+    color: #000000;
+  }
+  
+  .product__size-box {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 1.25rem 1rem;
+  }
+  
+  .product__size-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0;
+  }
+  
+  .product__size-btn {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 56px;
+    height: 48px;
+    padding: 0 0.75rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  
+  .product__size-btn input {
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
+  
+  .product__size-text {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: #111827;
+    transition: all 0.15s ease;
+  }
+  
+  .product__size-btn:hover .product__size-text {
+    color: #000000;
+    font-weight: 600;
+  }
+  
+  .product__size-btn.is-selected .product__size-text {
+    font-weight: 700;
+    color: #000000;
+  }
+  
+  .product__size-btn.is-unavailable {
+    cursor: pointer;
+  }
+  
+  .product__size-btn.is-unavailable .product__size-text {
+    color: #9ca3af;
+    text-decoration: line-through;
+  }
+  
+  .product__size-btn.is-unavailable input {
+    cursor: pointer;
+  }
+  
+  /* Size Bell Icon */
+  .product__size-bell {
+    position: absolute;
+    top: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 5;
+  }
+  
+  .product__size-bell svg {
+    width: 14px;
+    height: 14px;
+    stroke: #9ca3af;
+    transition: all 0.2s ease;
+  }
+  
+  .product__size-bell:hover svg {
+    stroke: #111827;
+    transform: scale(1.1);
   }
 
+  /* Legacy option buttons for non-size options */
   .product__option-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -830,36 +1004,6 @@
   .product__option-btn--unavailable input {
     cursor: not-allowed;
   }
-  
-  /* Stock Alert Bell Icon - Clean minimal style */
-  .stock-alert-bell {
-    position: absolute;
-    top: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 16px;
-    height: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    z-index: 5;
-    padding: 0;
-  }
-  
-  .stock-alert-bell:hover svg {
-    stroke: #000000;
-    transform: scale(1.1);
-  }
-  
-  .stock-alert-bell svg {
-    width: 14px;
-    height: 14px;
-    stroke: #666666;
-    transition: all 0.2s ease;
-  }
 
   /* Color swatches */
   .product__option-swatches {
@@ -898,95 +1042,72 @@
     transform: scale(1.1);
   }
 
-  /* Actions */
+  /* Actions - Add to Cart */
   .product__actions {
-    display: flex;
-    gap: 1rem;
-    margin-top: 0.5rem;
-  }
-
-  /* Quantity Selector - Clean Minimal Style */
-  .product__quantity {
-    display: inline-flex;
-    align-items: center;
-    border: 1.5px solid #e5e5e5;
-    border-radius: 8px;
-    background: #ffffff;
-    overflow: hidden;
-  }
-  
-  .quantity__button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    background: #fafafa;
-    border: none;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    color: #374151;
-  }
-  
-  .quantity__button:hover {
-    background: #f3f4f6;
-    color: #111827;
-  }
-  
-  .quantity__button:active {
-    background: #e5e7eb;
-  }
-  
-  .quantity__button svg {
-    width: 16px;
-    height: 16px;
-    stroke-width: 2;
-  }
-  
-  .quantity__input {
-    width: 56px;
-    height: 44px;
-    text-align: center;
-    font-size: 0.9375rem;
-    font-weight: 500;
-    color: #111827;
-    background: #ffffff;
-    border: none;
-    border-left: 1.5px solid #e5e5e5;
-    border-right: 1.5px solid #e5e5e5;
-    -moz-appearance: textfield;
-    appearance: textfield;
-  }
-  
-  .quantity__input::-webkit-outer-spin-button,
-  .quantity__input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  
-  .quantity__input:focus {
-    outline: none;
-    background: #f9fafb;
+    margin-top: 1.5rem;
   }
 
   .product__add-btn {
-    flex: 1;
-    position: relative;
-  }
-
-  .product__add-btn-loading {
-    position: absolute;
-    inset: 0;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: inherit;
+    gap: 0.5rem;
+    padding: 1.125rem 2rem;
+    background: #111827;
+    color: #ffffff;
+    border: none;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .product__add-btn:hover:not(:disabled) {
+    background: #000000;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .product__add-btn:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+  
+  .product__add-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+  }
+  
+  .product__add-btn-loading {
+    display: none;
+  }
+  
+  .product__add-btn-loading:not([hidden]) {
+    display: inline-flex;
+  }
+  
+  .product__add-btn .spinner--small {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
   }
 
-  .spinner--small {
-    width: 20px;
-    height: 20px;
-    border-width: 2px;
+  /* Quantity Selector - Commented out but keeping styles */
+  .product__quantity {
+    display: none;
+  }
+
+  /* Trust Badges */
   }
 
   /* Trust Badges */
@@ -1274,6 +1395,18 @@ document.addEventListener('DOMContentLoaded', function() {
         if (selectedDisplay) {
           selectedDisplay.textContent = this.value;
         }
+        
+        // Update size button selected state (for Gymshark-style selector)
+        const parentLabel = this.closest('.product__size-btn');
+        if (parentLabel) {
+          const sizeContainer = this.closest('.product__size-options');
+          if (sizeContainer) {
+            sizeContainer.querySelectorAll('.product__size-btn').forEach(btn => {
+              btn.classList.remove('is-selected');
+            });
+            parentLabel.classList.add('is-selected');
+          }
+        }
 
         // Get all selected options
         const selectedOptions = [];
@@ -1315,7 +1448,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   priceHTML = `<span class="price__regular">${formatMoney(variant.price)}</span>`;
                 }
               } else {
-                priceHTML = `<span class="price__soldout">Ausverkauft</span>`;
+                priceHTML = `<span class="price__soldout">AUSVERKAUFT</span>`;
               }
               
               // Keep price note
@@ -1328,10 +1461,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (addToCartBtn && addToCartText) {
               if (variant.available) {
                 addToCartBtn.disabled = false;
-                addToCartText.textContent = window.almliebe?.strings?.addToCart || 'In den Warenkorb';
+                addToCartText.textContent = 'IN DEN WARENKORB';
               } else {
                 addToCartBtn.disabled = true;
-                addToCartText.textContent = window.almliebe?.strings?.soldOut || 'Ausverkauft';
+                addToCartText.textContent = 'AUSVERKAUFT';
               }
             }
 
@@ -1403,14 +1536,14 @@ document.addEventListener('DOMContentLoaded', function() {
           // Show success state briefly
           if (submitText) {
             submitText.hidden = false;
-            submitText.textContent = '✓ Hinzugefügt';
+            submitText.textContent = '✓ HINZUGEFÜGT';
           }
           if (submitLoading) submitLoading.hidden = true;
           
           // Reset button after 2 seconds
           setTimeout(() => {
             if (submitText) {
-              submitText.textContent = {{ "products.product.add_to_cart" | t | default: "In den Warenkorb" | json }};
+              submitText.textContent = 'IN DEN WARENKORB';
             }
             if (submitBtn) submitBtn.disabled = false;
           }, 2000);
@@ -1425,14 +1558,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show error state
         if (submitText) {
           submitText.hidden = false;
-          submitText.textContent = 'Fehler - Bitte erneut versuchen';
+          submitText.textContent = 'FEHLER - BITTE ERNEUT VERSUCHEN';
         }
         if (submitLoading) submitLoading.hidden = true;
         
         // Reset after 3 seconds
         setTimeout(() => {
           if (submitText) {
-            submitText.textContent = {{ "products.product.add_to_cart" | t | default: "In den Warenkorb" | json }};
+            submitText.textContent = 'IN DEN WARENKORB';
           }
           if (submitBtn) submitBtn.disabled = false;
         }, 3000);
