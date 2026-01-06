@@ -1135,23 +1135,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Stock Alert Bell - Open drawer when clicking on bell icon
   const stockAlertBells = page.querySelectorAll('[data-stock-alert-trigger]');
-  console.log('Found stock alert bells:', stockAlertBells.length);
+  console.log('Found bells', stockAlertBells.length);
   
   stockAlertBells.forEach(bell => {
     bell.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
-      console.log('Bell clicked!');
+      console.log('Bell clicked');
       
       const clickedSize = this.dataset.stockAlertTrigger;
-      console.log('Clicked size:', clickedSize);
       
-      // Get product data
+      // Get product data - built safely
       const productData = {
-        productId: {{ product.id | json }},
+        productId: String({{ product.id }}),
         title: {{ product.title | json }},
-        image: {{ product.featured_image | image_url: width: 200 | json }},
-        color: '',
+        image: "{{ product.featured_image | image_url: width: 200 | default: '' }}",
+        color: "",
         unavailableVariants: []
       };
       
@@ -1159,38 +1158,36 @@ document.addEventListener('DOMContentLoaded', function() {
       {%- for option in product.options_with_values -%}
         {%- assign opt_name = option.name | downcase -%}
         {%- if opt_name == 'color' or opt_name == 'colour' or opt_name == 'farbe' -%}
-          productData.color = {{ option.selected_value | json }};
+      productData.color = {{ option.selected_value | json }};
         {%- endif -%}
       {%- endfor -%}
       
       // Get all unavailable variants
       {%- for variant in product.variants -%}
         {%- unless variant.available -%}
-          productData.unavailableVariants.push({
-            id: {{ variant.id | json }},
-            title: {{ variant.title | json }},
-            option: {{ variant.option1 | default: variant.option2 | default: variant.option3 | json }}
-          });
+      productData.unavailableVariants.push({
+        id: String({{ variant.id }}),
+        title: {{ variant.title | json }},
+        option: {{ variant.option1 | default: variant.option2 | default: variant.option3 | json }}
+      });
         {%- endunless -%}
       {%- endfor -%}
       
-      console.log('Product data:', productData);
+      console.log('Product data built');
       
       // Pre-select the clicked size
       const clickedVariantIndex = productData.unavailableVariants.findIndex(v => v.option === clickedSize);
       if (clickedVariantIndex > 0) {
-        // Move clicked variant to front
         const clicked = productData.unavailableVariants.splice(clickedVariantIndex, 1)[0];
         productData.unavailableVariants.unshift(clicked);
       }
       
       // Open the drawer
-      console.log('openStockAlertDrawer exists:', typeof window.openStockAlertDrawer);
       if (typeof window.openStockAlertDrawer === 'function') {
-        console.log('Calling openStockAlertDrawer...');
+        console.log('Opening drawer');
         window.openStockAlertDrawer(productData);
       } else {
-        console.error('Stock alert drawer not found! Add back-in-stock-drawer snippet to theme.');
+        console.error('Drawer function not found');
         alert('Benachrichtigungs-Funktion nicht verfügbar.');
       }
     });
@@ -1366,9 +1363,6 @@ document.addEventListener('DOMContentLoaded', function() {
       if (submitBtn) submitBtn.disabled = true;
       
       const formData = new FormData(form);
-      for (let [key, value] of formData.entries()) {
-        console.log(`   ${key}: ${value}`);
-      }
       
       try {
         const response = await fetch('/cart/add.js', {
@@ -1394,7 +1388,7 @@ document.addEventListener('DOMContentLoaded', function() {
           // Reset button after 2 seconds
           setTimeout(() => {
             if (submitText) {
-              submitText.textContent = '{{ "products.product.add_to_cart" | t | default: "In den Warenkorb" }}';
+              submitText.textContent = {{ "products.product.add_to_cart" | t | default: "In den Warenkorb" | json }};
             }
             if (submitBtn) submitBtn.disabled = false;
           }, 2000);
@@ -1416,7 +1410,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Reset after 3 seconds
         setTimeout(() => {
           if (submitText) {
-            submitText.textContent = '{{ "products.product.add_to_cart" | t | default: "In den Warenkorb" }}';
+            submitText.textContent = {{ "products.product.add_to_cart" | t | default: "In den Warenkorb" | json }};
           }
           if (submitBtn) submitBtn.disabled = false;
         }, 3000);
