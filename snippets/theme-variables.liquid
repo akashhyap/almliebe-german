@@ -1,0 +1,194 @@
+{% comment %}
+  THEME VARIABLES - Almliebe Black & White Theme
+  
+  Add this to your theme.liquid in the <head> section:
+  {% render 'theme-variables' %}
+{% endcomment %}
+
+<style>
+  :root {
+    /* Primary Colors - Monochrome */
+    --color-primary: #000000;
+    --color-secondary: #333333;
+    --color-accent: #000000;
+    
+    /* Text Colors */
+    --color-text: #1a1a1a;
+    --color-text-secondary: #666666;
+    --color-text-light: #999999;
+    
+    /* Background Colors */
+    --color-background: #f5f5f5;
+    --color-background-alt: #fafafa;
+    --color-surface: #ffffff;
+    
+    /* Border Colors */
+    --color-border: #e5e5e5;
+    --color-border-dark: #cccccc;
+    
+    /* Functional Colors */
+    --color-sale: #c53030;
+    --color-success: #2f855a;
+    --color-warning: #c05621;
+    --color-error: #c53030;
+    
+    /* UI Elements */
+    --border-radius: 0px;
+    --border-radius-sm: 0px;
+    --border-radius-lg: 0px;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+    
+    /* Z-index layers */
+    --z-dropdown: 50;
+    --z-sticky: 60;
+    --z-drawer: 100;
+    --z-modal: 200;
+    --z-tooltip: 300;
+    
+    /* Typography */
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    
+    /* Transitions */
+    --transition-fast: 150ms ease;
+    --transition-base: 250ms ease;
+    --transition-slow: 350ms ease;
+  }
+
+  /* Base Button Styles */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all var(--transition-base);
+  }
+
+  .btn--primary {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+
+  .btn--primary:hover {
+    background: var(--color-secondary);
+    border-color: var(--color-secondary);
+  }
+
+  .btn--secondary {
+    background: transparent;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  .btn--secondary:hover {
+    background: var(--color-primary);
+    color: white;
+  }
+
+  .btn--full {
+    width: 100%;
+  }
+
+  /* Container */
+  .container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .container {
+      padding: 0 2rem;
+    }
+  }
+
+  /* Section spacing */
+  .section {
+    padding: 3rem 0;
+  }
+
+  @media (min-width: 768px) {
+    .section {
+      padding: 4rem 0;
+    }
+  }
+
+  /* Visually Hidden */
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* Rich Text */
+  .rte h1, .rte h2, .rte h3, .rte h4, .rte h5, .rte h6 {
+    margin-top: 1.5em;
+    margin-bottom: 0.5em;
+  }
+
+  .rte p {
+    margin-bottom: 1em;
+  }
+
+  .rte ul, .rte ol {
+    margin-bottom: 1em;
+    padding-left: 1.5em;
+  }
+
+  .rte a {
+    color: var(--color-primary);
+    text-decoration: underline;
+  }
+
+  /* Spinner */
+  .spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-border);
+    border-top-color: var(--color-primary);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  .spinner--small {
+    width: 14px;
+    height: 14px;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Responsive utilities */
+  @media (max-width: 767px) {
+    .hidden-mobile {
+      display: none !important;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .hidden-desktop {
+      display: none !important;
+    }
+  }
+</style>

@@ -68,13 +68,13 @@
 <style>
   .free-shipping-bar {
     padding: 0.75rem 1rem;
-    background: var(--color-background);
-    border-radius: var(--border-radius);
+    background: #f5f5f5;
+    border-radius: 0;
     margin-bottom: 1rem;
   }
 
   .free-shipping-bar--complete {
-    background: rgba(46, 125, 50, 0.1);
+    background: rgba(0, 0, 0, 0.05);
   }
 
   .free-shipping-bar__content {
@@ -91,33 +91,33 @@
 
   .free-shipping-bar__icon {
     flex-shrink: 0;
-    color: var(--color-primary);
+    color: #000000;
   }
 
   .free-shipping-bar--complete .free-shipping-bar__icon--check {
-    color: var(--color-success);
+    color: #2f855a;
   }
 
   .free-shipping-bar--complete .free-shipping-bar__message {
-    color: var(--color-success);
+    color: #2f855a;
   }
 
   .free-shipping-bar__track {
     height: 6px;
-    background: var(--color-border);
+    background: #e5e5e5;
     border-radius: 3px;
     overflow: hidden;
   }
 
   .free-shipping-bar__progress {
     height: 100%;
-    background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+    background: #000000;
     border-radius: 3px;
     transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .free-shipping-bar--complete .free-shipping-bar__progress {
-    background: var(--color-success);
+    background: #2f855a;
   }
 
   /* Animation on completion */

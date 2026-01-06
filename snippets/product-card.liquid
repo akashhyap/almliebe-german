@@ -342,23 +342,24 @@
   }
 
   .badge--sale {
-    background: var(--color-sale);
+    background: var(--color-sale, #c53030);
     color: white;
   }
 
   .badge--new {
-    background: var(--color-primary);
+    background: var(--color-primary, #000000);
     color: white;
   }
 
   .badge--soldout {
-    background: var(--color-text-secondary);
+    background: #666666;
     color: white;
   }
 
   .badge--lowstock {
-    background: var(--color-warning);
-    color: var(--color-text);
+    background: #f5f5f5;
+    color: #1a1a1a;
+    border: 1px solid #e5e5e5;
   }
 
   /* Wishlist Button */
@@ -389,8 +390,8 @@
   }
 
   .product-card__wishlist.is-active .icon-heart {
-    fill: var(--color-sale);
-    stroke: var(--color-sale);
+    fill: var(--color-sale, #c53030);
+    stroke: var(--color-sale, #c53030);
   }
 
   /* Quick Add (Desktop) */
@@ -401,11 +402,11 @@
     right: 0;
     padding: 0.875rem;
     font-size: 0.8125rem;
-    font-weight: 600;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     color: white;
-    background: var(--color-primary);
+    background: #000000;
     border: none;
     cursor: pointer;
     transform: translateY(100%);
@@ -420,7 +421,7 @@
   }
 
   .product-card__quick-add:hover {
-    background: var(--color-secondary);
+    background: #333333;
   }
 
   /* Mobile Size Overlay (Gymshark Pattern) */
@@ -473,8 +474,8 @@
   }
 
   .product-card__size-btn:hover:not(:disabled) {
-    border-color: var(--color-primary);
-    background: var(--color-primary);
+    border-color: #000000;
+    background: #000000;
     color: white;
   }
 
@@ -510,7 +511,7 @@
   }
 
   .product-card__title a:hover {
-    color: var(--color-primary);
+    color: #666666;
   }
 
   /* Color Swatches */
@@ -548,7 +549,7 @@
   }
 
   .price__sale {
-    color: var(--color-sale);
+    color: var(--color-sale, #c53030);
   }
 
   .price__compare {
