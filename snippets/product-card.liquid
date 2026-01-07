@@ -91,7 +91,7 @@
 -%}
 
 <div 
-  class="product-card{% if available == false %} product-card--sold-out{% endif %}{% if has_sizes %} product-card--has-sizes{% endif %}" 
+  class="product-card{% if available == false %} product-card--sold-out{% endif %}{% if has_sizes %} product-card--has-sizes{% endif %}{% if secondary_image %} product-card--has-secondary{% endif %}" 
   data-product-card 
   data-product-id="{{ product.id }}"
   data-product-url="{{ product.url }}"
@@ -268,12 +268,13 @@
     opacity: 0;
   }
 
+  /* Only swap images on hover if secondary image exists */
   @media (min-width: 1024px) {
-    .product-card:hover .product-card__image--primary {
+    .product-card--has-secondary:hover .product-card__image--primary {
       opacity: 0;
     }
     
-    .product-card:hover .product-card__image--secondary {
+    .product-card--has-secondary:hover .product-card__image--secondary {
       opacity: 1;
     }
   }
