@@ -124,6 +124,7 @@
                 assign filter_label_lower = filter.label | downcase
                 assign is_color = false
                 assign is_size = false
+                assign is_hersteller = false
                 
                 if filter_label_lower contains 'color' or filter_label_lower contains 'farbe' or filter_label_lower contains 'colour'
                   assign is_color = true
@@ -132,9 +133,13 @@
                 if filter_label_lower contains 'size' or filter_label_lower contains 'größe' or filter_label_lower contains 'groesse' or filter_label_lower contains 'grösse'
                   assign is_size = true
                 endif
+                
+                if filter_label_lower contains 'hersteller' or filter_label_lower contains 'vendor' or filter_label_lower contains 'marke' or filter_label_lower contains 'brand'
+                  assign is_hersteller = true
+                endif
               -%}
               
-              <details class="filter-group">
+              <details class="filter-group"{% if is_hersteller %} open{% endif %}>
                 <summary class="filter-group__header">
                   <span class="filter-group__title">{{ filter.label | upcase }}</span>
                   <svg class="filter-group__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -298,6 +303,7 @@
         <div class="collection-toolbar__sort">
           <label for="SortBy">{{ 'collections.sorting.title' | t | default: 'Sortieren' }}:</label>
           <select id="SortBy" data-sort-by>
+            <option value="" disabled {% unless sort_by %}selected{% endunless %}>{{ 'collections.sorting.title' | t | default: 'Sortieren' }}</option>
             {%- for option in collection.sort_options -%}
               <option value="{{ option.value }}"{% if option.value == sort_by %} selected{% endif %}>
                 {{ option.name }}
@@ -1223,6 +1229,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // ========== SORT CHANGE ==========
   sortSelect?.addEventListener('change', function() {
+    if (!this.value) return; // Skip if placeholder selected
     const url = new URL(window.location);
     url.searchParams.set('sort_by', this.value);
     window.location = url;
