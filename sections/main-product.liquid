@@ -1312,6 +1312,120 @@
       left: calc(100% + 10px);
     }
   }
+
+  /* Lightbox for Mobile/Tablet */
+  .product-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.3s, opacity 0.3s;
+  }
+  
+  .product-lightbox.is-active {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  .product-lightbox__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    cursor: pointer;
+  }
+  
+  .product-lightbox__container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+  }
+  
+  .product-lightbox__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: #ffffff;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.2s;
+  }
+  
+  .product-lightbox__close:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .product-lightbox__nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: #ffffff;
+    cursor: pointer;
+    z-index: 10;
+    transition: background 0.2s;
+  }
+  
+  .product-lightbox__nav:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .product-lightbox__nav--prev {
+    left: 0.5rem;
+  }
+  
+  .product-lightbox__nav--next {
+    right: 0.5rem;
+  }
+  
+  .product-lightbox__image-wrapper {
+    position: relative;
+    max-width: 90vw;
+    max-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .product-lightbox__image {
+    max-width: 100%;
+    max-height: 85vh;
+    object-fit: contain;
+  }
+  
+  .product-lightbox__counter {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+  }
 </style>
 
 <script>
@@ -1382,34 +1496,124 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // ========== WINDOW ZOOM - Desktop hover zoom ==========
-  console.log('[Zoom] Initializing window zoom...');
+  // ========== WINDOW ZOOM (Desktop) + LIGHTBOX (Mobile) ==========
   
   const gallery = page.querySelector('.product__gallery');
   const zoomWrappers = page.querySelectorAll('[data-zoom-wrapper]');
   
-  console.log('[Zoom] Found', zoomWrappers.length, 'zoom wrappers');
+  // === LIGHTBOX FOR MOBILE ===
+  if (!document.querySelector('[data-product-lightbox]')) {
+    const lightboxHTML = `
+      <div class="product-lightbox" data-product-lightbox aria-hidden="true">
+        <div class="product-lightbox__overlay" data-lightbox-close></div>
+        <div class="product-lightbox__container">
+          <button type="button" class="product-lightbox__close" data-lightbox-close aria-label="Schließen">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+          <button type="button" class="product-lightbox__nav product-lightbox__nav--prev" data-lightbox-prev aria-label="Vorheriges Bild">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M15 18l-6-6 6-6"/>
+            </svg>
+          </button>
+          <div class="product-lightbox__image-wrapper">
+            <img class="product-lightbox__image" data-lightbox-image src="" alt="">
+          </div>
+          <button type="button" class="product-lightbox__nav product-lightbox__nav--next" data-lightbox-next aria-label="Nächstes Bild">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
+          </button>
+          <div class="product-lightbox__counter" data-lightbox-counter></div>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', lightboxHTML);
+  }
   
-  // Create single zoom window attached to gallery (outside overflow:hidden)
+  const lightbox = document.querySelector('[data-product-lightbox]');
+  const lightboxImage = lightbox?.querySelector('[data-lightbox-image]');
+  const lightboxCounter = lightbox?.querySelector('[data-lightbox-counter]');
+  const lightboxCloseButtons = lightbox?.querySelectorAll('[data-lightbox-close]');
+  const lightboxPrev = lightbox?.querySelector('[data-lightbox-prev]');
+  const lightboxNext = lightbox?.querySelector('[data-lightbox-next]');
+  
+  // Collect all zoomable images for lightbox
+  const zoomImages = [];
+  page.querySelectorAll('[data-zoom-image]').forEach(img => {
+    zoomImages.push({
+      src: img.dataset.zoomImage || img.src,
+      alt: img.alt || ''
+    });
+  });
+  
+  let lightboxIndex = 0;
+  
+  function openLightbox(index) {
+    if (!lightbox || !zoomImages.length) return;
+    lightboxIndex = index;
+    updateLightboxImage();
+    lightbox.classList.add('is-active');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+  
+  function closeLightbox() {
+    if (!lightbox) return;
+    lightbox.classList.remove('is-active');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+  
+  function updateLightboxImage() {
+    if (!lightboxImage || !zoomImages[lightboxIndex]) return;
+    lightboxImage.src = zoomImages[lightboxIndex].src;
+    lightboxImage.alt = zoomImages[lightboxIndex].alt;
+    if (lightboxCounter) {
+      lightboxCounter.textContent = (lightboxIndex + 1) + ' / ' + zoomImages.length;
+    }
+  }
+  
+  function lightboxPrevImage() {
+    lightboxIndex = lightboxIndex === 0 ? zoomImages.length - 1 : lightboxIndex - 1;
+    updateLightboxImage();
+  }
+  
+  function lightboxNextImage() {
+    lightboxIndex = lightboxIndex === zoomImages.length - 1 ? 0 : lightboxIndex + 1;
+    updateLightboxImage();
+  }
+  
+  // Lightbox controls
+  lightboxCloseButtons?.forEach(btn => {
+    btn.addEventListener('click', closeLightbox);
+  });
+  
+  lightboxPrev?.addEventListener('click', lightboxPrevImage);
+  lightboxNext?.addEventListener('click', lightboxNextImage);
+  
+  // Keyboard navigation for lightbox
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox?.classList.contains('is-active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') lightboxPrevImage();
+    if (e.key === 'ArrowRight') lightboxNextImage();
+  });
+  
+  // === WINDOW ZOOM FOR DESKTOP ===
   let zoomWindow = null;
-  let activeLens = null;
   
   if (gallery && zoomWrappers.length > 0) {
     zoomWindow = document.createElement('div');
     zoomWindow.className = 'product__zoom-window';
     zoomWindow.id = 'productZoomWindow';
     gallery.appendChild(zoomWindow);
-    console.log('[Zoom] Zoom window created and attached to gallery');
   }
   
   zoomWrappers.forEach((wrapper, index) => {
     const img = wrapper.querySelector('.product__image');
-    if (!img) {
-      console.log('[Zoom] No image found in wrapper', index);
-      return;
-    }
-    
-    console.log('[Zoom] Setting up wrapper', index);
+    if (!img) return;
     
     // Create zoom lens for this wrapper - small circle
     const lens = document.createElement('div');
@@ -1427,14 +1631,9 @@ document.addEventListener('DOMContentLoaded', function() {
       
       if (zoomWindow) {
         zoomWindow.style.backgroundImage = 'url("' + zoomSrc + '")';
-        
-        // Dynamic height - match image height
         zoomWindow.style.height = rect.height + 'px';
-        
         zoomWindow.classList.add('is-visible');
         lens.classList.add('is-visible');
-        activeLens = lens;
-        console.log('[Zoom] Showing zoom, height:', rect.height);
       }
     }
     
@@ -1443,7 +1642,6 @@ document.addEventListener('DOMContentLoaded', function() {
         zoomWindow.classList.remove('is-visible');
       }
       lens.classList.remove('is-visible');
-      activeLens = null;
     }
     
     function moveZoom(e) {
@@ -1452,54 +1650,56 @@ document.addEventListener('DOMContentLoaded', function() {
       const rect = wrapper.getBoundingClientRect();
       const galleryRect = gallery.getBoundingClientRect();
       
-      // Get cursor position relative to image
       let x = e.clientX - rect.left;
       let y = e.clientY - rect.top;
       
-      // Lens size (small circle)
       const lensW = lens.offsetWidth / 2;
       const lensH = lens.offsetHeight / 2;
       
-      // Prevent lens from going outside image
       if (x < lensW) x = lensW;
       if (y < lensH) y = lensH;
       if (x > rect.width - lensW) x = rect.width - lensW;
       if (y > rect.height - lensH) y = rect.height - lensH;
       
-      // Position lens centered on cursor
       lens.style.left = (x - lensW) + 'px';
       lens.style.top = (y - lensH) + 'px';
       
-      // Position zoom window relative to gallery
       const windowTop = rect.top - galleryRect.top;
       zoomWindow.style.top = windowTop + 'px';
       zoomWindow.style.left = (rect.width + 15) + 'px';
       
-      // Get zoom window dimensions
       const zoomWindowW = zoomWindow.offsetWidth;
       const zoomWindowH = zoomWindow.offsetHeight;
       
-      // Background size (zoomed)
       const bgW = rect.width * zoomLevel;
       const bgH = rect.height * zoomLevel;
       zoomWindow.style.backgroundSize = bgW + 'px ' + bgH + 'px';
       
-      // Background position - center on cursor position
       const bgX = -((x / rect.width) * bgW - zoomWindowW / 2);
       const bgY = -((y / rect.height) * bgH - zoomWindowH / 2);
       zoomWindow.style.backgroundPosition = bgX + 'px ' + bgY + 'px';
     }
     
-    // Mouse events
+    // Mouse events - Desktop zoom
     wrapper.addEventListener('mouseenter', function(e) {
-      showZoom();
-      moveZoom(e);
+      if (window.innerWidth >= 1024) {
+        showZoom();
+        moveZoom(e);
+      }
     });
     
     wrapper.addEventListener('mousemove', moveZoom);
     
     wrapper.addEventListener('mouseleave', function() {
       hideZoom();
+    });
+    
+    // Click event - Mobile lightbox
+    wrapper.addEventListener('click', function(e) {
+      if (window.innerWidth < 1024) {
+        e.preventDefault();
+        openLightbox(currentIndex);
+      }
     });
   });
   // Quantity buttons
