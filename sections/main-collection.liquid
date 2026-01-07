@@ -11,7 +11,6 @@
 {% endcomment %}
 
 {%- liquid
-  assign sort_by = collection.sort_by | default: collection.default_sort_by
   assign products_per_page = section.settings.products_per_page | default: 24
   
   # Count active filters
@@ -275,43 +274,6 @@
         {%- endif -%}
       </header>
       
-      {%- comment -%} Toolbar {%- endcomment -%}
-      <div class="collection-toolbar">
-        {%- comment -%} Mobile Filter Button {%- endcomment -%}
-        {%- if section.settings.enable_filtering -%}
-          <button type="button" class="collection-toolbar__filter" data-filter-toggle>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/>
-              <line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/>
-              <line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/>
-              <line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/>
-              <line x1="17" y1="16" x2="23" y2="16"/>
-            </svg>
-            <span>Filter</span>
-            {%- if total_active_filters > 0 -%}
-              <span class="collection-toolbar__filter-count">{{ total_active_filters }}</span>
-            {%- endif -%}
-          </button>
-        {%- endif -%}
-        
-        {%- comment -%} Product Count {%- endcomment -%}
-        <p class="collection-toolbar__count">
-          <span data-product-count>{{ collection.products_count }}</span> {{ 'collections.general.products' | t | default: 'Produkte' }}
-        </p>
-        
-        {%- comment -%} Sort {%- endcomment -%}
-        <div class="collection-toolbar__sort">
-          <label for="SortBy">{{ 'collections.sorting.title' | t | default: 'Sortieren' }}:</label>
-          <select id="SortBy" data-sort-by>
-            {%- for option in collection.sort_options -%}
-              <option value="{{ option.value }}"{% if option.value == sort_by %} selected{% endif %}>
-                {{ option.name }}
-              </option>
-            {%- endfor -%}
-          </select>
-        </div>
-      </div>
-
       {%- comment -%} Product Grid {%- endcomment -%}
       {%- paginate collection.products by products_per_page -%}
         {%- if collection.products.size > 0 -%}
@@ -943,96 +905,6 @@
     margin: 0;
   }
   
-  /* Toolbar */
-  .collection-toolbar {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding-bottom: 1.5rem;
-    margin-bottom: 2rem;
-  }
-  
-  .collection-toolbar__filter {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.625rem 1rem;
-    background: none;
-    border: 1px solid #e5e7eb;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #374151;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  
-  .collection-toolbar__filter:hover {
-    border-color: #111827;
-    color: #111827;
-  }
-  
-  @media (min-width: 1024px) {
-    .collection-toolbar__filter {
-      display: none;
-    }
-  }
-  
-  .collection-toolbar__filter-count {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 20px;
-    height: 20px;
-    padding: 0 0.375rem;
-    background: #111827;
-    color: #ffffff;
-    border-radius: 9999px;
-    font-size: 0.6875rem;
-    font-weight: 600;
-  }
-  
-  .collection-toolbar__count {
-    flex: 1;
-    font-size: 0.875rem;
-    color: #6b7280;
-    margin: 0;
-  }
-  
-  .collection-toolbar__sort {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .collection-toolbar__sort label {
-    font-size: 0.875rem;
-    color: #6b7280;
-    display: none;
-  }
-  
-  @media (min-width: 768px) {
-    .collection-toolbar__sort label {
-      display: block;
-    }
-  }
-  
-  .collection-toolbar__sort select {
-    padding: 0.5rem 2rem 0.5rem 0.75rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") right 0.75rem center no-repeat;
-    -webkit-appearance: none;
-    appearance: none;
-    cursor: pointer;
-  }
-  
-  .collection-toolbar__sort select:focus {
-    outline: none;
-    border-color: #111827;
-  }
-
   /* ========== PRODUCT GRID ========== */
   .collection-grid {
     display: grid;
@@ -1155,10 +1027,8 @@ document.addEventListener('DOMContentLoaded', function() {
   
   const collectionUrl = page.dataset.collectionUrl;
   const filtersEl = document.querySelector('[data-collection-filters]');
-  const filterToggle = document.querySelector('[data-filter-toggle]');
   const filterCloseButtons = document.querySelectorAll('[data-filter-close]');
   const filterForm = document.querySelector('[data-filter-form]');
-  const sortSelect = document.querySelector('[data-sort-by]');
   const grid = document.querySelector('[data-collection-grid]');
   const loadMoreContainer = document.querySelector('[data-load-more-container]');
   
@@ -1172,8 +1042,6 @@ document.addEventListener('DOMContentLoaded', function() {
     filtersEl?.classList.remove('is-open');
     document.body.style.overflow = '';
   }
-  
-  filterToggle?.addEventListener('click', openFilters);
   
   filterCloseButtons.forEach(btn => {
     btn.addEventListener('click', closeFilters);
@@ -1225,21 +1093,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   }
-  
-  // ========== DEFAULT SORT (Newest) ==========
-  // If no sort in URL, redirect to newest
-  if (!window.location.search.includes('sort_by')) {
-    const url = new URL(window.location);
-    url.searchParams.set('sort_by', 'created-descending');
-    window.location.replace(url);
-  }
-  
-  // ========== SORT CHANGE ==========
-  sortSelect?.addEventListener('change', function() {
-    const url = new URL(window.location);
-    url.searchParams.set('sort_by', this.value);
-    window.location = url;
-  });
   
   // ========== LOAD MORE ==========
   const loadMoreBtn = document.querySelector('[data-load-more]');
