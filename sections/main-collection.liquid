@@ -304,12 +304,21 @@
         {%- if request.url contains 'sort_by' -%}
           {%- assign url_has_sort = true -%}
         {%- endif -%}
+        {%- assign default_sort_selected = false -%}
         <div class="collection-toolbar__sort">
           <label for="SortBy">{{ 'collections.sorting.title' | t | default: 'Sortieren' }}:</label>
           <select id="SortBy" data-sort-by>
-            <option value=""{% unless url_has_sort %} selected{% endunless %} disabled>Auswählen</option>
             {%- for option in collection.sort_options -%}
-              <option value="{{ option.value }}"{% if url_has_sort and option.value == sort_by %} selected{% endif %}>
+              {%- assign should_select = false -%}
+              {%- if url_has_sort and option.value == sort_by -%}
+                {%- assign should_select = true -%}
+              {%- elsif url_has_sort == false -%}
+                {%- if default_sort_selected == false and option.value != 'best-selling' -%}
+                  {%- assign should_select = true -%}
+                  {%- assign default_sort_selected = true -%}
+                {%- endif -%}
+              {%- endif -%}
+              <option value="{{ option.value }}"{% if should_select %} selected{% endif %}>
                 {{ option.name }}
               </option>
             {%- endfor -%}
@@ -1233,7 +1242,6 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // ========== SORT CHANGE ==========
   sortSelect?.addEventListener('change', function() {
-    if (!this.value) return;
     const url = new URL(window.location);
     url.searchParams.set('sort_by', this.value);
     window.location = url;
