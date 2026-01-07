@@ -2,11 +2,12 @@
   MAIN COLLECTION - Magento-style layout
   
   Features:
+  - KATEGORIE from navigation menu (e.g., damen-sidebar)
+  - Filters from Search & Discovery app
   - Left sidebar filters (collapsible accordion)
   - Title + description top right
   - Product grid with Load More
   - Mobile filter drawer
-  - Clean, modern styling
 {% endcomment %}
 
 {%- liquid
@@ -23,6 +24,10 @@
       endif
     endif
   endfor
+  
+  # Check for category navigation menu based on collection handle
+  assign sidebar_menu_handle = collection.handle | append: '-sidebar'
+  assign sidebar_menu = linklists[sidebar_menu_handle]
 -%}
 
 <section class="collection-page" data-collection-page data-collection-url="{{ collection.url }}">
@@ -44,7 +49,35 @@
             </button>
           </div>
           
-          {%- comment -%} Active Filters {%- endcomment -%}
+          {%- comment -%} ===== KATEGORIE - Navigation Links (from menu) ===== {%- endcomment -%}
+          {%- if sidebar_menu.links.size > 0 -%}
+            <details class="filter-group filter-group--kategorie" open>
+              <summary class="filter-group__header">
+                <span class="filter-group__title">KATEGORIE</span>
+                <svg class="filter-group__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="6 9 12 15 18 9"/>
+                </svg>
+              </summary>
+              
+              <div class="filter-group__content">
+                <ul class="kategorie-list">
+                  {%- for link in sidebar_menu.links -%}
+                    {%- assign linked_collection = collections[link.object.handle] -%}
+                    <li>
+                      <a href="{{ link.url }}" class="kategorie-link{% if link.active %} is-active{% endif %}">
+                        <span class="kategorie-link__label">{{ link.title }}</span>
+                        {%- if linked_collection -%}
+                          <span class="kategorie-link__count">{{ linked_collection.products_count }}</span>
+                        {%- endif -%}
+                      </a>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            </details>
+          {%- endif -%}
+          
+          {%- comment -%} ===== Active Filters ===== {%- endcomment -%}
           {%- if total_active_filters > 0 -%}
             <div class="collection-filters__active">
               <div class="collection-filters__active-list">
@@ -76,7 +109,7 @@
             </div>
           {%- endif -%}
           
-          {%- comment -%} Filter Groups {%- endcomment -%}
+          {%- comment -%} ===== Search & Discovery Filters ===== {%- endcomment -%}
           <form class="collection-filters__form" data-filter-form>
             {%- for filter in collection.filters -%}
               {%- liquid
@@ -88,7 +121,7 @@
                   assign is_color = true
                 endif
                 
-                if filter_label_lower contains 'size' or filter_label_lower contains 'größe' or filter_label_lower contains 'groesse'
+                if filter_label_lower contains 'size' or filter_label_lower contains 'größe' or filter_label_lower contains 'groesse' or filter_label_lower contains 'grösse'
                   assign is_size = true
                 endif
               -%}
@@ -559,6 +592,58 @@
   
   .filter-group__content {
     padding-bottom: 1rem;
+  }
+  
+  /* KATEGORIE Navigation Links */
+  .filter-group--kategorie {
+    padding: 0 1.25rem;
+  }
+  
+  @media (min-width: 1024px) {
+    .filter-group--kategorie {
+      padding: 0;
+    }
+  }
+  
+  .kategorie-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  
+  .kategorie-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: color 0.15s;
+  }
+  
+  .kategorie-link:hover {
+    color: #111827;
+  }
+  
+  .kategorie-link.is-active {
+    color: #111827;
+    font-weight: 500;
+  }
+  
+  .kategorie-link__label {
+    flex: 1;
+  }
+  
+  .kategorie-link__count {
+    color: #9ca3af;
+    font-size: 0.8125rem;
+  }
+  
+  .kategorie-link:hover .kategorie-link__count {
+    color: #6b7280;
   }
   
   /* Filter List (Checkboxes) */
