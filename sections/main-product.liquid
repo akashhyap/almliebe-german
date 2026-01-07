@@ -1236,6 +1236,10 @@
   }
 
   /* Product Zoom Window - Desktop hover zoom */
+  .product__gallery {
+    position: relative;
+  }
+  
   .product__image-wrapper {
     position: relative;
     cursor: crosshair;
@@ -1253,7 +1257,7 @@
     z-index: 10;
   }
   
-  .product__image-wrapper:hover .product__zoom-lens {
+  .product__zoom-lens.is-visible {
     opacity: 1;
   }
   
@@ -1270,13 +1274,13 @@
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.2s ease, visibility 0.2s ease;
-    z-index: 100;
+    z-index: 1000;
     pointer-events: none;
     border-radius: 4px;
     overflow: hidden;
   }
   
-  .product__image-wrapper:hover .product__zoom-window {
+  .product__zoom-window.is-visible {
     opacity: 1;
     visibility: visible;
   }
@@ -1293,7 +1297,7 @@
     }
   }
   
-  /* Adjust zoom window position if not enough space on right */
+  /* Adjust zoom window size on medium screens */
   @media (min-width: 1024px) and (max-width: 1400px) {
     .product__zoom-window {
       width: 400px;
@@ -1371,35 +1375,69 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // ========== WINDOW ZOOM - Desktop hover zoom ==========
+  console.log('[Zoom] Initializing window zoom...');
+  
+  const gallery = page.querySelector('.product__gallery');
   const zoomWrappers = page.querySelectorAll('[data-zoom-wrapper]');
   
-  zoomWrappers.forEach(wrapper => {
+  console.log('[Zoom] Found', zoomWrappers.length, 'zoom wrappers');
+  
+  // Create single zoom window attached to gallery (outside overflow:hidden)
+  let zoomWindow = null;
+  let activeLens = null;
+  
+  if (gallery && zoomWrappers.length > 0) {
+    zoomWindow = document.createElement('div');
+    zoomWindow.className = 'product__zoom-window';
+    zoomWindow.id = 'productZoomWindow';
+    gallery.appendChild(zoomWindow);
+    console.log('[Zoom] Zoom window created and attached to gallery');
+  }
+  
+  zoomWrappers.forEach((wrapper, index) => {
     const img = wrapper.querySelector('.product__image');
-    if (!img) return;
+    if (!img) {
+      console.log('[Zoom] No image found in wrapper', index);
+      return;
+    }
     
-    // Create zoom lens
+    console.log('[Zoom] Setting up wrapper', index, 'with image:', img.src.substring(0, 50) + '...');
+    
+    // Create zoom lens for this wrapper
     const lens = document.createElement('div');
     lens.className = 'product__zoom-lens';
     wrapper.appendChild(lens);
     
-    // Create zoom window
-    const zoomWindow = document.createElement('div');
-    zoomWindow.className = 'product__zoom-window';
-    wrapper.appendChild(zoomWindow);
-    
     // Zoom ratio
     const zoomLevel = 2.5;
     
-    function initZoom() {
+    function showZoom() {
+      if (window.innerWidth < 1024) return;
+      
       const zoomSrc = img.dataset.zoomImage || img.src;
-      zoomWindow.style.backgroundImage = 'url(' + zoomSrc + ')';
+      console.log('[Zoom] Show zoom, src:', zoomSrc.substring(0, 50) + '...');
+      
+      if (zoomWindow) {
+        zoomWindow.style.backgroundImage = 'url("' + zoomSrc + '")';
+        zoomWindow.classList.add('is-visible');
+        lens.classList.add('is-visible');
+        activeLens = lens;
+      }
+    }
+    
+    function hideZoom() {
+      if (zoomWindow) {
+        zoomWindow.classList.remove('is-visible');
+      }
+      lens.classList.remove('is-visible');
+      activeLens = null;
     }
     
     function moveZoom(e) {
-      // Only on desktop
-      if (window.innerWidth < 1024) return;
+      if (window.innerWidth < 1024 || !zoomWindow) return;
       
       const rect = wrapper.getBoundingClientRect();
+      const galleryRect = gallery.getBoundingClientRect();
       
       // Get cursor position relative to image
       let x = e.clientX - rect.left;
@@ -1419,9 +1457,14 @@ document.addEventListener('DOMContentLoaded', function() {
       lens.style.left = (x - lensW) + 'px';
       lens.style.top = (y - lensH) + 'px';
       
+      // Position zoom window relative to gallery
+      const windowTop = rect.top - galleryRect.top;
+      zoomWindow.style.top = windowTop + 'px';
+      zoomWindow.style.left = (rect.width + 20) + 'px';
+      
       // Calculate zoom window background position
-      const zoomWindowW = zoomWindow.offsetWidth;
-      const zoomWindowH = zoomWindow.offsetHeight;
+      const zoomWindowW = zoomWindow.offsetWidth || 500;
+      const zoomWindowH = zoomWindow.offsetHeight || 500;
       
       // Background size
       const bgW = rect.width * zoomLevel;
@@ -1434,22 +1477,20 @@ document.addEventListener('DOMContentLoaded', function() {
       zoomWindow.style.backgroundPosition = bgX + 'px ' + bgY + 'px';
     }
     
-    // Initialize on image load
-    if (img.complete) {
-      initZoom();
-    } else {
-      img.addEventListener('load', initZoom);
-    }
-    
     // Mouse events
+    wrapper.addEventListener('mouseenter', function(e) {
+      console.log('[Zoom] Mouse enter wrapper', index);
+      showZoom();
+      moveZoom(e);
+    });
+    
     wrapper.addEventListener('mousemove', moveZoom);
-    wrapper.addEventListener('mouseenter', function() {
-      if (window.innerWidth >= 1024) {
-        initZoom();
-      }
+    
+    wrapper.addEventListener('mouseleave', function() {
+      console.log('[Zoom] Mouse leave wrapper', index);
+      hideZoom();
     });
   });
-
   // Quantity buttons
   const quantityInput = page.querySelector('[data-quantity-input]');
   const minusBtn = page.querySelector('[data-quantity-minus]');
