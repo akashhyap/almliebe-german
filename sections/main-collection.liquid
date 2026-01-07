@@ -320,13 +320,13 @@
 <style>
   /* ========== COLLECTION PAGE LAYOUT ========== */
   .collection-page {
-    padding: 0 0 4rem;
+    padding: 2rem 0 4rem;
   }
   
   .collection-page__container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 0 1.5rem;
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
@@ -334,9 +334,17 @@
   
   @media (min-width: 1024px) {
     .collection-page__container {
-      grid-template-columns: 260px 1fr;
-      padding: 0 2rem;
+      grid-template-columns: 240px 1fr;
+      padding: 0 3rem;
       gap: 3rem;
+      align-items: start;
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    .collection-page__container {
+      padding: 0 4rem;
+      gap: 4rem;
     }
   }
 
@@ -800,26 +808,29 @@
   /* Collection Header */
   .collection-header {
     margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
   }
   
   .collection-header__title {
     font-size: 1.75rem;
     font-weight: 600;
-    margin: 0 0 0.75rem;
+    margin: 0 0 0.5rem;
     color: #111827;
   }
   
   @media (min-width: 768px) {
     .collection-header__title {
-      font-size: 2rem;
+      font-size: 2.25rem;
+      margin-bottom: 0.75rem;
     }
   }
   
   .collection-header__description {
     font-size: 0.9375rem;
-    line-height: 1.6;
+    line-height: 1.7;
     color: #6b7280;
-    max-width: 800px;
+    max-width: 700px;
   }
   
   .collection-header__description p {
@@ -831,9 +842,8 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding-bottom: 1rem;
-    margin-bottom: 1.5rem;
-    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
   }
   
   .collection-toolbar__filter {
@@ -921,25 +931,25 @@
   .collection-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    gap: 1rem 0.75rem;
   }
   
   @media (min-width: 640px) {
     .collection-grid {
-      gap: 1.25rem;
+      gap: 1.5rem 1rem;
     }
   }
   
   @media (min-width: 768px) {
     .collection-grid {
       grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
+      gap: 2rem 1.5rem;
     }
   }
   
-  @media (min-width: 1200px) {
+  @media (min-width: 1024px) {
     .collection-grid {
-      grid-template-columns: repeat(4, 1fr);
+      gap: 2.5rem 2rem;
     }
   }
 
