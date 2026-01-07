@@ -300,21 +300,11 @@
         </p>
         
         {%- comment -%} Sort {%- endcomment -%}
-        {%- assign url_has_sort = false -%}
-        {%- if request.url contains 'sort_by' -%}
-          {%- assign url_has_sort = true -%}
-        {%- endif -%}
         <div class="collection-toolbar__sort">
           <label for="SortBy">{{ 'collections.sorting.title' | t | default: 'Sortieren' }}:</label>
           <select id="SortBy" data-sort-by>
             {%- for option in collection.sort_options -%}
-              {%- assign should_select = false -%}
-              {%- if url_has_sort and option.value == sort_by -%}
-                {%- assign should_select = true -%}
-              {%- elsif url_has_sort == false and option.value == 'created-descending' -%}
-                {%- assign should_select = true -%}
-              {%- endif -%}
-              <option value="{{ option.value }}"{% if should_select %} selected{% endif %}>
+              <option value="{{ option.value }}"{% if option.value == sort_by %} selected{% endif %}>
                 {{ option.name }}
               </option>
             {%- endfor -%}
