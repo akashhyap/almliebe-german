@@ -631,7 +631,7 @@
     right: 1rem;
     width: 40px;
     height: 40px;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     background: white;
@@ -643,8 +643,15 @@
     transition: opacity 0.2s;
   }
 
-  .product__media-main:hover .product__zoom-btn {
-    opacity: 1;
+  /* Show zoom button only on mobile/tablet */
+  @media (max-width: 1023px) {
+    .product__zoom-btn {
+      display: flex;
+    }
+    
+    .product__media-main:hover .product__zoom-btn {
+      opacity: 1;
+    }
   }
 
   .product__gallery-nav {
@@ -1228,133 +1235,69 @@
     text-align: center;
   }
 
-  /* Product Lightbox / Zoom */
-  .product-lightbox {
-    position: fixed;
-    inset: 0;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    visibility: hidden;
-    opacity: 0;
-    transition: visibility 0.3s, opacity 0.3s;
+  /* Product Zoom Window - Desktop hover zoom */
+  .product__image-wrapper {
+    position: relative;
+    cursor: crosshair;
   }
   
-  .product-lightbox.is-active {
-    visibility: visible;
+  .product__zoom-lens {
+    position: absolute;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.3);
+    width: 150px;
+    height: 150px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    z-index: 10;
+  }
+  
+  .product__image-wrapper:hover .product__zoom-lens {
     opacity: 1;
   }
   
-  .product-lightbox__overlay {
+  .product__zoom-window {
     position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.9);
-    cursor: pointer;
-  }
-  
-  .product-lightbox__container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1rem;
-  }
-  
-  .product-lightbox__close {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    border-radius: 50%;
-    color: #ffffff;
-    cursor: pointer;
-    z-index: 10;
-    transition: background 0.2s;
-  }
-  
-  .product-lightbox__close:hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
-  
-  .product-lightbox__nav {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 48px;
-    height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
-    border-radius: 50%;
-    color: #ffffff;
-    cursor: pointer;
-    z-index: 10;
-    transition: background 0.2s;
-  }
-  
-  .product-lightbox__nav:hover {
-    background: rgba(255, 255, 255, 0.2);
-  }
-  
-  .product-lightbox__nav--prev {
-    left: 1rem;
-  }
-  
-  .product-lightbox__nav--next {
-    right: 1rem;
-  }
-  
-  .product-lightbox__image-wrapper {
-    position: relative;
-    max-width: 90vw;
-    max-height: 90vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .product-lightbox__image {
-    max-width: 100%;
-    max-height: 90vh;
-    object-fit: contain;
+    top: 0;
+    left: calc(100% + 20px);
+    width: 500px;
+    height: 500px;
+    background-repeat: no-repeat;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    z-index: 100;
+    pointer-events: none;
     border-radius: 4px;
+    overflow: hidden;
   }
   
-  .product-lightbox__counter {
-    position: absolute;
-    bottom: 1.5rem;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.875rem;
-    color: rgba(255, 255, 255, 0.7);
-    background: rgba(0, 0, 0, 0.5);
-    padding: 0.5rem 1rem;
-    border-radius: 9999px;
+  .product__image-wrapper:hover .product__zoom-window {
+    opacity: 1;
+    visibility: visible;
   }
   
-  @media (max-width: 768px) {
-    .product-lightbox__nav {
-      width: 40px;
-      height: 40px;
+  /* Hide zoom on mobile/tablet */
+  @media (max-width: 1023px) {
+    .product__zoom-lens,
+    .product__zoom-window {
+      display: none !important;
     }
     
-    .product-lightbox__nav--prev {
-      left: 0.5rem;
+    .product__image-wrapper {
+      cursor: pointer;
     }
-    
-    .product-lightbox__nav--next {
-      right: 0.5rem;
+  }
+  
+  /* Adjust zoom window position if not enough space on right */
+  @media (min-width: 1024px) and (max-width: 1400px) {
+    .product__zoom-window {
+      width: 400px;
+      height: 400px;
     }
   }
 </style>
@@ -1427,127 +1370,84 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  // ========== IMAGE ZOOM LIGHTBOX ==========
-  const zoomTriggers = page.querySelectorAll('[data-zoom-trigger]');
+  // ========== WINDOW ZOOM - Desktop hover zoom ==========
+  const zoomWrappers = page.querySelectorAll('[data-zoom-wrapper]');
   
-  // Create lightbox HTML if it doesn't exist
-  if (!document.querySelector('[data-product-lightbox]')) {
-    const lightboxHTML = `
-      <div class="product-lightbox" data-product-lightbox aria-hidden="true">
-        <div class="product-lightbox__overlay" data-lightbox-close></div>
-        <div class="product-lightbox__container">
-          <button type="button" class="product-lightbox__close" data-lightbox-close aria-label="Schließen">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-          </button>
-          <button type="button" class="product-lightbox__nav product-lightbox__nav--prev" data-lightbox-prev aria-label="Vorheriges Bild">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M15 18l-6-6 6-6"/>
-            </svg>
-          </button>
-          <div class="product-lightbox__image-wrapper">
-            <img class="product-lightbox__image" data-lightbox-image src="" alt="">
-          </div>
-          <button type="button" class="product-lightbox__nav product-lightbox__nav--next" data-lightbox-next aria-label="Nächstes Bild">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M9 18l6-6-6-6"/>
-            </svg>
-          </button>
-          <div class="product-lightbox__counter" data-lightbox-counter></div>
-        </div>
-      </div>
-    `;
-    document.body.insertAdjacentHTML('beforeend', lightboxHTML);
-  }
-  
-  const lightbox = document.querySelector('[data-product-lightbox]');
-  const lightboxImage = lightbox?.querySelector('[data-lightbox-image]');
-  const lightboxCounter = lightbox?.querySelector('[data-lightbox-counter]');
-  const lightboxCloseButtons = lightbox?.querySelectorAll('[data-lightbox-close]');
-  const lightboxPrev = lightbox?.querySelector('[data-lightbox-prev]');
-  const lightboxNext = lightbox?.querySelector('[data-lightbox-next]');
-  
-  // Collect all zoomable images
-  const zoomImages = [];
-  page.querySelectorAll('[data-zoom-image]').forEach(img => {
-    zoomImages.push({
-      src: img.dataset.zoomImage,
-      alt: img.alt || ''
-    });
-  });
-  
-  let lightboxIndex = 0;
-  
-  function openLightbox(index) {
-    if (!lightbox || !zoomImages.length) return;
+  zoomWrappers.forEach(wrapper => {
+    const img = wrapper.querySelector('.product__image');
+    if (!img) return;
     
-    lightboxIndex = index;
-    updateLightboxImage();
-    lightbox.classList.add('is-active');
-    lightbox.setAttribute('aria-hidden', 'false');
-    document.body.style.overflow = 'hidden';
-  }
-  
-  function closeLightbox() {
-    if (!lightbox) return;
-    lightbox.classList.remove('is-active');
-    lightbox.setAttribute('aria-hidden', 'true');
-    document.body.style.overflow = '';
-  }
-  
-  function updateLightboxImage() {
-    if (!lightboxImage || !zoomImages[lightboxIndex]) return;
-    lightboxImage.src = zoomImages[lightboxIndex].src;
-    lightboxImage.alt = zoomImages[lightboxIndex].alt;
-    if (lightboxCounter) {
-      lightboxCounter.textContent = (lightboxIndex + 1) + ' / ' + zoomImages.length;
+    // Create zoom lens
+    const lens = document.createElement('div');
+    lens.className = 'product__zoom-lens';
+    wrapper.appendChild(lens);
+    
+    // Create zoom window
+    const zoomWindow = document.createElement('div');
+    zoomWindow.className = 'product__zoom-window';
+    wrapper.appendChild(zoomWindow);
+    
+    // Zoom ratio
+    const zoomLevel = 2.5;
+    
+    function initZoom() {
+      const zoomSrc = img.dataset.zoomImage || img.src;
+      zoomWindow.style.backgroundImage = 'url(' + zoomSrc + ')';
     }
-  }
-  
-  function lightboxPrevImage() {
-    lightboxIndex = lightboxIndex === 0 ? zoomImages.length - 1 : lightboxIndex - 1;
-    updateLightboxImage();
-  }
-  
-  function lightboxNextImage() {
-    lightboxIndex = lightboxIndex === zoomImages.length - 1 ? 0 : lightboxIndex + 1;
-    updateLightboxImage();
-  }
-  
-  // Zoom button clicks
-  zoomTriggers.forEach(trigger => {
-    trigger.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      openLightbox(currentIndex);
-    });
-  });
-  
-  // Also allow clicking on the main image to zoom
-  page.querySelectorAll('[data-zoom-wrapper]').forEach(wrapper => {
-    wrapper.addEventListener('click', (e) => {
-      if (e.target.closest('[data-zoom-trigger]')) return;
-      e.preventDefault();
-      openLightbox(currentIndex);
-    });
-  });
-  
-  // Lightbox controls
-  lightboxCloseButtons?.forEach(btn => {
-    btn.addEventListener('click', closeLightbox);
-  });
-  
-  lightboxPrev?.addEventListener('click', lightboxPrevImage);
-  lightboxNext?.addEventListener('click', lightboxNextImage);
-  
-  // Keyboard navigation for lightbox
-  document.addEventListener('keydown', (e) => {
-    if (!lightbox?.classList.contains('is-active')) return;
     
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft') lightboxPrevImage();
-    if (e.key === 'ArrowRight') lightboxNextImage();
+    function moveZoom(e) {
+      // Only on desktop
+      if (window.innerWidth < 1024) return;
+      
+      const rect = wrapper.getBoundingClientRect();
+      
+      // Get cursor position relative to image
+      let x = e.clientX - rect.left;
+      let y = e.clientY - rect.top;
+      
+      // Lens size
+      const lensW = lens.offsetWidth / 2;
+      const lensH = lens.offsetHeight / 2;
+      
+      // Prevent lens from going outside image
+      if (x < lensW) x = lensW;
+      if (y < lensH) y = lensH;
+      if (x > rect.width - lensW) x = rect.width - lensW;
+      if (y > rect.height - lensH) y = rect.height - lensH;
+      
+      // Position lens
+      lens.style.left = (x - lensW) + 'px';
+      lens.style.top = (y - lensH) + 'px';
+      
+      // Calculate zoom window background position
+      const zoomWindowW = zoomWindow.offsetWidth;
+      const zoomWindowH = zoomWindow.offsetHeight;
+      
+      // Background size
+      const bgW = rect.width * zoomLevel;
+      const bgH = rect.height * zoomLevel;
+      zoomWindow.style.backgroundSize = bgW + 'px ' + bgH + 'px';
+      
+      // Background position (inverted and scaled)
+      const bgX = -((x / rect.width) * bgW - zoomWindowW / 2);
+      const bgY = -((y / rect.height) * bgH - zoomWindowH / 2);
+      zoomWindow.style.backgroundPosition = bgX + 'px ' + bgY + 'px';
+    }
+    
+    // Initialize on image load
+    if (img.complete) {
+      initZoom();
+    } else {
+      img.addEventListener('load', initZoom);
+    }
+    
+    // Mouse events
+    wrapper.addEventListener('mousemove', moveZoom);
+    wrapper.addEventListener('mouseenter', function() {
+      if (window.innerWidth >= 1024) {
+        initZoom();
+      }
+    });
   });
 
   // Quantity buttons
