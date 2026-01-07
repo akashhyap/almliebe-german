@@ -91,7 +91,7 @@
           
           {%- comment -%} ===== KATEGORIE - Navigation Links (from menu) ===== {%- endcomment -%}
           {%- if sidebar_menu.links.size > 0 -%}
-            <details class="filter-group filter-group--kategorie" open>
+            <details class="filter-group filter-group--kategorie">
               <summary class="filter-group__header">
                 <span class="filter-group__title">KATEGORIE</span>
                 <svg class="filter-group__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -134,7 +134,7 @@
                 endif
               -%}
               
-              <details class="filter-group" open>
+              <details class="filter-group">
                 <summary class="filter-group__header">
                   <span class="filter-group__title">{{ filter.label | upcase }}</span>
                   <svg class="filter-group__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

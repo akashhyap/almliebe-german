@@ -83,10 +83,22 @@
     endif
   endfor
   
-  # Collect unique sizes with availability
+  # Determine if we should show size selector
+  # Show if: has size option OR is single variant (One Size)
   assign has_sizes = false
-  if size_option_index != nil and product.variants.size > 1
+  assign is_one_size = false
+  
+  if size_option_index != nil
+    # Has size option - always show
     assign has_sizes = true
+    # Check if only one size value
+    if product.options_by_name[size_option_name].values.size == 1
+      assign is_one_size = true
+    endif
+  elsif product.variants.size == 1 and product.has_only_default_variant
+    # Single variant with no options = One Size
+    assign has_sizes = true
+    assign is_one_size = true
   endif
 -%}
 
@@ -168,37 +180,54 @@
         <div class="product-card__sizes-label">{{ product.title }}</div>
         
         {%- comment -%} Size Grid {%- endcomment -%}
-        <div class="product-card__sizes-grid">
-          {%- assign displayed_sizes = '' -%}
-          {%- for variant in product.variants -%}
-            {%- assign size_value = variant.options[size_option_index] -%}
-            {%- unless displayed_sizes contains size_value -%}
-              {%- comment -%} Check if this size is available in any variant {%- endcomment -%}
-              {%- assign size_available = false -%}
-              {%- assign size_variant_id = nil -%}
-              {%- for v in product.variants -%}
-                {%- if v.options[size_option_index] == size_value and v.available -%}
-                  {%- assign size_available = true -%}
-                  {%- assign size_variant_id = v.id -%}
-                  {%- break -%}
-                {%- endif -%}
-              {%- endfor -%}
-              
-              <button 
-                type="button"
-                class="product-card__size-btn{% unless size_available %} product-card__size-btn--oos{% endunless %}"
-                data-size-add="{{ size_variant_id | default: variant.id }}"
-                {% unless size_available %}disabled aria-disabled="true"{% endunless %}
-                aria-label="{{ size_value }}{% unless size_available %} - Ausverkauft{% endunless %}"
-              >
-                <span class="product-card__size-text">{{ size_value }}</span>
-                {%- unless size_available -%}
-                  <span class="product-card__size-strike"></span>
-                {%- endunless -%}
-              </button>
-              {%- assign displayed_sizes = displayed_sizes | append: size_value | append: ',' -%}
-            {%- endunless -%}
-          {%- endfor -%}
+        <div class="product-card__sizes-grid{% if is_one_size %} product-card__sizes-grid--one-size{% endif %}">
+          {%- if is_one_size and product.has_only_default_variant -%}
+            {%- comment -%} One Size - no size option {%- endcomment -%}
+            <button 
+              type="button"
+              class="product-card__size-btn product-card__size-btn--one-size{% unless product.available %} product-card__size-btn--oos{% endunless %}"
+              data-size-add="{{ product.first_available_variant.id }}"
+              {% unless product.available %}disabled aria-disabled="true"{% endunless %}
+              aria-label="One Size{% unless product.available %} - Ausverkauft{% endunless %}"
+            >
+              <span class="product-card__size-text">One Size</span>
+              {%- unless product.available -%}
+                <span class="product-card__size-strike"></span>
+              {%- endunless -%}
+            </button>
+          {%- else -%}
+            {%- comment -%} Regular sizes or single size from option {%- endcomment -%}
+            {%- assign displayed_sizes = '' -%}
+            {%- for variant in product.variants -%}
+              {%- assign size_value = variant.options[size_option_index] -%}
+              {%- unless displayed_sizes contains size_value -%}
+                {%- comment -%} Check if this size is available in any variant {%- endcomment -%}
+                {%- assign size_available = false -%}
+                {%- assign size_variant_id = nil -%}
+                {%- for v in product.variants -%}
+                  {%- if v.options[size_option_index] == size_value and v.available -%}
+                    {%- assign size_available = true -%}
+                    {%- assign size_variant_id = v.id -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                
+                <button 
+                  type="button"
+                  class="product-card__size-btn{% if is_one_size %} product-card__size-btn--one-size{% endif %}{% unless size_available %} product-card__size-btn--oos{% endunless %}"
+                  data-size-add="{{ size_variant_id | default: variant.id }}"
+                  {% unless size_available %}disabled aria-disabled="true"{% endunless %}
+                  aria-label="{{ size_value }}{% unless size_available %} - Ausverkauft{% endunless %}"
+                >
+                  <span class="product-card__size-text">{% if is_one_size %}One Size{% else %}{{ size_value }}{% endif %}</span>
+                  {%- unless size_available -%}
+                    <span class="product-card__size-strike"></span>
+                  {%- endunless -%}
+                </button>
+                {%- assign displayed_sizes = displayed_sizes | append: size_value | append: ',' -%}
+              {%- endunless -%}
+            {%- endfor -%}
+          {%- endif -%}
         </div>
       </div>
     {%- endif -%}
@@ -413,6 +442,15 @@
     gap: 1px;
     background: #e5e7eb;
     border: 1px solid #e5e7eb;
+  }
+  
+  /* One Size - full width button */
+  .product-card__sizes-grid--one-size {
+    grid-template-columns: 1fr;
+  }
+  
+  .product-card__size-btn--one-size {
+    padding: 0.875rem 1rem;
   }
 
   .product-card__size-btn {
