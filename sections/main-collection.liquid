@@ -274,6 +274,26 @@
         {%- endif -%}
       </header>
       
+      {%- comment -%} Toolbar {%- endcomment -%}
+      <div class="collection-toolbar">
+        {%- comment -%} Product Count {%- endcomment -%}
+        <p class="collection-toolbar__count">
+          <span data-product-count>{{ collection.products_count }}</span> {{ 'collections.general.products' | t | default: 'Produkte' }}
+        </p>
+        
+        {%- comment -%} Sort {%- endcomment -%}
+        <div class="collection-toolbar__sort">
+          <label for="SortBy">{{ 'collections.sorting.title' | t | default: 'Sortieren' }}:</label>
+          <select id="SortBy" data-sort-by>
+            {%- for option in collection.sort_options -%}
+              <option value="{{ option.value }}"{% if option.value == collection.sort_by %} selected{% endif %}>
+                {{ option.name }}
+              </option>
+            {%- endfor -%}
+          </select>
+        </div>
+      </div>
+
       {%- comment -%} Product Grid {%- endcomment -%}
       {%- paginate collection.products by products_per_page -%}
         {%- if collection.products.size > 0 -%}
@@ -905,6 +925,56 @@
     margin: 0;
   }
   
+  /* Toolbar */
+  .collection-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .collection-toolbar__count {
+    flex: 1;
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0;
+  }
+  
+  .collection-toolbar__sort {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .collection-toolbar__sort label {
+    font-size: 0.875rem;
+    color: #6b7280;
+    display: none;
+  }
+  
+  @media (min-width: 768px) {
+    .collection-toolbar__sort label {
+      display: block;
+    }
+  }
+  
+  .collection-toolbar__sort select {
+    padding: 0.5rem 2rem 0.5rem 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") right 0.75rem center no-repeat;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+  }
+  
+  .collection-toolbar__sort select:focus {
+    outline: none;
+    border-color: #111827;
+  }
+
   /* ========== PRODUCT GRID ========== */
   .collection-grid {
     display: grid;
@@ -1025,10 +1095,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const page = document.querySelector('[data-collection-page]');
   if (!page) return;
   
-  // ========== AUTO-SORT BY NEWEST ==========
+  // ========== AUTO-SORT BY A-Z ==========
   if (!window.location.search.includes('sort_by')) {
     const url = new URL(window.location);
-    url.searchParams.set('sort_by', 'created-descending');
+    url.searchParams.set('sort_by', 'title-ascending');
     window.location.replace(url);
     return;
   }
@@ -1037,6 +1107,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const filtersEl = document.querySelector('[data-collection-filters]');
   const filterCloseButtons = document.querySelectorAll('[data-filter-close]');
   const filterForm = document.querySelector('[data-filter-form]');
+  const sortSelect = document.querySelector('[data-sort-by]');
   const grid = document.querySelector('[data-collection-grid]');
   const loadMoreContainer = document.querySelector('[data-load-more-container]');
   
@@ -1101,6 +1172,13 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   }
+  
+  // ========== SORT CHANGE ==========
+  sortSelect?.addEventListener('change', function() {
+    const url = new URL(window.location);
+    url.searchParams.set('sort_by', this.value);
+    window.location = url;
+  });
   
   // ========== LOAD MORE ==========
   const loadMoreBtn = document.querySelector('[data-load-more]');
