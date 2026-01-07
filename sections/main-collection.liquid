@@ -19,7 +19,10 @@
   for filter in collection.filters
     assign total_active_filters = total_active_filters | plus: filter.active_values.size
     if filter.type == 'price_range'
-      if filter.min_value.value != nil or filter.max_value.value != nil
+      # Only count price if actual values are set (not 0)
+      assign min_val = filter.min_value.value | divided_by: 100 | default: 0
+      assign max_val = filter.max_value.value | divided_by: 100 | default: 0
+      if min_val > 0 or max_val > 0
         assign total_active_filters = total_active_filters | plus: 1
       endif
     endif
@@ -49,6 +52,43 @@
             </button>
           </div>
           
+          {%- comment -%} ===== Active Filters (TOP - above everything) ===== {%- endcomment -%}
+          {%- if total_active_filters > 0 -%}
+            <div class="collection-filters__active">
+              <div class="collection-filters__active-list">
+                {%- for filter in collection.filters -%}
+                  {%- if filter.type == 'price_range' -%}
+                    {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+                      {%- comment -%} Only show price tag if actual values are set (not zero/empty) {%- endcomment -%}
+                      {%- assign min_price = filter.min_value.value | divided_by: 100 -%}
+                      {%- assign max_price = filter.max_value.value | divided_by: 100 -%}
+                      {%- if min_price > 0 or max_price > 0 -%}
+                        <a href="{{ filter.url_to_remove }}" class="filter-tag">
+                          €{{ min_price | default: 0 }} - €{{ max_price | default: filter.range_max | divided_by: 100 }}
+                          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                          </svg>
+                        </a>
+                      {%- endif -%}
+                    {%- endif -%}
+                  {%- else -%}
+                    {%- for value in filter.active_values -%}
+                      <a href="{{ value.url_to_remove }}" class="filter-tag">
+                        {{ value.label }}
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                      </a>
+                    {%- endfor -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+              <a href="{{ collection.url }}" class="collection-filters__clear">
+                {{ 'collections.filtering.clear_all' | t | default: 'Alle Filter löschen' }}
+              </a>
+            </div>
+          {%- endif -%}
+          
           {%- comment -%} ===== KATEGORIE - Navigation Links (from menu) ===== {%- endcomment -%}
           {%- if sidebar_menu.links.size > 0 -%}
             <details class="filter-group filter-group--kategorie" open>
@@ -75,38 +115,6 @@
                 </ul>
               </div>
             </details>
-          {%- endif -%}
-          
-          {%- comment -%} ===== Active Filters ===== {%- endcomment -%}
-          {%- if total_active_filters > 0 -%}
-            <div class="collection-filters__active">
-              <div class="collection-filters__active-list">
-                {%- for filter in collection.filters -%}
-                  {%- if filter.type == 'price_range' -%}
-                    {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
-                      <a href="{{ filter.url_to_remove }}" class="filter-tag">
-                        {{ filter.min_value.value | default: filter.range_min | money_without_trailing_zeros }} - {{ filter.max_value.value | default: filter.range_max | money_without_trailing_zeros }}
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                        </svg>
-                      </a>
-                    {%- endif -%}
-                  {%- else -%}
-                    {%- for value in filter.active_values -%}
-                      <a href="{{ value.url_to_remove }}" class="filter-tag">
-                        {{ value.label }}
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
-                          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                        </svg>
-                      </a>
-                    {%- endfor -%}
-                  {%- endif -%}
-                {%- endfor -%}
-              </div>
-              <a href="{{ collection.url }}" class="collection-filters__clear">
-                {{ 'collections.filtering.clear_all' | t | default: 'Alle löschen' }}
-              </a>
-            </div>
           {%- endif -%}
           
           {%- comment -%} ===== Search & Discovery Filters ===== {%- endcomment -%}
@@ -197,6 +205,12 @@
                       {%- endif -%}
                       
                     {%- when 'price_range' -%}
+                      {%- liquid
+                        assign price_min_val = filter.min_value.value | divided_by: 100
+                        assign price_max_val = filter.max_value.value | divided_by: 100
+                        assign range_min = filter.range_min | divided_by: 100
+                        assign range_max = filter.range_max | divided_by: 100
+                      -%}
                       <div class="filter-price">
                         <div class="filter-price__inputs">
                           <div class="filter-price__field">
@@ -204,10 +218,11 @@
                             <input 
                               type="number" 
                               name="{{ filter.min_value.param_name }}"
-                              value="{{ filter.min_value.value | divided_by: 100 }}"
-                              min="{{ filter.range_min | divided_by: 100 }}"
-                              max="{{ filter.range_max | divided_by: 100 }}"
-                              placeholder="{{ filter.range_min | divided_by: 100 }}"
+                              value="{% if price_min_val > 0 %}{{ price_min_val }}{% endif %}"
+                              min="{{ range_min }}"
+                              max="{{ range_max }}"
+                              placeholder="{{ range_min }}"
+                              data-price-input
                             >
                           </div>
                           <span class="filter-price__separator">–</span>
@@ -216,10 +231,11 @@
                             <input 
                               type="number" 
                               name="{{ filter.max_value.param_name }}"
-                              value="{{ filter.max_value.value | divided_by: 100 }}"
-                              min="{{ filter.range_min | divided_by: 100 }}"
-                              max="{{ filter.range_max | divided_by: 100 }}"
-                              placeholder="{{ filter.range_max | divided_by: 100 }}"
+                              value="{% if price_max_val > 0 %}{{ price_max_val }}{% endif %}"
+                              min="{{ range_min }}"
+                              max="{{ range_max }}"
+                              placeholder="{{ range_max }}"
+                              data-price-input
                             >
                           </div>
                         </div>
@@ -1168,13 +1184,40 @@ document.addEventListener('DOMContentLoaded', function() {
   // ========== AUTO-SUBMIT FILTERS (Desktop) ==========
   if (filterForm && window.innerWidth >= 1024) {
     filterForm.addEventListener('change', function(e) {
-      // Debounce for price inputs
-      if (e.target.type === 'number') {
-        clearTimeout(this.debounceTimer);
-        this.debounceTimer = setTimeout(() => this.submit(), 500);
-      } else {
-        this.submit();
-      }
+      // Skip price inputs on change - they use blur/enter instead
+      if (e.target.dataset.priceInput !== undefined) return;
+      this.submit();
+    });
+    
+    // Handle price inputs specially - only submit on blur or enter
+    const priceInputs = filterForm.querySelectorAll('[data-price-input]');
+    priceInputs.forEach(input => {
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          // Remove empty price inputs before submit
+          priceInputs.forEach(pi => {
+            if (!pi.value || pi.value === '0') pi.name = '';
+          });
+          filterForm.submit();
+        }
+      });
+      
+      input.addEventListener('blur', function() {
+        // Debounce blur submissions
+        clearTimeout(filterForm.priceDebounce);
+        filterForm.priceDebounce = setTimeout(() => {
+          // Only submit if a value was entered
+          const hasValue = Array.from(priceInputs).some(pi => pi.value && pi.value !== '0');
+          if (hasValue) {
+            // Remove empty price inputs
+            priceInputs.forEach(pi => {
+              if (!pi.value || pi.value === '0') pi.name = '';
+            });
+            filterForm.submit();
+          }
+        }, 800);
+      });
     });
   }
   
