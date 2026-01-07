@@ -1025,6 +1025,14 @@ document.addEventListener('DOMContentLoaded', function() {
   const page = document.querySelector('[data-collection-page]');
   if (!page) return;
   
+  // ========== AUTO-SORT BY NEWEST ==========
+  if (!window.location.search.includes('sort_by')) {
+    const url = new URL(window.location);
+    url.searchParams.set('sort_by', 'created-descending');
+    window.location.replace(url);
+    return;
+  }
+  
   const collectionUrl = page.dataset.collectionUrl;
   const filtersEl = document.querySelector('[data-collection-filters]');
   const filterCloseButtons = document.querySelectorAll('[data-filter-close]');
