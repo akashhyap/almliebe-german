@@ -300,12 +300,16 @@
         </p>
         
         {%- comment -%} Sort {%- endcomment -%}
+        {%- assign url_has_sort = false -%}
+        {%- if request.url contains 'sort_by' -%}
+          {%- assign url_has_sort = true -%}
+        {%- endif -%}
         <div class="collection-toolbar__sort">
           <label for="SortBy">{{ 'collections.sorting.title' | t | default: 'Sortieren' }}:</label>
           <select id="SortBy" data-sort-by>
-            <option value="" disabled {% unless sort_by %}selected{% endunless %}>{{ 'collections.sorting.title' | t | default: 'Sortieren' }}</option>
+            <option value=""{% unless url_has_sort %} selected{% endunless %} disabled>{{ 'collections.sorting.select' | t | default: 'Auswählen' }}</option>
             {%- for option in collection.sort_options -%}
-              <option value="{{ option.value }}"{% if option.value == sort_by %} selected{% endif %}>
+              <option value="{{ option.value }}"{% if url_has_sort and option.value == sort_by %} selected{% endif %}>
                 {{ option.name }}
               </option>
             {%- endfor -%}
@@ -1229,7 +1233,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // ========== SORT CHANGE ==========
   sortSelect?.addEventListener('change', function() {
-    if (!this.value) return; // Skip if placeholder selected
+    if (!this.value) return;
     const url = new URL(window.location);
     url.searchParams.set('sort_by', this.value);
     window.location = url;
