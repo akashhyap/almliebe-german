@@ -1245,38 +1245,45 @@
     cursor: crosshair;
   }
   
+  /* Modern minimal lens - small circle */
   .product__zoom-lens {
     position: absolute;
-    border: 2px solid rgba(0, 0, 0, 0.3);
-    background: rgba(255, 255, 255, 0.3);
-    width: 150px;
-    height: 150px;
+    width: 80px;
+    height: 80px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
     pointer-events: none;
     opacity: 0;
-    transition: opacity 0.15s ease;
+    transition: opacity 0.1s ease;
     z-index: 10;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
   }
   
   .product__zoom-lens.is-visible {
     opacity: 1;
   }
   
+  /* Responsive zoom window - matches image height */
   .product__zoom-window {
     position: absolute;
     top: 0;
-    left: calc(100% + 20px);
-    width: 500px;
-    height: 500px;
+    left: calc(100% + 15px);
+    width: 45vw;
+    max-width: 550px;
+    min-width: 350px;
+    height: 100%;
+    min-height: 400px;
     background-repeat: no-repeat;
     background-color: #ffffff;
     border: 1px solid #e5e7eb;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.2s ease, visibility 0.2s ease;
+    transition: opacity 0.15s ease;
     z-index: 1000;
     pointer-events: none;
-    border-radius: 4px;
+    border-radius: 8px;
     overflow: hidden;
   }
   
@@ -1297,11 +1304,12 @@
     }
   }
   
-  /* Adjust zoom window size on medium screens */
-  @media (min-width: 1024px) and (max-width: 1400px) {
+  /* Adjust for smaller desktop screens */
+  @media (min-width: 1024px) and (max-width: 1280px) {
     .product__zoom-window {
-      width: 400px;
-      height: 400px;
+      width: 40vw;
+      min-width: 300px;
+      left: calc(100% + 10px);
     }
   }
 </style>
@@ -1401,9 +1409,9 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
     
-    console.log('[Zoom] Setting up wrapper', index, 'with image:', img.src.substring(0, 50) + '...');
+    console.log('[Zoom] Setting up wrapper', index);
     
-    // Create zoom lens for this wrapper
+    // Create zoom lens for this wrapper - small circle
     const lens = document.createElement('div');
     lens.className = 'product__zoom-lens';
     wrapper.appendChild(lens);
@@ -1415,13 +1423,18 @@ document.addEventListener('DOMContentLoaded', function() {
       if (window.innerWidth < 1024) return;
       
       const zoomSrc = img.dataset.zoomImage || img.src;
-      console.log('[Zoom] Show zoom, src:', zoomSrc.substring(0, 50) + '...');
+      const rect = wrapper.getBoundingClientRect();
       
       if (zoomWindow) {
         zoomWindow.style.backgroundImage = 'url("' + zoomSrc + '")';
+        
+        // Dynamic height - match image height
+        zoomWindow.style.height = rect.height + 'px';
+        
         zoomWindow.classList.add('is-visible');
         lens.classList.add('is-visible');
         activeLens = lens;
+        console.log('[Zoom] Showing zoom, height:', rect.height);
       }
     }
     
@@ -1443,7 +1456,7 @@ document.addEventListener('DOMContentLoaded', function() {
       let x = e.clientX - rect.left;
       let y = e.clientY - rect.top;
       
-      // Lens size
+      // Lens size (small circle)
       const lensW = lens.offsetWidth / 2;
       const lensH = lens.offsetHeight / 2;
       
@@ -1453,25 +1466,25 @@ document.addEventListener('DOMContentLoaded', function() {
       if (x > rect.width - lensW) x = rect.width - lensW;
       if (y > rect.height - lensH) y = rect.height - lensH;
       
-      // Position lens
+      // Position lens centered on cursor
       lens.style.left = (x - lensW) + 'px';
       lens.style.top = (y - lensH) + 'px';
       
       // Position zoom window relative to gallery
       const windowTop = rect.top - galleryRect.top;
       zoomWindow.style.top = windowTop + 'px';
-      zoomWindow.style.left = (rect.width + 20) + 'px';
+      zoomWindow.style.left = (rect.width + 15) + 'px';
       
-      // Calculate zoom window background position
-      const zoomWindowW = zoomWindow.offsetWidth || 500;
-      const zoomWindowH = zoomWindow.offsetHeight || 500;
+      // Get zoom window dimensions
+      const zoomWindowW = zoomWindow.offsetWidth;
+      const zoomWindowH = zoomWindow.offsetHeight;
       
-      // Background size
+      // Background size (zoomed)
       const bgW = rect.width * zoomLevel;
       const bgH = rect.height * zoomLevel;
       zoomWindow.style.backgroundSize = bgW + 'px ' + bgH + 'px';
       
-      // Background position (inverted and scaled)
+      // Background position - center on cursor position
       const bgX = -((x / rect.width) * bgW - zoomWindowW / 2);
       const bgY = -((y / rect.height) * bgH - zoomWindowH / 2);
       zoomWindow.style.backgroundPosition = bgX + 'px ' + bgY + 'px';
@@ -1479,7 +1492,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Mouse events
     wrapper.addEventListener('mouseenter', function(e) {
-      console.log('[Zoom] Mouse enter wrapper', index);
       showZoom();
       moveZoom(e);
     });
@@ -1487,7 +1499,6 @@ document.addEventListener('DOMContentLoaded', function() {
     wrapper.addEventListener('mousemove', moveZoom);
     
     wrapper.addEventListener('mouseleave', function() {
-      console.log('[Zoom] Mouse leave wrapper', index);
       hideZoom();
     });
   });
