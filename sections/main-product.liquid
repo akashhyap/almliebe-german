@@ -2032,7 +2032,16 @@ document.addEventListener('DOMContentLoaded', function() {
   
 });
 </script>
-
+{%- comment -%} Product JSON for Recently Viewed tracking {%- endcomment -%}
+<script type="application/json" data-product-json>
+  {
+    "id": {{ product.id }},
+    "handle": {{ product.handle | json }},
+    "title": {{ product.title | json }},
+    "featured_image": {{ product.featured_image | image_url: width: 200 | json }},
+    "images": {{ product.images | map: 'src' | json }}
+  }
+</script>
 {% schema %}
 {
   "name": "Product Page",
