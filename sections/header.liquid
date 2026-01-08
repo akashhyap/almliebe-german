@@ -93,10 +93,13 @@
     {%- comment -%} Header Actions - Right Side {%- endcomment -%}
     <div class="header__actions">
       
-      {%- comment -%} Search {%- endcomment -%}
-      <a href="{{ routes.search_url }}" class="header__action" aria-label="Search">
-        {% render 'icon-search' %}
-      </a>
+      {%- comment -%} Search - Opens Predictive Search {%- endcomment -%}
+      <button type="button" class="header__action" aria-label="Suchen" data-search-toggle>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+      </button>
 
       {%- comment -%} Wishlist {%- endcomment -%}
       <a href="/pages/wunschliste" class="header__action header__wishlist" aria-label="Wunschliste">
@@ -113,7 +116,7 @@
 
       {%- comment -%} Cart - Opens Cart Drawer {%- endcomment -%}
       <button type="button" id="almliebe-cart-btn" class="header__action" aria-label="Warenkorb" onclick="event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation(); if(typeof window.openCartDrawer==='function'){window.openCartDrawer();} return false;">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="9" cy="21" r="1"/>
           <circle cx="20" cy="21" r="1"/>
           <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
@@ -137,6 +140,17 @@
 
     <nav class="mobile-menu__nav" role="navigation">
       <ul class="mobile-nav-list">
+        {%- comment -%} Search in mobile menu {%- endcomment -%}
+        <li class="mobile-nav-item mobile-nav-item--search">
+          <button type="button" class="mobile-nav-link mobile-nav-link--search" data-search-toggle>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="11" cy="11" r="8"/>
+              <path d="m21 21-4.35-4.35"/>
+            </svg>
+            <span>Suchen</span>
+          </button>
+        </li>
+
         {% for link in linklists.main-menu.links %}
           <li class="mobile-nav-item">
             <a href="{{ link.url }}" class="mobile-nav-link">
@@ -194,7 +208,7 @@
     }
   }
 
-  /* Header - Fixed Position for Reliable Sticky */
+  /* Header - Fixed Position */
   .header {
     position: fixed;
     top: 0;
@@ -232,7 +246,7 @@
     }
   }
 
-  /* Logo - Left */
+  /* Logo */
   .header__logo {
     display: flex;
     align-items: center;
@@ -323,7 +337,7 @@
     background: #000000;
   }
 
-  /* Dropdown - Level 2 */
+  /* Dropdown */
   .dropdown {
     position: absolute;
     min-width: 240px;
@@ -349,7 +363,6 @@
     visibility: visible;
   }
 
-  /* Dropdown - Level 3 (Nested) */
   .dropdown--level-3 {
     top: -0.75rem;
     left: 100%;
@@ -381,7 +394,6 @@
     color: #000000;
     text-decoration: none;
     transition: background 0.2s ease;
-    position: relative;
   }
 
   .dropdown__link:hover {
@@ -414,7 +426,7 @@
     border-radius: 3px;
   }
 
-  /* Header Actions - Right Side */
+  /* Header Actions */
   .header__actions {
     display: flex;
     align-items: center;
@@ -454,7 +466,7 @@
     stroke-width: 1.5;
   }
 
-  /* Count badge for wishlist and cart */
+  /* Count badge */
   .header__count-badge {
     position: absolute;
     top: 2px;
@@ -573,8 +585,14 @@
     text-decoration: none;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
   }
 
+  .mobile-nav-item--search .mobile-nav-link,
   .mobile-nav-item--account .mobile-nav-link,
   .mobile-nav-item--wishlist .mobile-nav-link {
     display: flex;
@@ -645,6 +663,12 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.classList.toggle('mobile-menu-open');
   }
   
+  function closeMobileMenu() {
+    mobileMenu?.classList.remove('is-active');
+    mobileMenuOverlay?.classList.remove('is-active');
+    document.body.classList.remove('mobile-menu-open');
+  }
+  
   mobileMenuToggles.forEach(toggle => {
     toggle.addEventListener('click', toggleMobileMenu);
   });
@@ -663,6 +687,25 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }, { passive: true });
   }
+
+  // Search toggle - opens predictive search
+  const searchToggles = document.querySelectorAll('[data-search-toggle]');
+  
+  searchToggles.forEach(toggle => {
+    toggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      // Close mobile menu if open
+      closeMobileMenu();
+      
+      // Open predictive search
+      if (typeof window.openPredictiveSearch === 'function') {
+        window.openPredictiveSearch();
+      } else if (typeof window.PredictiveSearch?.open === 'function') {
+        window.PredictiveSearch.open();
+      }
+    });
+  });
 });
 </script>
 
