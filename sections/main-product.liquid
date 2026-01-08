@@ -323,7 +323,7 @@
                               endif
                             endfor
                           -%}
-                          <label class="product__size-btn{% if option.selected_value == value %} is-selected{% endif %}{% unless variant_available %} is-unavailable{% endunless %}" data-option-value="{{ value | escape }}">
+                          <label class="product__size-btn{% if option.selected_value == value and variant_available %} is-selected{% endif %}{% unless variant_available %} is-unavailable{% endunless %}" data-option-value="{{ value | escape }}">
                             {%- unless variant_available -%}
                               <span class="product__size-bell" data-stock-alert-trigger="{{ value | escape }}" title="Benachrichtigung bei Verfügbarkeit">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
