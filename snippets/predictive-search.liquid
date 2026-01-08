@@ -14,7 +14,7 @@
 <div class="predictive-search" data-predictive-search aria-hidden="true">
   <div class="predictive-search__header">
     <div class="predictive-search__input-wrapper">
-      <svg class="predictive-search__search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <svg class="predictive-search__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <circle cx="11" cy="11" r="8"/>
         <path d="m21 21-4.35-4.35"/>
       </svg>
@@ -30,7 +30,7 @@
         aria-label="Suchen"
       >
       <button type="button" class="predictive-search__clear is-hidden" data-predictive-search-clear aria-label="Suche löschen">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
           <path d="M18 6L6 18M6 6l12 12"/>
         </svg>
       </button>
@@ -183,6 +183,7 @@
     }
   }
 
+  /* Input wrapper - using flexbox for better alignment */
   .predictive-search__input-wrapper {
     flex: 1;
     max-width: 600px;
@@ -190,39 +191,36 @@
     position: relative;
     display: flex;
     align-items: center;
+    background: #ffffff;
+    border: 2px solid #e5e5e5;
+    border-radius: 50px;
+    transition: border-color 0.2s ease;
   }
 
-  /* FIXED: Search icon positioning */
+  .predictive-search__input-wrapper:focus-within {
+    border-color: #000000;
+  }
+
+  /* Search icon - positioned with flexbox gap */
   .predictive-search__search-icon {
-    position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
+    margin-left: 16px;
     color: #666666;
-    pointer-events: none;
     flex-shrink: 0;
   }
 
-  /* FIXED: Input padding to prevent text overlap with icon */
+  /* Input - no border, shares container border */
   .predictive-search__input {
-    width: 100%;
-    height: 52px;
-    padding: 0 48px 0 52px;
+    flex: 1;
+    height: 48px;
+    padding: 0 12px;
     font-size: 1rem;
     font-family: inherit;
-    border: 2px solid #e5e5e5;
-    border-radius: 50px;
-    background: #ffffff;
-    transition: border-color 0.2s ease;
-    -webkit-appearance: none;
-    appearance: none;
-  }
-
-  .predictive-search__input:focus {
+    border: none;
+    background: transparent;
     outline: none;
-    border-color: #000000;
+    min-width: 0;
   }
 
   .predictive-search__input::placeholder {
@@ -236,13 +234,11 @@
     appearance: none;
   }
 
+  /* Clear button */
   .predictive-search__clear {
-    position: absolute;
-    right: 16px;
-    top: 50%;
-    transform: translateY(-50%);
     width: 24px;
     height: 24px;
+    margin-right: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -253,6 +249,7 @@
     color: #666666;
     transition: background 0.2s ease, color 0.2s ease;
     padding: 0;
+    flex-shrink: 0;
   }
 
   .predictive-search__clear:hover {
