@@ -903,19 +903,25 @@
   
   .product__size-text {
     font-size: 0.9375rem;
-    font-weight: 300;
+    font-weight: 400;
     color: #111827;
     transition: all 0.15s ease;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
   }
   
-  .product__size-btn:hover .product__size-text {
-    color: #000000;
-    font-weight: 400;
+  .product__size-btn:hover:not(.is-unavailable) .product__size-text {
+    background: #111827;
+    color: #ffffff;
   }
   
   .product__size-btn.is-selected .product__size-text {
-    font-weight: 500;
-    color: #000000;
+    background: #111827;
+    color: #ffffff;
   }
   
   .product__size-btn.is-unavailable {
