@@ -1,4 +1,4 @@
-<header class="header{% if settings.header_sticky %} header--sticky{% endif %}" data-header>
+<header class="header header--sticky" data-header>
   <div class="header__inner">
     
     {%- comment -%} Mobile Menu Toggle {%- endcomment -%}
@@ -97,7 +97,7 @@
 
       {%- comment -%} Wishlist {%- endcomment -%}
       <a href="/pages/wunschliste" class="header__action header__wishlist" aria-label="Wunschliste">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
         <span class="header__count-badge is-hidden" data-wishlist-count>0</span>
@@ -186,21 +186,21 @@
     background: #FFFFFF;
     border-bottom: 1px solid #E8E8E8;
     position: relative;
-    z-index: var(--z-header);
+    z-index: var(--z-header, 1000);
   }
 
+  /* Sticky Header - Always enabled */
   .header--sticky {
     position: sticky;
     top: 0;
-    transition: transform var(--duration-default) var(--ease-out), box-shadow var(--duration-default);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
   }
 
   .header--sticky.is-scrolled {
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  }
-
-  .header.is-hidden {
-    transform: translateY(-100%);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 
   .header__inner {
@@ -286,12 +286,12 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     padding: 0.5rem 0;
-    transition: opacity var(--duration-short);
+    transition: opacity 0.2s ease;
   }
 
   .nav-link__icon {
     margin-left: 0.25rem;
-    transition: transform var(--duration-short);
+    transition: transform 0.2s ease;
   }
 
   .nav-item--has-dropdown:hover .nav-link__icon {
@@ -373,7 +373,7 @@
     font-weight: 500;
     color: #000000;
     text-decoration: none;
-    transition: background var(--duration-short);
+    transition: background 0.2s ease;
     position: relative;
   }
 
@@ -419,29 +419,30 @@
     justify-self: end;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.25rem;
   }
 
   @media (max-width: 1023px) {
     .header__actions {
       order: 3;
-      gap: 0.25rem;
+      gap: 0.125rem;
     }
   }
 
   .header__action {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #000000;
     text-decoration: none;
-    transition: opacity var(--duration-short);
+    transition: opacity 0.2s ease;
     background: transparent;
     border: none;
     cursor: pointer;
     padding: 0;
+    position: relative;
   }
 
   .header__action:hover {
@@ -449,41 +450,16 @@
   }
 
   .header__action svg {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
     stroke-width: 1.5;
   }
 
-  .header__cart {
-    position: relative;
-  }
-
-  .header__cart-count {
-    position: absolute;
-    top: 4px;
-    right: 2px;
-    min-width: 18px;
-    height: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 0.25rem;
-    font-size: 0.6875rem;
-    font-weight: 700;
-    background: #000000;
-    color: #FFFFFF;
-    border-radius: 9px;
-  }
-
-  .header__cart-count.is-hidden {
-    display: none;
-  }
-
-  /* Unified count badge for wishlist and cart - same black style */
+  /* Unified count badge for wishlist and cart */
   .header__count-badge {
     position: absolute;
-    top: 4px;
-    right: 2px;
+    top: 2px;
+    right: 0;
     min-width: 18px;
     height: 18px;
     display: flex;
@@ -511,8 +487,8 @@
   }
 
   .header__menu-toggle {
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -525,8 +501,8 @@
   }
 
   .header__menu-toggle svg {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
   }
 
   /* Mobile Menu */
@@ -538,7 +514,7 @@
     max-width: 400px;
     height: 100vh;
     background: #FFFFFF;
-    z-index: calc(var(--z-header) + 10);
+    z-index: calc(var(--z-header, 1000) + 10);
     transform: translateX(-100%);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow-y: auto;
@@ -651,7 +627,7 @@
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
-    z-index: calc(var(--z-header) + 5);
+    z-index: calc(var(--z-header, 1000) + 5);
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -686,11 +662,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const header = document.querySelector('[data-header]');
   let lastScroll = 0;
   
-  if (header?.classList.contains('header--sticky')) {
+  if (header) {
     window.addEventListener('scroll', function() {
       const currentScroll = window.pageYOffset;
       
-      if (currentScroll > 100) {
+      // Add shadow after scrolling 50px
+      if (currentScroll > 50) {
         header.classList.add('is-scrolled');
       } else {
         header.classList.remove('is-scrolled');
