@@ -146,7 +146,7 @@
       {%- endif -%}
     </a>
     
-    {%- comment -%} Badges {%- endcomment -%}
+    {%- comment -%} Badges - positioned bottom-right, moves into size selector on hover {%- endcomment -%}
     <div class="product-card__badges">
       {%- if show_soldout_badge -%}
         <span class="badge badge--soldout">{{ 'products.product.sold_out' | t | default: 'Ausverkauft' }}</span>
@@ -176,8 +176,18 @@
     {%- comment -%} Gymshark-style Size Selector (Desktop Hover) {%- endcomment -%}
     {%- if has_sizes -%}
       <div class="product-card__sizes" data-size-selector>
-        {%- comment -%} Product name label {%- endcomment -%}
-        <div class="product-card__sizes-label">{{ product.title }}</div>
+        {%- comment -%} Badge inside size selector - top right {%- endcomment -%}
+        <div class="product-card__sizes-badge">
+          {%- if show_soldout_badge -%}
+            <span class="badge badge--soldout">{{ 'products.product.sold_out' | t | default: 'Ausverkauft' }}</span>
+          {%- elsif show_sale_badge -%}
+            <span class="badge badge--sale">-{{ savings_percent }}%</span>
+          {%- elsif show_new_badge -%}
+            <span class="badge badge--new">{{ 'products.product.new' | t | default: 'Neu' }}</span>
+          {%- elsif show_lowstock_badge -%}
+            <span class="badge badge--lowstock">{{ 'products.product.low_stock' | t | default: 'Nur noch wenige' }}</span>
+          {%- endif -%}
+        </div>
         
         {%- comment -%} Size Grid {%- endcomment -%}
         <div class="product-card__sizes-grid{% if is_one_size %} product-card__sizes-grid--one-size{% endif %}">
@@ -333,14 +343,27 @@
     align-items: flex-end;
     gap: 0.375rem;
     z-index: 4;
-    transition: bottom 0.25s ease;
+    transition: opacity 0.15s ease;
   }
   
-  /* Move badges up when size selector appears on desktop hover */
+  /* Hide original badges when size selector appears on desktop hover */
   @media (min-width: 1024px) {
     .product-card--has-sizes:hover .product-card__badges {
-      bottom: calc(100px + 0.5rem);
+      opacity: 0;
+      pointer-events: none;
     }
+  }
+  
+  /* Badge inside size selector - top right corner */
+  .product-card__sizes-badge {
+    position: absolute;
+    top: -2.25rem;
+    right: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+    z-index: 5;
   }
 
   .badge {
@@ -426,16 +449,6 @@
       transform: translateY(0);
       opacity: 1;
     }
-  }
-
-  .product-card__sizes-label {
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: #374151;
-    text-align: center;
-    padding-bottom: 0.625rem;
-    margin-bottom: 0.5rem;
-    border-bottom: 1px solid #e5e7eb;
   }
 
   .product-card__sizes-grid {
