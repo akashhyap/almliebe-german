@@ -1,0 +1,364 @@
+{% comment %}
+  WISHLIST - Advanced Custom Solution with Account Sync
+  
+  Features:
+  - Guest: localStorage storage
+  - Logged in: Customer metafield storage (synced across devices)
+  - Auto-merge on login
+  - No app required
+  
+  Setup Required:
+  1. Create customer metafield definition: custom.wishlist (JSON)
+  2. Deploy Vercel API function
+  3. Configure App Proxy in Shopify
+  4. Include this snippet in theme.liquid before </body>
+{% endcomment %}
+
+<script>
+window.AlmliebeWishlist = (function() {
+  const STORAGE_KEY = 'almliebe_wishlist';
+  const API_ENDPOINT = '/apps/wishlist';
+  
+  // Check if customer is logged in
+  const isLoggedIn = {{ customer | default: false | json }} !== false;
+  const customerId = {{ customer.id | default: 'null' }};
+  
+  // Customer's saved wishlist from metafield (loaded with page)
+  let accountItems = [];
+  {%- if customer and customer.metafields.custom.wishlist -%}
+    try {
+      accountItems = JSON.parse({{ customer.metafields.custom.wishlist | json }}) || [];
+    } catch (e) {
+      accountItems = [];
+    }
+  {%- endif -%}
+  
+  // Get items from localStorage
+  function getLocalItems() {
+    try {
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    } catch (e) {
+      return [];
+    }
+  }
+  
+  // Save items to localStorage
+  function saveLocalItems(items) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  }
+  
+  // Clear localStorage
+  function clearLocalItems() {
+    localStorage.removeItem(STORAGE_KEY);
+  }
+  
+  // Save items to customer metafield via API
+  async function saveToAccount(items) {
+    if (!isLoggedIn) return false;
+    
+    try {
+      const response = await fetch(API_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          action: 'save',
+          customer_id: customerId,
+          wishlist: items
+        })
+      });
+      
+      const data = await response.json();
+      if (data.success) {
+        accountItems = items; // Update local cache
+        return true;
+      }
+      return false;
+    } catch (e) {
+      console.error('Wishlist save to account failed:', e);
+      return false;
+    }
+  }
+  
+  // Get all items
+  function getItems() {
+    if (isLoggedIn) {
+      return accountItems.length > 0 ? accountItems : getLocalItems();
+    }
+    return getLocalItems();
+  }
+  
+  // Save items (to both localStorage and account if logged in)
+  async function saveItems(items) {
+    // Always save to localStorage as backup/cache
+    saveLocalItems(items);
+    
+    // If logged in, also save to account
+    if (isLoggedIn) {
+      await saveToAccount(items);
+    }
+    
+    updateCount();
+    document.dispatchEvent(new CustomEvent('wishlist:updated', { detail: { items } }));
+  }
+  
+  // Add product
+  function add(productId, productHandle, productData) {
+    const items = getItems();
+    const exists = items.find(item => item.id == productId);
+    
+    if (!exists) {
+      items.push({
+        id: String(productId),
+        handle: productHandle || '',
+        title: productData?.title || '',
+        image: productData?.image || '',
+        price: productData?.price || '',
+        vendor: productData?.vendor || '',
+        url: productData?.url || '',
+        addedAt: Date.now()
+      });
+      saveItems(items);
+    }
+    return items;
+  }
+  
+  // Remove product
+  function remove(productId) {
+    let items = getItems();
+    items = items.filter(item => item.id != productId);
+    saveItems(items);
+    return items;
+  }
+  
+  // Toggle product
+  function toggle(productId, productHandle, productData) {
+    if (contains(productId)) {
+      remove(productId);
+      return false;
+    } else {
+      add(productId, productHandle, productData);
+      return true;
+    }
+  }
+  
+  // Check if product is in wishlist
+  function contains(productId) {
+    const items = getItems();
+    return items.some(item => item.id == productId);
+  }
+  
+  // Get count
+  function getCount() {
+    return getItems().length;
+  }
+  
+  // Update header count badge
+  function updateCount() {
+    const count = getCount();
+    const badges = document.querySelectorAll('[data-wishlist-count]');
+    
+    badges.forEach(badge => {
+      badge.textContent = count;
+      badge.style.display = count > 0 ? 'flex' : 'none';
+    });
+  }
+  
+  // Merge localStorage with account on login
+  async function mergeWishlists() {
+    if (!isLoggedIn) return;
+    
+    const localItems = getLocalItems();
+    
+    // If local items exist and account is empty or has different items
+    if (localItems.length > 0) {
+      const merged = [...accountItems];
+      let hasNewItems = false;
+      
+      localItems.forEach(localItem => {
+        if (!merged.some(item => item.id == localItem.id)) {
+          merged.push(localItem);
+          hasNewItems = true;
+        }
+      });
+      
+      if (hasNewItems) {
+        await saveToAccount(merged);
+        accountItems = merged;
+      }
+      
+      // Clear localStorage after successful merge
+      clearLocalItems();
+    }
+  }
+  
+  // Initialize all wishlist buttons
+  async function init() {
+    // Merge wishlists if logged in
+    if (isLoggedIn) {
+      await mergeWishlists();
+    }
+    
+    // Set active state for all wishlist buttons
+    document.querySelectorAll('[data-wishlist-toggle]').forEach(btn => {
+      const productId = btn.dataset.wishlistToggle;
+      if (contains(productId)) {
+        btn.classList.add('is-active');
+      } else {
+        btn.classList.remove('is-active');
+      }
+    });
+    
+    updateCount();
+  }
+  
+  // Public API
+  return {
+    getItems,
+    add,
+    remove,
+    toggle,
+    contains,
+    getCount,
+    updateCount,
+    init,
+    isLoggedIn,
+    saveItems,
+    clearLocalItems
+  };
+})();
+
+// Alias for backwards compatibility
+window.Wishlist = window.AlmliebeWishlist;
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', function() {
+  window.AlmliebeWishlist.init();
+  
+  // Global click handler for wishlist buttons
+  document.addEventListener('click', function(e) {
+    const wishlistBtn = e.target.closest('[data-wishlist-toggle]');
+    if (!wishlistBtn) return;
+    
+    e.preventDefault();
+    e.stopPropagation();
+    
+    const productId = wishlistBtn.dataset.wishlistToggle;
+    const productHandle = wishlistBtn.dataset.productHandle || '';
+    
+    // Get product data from data attributes
+    const productData = {
+      title: wishlistBtn.dataset.productTitle || '',
+      image: wishlistBtn.dataset.productImage || '',
+      price: wishlistBtn.dataset.productPrice || '',
+      vendor: wishlistBtn.dataset.productVendor || '',
+      url: wishlistBtn.dataset.productUrl || ''
+    };
+    
+    const isAdded = window.AlmliebeWishlist.toggle(productId, productHandle, productData);
+    
+    // Update all buttons for this product
+    document.querySelectorAll(`[data-wishlist-toggle="${productId}"]`).forEach(btn => {
+      btn.classList.toggle('is-active', isAdded);
+      btn.setAttribute('aria-label', isAdded ? 'Von Wunschliste entfernen' : 'Zur Wunschliste hinzufügen');
+    });
+    
+    // Show feedback toast
+    showWishlistToast(isAdded);
+  });
+});
+
+// Toast notification
+function showWishlistToast(added) {
+  const existing = document.querySelector('.wishlist-toast');
+  if (existing) existing.remove();
+  
+  const toast = document.createElement('div');
+  toast.className = 'wishlist-toast';
+  toast.innerHTML = `
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="${added ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="1.5">
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+    </svg>
+    <span>${added ? 'Zur Wunschliste hinzugefügt' : 'Von Wunschliste entfernt'}</span>
+  `;
+  document.body.appendChild(toast);
+  
+  requestAnimationFrame(() => toast.classList.add('is-visible'));
+  
+  setTimeout(() => {
+    toast.classList.remove('is-visible');
+    setTimeout(() => toast.remove(), 300);
+  }, 2000);
+}
+
+document.addEventListener('shopify:section:load', () => window.AlmliebeWishlist.init());
+</script>
+
+<style>
+  .header__wishlist {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    color: #111827;
+    text-decoration: none;
+  }
+  
+  .header__wishlist svg {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    fill: none;
+    transition: all 0.2s;
+  }
+  
+  .header__wishlist:hover svg {
+    transform: scale(1.1);
+  }
+  
+  [data-wishlist-count] {
+    position: absolute;
+    top: 0;
+    right: 0;
+    min-width: 16px;
+    height: 16px;
+    padding: 0 4px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #ffffff;
+    background: #111827;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .wishlist-toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.25rem;
+    background: #111827;
+    color: #ffffff;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    opacity: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .wishlist-toast.is-visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+</style>

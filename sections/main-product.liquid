@@ -180,8 +180,26 @@
           </p>
         {%- endif -%}
 
-        {%- comment -%} Title {%- endcomment -%}
-        <h1 class="product__title">{{ product.title }}</h1>
+        {%- comment -%} Title with Wishlist {%- endcomment -%}
+        <div class="product__title-row">
+          <h1 class="product__title">{{ product.title }}</h1>
+          <button 
+            type="button" 
+            class="product__wishlist"
+            data-wishlist-toggle="{{ product.id }}"
+            data-product-handle="{{ product.handle }}"
+            data-product-title="{{ product.title | escape }}"
+            data-product-image="{{ product.featured_image | image_url: width: 400 }}"
+            data-product-price="{{ product.price | money }}"
+            data-product-vendor="{{ product.vendor | escape }}"
+            data-product-url="{{ product.url }}"
+            aria-label="{{ 'products.product.add_to_wishlist' | t | default: 'Zur Wunschliste hinzufügen' }}"
+          >
+            <svg class="icon-heart" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </button>
+        </div>
 
         {%- comment -%} Reviews Summary {%- endcomment -%}
         <div class="product__reviews-summary" data-reviews-summary>
@@ -770,9 +788,49 @@
     color: var(--color-text-secondary);
   }
 
+  .product__title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
   .product__title {
     font-size: 1.75rem;
     margin: 0;
+    flex: 1;
+  }
+
+  .product__wishlist {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: #f3f4f6;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .product__wishlist:hover {
+    background: #e5e7eb;
+  }
+
+  .product__wishlist svg {
+    stroke: #111827;
+    fill: none;
+    transition: fill 0.2s, transform 0.2s;
+  }
+
+  .product__wishlist:hover svg {
+    transform: scale(1.1);
+  }
+
+  .product__wishlist.is-active svg {
+    fill: #111827;
   }
 
   .product__price {

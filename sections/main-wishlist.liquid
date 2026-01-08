@@ -1,0 +1,287 @@
+{% comment %}
+  WISHLIST PAGE - Displays saved wishlist items
+  
+  Requires:
+  - snippets/wishlist.liquid to be included in theme.liquid
+  - page.wishlist.json template
+{% endcomment %}
+
+<div class="wishlist-page">
+  <div class="container">
+    <h1 class="wishlist-page__title">Wunschliste</h1>
+    
+    <div class="wishlist-page__content">
+      {%- comment -%} Empty State {%- endcomment -%}
+      <div class="wishlist-page__empty" id="wishlist-empty" style="display: none;">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <h2>Ihre Wunschliste ist leer</h2>
+        <p>Speichern Sie Ihre Lieblingsartikel, indem Sie auf das Herz-Symbol klicken.</p>
+        <a href="/collections/all" class="btn btn--primary">Jetzt einkaufen</a>
+      </div>
+      
+      {%- comment -%} Wishlist Grid {%- endcomment -%}
+      <div class="wishlist-page__grid" id="wishlist-grid"></div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .wishlist-page {
+    padding: 3rem 0;
+    min-height: 60vh;
+  }
+  
+  .wishlist-page .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  .wishlist-page__title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0 0 2rem;
+    text-align: center;
+  }
+  
+  .wishlist-page__empty {
+    text-align: center;
+    padding: 4rem 2rem;
+  }
+  
+  .wishlist-page__empty svg {
+    color: #d1d5db;
+    margin-bottom: 1.5rem;
+  }
+  
+  .wishlist-page__empty h2 {
+    font-size: 1.25rem;
+    margin: 0 0 0.5rem;
+  }
+  
+  .wishlist-page__empty p {
+    color: #6b7280;
+    margin: 0 0 1.5rem;
+  }
+  
+  .wishlist-page__empty .btn {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    background: #111827;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 9999px;
+    font-weight: 600;
+    transition: background 0.2s;
+  }
+  
+  .wishlist-page__empty .btn:hover {
+    background: #000000;
+  }
+  
+  .wishlist-page__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  @media (min-width: 640px) {
+    .wishlist-page__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .wishlist-page__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  
+  /* Wishlist Item Card */
+  .wishlist-item {
+    position: relative;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .wishlist-item__remove {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+    transition: all 0.2s;
+  }
+  
+  .wishlist-item__remove:hover {
+    background: #fee2e2;
+  }
+  
+  .wishlist-item__remove svg {
+    width: 18px;
+    height: 18px;
+    stroke: #6b7280;
+    transition: stroke 0.2s;
+  }
+  
+  .wishlist-item__remove:hover svg {
+    stroke: #dc2626;
+  }
+  
+  .wishlist-item__image {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: #f3f4f6;
+  }
+  
+  .wishlist-item__image a {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .wishlist-item__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+  
+  .wishlist-item:hover .wishlist-item__image img {
+    transform: scale(1.05);
+  }
+  
+  .wishlist-item__info {
+    padding: 0.75rem;
+  }
+  
+  .wishlist-item__vendor {
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #6b7280;
+    margin: 0 0 0.25rem;
+  }
+  
+  .wishlist-item__title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin: 0 0 0.25rem;
+    line-height: 1.3;
+  }
+  
+  .wishlist-item__title a {
+    color: inherit;
+    text-decoration: none;
+  }
+  
+  .wishlist-item__title a:hover {
+    text-decoration: underline;
+  }
+  
+  .wishlist-item__price {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #111827;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  renderWishlist();
+  
+  // Re-render when wishlist updates
+  document.addEventListener('wishlist:updated', renderWishlist);
+});
+
+function renderWishlist() {
+  const grid = document.getElementById('wishlist-grid');
+  const empty = document.getElementById('wishlist-empty');
+  
+  if (!grid || !empty) return;
+  
+  const items = window.Wishlist ? window.Wishlist.getItems() : [];
+  
+  if (items.length === 0) {
+    grid.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+  
+  grid.style.display = 'grid';
+  empty.style.display = 'none';
+  
+  grid.innerHTML = items.map(item => `
+    <div class="wishlist-item" data-wishlist-item="${item.id}">
+      <button 
+        type="button" 
+        class="wishlist-item__remove" 
+        data-remove-wishlist="${item.id}"
+        aria-label="Entfernen"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+      <div class="wishlist-item__image">
+        <a href="${item.url || '/products/' + item.handle}">
+          <img src="${item.image || 'https://placehold.co/400x500?text=No+Image'}" alt="${item.title || 'Produkt'}" loading="lazy">
+        </a>
+      </div>
+      <div class="wishlist-item__info">
+        ${item.vendor ? `<p class="wishlist-item__vendor">${item.vendor}</p>` : ''}
+        <h3 class="wishlist-item__title">
+          <a href="${item.url || '/products/' + item.handle}">${item.title || 'Produkt'}</a>
+        </h3>
+        ${item.price ? `<p class="wishlist-item__price">${item.price}</p>` : ''}
+      </div>
+    </div>
+  `).join('');
+  
+  // Add remove handlers
+  grid.querySelectorAll('[data-remove-wishlist]').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      const productId = this.dataset.removeWishlist;
+      
+      // Animate out
+      const item = this.closest('.wishlist-item');
+      item.style.opacity = '0';
+      item.style.transform = 'scale(0.9)';
+      item.style.transition = 'all 0.3s';
+      
+      setTimeout(() => {
+        window.Wishlist.remove(productId);
+        renderWishlist();
+      }, 300);
+    });
+  });
+}
+</script>
+
+{% schema %}
+{
+  "name": "Wishlist Page",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Wishlist Page"
+    }
+  ]
+}
+{% endschema %}

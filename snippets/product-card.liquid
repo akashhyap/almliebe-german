@@ -166,6 +166,12 @@
       type="button" 
       class="product-card__wishlist"
       data-wishlist-toggle="{{ product.id }}"
+      data-product-handle="{{ product.handle }}"
+      data-product-title="{{ product.title | escape }}"
+      data-product-image="{{ product.featured_image | image_url: width: 400 }}"
+      data-product-price="{{ product.price | money }}"
+      data-product-vendor="{{ product.vendor | escape }}"
+      data-product-url="{{ product.url }}"
       aria-label="{{ 'products.product.add_to_wishlist' | t | default: 'Zur Wunschliste hinzufügen' }}"
     >
       <svg class="icon-heart" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -746,33 +752,6 @@ if (!window.productCardInitialized) {
       }
       return;
     }
-    
-    // Wishlist toggle
-    const wishlistBtn = e.target.closest('[data-wishlist-toggle]');
-    if (wishlistBtn) {
-      e.preventDefault();
-      wishlistBtn.classList.toggle('is-active');
-      
-      const productId = wishlistBtn.dataset.wishlistToggle;
-      let wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-      
-      if (wishlistBtn.classList.contains('is-active')) {
-        if (!wishlist.includes(productId)) {
-          wishlist.push(productId);
-        }
-      } else {
-        wishlist = wishlist.filter(id => id !== productId);
-      }
-      
-      localStorage.setItem('wishlist', JSON.stringify(wishlist));
-    }
-  });
-  
-  // Initialize wishlist state
-  const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-  wishlist.forEach(id => {
-    const btn = document.querySelector(`[data-wishlist-toggle="${id}"]`);
-    if (btn) btn.classList.add('is-active');
   });
 }
 </script>
