@@ -157,6 +157,11 @@
             {%- endfor -%}
           </div>
         {%- endif -%}
+        
+        {%- comment -%} Model Info {%- endcomment -%}
+        {%- if product.metafields.custom.model_info != blank -%}
+          <p class="product__model-info">{{ product.metafields.custom.model_info }}</p>
+        {%- endif -%}
       </div>
 
       {%- comment -%} ========== PRODUCT INFO ========== {%- endcomment -%}
@@ -715,6 +720,15 @@
     justify-content: center;
     background: rgba(0,0,0,0.3);
     color: white;
+  }
+
+  /* Model Info */
+  .product__model-info {
+    font-size: 0.8125rem;
+    color: #6b7280;
+    text-align: center;
+    margin: 0.75rem 0 0;
+    font-style: italic;
   }
 
   /* Product Info */
