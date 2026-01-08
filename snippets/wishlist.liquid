@@ -161,7 +161,11 @@ window.AlmliebeWishlist = (function() {
     
     badges.forEach(badge => {
       badge.textContent = count;
-      badge.style.display = count > 0 ? 'flex' : 'none';
+      if (count > 0) {
+        badge.classList.remove('is-hidden');
+      } else {
+        badge.classList.add('is-hidden');
+      }
     });
   }
   

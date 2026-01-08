@@ -100,6 +100,14 @@
         {% render 'icon-account' %}
       </a>
 
+      {%- comment -%} Wishlist {%- endcomment -%}
+      <a href="/pages/wunschliste" class="header__action header__wishlist" aria-label="Wunschliste">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <span class="header__wishlist-count is-hidden" data-wishlist-count>0</span>
+      </a>
+
       {%- comment -%} Cart - Opens Cart Drawer {%- endcomment -%}
       <button type="button" id="almliebe-cart-btn" class="header__action" aria-label="Warenkorb" onclick="event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation(); if(typeof window.openCartDrawer==='function'){window.openCartDrawer();} return false;">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -144,6 +152,17 @@
             {% endif %}
           </li>
         {% endfor %}
+        
+        {%- comment -%} Wishlist link in mobile {%- endcomment -%}
+        <li class="mobile-nav-item mobile-nav-item--wishlist">
+          <a href="/pages/wunschliste" class="mobile-nav-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+            <span>Wunschliste</span>
+            <span class="mobile-nav-wishlist-count is-hidden" data-wishlist-count>0</span>
+          </a>
+        </li>
         
         {%- comment -%} Account link in mobile {%- endcomment -%}
         <li class="mobile-nav-item mobile-nav-item--account">
@@ -464,6 +483,32 @@
     display: none;
   }
 
+  /* Wishlist icon */
+  .header__wishlist {
+    position: relative;
+  }
+
+  .header__wishlist-count {
+    position: absolute;
+    top: 4px;
+    right: 2px;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.25rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    background: #000000;
+    color: #FFFFFF;
+    border-radius: 9px;
+  }
+
+  .header__wishlist-count.is-hidden {
+    display: none;
+  }
+
   .header__menu-toggle {
     width: 44px;
     height: 44px;
@@ -559,6 +604,31 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
+  }
+
+  .mobile-nav-item--wishlist .mobile-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .mobile-nav-wishlist-count {
+    margin-left: auto;
+    min-width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.375rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: #000000;
+    color: #FFFFFF;
+    border-radius: 10px;
+  }
+
+  .mobile-nav-wishlist-count.is-hidden {
+    display: none;
   }
 
   .mobile-nav-submenu {
