@@ -310,7 +310,7 @@
                         {{ 'products.product.size_guide' | t | default: 'Größentabelle' }}
                       </button>
                     </div>
-                    <div class="product__size-box">
+                    <div class="product__size-box{% if option.values.size == 1 %} product__size-box--single{% endif %}">
                       <div class="product__size-options">
                         {%- for value in option.values -%}
                           {%- liquid
@@ -975,6 +975,29 @@
     cursor: pointer;
     transition: all 0.15s ease;
   }
+
+  /* Single size option - no circle, just text */
+.product__size-box--single .product__size-btn {
+  min-width: auto;
+  height: auto;
+  padding: 0;
+}
+
+.product__size-box--single .product__size-text {
+  width: auto;
+  height: auto;
+  padding: 0.625rem 1.25rem;
+  border-radius: 9999px;
+  border: 1px solid #e5e7eb;
+  background: transparent;
+}
+
+.product__size-box--single .product__size-btn.is-selected .product__size-text,
+.product__size-box--single .product__size-btn:hover:not(.is-unavailable) .product__size-text {
+  background: #111827;
+  color: #ffffff;
+  border-color: #111827;
+}
   
   .product__size-btn input {
     position: absolute;
