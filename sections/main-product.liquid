@@ -1235,7 +1235,7 @@
     text-align: center;
   }
 
-  /* Product Zoom Window - Desktop hover zoom */
+  /* Product Inner Zoom - Desktop hover zoom */
   .product__gallery {
     position: relative;
   }
@@ -1243,73 +1243,35 @@
   .product__image-wrapper {
     position: relative;
     cursor: crosshair;
-  }
-  
-  /* Modern minimal lens - small circle */
-  .product__zoom-lens {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.1s ease;
-    z-index: 10;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
-  }
-  
-  .product__zoom-lens.is-visible {
-    opacity: 1;
-  }
-  
-  /* Responsive zoom window - matches image height */
-  .product__zoom-window {
-    position: absolute;
-    top: 0;
-    left: calc(100% + 15px);
-    width: 45vw;
-    max-width: 550px;
-    min-width: 350px;
-    height: 100%;
-    min-height: 400px;
-    background-repeat: no-repeat;
-    background-color: #ffffff;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.15s ease;
-    z-index: 1000;
-    pointer-events: none;
-    border-radius: 8px;
     overflow: hidden;
   }
   
-  .product__zoom-window.is-visible {
+  /* Inner zoom overlay - shows magnified image inside the wrapper */
+  .product__zoom-inner {
+    position: absolute;
+    inset: 0;
+    background-repeat: no-repeat;
+    background-color: #ffffff;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.15s ease;
+    z-index: 10;
+    pointer-events: none;
+  }
+  
+  .product__zoom-inner.is-visible {
     opacity: 1;
     visibility: visible;
   }
   
   /* Hide zoom on mobile/tablet */
   @media (max-width: 1023px) {
-    .product__zoom-lens,
-    .product__zoom-window {
+    .product__zoom-inner {
       display: none !important;
     }
     
     .product__image-wrapper {
       cursor: pointer;
-    }
-  }
-  
-  /* Adjust for smaller desktop screens */
-  @media (min-width: 1024px) and (max-width: 1280px) {
-    .product__zoom-window {
-      width: 40vw;
-      min-width: 300px;
-      left: calc(100% + 10px);
     }
   }
 
@@ -1601,24 +1563,15 @@ document.addEventListener('DOMContentLoaded', function() {
     if (e.key === 'ArrowRight') lightboxNextImage();
   });
   
-  // === WINDOW ZOOM FOR DESKTOP ===
-  let zoomWindow = null;
-  
-  if (gallery && zoomWrappers.length > 0) {
-    zoomWindow = document.createElement('div');
-    zoomWindow.className = 'product__zoom-window';
-    zoomWindow.id = 'productZoomWindow';
-    gallery.appendChild(zoomWindow);
-  }
-  
+  // === INNER ZOOM FOR DESKTOP ===
   zoomWrappers.forEach((wrapper, index) => {
     const img = wrapper.querySelector('.product__image');
     if (!img) return;
     
-    // Create zoom lens for this wrapper - small circle
-    const lens = document.createElement('div');
-    lens.className = 'product__zoom-lens';
-    wrapper.appendChild(lens);
+    // Create inner zoom overlay for this wrapper
+    const zoomInner = document.createElement('div');
+    zoomInner.className = 'product__zoom-inner';
+    wrapper.appendChild(zoomInner);
     
     // Zoom ratio
     const zoomLevel = 2.5;
@@ -1627,57 +1580,36 @@ document.addEventListener('DOMContentLoaded', function() {
       if (window.innerWidth < 1024) return;
       
       const zoomSrc = img.dataset.zoomImage || img.src;
-      const rect = wrapper.getBoundingClientRect();
-      
-      if (zoomWindow) {
-        zoomWindow.style.backgroundImage = 'url("' + zoomSrc + '")';
-        zoomWindow.style.height = rect.height + 'px';
-        zoomWindow.classList.add('is-visible');
-        lens.classList.add('is-visible');
-      }
+      zoomInner.style.backgroundImage = 'url("' + zoomSrc + '")';
+      zoomInner.classList.add('is-visible');
     }
     
     function hideZoom() {
-      if (zoomWindow) {
-        zoomWindow.classList.remove('is-visible');
-      }
-      lens.classList.remove('is-visible');
+      zoomInner.classList.remove('is-visible');
     }
     
     function moveZoom(e) {
-      if (window.innerWidth < 1024 || !zoomWindow) return;
+      if (window.innerWidth < 1024) return;
       
       const rect = wrapper.getBoundingClientRect();
-      const galleryRect = gallery.getBoundingClientRect();
       
-      let x = e.clientX - rect.left;
-      let y = e.clientY - rect.top;
+      // Get cursor position relative to image (0 to 1)
+      let x = (e.clientX - rect.left) / rect.width;
+      let y = (e.clientY - rect.top) / rect.height;
       
-      const lensW = lens.offsetWidth / 2;
-      const lensH = lens.offsetHeight / 2;
+      // Clamp values
+      x = Math.max(0, Math.min(1, x));
+      y = Math.max(0, Math.min(1, y));
       
-      if (x < lensW) x = lensW;
-      if (y < lensH) y = lensH;
-      if (x > rect.width - lensW) x = rect.width - lensW;
-      if (y > rect.height - lensH) y = rect.height - lensH;
-      
-      lens.style.left = (x - lensW) + 'px';
-      lens.style.top = (y - lensH) + 'px';
-      
-      const windowTop = rect.top - galleryRect.top;
-      zoomWindow.style.top = windowTop + 'px';
-      zoomWindow.style.left = (rect.width + 15) + 'px';
-      
-      const zoomWindowW = zoomWindow.offsetWidth;
-      const zoomWindowH = zoomWindow.offsetHeight;
-      
+      // Background size (zoomed)
       const bgW = rect.width * zoomLevel;
       const bgH = rect.height * zoomLevel;
-      zoomWindow.style.backgroundSize = bgW + 'px ' + bgH + 'px';
+      zoomInner.style.backgroundSize = bgW + 'px ' + bgH + 'px';
       
-      const bgX = -((x / rect.width) * bgW - zoomWindowW / 2);
-      const bgY = -((y / rect.height) * bgH - zoomWindowH / 2);
-      zoomWindow.style.backgroundPosition = bgX + 'px ' + bgY + 'px';
+      // Background position - follow cursor
+      const bgX = -(x * (bgW - rect.width));
+      const bgY = -(y * (bgH - rect.height));
+      zoomInner.style.backgroundPosition = bgX + 'px ' + bgY + 'px';
     }
     
     // Mouse events - Desktop zoom
