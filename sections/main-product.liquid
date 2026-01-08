@@ -160,7 +160,13 @@
         
         {%- comment -%} Model Info {%- endcomment -%}
         {%- if product.metafields.custom.model_info != blank -%}
-          <p class="product__model-info">{{ product.metafields.custom.model_info }}</p>
+          <p class="product__model-info">
+            <svg class="product__model-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="5" r="3"/>
+              <path d="M12 8v8m-4-4h8m-6 4l-2 4m4-4l2 4"/>
+            </svg>
+            {{ product.metafields.custom.model_info }}
+          </p>
         {%- endif -%}
       </div>
 
@@ -724,11 +730,20 @@
 
   /* Model Info */
   .product__model-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
     font-size: 0.8125rem;
     color: #6b7280;
     text-align: center;
     margin: 0.75rem 0 0;
     font-style: italic;
+  }
+  
+  .product__model-icon {
+    flex-shrink: 0;
+    opacity: 0.7;
   }
 
   /* Product Info */
