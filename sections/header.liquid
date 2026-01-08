@@ -95,17 +95,17 @@
         {% render 'icon-search' %}
       </a>
 
-      {%- comment -%} Account {%- endcomment -%}
-      <a href="{{ routes.account_url }}" class="header__action hidden-mobile" aria-label="Account">
-        {% render 'icon-account' %}
-      </a>
-
       {%- comment -%} Wishlist {%- endcomment -%}
       <a href="/pages/wunschliste" class="header__action header__wishlist" aria-label="Wunschliste">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
-        <span class="header__wishlist-count is-hidden" data-wishlist-count>0</span>
+        <span class="header__count-badge is-hidden" data-wishlist-count>0</span>
+      </a>
+
+      {%- comment -%} Account {%- endcomment -%}
+      <a href="{{ routes.account_url }}" class="header__action hidden-mobile" aria-label="Account">
+        {% render 'icon-account' %}
       </a>
 
       {%- comment -%} Cart - Opens Cart Drawer {%- endcomment -%}
@@ -115,7 +115,7 @@
           <circle cx="20" cy="21" r="1"/>
           <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
         </svg>
-        <span class="header__cart-count{% if cart.item_count == 0 %} is-hidden{% endif %}" data-cart-count>{{ cart.item_count }}</span>
+        <span class="header__count-badge{% if cart.item_count == 0 %} is-hidden{% endif %}" data-cart-count>{{ cart.item_count }}</span>
       </button>
     </div>
 
@@ -458,10 +458,6 @@
     position: relative;
   }
 
-  #almliebe-cart-btn {
-    position: relative;
-  }
-
   .header__cart-count {
     position: absolute;
     top: 4px;
@@ -483,30 +479,35 @@
     display: none;
   }
 
-  /* Wishlist icon */
-  .header__wishlist {
-    position: relative;
-  }
-
-  .header__wishlist-count {
+  /* Unified count badge for wishlist and cart */
+  .header__count-badge {
     position: absolute;
-    top: 4px;
-    right: 2px;
+    top: 2px;
+    right: 0;
     min-width: 18px;
     height: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 0.25rem;
+    padding: 0 5px;
     font-size: 0.6875rem;
     font-weight: 700;
-    background: #000000;
+    background: #0EA5E9;
     color: #FFFFFF;
-    border-radius: 9px;
+    border-radius: 50%;
   }
 
-  .header__wishlist-count.is-hidden {
+  .header__count-badge.is-hidden {
     display: none;
+  }
+
+  /* Wishlist icon */
+  .header__wishlist {
+    position: relative;
+  }
+
+  #almliebe-cart-btn {
+    position: relative;
   }
 
   .header__menu-toggle {
