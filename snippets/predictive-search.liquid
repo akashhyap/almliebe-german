@@ -6,6 +6,7 @@
   - Initial state: Trending searches (pills) + Recently viewed products
   - Search state: Suggestions list + Products grid
   - Real-time search using Shopify Predictive Search API
+  - Smart suggestions from vendors, collections, products
   - Wishlist integration
   - Recently viewed tracking via localStorage
 {% endcomment %}
@@ -183,86 +184,82 @@
     }
   }
 
-  /* Input wrapper - using flexbox for better alignment */
-.predictive-search__input-wrapper {
-  flex: 1;
-  max-width: 600px;
-  margin: 0 auto;
-  position: relative;
-  display: flex;
-  align-items: center;
-  background: #ffffff;
-  border: 1px solid #d1d5db;
-  border-radius: 50px;
-  overflow: hidden;
-}
-
-  .predictive-search__input-wrapper:focus-within {
-    border-color: #000000;
+  /* Input wrapper */
+  .predictive-search__input-wrapper {
+    flex: 1;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 50px;
+    overflow: hidden;
   }
 
-  /* Search icon - positioned with flexbox gap */
- .predictive-search__search-icon {
-  width: 18px;
-  height: 18px;
-  margin-left: 16px;
-  color: #9ca3af;
-  flex-shrink: 0;
-}
+  /* Search icon */
+  .predictive-search__search-icon {
+    width: 18px;
+    height: 18px;
+    margin-left: 16px;
+    color: #9ca3af;
+    flex-shrink: 0;
+  }
 
-  /* Input - no border, shares container border */
- .predictive-search__input {
-  flex: 1;
-  height: 48px;
-  padding: 0 12px;
-  font-size: 1rem;
-  font-family: inherit;
-  border: none !important;
-  background: transparent;
-  outline: none !important;
-  box-shadow: none !important;
-  -webkit-appearance: none;
-  appearance: none;
-  min-width: 0;
-}
+  /* Input */
+  .predictive-search__input {
+    flex: 1;
+    height: 48px;
+    padding: 0 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    border: none !important;
+    background: transparent;
+    outline: none !important;
+    box-shadow: none !important;
+    -webkit-appearance: none;
+    appearance: none;
+    min-width: 0;
+  }
 
-.predictive-search__input:focus {
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-}
+  .predictive-search__input:focus {
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+  }
 
-.predictive-search__input::placeholder {
-  color: #9ca3af;
-}
+  .predictive-search__input::placeholder {
+    color: #9ca3af;
+  }
 
   /* Remove default search input styling */
   .predictive-search__input::-webkit-search-cancel-button,
-.predictive-search__input::-webkit-search-decoration,
-.predictive-search__input::-webkit-search-results-button,
-.predictive-search__input::-webkit-search-results-decoration {
-  -webkit-appearance: none;
-  appearance: none;
-  display: none;
-}
+  .predictive-search__input::-webkit-search-decoration,
+  .predictive-search__input::-webkit-search-results-button,
+  .predictive-search__input::-webkit-search-results-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+    display: none;
+  }
 
-/* Clear button */
-.predictive-search__clear {
-  width: 24px;
-  height: 24px;
-  margin-right: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #e5e5e5;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  color: #666666;
-  transition: background 0.2s ease, color 0.2s ease;
-  padding: 0;
-  flex-shrink: 0;
-}
+  /* Clear button */
+  .predictive-search__clear {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e5e5e5;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #666666;
+    transition: background 0.2s ease, color 0.2s ease;
+    padding: 0;
+    flex-shrink: 0;
+  }
 
   .predictive-search__clear:hover {
     background: #d0d0d0;
@@ -496,7 +493,9 @@
   }
 
   .predictive-search__suggestion-link {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     padding: 0.5rem 0;
     font-size: 0.9375rem;
     color: #333333;
@@ -511,6 +510,19 @@
   .predictive-search__suggestion-link strong {
     font-weight: 700;
     color: #000000;
+  }
+
+  .predictive-search__suggestion-type {
+    font-size: 0.6875rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #9ca3af;
+    background: #f3f4f6;
+    padding: 0.125rem 0.375rem;
+    border-radius: 3px;
+    margin-left: auto;
+    flex-shrink: 0;
   }
 
   /* Products column */
@@ -744,6 +756,7 @@
   const SEARCH_DEBOUNCE = 300;
   const MIN_QUERY_LENGTH = 2;
   const MAX_PRODUCTS = 4;
+  const MAX_SUGGESTIONS = 5;
   const RECENTLY_VIEWED_KEY = 'almliebe_recently_viewed';
   const MAX_RECENTLY_VIEWED = 4;
   
@@ -912,8 +925,9 @@
     showLoading();
     
     try {
+      // Include collections in the search
       const response = await fetch(
-        `/search/suggest.json?q=${encodeURIComponent(query)}&resources[type]=product,query&resources[limit]=10&resources[options][unavailable_products]=hide`
+        `/search/suggest.json?q=${encodeURIComponent(query)}&resources[type]=product,collection,query&resources[limit]=10&resources[options][unavailable_products]=hide`
       );
       
       if (!response.ok) throw new Error('Search failed');
@@ -930,13 +944,14 @@
   function renderResults(data, query) {
     const resources = data.resources?.results || {};
     const products = resources.products || [];
+    const collections = resources.collections || [];
     const queries = resources.queries || [];
     
     // Hide loading
     loadingState.classList.add('is-hidden');
     
     // Check if we have results
-    if (products.length === 0 && queries.length === 0) {
+    if (products.length === 0 && collections.length === 0) {
       showNoResults(query);
       return;
     }
@@ -946,8 +961,11 @@
     noResults.classList.add('is-hidden');
     liveResults.classList.remove('is-hidden');
     
+    // Build smart suggestions from multiple sources
+    const suggestions = buildSmartSuggestions(query, products, collections, queries);
+    
     // Render suggestions
-    renderSuggestions(queries, query);
+    renderSuggestions(suggestions, query);
     
     // Render products
     renderProducts(products.slice(0, MAX_PRODUCTS));
@@ -956,26 +974,144 @@
     updateViewAllLink(query);
   }
   
+  // Build smart suggestions from vendors, collections, product types, and queries
+  function buildSmartSuggestions(query, products, collections, queries) {
+    const suggestions = [];
+    const addedTexts = new Set(); // Track what we've added to avoid duplicates
+    const lowerQuery = query.toLowerCase();
+    
+    // 1. Add matching vendors (brands) from products
+    const vendors = new Set();
+    products.forEach(product => {
+      if (product.vendor && product.vendor.toLowerCase().includes(lowerQuery)) {
+        vendors.add(product.vendor);
+      }
+    });
+    
+    vendors.forEach(vendor => {
+      const key = vendor.toLowerCase();
+      if (!addedTexts.has(key)) {
+        suggestions.push({
+          text: vendor,
+          type: 'brand',
+          url: `/collections/vendors?q=${encodeURIComponent(vendor)}`
+        });
+        addedTexts.add(key);
+      }
+    });
+    
+    // 2. Add matching collections
+    collections.forEach(collection => {
+      const key = collection.title.toLowerCase();
+      if (!addedTexts.has(key)) {
+        suggestions.push({
+          text: collection.title,
+          type: 'collection',
+          url: collection.url
+        });
+        addedTexts.add(key);
+      }
+    });
+    
+    // 3. Add matching product types from products
+    const productTypes = new Set();
+    products.forEach(product => {
+      if (product.type && product.type.toLowerCase().includes(lowerQuery)) {
+        productTypes.add(product.type);
+      }
+    });
+    
+    productTypes.forEach(type => {
+      const key = type.toLowerCase();
+      if (!addedTexts.has(key)) {
+        suggestions.push({
+          text: type,
+          type: 'category',
+          url: `/search?q=${encodeURIComponent(type)}`
+        });
+        addedTexts.add(key);
+      }
+    });
+    
+    // 4. Add Shopify's query suggestions
+    queries.forEach(q => {
+      const text = q.text || q;
+      const key = text.toLowerCase();
+      if (!addedTexts.has(key)) {
+        suggestions.push({
+          text: text,
+          type: null, // No type badge for query suggestions
+          url: `/search?q=${encodeURIComponent(text)}`
+        });
+        addedTexts.add(key);
+      }
+    });
+    
+    // 5. If still not enough suggestions, extract from product titles
+    if (suggestions.length < MAX_SUGGESTIONS) {
+      // Get unique significant words from product titles
+      const titleWords = new Set();
+      products.forEach(product => {
+        // Split title and find words that start with the query
+        const words = product.title.split(/[\s\-–,]+/);
+        words.forEach(word => {
+          const cleanWord = word.replace(/[^a-zA-ZäöüÄÖÜß]/g, '');
+          if (cleanWord.length > 2 && cleanWord.toLowerCase().startsWith(lowerQuery)) {
+            titleWords.add(cleanWord);
+          }
+        });
+      });
+      
+      titleWords.forEach(word => {
+        if (suggestions.length >= MAX_SUGGESTIONS) return;
+        const key = word.toLowerCase();
+        if (!addedTexts.has(key)) {
+          suggestions.push({
+            text: word,
+            type: null,
+            url: `/search?q=${encodeURIComponent(word)}`
+          });
+          addedTexts.add(key);
+        }
+      });
+    }
+    
+    // Sort: brands first, then collections, then categories, then others
+    const typeOrder = { 'brand': 0, 'collection': 1, 'category': 2 };
+    suggestions.sort((a, b) => {
+      const orderA = a.type ? (typeOrder[a.type] ?? 3) : 3;
+      const orderB = b.type ? (typeOrder[b.type] ?? 3) : 3;
+      return orderA - orderB;
+    });
+    
+    return suggestions.slice(0, MAX_SUGGESTIONS);
+  }
+  
   // Render suggestions
-  function renderSuggestions(queries, currentQuery) {
-    if (queries.length === 0) {
+  function renderSuggestions(suggestions, currentQuery) {
+    if (suggestions.length === 0) {
+      // Fallback: just show the search query
       suggestionsContainer.innerHTML = `
         <li>
           <a href="/search?q=${encodeURIComponent(currentQuery)}" class="predictive-search__suggestion-link">
-            <strong>${escapeHtml(currentQuery)}</strong>
+            Search for "<strong>${escapeHtml(currentQuery)}</strong>"
           </a>
         </li>
       `;
       return;
     }
     
-    suggestionsContainer.innerHTML = queries.map(q => {
-      const text = q.text || q;
-      const highlighted = highlightMatch(text, currentQuery);
+    suggestionsContainer.innerHTML = suggestions.map(suggestion => {
+      const highlighted = highlightMatch(suggestion.text, currentQuery);
+      const typeLabel = suggestion.type 
+        ? `<span class="predictive-search__suggestion-type">${suggestion.type}</span>` 
+        : '';
+      
       return `
         <li>
-          <a href="/search?q=${encodeURIComponent(text)}" class="predictive-search__suggestion-link">
-            ${highlighted}
+          <a href="${suggestion.url}" class="predictive-search__suggestion-link">
+            <span>${highlighted}</span>
+            ${typeLabel}
           </a>
         </li>
       `;
@@ -994,7 +1130,7 @@
     const match = text.slice(index, index + query.length);
     const after = text.slice(index + query.length);
     
-    return `<strong>${escapeHtml(match)}</strong>${escapeHtml(after)}`;
+    return `${escapeHtml(before)}<strong>${escapeHtml(match)}</strong>${escapeHtml(after)}`;
   }
   
   // Render products
