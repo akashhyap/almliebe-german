@@ -462,20 +462,20 @@
     gap: 0.5rem;
   }
   
-  /* One Size - full width button */
+  /* One Size - centered content */
   .product-card__sizes-grid--one-size {
-    grid-template-columns: 1fr;
+    display: flex;
+    justify-content: center;
   }
   
   /* Add to Cart Button (One Size products) */
   .product-card__atc-btn {
     position: relative;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    width: 100%;
-    padding: 0.625rem 1rem;
+    padding: 0.625rem 1.5rem;
     background: #111827;
     border: none;
     border-radius: 4px;
@@ -484,6 +484,7 @@
     color: #ffffff;
     cursor: pointer;
     transition: background 0.15s;
+    white-space: nowrap;
   }
   
   .product-card__atc-btn:hover:not(:disabled) {
