@@ -391,48 +391,10 @@
   }
 
   // ============================================
-  // PREDICTIVE SEARCH
+  // PREDICTIVE SEARCH - REMOVED
+  // Search functionality is now handled by
+  // snippets/predictive-search.liquid
   // ============================================
-
-  class PredictiveSearch {
-    constructor() {
-      this.searchInput = document.querySelector('[data-predictive-search-input]');
-      this.resultsContainer = document.querySelector('[data-predictive-search-results]');
-      
-      if (this.searchInput && this.resultsContainer) {
-        this.init();
-      }
-    }
-
-    init() {
-      this.searchInput.addEventListener('input', almliebe.debounce((e) => {
-        this.search(e.target.value);
-      }, 300));
-    }
-
-    async search(query) {
-      if (query.length < 2) {
-        this.resultsContainer.innerHTML = '';
-        this.resultsContainer.classList.remove('is-active');
-        return;
-      }
-
-      try {
-        const response = await fetch(`${window.almliebe.routes.predictive_search_url}?q=${encodeURIComponent(query)}&resources[type]=product&resources[limit]=6`);
-        const data = await response.json();
-        
-        this.renderResults(data);
-      } catch (error) {
-        console.error('Search error:', error);
-      }
-    }
-
-    renderResults(data) {
-      // This would be populated with actual search results
-      // Implementation depends on your specific needs
-      this.resultsContainer.classList.add('is-active');
-    }
-  }
 
   // ============================================
   // INITIALIZATION
@@ -444,7 +406,7 @@
     new Cart();
     new Modal();
     new StickyHeader();
-    new PredictiveSearch();
+    // PredictiveSearch removed - handled by predictive-search.liquid snippet
 
     // Remove loading overlay
     const loadingOverlay = document.querySelector('.loading-overlay');

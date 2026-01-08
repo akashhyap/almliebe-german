@@ -192,22 +192,32 @@
     align-items: center;
   }
 
+  /* FIXED: Search icon positioning */
   .predictive-search__search-icon {
     position: absolute;
-    left: 1.25rem;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
     color: #666666;
     pointer-events: none;
+    flex-shrink: 0;
   }
 
+  /* FIXED: Input padding to prevent text overlap with icon */
   .predictive-search__input {
     width: 100%;
-    padding: 1rem 3rem 1rem 3.5rem;
+    height: 52px;
+    padding: 0 48px 0 52px;
     font-size: 1rem;
     font-family: inherit;
     border: 2px solid #e5e5e5;
     border-radius: 50px;
     background: #ffffff;
     transition: border-color 0.2s ease;
+    -webkit-appearance: none;
+    appearance: none;
   }
 
   .predictive-search__input:focus {
@@ -219,9 +229,18 @@
     color: #999999;
   }
 
+  /* Remove default search input styling */
+  .predictive-search__input::-webkit-search-cancel-button,
+  .predictive-search__input::-webkit-search-decoration {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
   .predictive-search__clear {
     position: absolute;
-    right: 1rem;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
     width: 24px;
     height: 24px;
     display: flex;
@@ -233,6 +252,7 @@
     cursor: pointer;
     color: #666666;
     transition: background 0.2s ease, color 0.2s ease;
+    padding: 0;
   }
 
   .predictive-search__clear:hover {
