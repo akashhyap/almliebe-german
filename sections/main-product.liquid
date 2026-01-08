@@ -68,6 +68,24 @@
       <div class="product__gallery" data-product-gallery>
         {%- comment -%} Main Image {%- endcomment -%}
         <div class="product__media-main" data-main-image-container>
+          {%- comment -%} Wishlist button overlay on image {%- endcomment -%}
+          <button 
+            type="button" 
+            class="product__wishlist"
+            data-wishlist-toggle="{{ product.id }}"
+            data-product-handle="{{ product.handle }}"
+            data-product-title="{{ product.title | escape }}"
+            data-product-image="{{ product.featured_image | image_url: width: 400 }}"
+            data-product-price="{{ product.price | money }}"
+            data-product-vendor="{{ product.vendor | escape }}"
+            data-product-url="{{ product.url }}"
+            aria-label="{{ 'products.product.add_to_wishlist' | t | default: 'Zur Wunschliste hinzufügen' }}"
+          >
+            <svg class="icon-heart" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+            </svg>
+          </button>
+          
           {%- for media in product.media -%}
             <div 
               class="product__media-item{% if forloop.first %} is-active{% endif %}" 
@@ -180,26 +198,8 @@
           </p>
         {%- endif -%}
 
-        {%- comment -%} Title with Wishlist {%- endcomment -%}
-        <div class="product__title-row">
-          <h1 class="product__title">{{ product.title }}</h1>
-          <button 
-            type="button" 
-            class="product__wishlist"
-            data-wishlist-toggle="{{ product.id }}"
-            data-product-handle="{{ product.handle }}"
-            data-product-title="{{ product.title | escape }}"
-            data-product-image="{{ product.featured_image | image_url: width: 400 }}"
-            data-product-price="{{ product.price | money }}"
-            data-product-vendor="{{ product.vendor | escape }}"
-            data-product-url="{{ product.url }}"
-            aria-label="{{ 'products.product.add_to_wishlist' | t | default: 'Zur Wunschliste hinzufügen' }}"
-          >
-            <svg class="icon-heart" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-            </svg>
-          </button>
-        </div>
+        {%- comment -%} Title {%- endcomment -%}
+        <h1 class="product__title">{{ product.title }}</h1>
 
         {%- comment -%} Reviews Summary {%- endcomment -%}
         <div class="product__reviews-summary" data-reviews-summary>
@@ -788,35 +788,33 @@
     color: var(--color-text-secondary);
   }
 
-  .product__title-row {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-
   .product__title {
     font-size: 1.75rem;
     margin: 0;
-    flex: 1;
   }
 
+  /* Wishlist button - positioned over image */
   .product__wishlist {
-    flex-shrink: 0;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 5;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 44px;
     height: 44px;
-    background: #f3f4f6;
+    background: rgba(255, 255, 255, 0.9);
     border: none;
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   }
 
   .product__wishlist:hover {
-    background: #e5e7eb;
+    background: #ffffff;
+    transform: scale(1.05);
   }
 
   .product__wishlist svg {
@@ -1007,6 +1005,19 @@
   .product__size-btn.is-selected .product__size-text {
     background: #111827;
     color: #ffffff;
+  }
+  
+  /* Unavailable sizes should NEVER show selected highlight */
+  .product__size-btn.is-selected.is-unavailable .product__size-text {
+    background: transparent;
+    color: #9ca3af;
+    text-decoration: line-through;
+  }
+  
+  /* Prevent hover highlight on unavailable sizes */
+  .product__size-btn.is-unavailable:hover .product__size-text {
+    background: transparent;
+    color: #9ca3af;
   }
   
   .product__size-btn.is-unavailable {
