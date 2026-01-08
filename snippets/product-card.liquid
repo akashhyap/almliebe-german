@@ -191,19 +191,24 @@
         
         {%- comment -%} Size Grid {%- endcomment -%}
         <div class="product-card__sizes-grid{% if is_one_size %} product-card__sizes-grid--one-size{% endif %}">
-          {%- if is_one_size and product.has_only_default_variant -%}
-            {%- comment -%} One Size - no size option {%- endcomment -%}
+          {%- if is_one_size -%}
+            {%- comment -%} One Size - Show Add to Cart button {%- endcomment -%}
+            {%- assign one_size_variant = product.first_available_variant | default: product.variants.first -%}
             <button 
               type="button"
-              class="product-card__size-btn product-card__size-btn--one-size{% unless product.available %} product-card__size-btn--oos{% endunless %}"
-              data-size-add="{{ product.first_available_variant.id }}"
+              class="product-card__atc-btn{% unless product.available %} product-card__atc-btn--oos{% endunless %}"
+              data-size-add="{{ one_size_variant.id }}"
               {% unless product.available %}disabled aria-disabled="true"{% endunless %}
-              aria-label="One Size{% unless product.available %} - Ausverkauft{% endunless %}"
+              aria-label="{% if product.available %}In den Warenkorb{% else %}Nicht auf Lager{% endif %}"
             >
-              <span class="product-card__size-text">One Size</span>
-              {%- unless product.available -%}
-                <span class="product-card__size-strike"></span>
-              {%- endunless -%}
+              {%- if product.available -%}
+                <svg class="product-card__atc-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                </svg>
+                <span>In den Warenkorb</span>
+              {%- else -%}
+                <span>Nicht auf Lager</span>
+              {%- endif -%}
             </button>
           {%- else -%}
             {%- comment -%} Regular sizes or single size from option {%- endcomment -%}
@@ -224,12 +229,12 @@
                 
                 <button 
                   type="button"
-                  class="product-card__size-btn{% if is_one_size %} product-card__size-btn--one-size{% endif %}{% unless size_available %} product-card__size-btn--oos{% endunless %}"
+                  class="product-card__size-btn{% unless size_available %} product-card__size-btn--oos{% endunless %}"
                   data-size-add="{{ size_variant_id | default: variant.id }}"
                   {% unless size_available %}disabled aria-disabled="true"{% endunless %}
                   aria-label="{{ size_value }}{% unless size_available %} - Ausverkauft{% endunless %}"
                 >
-                  <span class="product-card__size-text">{% if is_one_size %}One Size{% else %}{{ size_value }}{% endif %}</span>
+                  <span class="product-card__size-text">{{ size_value }}</span>
                   {%- unless size_available -%}
                     <span class="product-card__size-strike"></span>
                   {%- endunless -%}
@@ -462,8 +467,71 @@
     grid-template-columns: 1fr;
   }
   
-  .product-card__size-btn--one-size {
+  /* Add to Cart Button (One Size products) */
+  .product-card__atc-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
     padding: 0.875rem 1rem;
+    background: #111827;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  
+  .product-card__atc-btn:hover:not(:disabled) {
+    background: #000000;
+  }
+  
+  .product-card__atc-btn:active:not(:disabled) {
+    background: #1f2937;
+  }
+  
+  .product-card__atc-icon {
+    flex-shrink: 0;
+  }
+  
+  /* Out of Stock - Add to Cart */
+  .product-card__atc-btn--oos {
+    background: #e5e7eb;
+    color: #9ca3af;
+    cursor: not-allowed;
+  }
+  
+  /* Loading/Success states for ATC button */
+  .product-card__atc-btn.is-loading {
+    pointer-events: none;
+  }
+  
+  .product-card__atc-btn.is-loading span,
+  .product-card__atc-btn.is-loading svg {
+    opacity: 0;
+  }
+  
+  .product-card__atc-btn.is-loading::after {
+    content: '';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+  
+  .product-card__atc-btn.is-added {
+    background: #059669;
+  }
+  
+  .product-card__atc-btn.is-added span::after {
+    content: ' ✓';
   }
 
   .product-card__size-btn {
