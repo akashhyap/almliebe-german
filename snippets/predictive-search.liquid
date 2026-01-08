@@ -3,13 +3,11 @@
   
   Features:
   - Slide-down search panel below header
+  - Initial state: Trending searches (pills) + Recently viewed products
+  - Search state: Suggestions list + Products grid
   - Real-time search using Shopify Predictive Search API
-  - Two columns: Suggestions (left) + Products (right)
   - Wishlist integration
-  - Sale badges, ratings display
-  - "View all" link to full search results
-  - Keyboard navigation (ESC to close)
-  - Mobile responsive
+  - Recently viewed tracking via localStorage
 {% endcomment %}
 
 {%- comment -%} Search Overlay {%- endcomment -%}
@@ -24,7 +22,7 @@
         type="search" 
         class="predictive-search__input" 
         data-predictive-search-input
-        placeholder="Suchen..."
+        placeholder="What are you looking for today?"
         autocomplete="off"
         autocorrect="off"
         autocapitalize="off"
@@ -45,17 +43,39 @@
   </div>
 
   <div class="predictive-search__results" data-predictive-search-results>
-    {%- comment -%} Initial state - Popular searches or empty {%- endcomment -%}
+    
+    {%- comment -%} Initial state - Trending + Recently Viewed {%- endcomment -%}
     <div class="predictive-search__initial" data-predictive-search-initial>
-      <div class="predictive-search__suggestions-column">
-        <h3 class="predictive-search__heading">BELIEBTE SUCHEN</h3>
-        <ul class="predictive-search__suggestions-list">
-          <li><a href="/search?q=dirndl" class="predictive-search__suggestion-link">Dirndl</a></li>
-          <li><a href="/search?q=lederhose" class="predictive-search__suggestion-link">Lederhose</a></li>
-          <li><a href="/search?q=bluse" class="predictive-search__suggestion-link">Bluse</a></li>
-          <li><a href="/search?q=trachtenhemd" class="predictive-search__suggestion-link">Trachtenhemd</a></li>
-          <li><a href="/search?q=weste" class="predictive-search__suggestion-link">Weste</a></li>
-        </ul>
+      <div class="predictive-search__initial-layout">
+        
+        {%- comment -%} Trending Searches - Left {%- endcomment -%}
+        <div class="predictive-search__trending">
+          <h3 class="predictive-search__heading">
+            <svg class="predictive-search__trending-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+              <polyline points="17 6 23 6 23 12"/>
+            </svg>
+            TRENDING SEARCHES
+          </h3>
+          <div class="predictive-search__tags">
+            <a href="/search?q=dirndl" class="predictive-search__tag">DIRNDL</a>
+            <a href="/search?q=lederhose" class="predictive-search__tag">LEDERHOSE</a>
+            <a href="/search?q=bluse" class="predictive-search__tag">BLUSE</a>
+            <a href="/search?q=trachtenhemd" class="predictive-search__tag">TRACHTENHEMD</a>
+          </div>
+        </div>
+
+        {%- comment -%} Recently Viewed - Right {%- endcomment -%}
+        <div class="predictive-search__recently-viewed is-hidden" data-recently-viewed>
+          <div class="predictive-search__recently-header">
+            <h3 class="predictive-search__heading">RECENTLY VIEWED</h3>
+            <button type="button" class="predictive-search__clear-recent" data-clear-recently-viewed>CLEAR</button>
+          </div>
+          <div class="predictive-search__recently-grid" data-recently-viewed-grid>
+            {%- comment -%} Populated by JS {%- endcomment -%}
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -64,7 +84,7 @@
       <div class="predictive-search__columns">
         {%- comment -%} Left column - Suggestions {%- endcomment -%}
         <div class="predictive-search__suggestions-column">
-          <h3 class="predictive-search__heading">VORSCHLÄGE</h3>
+          <h3 class="predictive-search__heading">SUGGESTIONS</h3>
           <ul class="predictive-search__suggestions-list" data-predictive-search-suggestions>
             {%- comment -%} Populated by JS {%- endcomment -%}
           </ul>
@@ -72,12 +92,12 @@
 
         {%- comment -%} Right column - Products {%- endcomment -%}
         <div class="predictive-search__products-column">
-          <h3 class="predictive-search__heading">PRODUKTE</h3>
+          <h3 class="predictive-search__heading">PRODUCTS</h3>
           <div class="predictive-search__products-grid" data-predictive-search-products>
             {%- comment -%} Populated by JS {%- endcomment -%}
           </div>
           <a href="/search?q=" class="predictive-search__view-all is-hidden" data-predictive-search-view-all>
-            Alle Ergebnisse anzeigen "<span data-search-term></span>"
+            View all "<span data-search-term></span>"
           </a>
         </div>
       </div>
@@ -85,8 +105,8 @@
 
     {%- comment -%} No results state {%- endcomment -%}
     <div class="predictive-search__no-results is-hidden" data-predictive-search-no-results>
-      <p>Keine Ergebnisse für "<span data-search-term></span>" gefunden.</p>
-      <p class="predictive-search__no-results-hint">Versuchen Sie es mit einem anderen Suchbegriff.</p>
+      <p>No results found for "<span data-search-term></span>"</p>
+      <p class="predictive-search__no-results-hint">Try a different search term.</p>
     </div>
 
     {%- comment -%} Loading state {%- endcomment -%}
@@ -174,26 +194,25 @@
 
   .predictive-search__search-icon {
     position: absolute;
-    left: 1rem;
+    left: 1.25rem;
     color: #666666;
     pointer-events: none;
   }
 
   .predictive-search__input {
     width: 100%;
-    padding: 0.875rem 2.5rem 0.875rem 3rem;
+    padding: 1rem 3rem 1rem 3.5rem;
     font-size: 1rem;
     font-family: inherit;
-    border: 1px solid #e5e5e5;
+    border: 2px solid #e5e5e5;
     border-radius: 50px;
-    background: #f5f5f5;
-    transition: border-color 0.2s ease, background 0.2s ease;
+    background: #ffffff;
+    transition: border-color 0.2s ease;
   }
 
   .predictive-search__input:focus {
     outline: none;
     border-color: #000000;
-    background: #ffffff;
   }
 
   .predictive-search__input::placeholder {
@@ -202,9 +221,9 @@
 
   .predictive-search__clear {
     position: absolute;
-    right: 0.75rem;
-    width: 28px;
-    height: 28px;
+    right: 1rem;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -256,18 +275,163 @@
     }
   }
 
-  /* Columns layout */
+  /* Headings */
+  .predictive-search__heading {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #000000;
+    margin: 0 0 1rem;
+  }
+
+  .predictive-search__trending-icon {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* ====================
+     INITIAL STATE - Trending + Recently Viewed
+     ==================== */
+  
+  .predictive-search__initial {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .predictive-search__initial-layout {
+    display: flex;
+    justify-content: space-between;
+    gap: 4rem;
+  }
+
+  @media (max-width: 767px) {
+    .predictive-search__initial-layout {
+      flex-direction: column;
+      gap: 2rem;
+    }
+  }
+
+  /* Trending Searches */
+  .predictive-search__trending {
+    flex: 1;
+  }
+
+  .predictive-search__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .predictive-search__tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #000000;
+    background: #f5f5f5;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .predictive-search__tag:hover {
+    background: #000000;
+    color: #ffffff;
+  }
+
+  /* Recently Viewed */
+  .predictive-search__recently-viewed {
+    flex-shrink: 0;
+  }
+
+  .predictive-search__recently-viewed.is-hidden {
+    display: none;
+  }
+
+  .predictive-search__recently-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .predictive-search__recently-header .predictive-search__heading {
+    margin-bottom: 0;
+  }
+
+  .predictive-search__clear-recent {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #666666;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 50px;
+    padding: 0.375rem 0.875rem;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .predictive-search__clear-recent:hover {
+    background: #e0e0e0;
+    color: #000000;
+  }
+
+  .predictive-search__recently-grid {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .predictive-search__recent-item {
+    width: 64px;
+    flex-shrink: 0;
+  }
+
+  .predictive-search__recent-item a {
+    display: block;
+    text-decoration: none;
+  }
+
+  .predictive-search__recent-image {
+    width: 64px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    background: #f5f5f5;
+    transition: opacity 0.2s ease;
+  }
+
+  .predictive-search__recent-item a:hover .predictive-search__recent-image {
+    opacity: 0.8;
+  }
+
+  /* ====================
+     SEARCH RESULTS STATE
+     ==================== */
+
+  .predictive-search__live-results.is-hidden {
+    display: none;
+  }
+
   .predictive-search__columns {
     display: grid;
-    grid-template-columns: 250px 1fr;
+    grid-template-columns: 220px 1fr;
     gap: 3rem;
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
   }
 
   @media (max-width: 1023px) {
     .predictive-search__columns {
-      grid-template-columns: 200px 1fr;
+      grid-template-columns: 180px 1fr;
       gap: 2rem;
     }
   }
@@ -287,16 +451,6 @@
     }
   }
 
-  /* Headings */
-  .predictive-search__heading {
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: #000000;
-    margin: 0 0 1rem;
-  }
-
   /* Suggestions column */
   .predictive-search__suggestions-column {
     min-width: 0;
@@ -309,7 +463,7 @@
   }
 
   .predictive-search__suggestions-list li {
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.125rem;
   }
 
   .predictive-search__suggestion-link {
@@ -338,16 +492,16 @@
   .predictive-search__products-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
+    gap: 1.25rem;
   }
 
-  @media (max-width: 1200px) {
+  @media (max-width: 1100px) {
     .predictive-search__products-grid {
       grid-template-columns: repeat(3, 1fr);
     }
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 800px) {
     .predictive-search__products-grid {
       grid-template-columns: repeat(2, 1fr);
     }
@@ -489,25 +643,24 @@
   .predictive-search__view-all {
     display: inline-block;
     margin-top: 1.5rem;
-    padding: 0.75rem 0;
+    padding: 0.5rem 0;
     font-size: 0.9375rem;
     font-weight: 500;
     color: #000000;
     text-decoration: none;
-    border-bottom: 1px solid #000000;
-    transition: opacity 0.2s ease;
   }
 
   .predictive-search__view-all:hover {
-    opacity: 0.7;
-  }
-
-  .predictive-search__view-all.is-hidden {
-    display: none;
+    text-decoration: underline;
   }
 
   .predictive-search__view-all span {
     font-weight: 700;
+    text-decoration: underline;
+  }
+
+  .predictive-search__view-all.is-hidden {
+    display: none;
   }
 
   /* No results */
@@ -530,7 +683,6 @@
   }
 
   .predictive-search__no-results.is-hidden,
-  .predictive-search__live-results.is-hidden,
   .predictive-search__initial.is-hidden,
   .predictive-search__loading.is-hidden {
     display: none;
@@ -556,12 +708,6 @@
   @keyframes search-spin {
     to { transform: rotate(360deg); }
   }
-
-  /* Initial state */
-  .predictive-search__initial {
-    max-width: 1400px;
-    margin: 0 auto;
-  }
 </style>
 
 <script>
@@ -569,6 +715,8 @@
   const SEARCH_DEBOUNCE = 300;
   const MIN_QUERY_LENGTH = 2;
   const MAX_PRODUCTS = 4;
+  const RECENTLY_VIEWED_KEY = 'almliebe_recently_viewed';
+  const MAX_RECENTLY_VIEWED = 4;
   
   let searchTimeout;
   let currentQuery = '';
@@ -579,7 +727,6 @@
   const searchClear = document.querySelector('[data-predictive-search-clear]');
   const searchClose = document.querySelector('[data-predictive-search-close]');
   const searchOverlay = document.querySelector('[data-predictive-search-overlay]');
-  const searchResults = document.querySelector('[data-predictive-search-results]');
   const initialState = document.querySelector('[data-predictive-search-initial]');
   const liveResults = document.querySelector('[data-predictive-search-live]');
   const noResults = document.querySelector('[data-predictive-search-no-results]');
@@ -587,6 +734,99 @@
   const suggestionsContainer = document.querySelector('[data-predictive-search-suggestions]');
   const productsContainer = document.querySelector('[data-predictive-search-products]');
   const viewAllLink = document.querySelector('[data-predictive-search-view-all]');
+  const recentlyViewedContainer = document.querySelector('[data-recently-viewed]');
+  const recentlyViewedGrid = document.querySelector('[data-recently-viewed-grid]');
+  const clearRecentlyViewed = document.querySelector('[data-clear-recently-viewed]');
+  
+  // ==================
+  // RECENTLY VIEWED
+  // ==================
+  
+  function getRecentlyViewed() {
+    try {
+      return JSON.parse(localStorage.getItem(RECENTLY_VIEWED_KEY) || '[]');
+    } catch (e) {
+      return [];
+    }
+  }
+  
+  function saveRecentlyViewed(items) {
+    localStorage.setItem(RECENTLY_VIEWED_KEY, JSON.stringify(items));
+  }
+  
+  function addToRecentlyViewed(product) {
+    const items = getRecentlyViewed();
+    
+    // Remove if already exists
+    const filtered = items.filter(item => item.id !== product.id);
+    
+    // Add to beginning
+    filtered.unshift({
+      id: product.id,
+      handle: product.handle,
+      title: product.title,
+      image: product.image,
+      url: product.url
+    });
+    
+    // Keep only max items
+    const trimmed = filtered.slice(0, MAX_RECENTLY_VIEWED);
+    saveRecentlyViewed(trimmed);
+  }
+  
+  function clearRecentlyViewedItems() {
+    localStorage.removeItem(RECENTLY_VIEWED_KEY);
+    renderRecentlyViewed();
+  }
+  
+  function renderRecentlyViewed() {
+    const items = getRecentlyViewed();
+    
+    if (items.length === 0) {
+      recentlyViewedContainer?.classList.add('is-hidden');
+      return;
+    }
+    
+    recentlyViewedContainer?.classList.remove('is-hidden');
+    
+    if (recentlyViewedGrid) {
+      recentlyViewedGrid.innerHTML = items.map(item => `
+        <div class="predictive-search__recent-item">
+          <a href="${item.url}">
+            <img 
+              src="${item.image}" 
+              alt="${escapeHtml(item.title)}" 
+              class="predictive-search__recent-image"
+              loading="lazy"
+            >
+          </a>
+        </div>
+      `).join('');
+    }
+  }
+  
+  // Track current product page
+  function trackCurrentProduct() {
+    const productData = document.querySelector('[data-product-json]');
+    if (productData) {
+      try {
+        const product = JSON.parse(productData.textContent);
+        if (product && product.id) {
+          addToRecentlyViewed({
+            id: product.id,
+            handle: product.handle,
+            title: product.title,
+            image: product.featured_image || product.images?.[0] || '',
+            url: `/products/${product.handle}`
+          });
+        }
+      } catch (e) {}
+    }
+  }
+  
+  // ==================
+  // SEARCH FUNCTIONS
+  // ==================
   
   // Open search
   window.openPredictiveSearch = function() {
@@ -594,6 +834,9 @@
     searchOverlay.classList.add('is-active');
     searchContainer.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    
+    // Render recently viewed
+    renderRecentlyViewed();
     
     // Focus input after animation
     setTimeout(() => {
@@ -650,7 +893,6 @@
       renderResults(data, query);
       
     } catch (error) {
-      console.error('Predictive search error:', error);
       showNoResults(query);
     }
   }
@@ -688,7 +930,6 @@
   // Render suggestions
   function renderSuggestions(queries, currentQuery) {
     if (queries.length === 0) {
-      // Show the current query as a suggestion
       suggestionsContainer.innerHTML = `
         <li>
           <a href="/search?q=${encodeURIComponent(currentQuery)}" class="predictive-search__suggestion-link">
@@ -712,7 +953,7 @@
     }).join('');
   }
   
-  // Highlight matching text in suggestions
+  // Highlight matching text
   function highlightMatch(text, query) {
     const lowerText = text.toLowerCase();
     const lowerQuery = query.toLowerCase();
@@ -724,13 +965,13 @@
     const match = text.slice(index, index + query.length);
     const after = text.slice(index + query.length);
     
-    return `${escapeHtml(before)}<strong>${escapeHtml(match)}</strong>${escapeHtml(after)}`;
+    return `<strong>${escapeHtml(match)}</strong>${escapeHtml(after)}`;
   }
   
   // Render products
   function renderProducts(products) {
     if (products.length === 0) {
-      productsContainer.innerHTML = '<p class="predictive-search__no-products">Keine Produkte gefunden.</p>';
+      productsContainer.innerHTML = '<p>No products found.</p>';
       return;
     }
     
@@ -741,14 +982,12 @@
         ? formatMoney(product.compare_at_price_max) 
         : null;
       
-      // Calculate discount percentage
       let discountBadge = '';
       if (comparePrice && product.compare_at_price_max > product.price) {
         const discount = Math.round((1 - product.price / product.compare_at_price_max) * 100);
-        discountBadge = `<span class="predictive-search__product-badge">${discount}% RABATT</span>`;
+        discountBadge = `<span class="predictive-search__product-badge">${discount}% OFF</span>`;
       }
       
-      // Check if in wishlist
       const isInWishlist = window.AlmliebeWishlist?.contains(product.id) || false;
       const wishlistClass = isInWishlist ? 'is-active' : '';
       
@@ -763,7 +1002,7 @@
             data-product-image="${image}"
             data-product-price="${price}"
             data-product-url="${product.url}"
-            aria-label="${isInWishlist ? 'Von Wunschliste entfernen' : 'Zur Wunschliste hinzufügen'}"
+            aria-label="${isInWishlist ? 'Remove from wishlist' : 'Add to wishlist'}"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
@@ -806,7 +1045,7 @@
     });
   }
   
-  // Format money (cents to EUR)
+  // Format money
   function formatMoney(cents) {
     return new Intl.NumberFormat('de-DE', {
       style: 'currency',
@@ -821,21 +1060,21 @@
     return div.innerHTML;
   }
   
-  // Event listeners
+  // ==================
+  // EVENT LISTENERS
+  // ==================
+  
   if (searchInput) {
-    // Input handler with debounce
     searchInput.addEventListener('input', function() {
       const query = this.value.trim();
       currentQuery = query;
       
-      // Show/hide clear button
       if (query.length > 0) {
         searchClear.classList.remove('is-hidden');
       } else {
         searchClear.classList.add('is-hidden');
       }
       
-      // Debounce search
       clearTimeout(searchTimeout);
       
       if (query.length < MIN_QUERY_LENGTH) {
@@ -848,7 +1087,6 @@
       }, SEARCH_DEBOUNCE);
     });
     
-    // Enter key - go to search results
     searchInput.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' && currentQuery.length >= MIN_QUERY_LENGTH) {
         e.preventDefault();
@@ -861,7 +1099,6 @@
     });
   }
   
-  // Clear button
   if (searchClear) {
     searchClear.addEventListener('click', function() {
       searchInput.value = '';
@@ -871,27 +1108,34 @@
     });
   }
   
-  // Close button
   if (searchClose) {
     searchClose.addEventListener('click', closePredictiveSearch);
   }
   
-  // Overlay click
   if (searchOverlay) {
     searchOverlay.addEventListener('click', closePredictiveSearch);
   }
   
-  // ESC key global handler
+  if (clearRecentlyViewed) {
+    clearRecentlyViewed.addEventListener('click', clearRecentlyViewedItems);
+  }
+  
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && searchContainer.classList.contains('is-active')) {
       closePredictiveSearch();
     }
   });
   
-  // Initialize - expose for header.liquid
+  // Track product page views
+  document.addEventListener('DOMContentLoaded', function() {
+    trackCurrentProduct();
+  });
+  
+  // Expose API
   window.PredictiveSearch = {
     open: openPredictiveSearch,
-    close: closePredictiveSearch
+    close: closePredictiveSearch,
+    addToRecentlyViewed: addToRecentlyViewed
   };
 })();
 </script>
