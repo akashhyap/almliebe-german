@@ -88,6 +88,50 @@
             </div>
           {%- endif -%}
           
+          {%- comment -%} ===== SORT BY Section ===== {%- endcomment -%}
+          {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+          <details class="filter-group filter-group--sort" open>
+            <summary class="filter-group__header">
+              <span class="filter-group__title">SORTIEREN</span>
+              <svg class="filter-group__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </summary>
+            
+            <div class="filter-group__content">
+              <ul class="sort-options">
+                <li>
+                  <label class="sort-radio">
+                    <input type="radio" name="sort_by_radio" value="price-ascending" data-sort-radio {% if sort_by == 'price-ascending' %}checked{% endif %}>
+                    <span class="sort-radio__mark"></span>
+                    <span class="sort-radio__label">Preis: Niedrig bis Hoch</span>
+                  </label>
+                </li>
+                <li>
+                  <label class="sort-radio">
+                    <input type="radio" name="sort_by_radio" value="price-descending" data-sort-radio {% if sort_by == 'price-descending' %}checked{% endif %}>
+                    <span class="sort-radio__mark"></span>
+                    <span class="sort-radio__label">Preis: Hoch bis Niedrig</span>
+                  </label>
+                </li>
+                <li>
+                  <label class="sort-radio">
+                    <input type="radio" name="sort_by_radio" value="best-selling" data-sort-radio {% if sort_by == 'best-selling' %}checked{% endif %}>
+                    <span class="sort-radio__mark"></span>
+                    <span class="sort-radio__label">Bestseller</span>
+                  </label>
+                </li>
+                <li>
+                  <label class="sort-radio">
+                    <input type="radio" name="sort_by_radio" value="created-descending" data-sort-radio {% if sort_by == 'created-descending' %}checked{% endif %}>
+                    <span class="sort-radio__mark"></span>
+                    <span class="sort-radio__label">Neueste</span>
+                  </label>
+                </li>
+              </ul>
+            </div>
+          </details>
+          
           {%- comment -%} ===== KATEGORIE - Navigation Links (from menu) ===== {%- endcomment -%}
           {%- if sidebar_menu.links.size > 0 -%}
             <details class="filter-group filter-group--kategorie">
@@ -726,6 +770,91 @@
     font-size: 0.8125rem;
   }
   
+  /* Sort Radio Buttons */
+  .sort-options {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .sort-options li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .sort-options li:last-child {
+    margin-bottom: 0;
+  }
+  
+  .sort-radio {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    padding: 0.375rem 0;
+    transition: color 0.15s ease;
+  }
+  
+  .sort-radio:hover {
+    color: #000000;
+  }
+  
+  .sort-radio input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .sort-radio__mark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #d1d5db;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: border-color 0.15s ease;
+  }
+  
+  .sort-radio__mark::after {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #111827;
+    transform: scale(0);
+    transition: transform 0.15s ease;
+  }
+  
+  .sort-radio input:checked + .sort-radio__mark {
+    border-color: #111827;
+  }
+  
+  .sort-radio input:checked + .sort-radio__mark::after {
+    transform: scale(1);
+  }
+  
+  .sort-radio:hover .sort-radio__mark {
+    border-color: #9ca3af;
+  }
+  
+  .sort-radio__label {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #374151;
+    transition: color 0.15s ease;
+  }
+  
+  .sort-radio input:checked ~ .sort-radio__label {
+    font-weight: 500;
+    color: #111827;
+  }
+  
+  .filter-group--sort {
+    border-bottom: 1px solid #e5e7eb;
+  }
+
   /* Filter Swatches (Colors) */
   .filter-swatches {
     display: flex;
@@ -1095,14 +1224,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const page = document.querySelector('[data-collection-page]');
   if (!page) return;
   
-  // ========== AUTO-SORT BY A-Z ==========
-  if (!window.location.search.includes('sort_by')) {
-    const url = new URL(window.location);
-    url.searchParams.set('sort_by', 'title-ascending');
-    window.location.replace(url);
-    return;
-  }
-  
   const collectionUrl = page.dataset.collectionUrl;
   const filtersEl = document.querySelector('[data-collection-filters]');
   const filterCloseButtons = document.querySelectorAll('[data-filter-close]');
@@ -1173,11 +1294,23 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
-  // ========== SORT CHANGE ==========
+  // ========== SORT CHANGE (Dropdown) ==========
   sortSelect?.addEventListener('change', function() {
     const url = new URL(window.location);
     url.searchParams.set('sort_by', this.value);
     window.location = url;
+  });
+  
+  // ========== SORT CHANGE (Radio Buttons) ==========
+  const sortRadios = document.querySelectorAll('[data-sort-radio]');
+  sortRadios.forEach(radio => {
+    radio.addEventListener('change', function() {
+      if (this.checked) {
+        const url = new URL(window.location);
+        url.searchParams.set('sort_by', this.value);
+        window.location = url;
+      }
+    });
   });
   
   // ========== LOAD MORE ==========
