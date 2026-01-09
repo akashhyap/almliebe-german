@@ -92,7 +92,7 @@
             "settings": {
               "menu_item": "damen",
               "image": "shopify://shop_images/gottseidank-trachtenjacke-lea-kirsche-5.jpg",
-              "image_position": "center center",
+              "image_position": "center top",
               "title": "Neue Masche",
               "link": "shopify://collections/strickjanker"
             }
@@ -102,7 +102,7 @@
             "settings": {
               "menu_item": "damen",
               "image": "shopify://shop_images/heimatglueck-dirndl-rot-5.jpg",
-              "image_position": "center center",
+              "image_position": "center top",
               "title": "Samt Dirndl",
               "link": "shopify://collections/dirndl"
             }
