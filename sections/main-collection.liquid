@@ -318,7 +318,10 @@
         {%- if collection.products.size > 0 -%}
           <div class="collection-grid" data-collection-grid>
             {%- for product in collection.products -%}
-              {%- render 'product-card', product: product, lazy: true, card_index: forloop.index -%}
+              {%- comment -%} Exclude gift cards from all collections except Gutscheine {%- endcomment -%}
+              {%- unless product.type == 'Gift Card' and collection.handle != 'gutscheine' -%}
+                {%- render 'product-card', product: product, lazy: true, card_index: forloop.index -%}
+              {%- endunless -%}
             {%- endfor -%}
           </div>
 
