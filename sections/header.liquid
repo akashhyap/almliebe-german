@@ -341,9 +341,10 @@
     }
   }
 
-  /* Header Spacer */
+  /* Header Spacer - Only accounts for fixed header height */
+  /* Notification bar is in normal flow, so we don't add it here */
   .header-spacer {
-    height: calc(var(--notification-bar-height, 0px) + var(--header-height, 70px));
+    height: var(--header-height, 70px);
   }
 
   /* Header */
