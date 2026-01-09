@@ -67,17 +67,26 @@
       "header": {
         "type": "header",
         "blocks": {
+          "featured_collection_fTc6Ci": {
+            "type": "featured_collection",
+            "settings": {
+              "menu_item": "",
+              "title": "New Collection",
+              "link": ""
+            }
+          },
           "featured_collection_TpX6hD": {
             "type": "featured_collection",
             "settings": {
               "menu_item": "damen",
               "image": "shopify://shop_images/heimatglueck-dirndl-rot-5.jpg",
-              "title": "Featured",
+              "title": "Samt Dirndl",
               "link": "shopify://collections/dirndl"
             }
           }
         },
         "block_order": [
+          "featured_collection_fTc6Ci",
           "featured_collection_TpX6hD"
         ],
         "settings": {
