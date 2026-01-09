@@ -72,6 +72,7 @@
             "settings": {
               "menu_item": "herren",
               "image": "shopify://shop_images/220322_2067.jpg",
+              "image_position": "center top",
               "title": "Herrenjanker",
               "link": "shopify://collections/herrenjanker"
             }
@@ -81,6 +82,7 @@
             "settings": {
               "menu_item": "herren",
               "image": "shopify://shop_images/liebling-janker-alex-navy-grau-1_1.jpg",
+              "image_position": "center top",
               "title": "Männer Janker",
               "link": "shopify://collections/strickjanker"
             }
@@ -90,6 +92,7 @@
             "settings": {
               "menu_item": "damen",
               "image": "shopify://shop_images/gottseidank-trachtenjacke-lea-kirsche-5.jpg",
+              "image_position": "center center",
               "title": "Neue Masche",
               "link": "shopify://collections/strickjanker"
             }
@@ -99,6 +102,7 @@
             "settings": {
               "menu_item": "damen",
               "image": "shopify://shop_images/heimatglueck-dirndl-rot-5.jpg",
+              "image_position": "center center",
               "title": "Samt Dirndl",
               "link": "shopify://collections/dirndl"
             }
