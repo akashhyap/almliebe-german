@@ -316,10 +316,22 @@
       {%- comment -%} Product Grid {%- endcomment -%}
       {%- paginate collection.products by products_per_page -%}
         {%- if collection.products.size > 0 -%}
+          {%- comment -%} Define gift card collection handles (handles don't translate - they're URL slugs) {%- endcomment -%}
+          {%- assign is_gift_card_collection = false -%}
+          {%- if collection.handle == 'gutscheine' or collection.handle == 'gift-cards' or collection.handle == 'geschenkkarten' -%}
+            {%- assign is_gift_card_collection = true -%}
+          {%- endif -%}
+          
           <div class="collection-grid" data-collection-grid>
             {%- for product in collection.products -%}
-              {%- comment -%} Exclude gift cards from all collections except Gutscheine {%- endcomment -%}
-              {%- unless product.type == 'Gift Card' and collection.handle != 'gutscheine' -%}
+              {%- comment -%} Check if product is a gift card (native or by handle) {%- endcomment -%}
+              {%- assign is_gift_card_product = false -%}
+              {%- if product.gift_card or product.handle contains 'gutschein' -%}
+                {%- assign is_gift_card_product = true -%}
+              {%- endif -%}
+              
+              {%- comment -%} Exclude gift cards from all collections except gift card collections {%- endcomment -%}
+              {%- unless is_gift_card_product and is_gift_card_collection == false -%}
                 {%- render 'product-card', product: product, lazy: true, card_index: forloop.index -%}
               {%- endunless -%}
             {%- endfor -%}
