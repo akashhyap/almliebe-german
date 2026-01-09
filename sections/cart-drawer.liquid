@@ -1,6 +1,6 @@
 {% comment %}
   CART DRAWER - Gymshark Style
-  Clean slide-out cart from the right
+  Clean slide-out cart from the right with discount code support
 {% endcomment %}
 
 <div class="cart-drawer" data-cart-drawer aria-hidden="true">
@@ -128,12 +128,85 @@
     {%- comment -%} Footer {%- endcomment -%}
     {%- if cart.item_count > 0 -%}
       <div class="cart-drawer__footer">
+        
+        {%- comment -%} Discount Code Section {%- endcomment -%}
+        <div class="cart-drawer__discount" data-discount-section>
+          <h3 class="cart-drawer__discount-title">RABATTCODE</h3>
+          <div class="cart-drawer__discount-form">
+            <input 
+              type="text" 
+              class="cart-drawer__discount-input" 
+              data-discount-input
+              placeholder="Code eingeben"
+              autocomplete="off"
+              spellcheck="false"
+            >
+            <button 
+              type="button" 
+              class="cart-drawer__discount-btn"
+              data-discount-apply
+            >
+              ANWENDEN
+            </button>
+          </div>
+          
+          {%- comment -%} Applied Discounts {%- endcomment -%}
+          <div class="cart-drawer__discount-applied" data-discount-applied style="display: none;">
+            <div class="discount-tag" data-discount-tag>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                <line x1="7" y1="7" x2="7.01" y2="7"/>
+              </svg>
+              <span data-discount-code></span>
+              <button type="button" class="discount-tag__remove" data-discount-remove aria-label="Entfernen">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+          
+          {%- comment -%} Messages {%- endcomment -%}
+          <p class="cart-drawer__discount-message cart-drawer__discount-message--success" data-discount-success style="display: none;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+            <span data-discount-success-text></span>
+          </p>
+          <p class="cart-drawer__discount-message cart-drawer__discount-message--error" data-discount-error style="display: none;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="15" y1="9" x2="9" y2="15"/>
+              <line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+            <span data-discount-error-text></span>
+          </p>
+          
+          <p class="cart-drawer__discount-note">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="12" y1="16" x2="12" y2="12"/>
+              <line x1="12" y1="8" x2="12.01" y2="8"/>
+            </svg>
+            Geschenkkarten-Codes können an der Kasse eingelöst werden.
+          </p>
+        </div>
+
+        {%- comment -%} Order Summary {%- endcomment -%}
         <div class="cart-drawer__summary">
           <h3 class="cart-drawer__summary-title">{{ 'cart.general.order_summary' | t | default: 'BESTELLÜBERSICHT' }}</h3>
           <div class="cart-drawer__summary-row">
             <span>{{ 'cart.general.subtotal' | t | default: 'Zwischensumme' }}</span>
             <span data-cart-subtotal>{{ cart.total_price | money }}</span>
           </div>
+          
+          {%- comment -%} Discount Row - Shows when discount applied {%- endcomment -%}
+          <div class="cart-drawer__summary-row cart-drawer__summary-row--discount" data-discount-row style="display: none;">
+            <span>Rabatt</span>
+            <span data-discount-amount>-€0,00</span>
+          </div>
+          
           <div class="cart-drawer__summary-row">
             <span>{{ 'cart.general.standard_shipping' | t | default: 'Standardversand' }}</span>
             <span data-cart-shipping>{% if cart.total_price >= 9900 %}Kostenlos{% else %}Wird berechnet{% endif %}</span>
@@ -485,6 +558,191 @@
     flex-shrink: 0;
   }
 
+  /* ==========================================
+     DISCOUNT CODE SECTION - Gymshark Style
+     ========================================== */
+  .cart-drawer__discount {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .cart-drawer__discount-title {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.875rem;
+    color: #111827;
+  }
+
+  .cart-drawer__discount-form {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .cart-drawer__discount-input {
+    flex: 1;
+    height: 48px;
+    padding: 0 1rem;
+    font-size: 0.9375rem;
+    color: #111827;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .cart-drawer__discount-input::placeholder {
+    color: #9ca3af;
+  }
+
+  .cart-drawer__discount-input:focus {
+    border-color: #111827;
+    box-shadow: 0 0 0 1px #111827;
+  }
+
+  .cart-drawer__discount-input.is-error {
+    border-color: #dc2626;
+  }
+
+  .cart-drawer__discount-input.is-success {
+    border-color: #059669;
+  }
+
+  .cart-drawer__discount-btn {
+    height: 48px;
+    padding: 0 1.5rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: #ffffff;
+    background: #111827;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    transition: background 0.2s, opacity 0.2s;
+    white-space: nowrap;
+  }
+
+  .cart-drawer__discount-btn:hover {
+    background: #000000;
+  }
+
+  .cart-drawer__discount-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .cart-drawer__discount-btn.is-loading {
+    position: relative;
+    color: transparent;
+  }
+
+  .cart-drawer__discount-btn.is-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 16px;
+    height: 16px;
+    margin: -8px 0 0 -8px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Applied Discount Tag */
+  .cart-drawer__discount-applied {
+    margin-top: 0.75rem;
+  }
+
+  .discount-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 4px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #166534;
+  }
+
+  .discount-tag svg {
+    stroke: #166534;
+    flex-shrink: 0;
+  }
+
+  .discount-tag__remove {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    margin-left: 0.25rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #166534;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+
+  .discount-tag__remove:hover {
+    opacity: 1;
+  }
+
+  /* Messages */
+  .cart-drawer__discount-message {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.75rem 0 0;
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .cart-drawer__discount-message--success {
+    color: #059669;
+  }
+
+  .cart-drawer__discount-message--success svg {
+    stroke: #059669;
+  }
+
+  .cart-drawer__discount-message--error {
+    color: #dc2626;
+  }
+
+  .cart-drawer__discount-message--error svg {
+    stroke: #dc2626;
+  }
+
+  /* Gift Card Note */
+  .cart-drawer__discount-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin: 0.875rem 0 0;
+    font-size: 0.75rem;
+    color: #6b7280;
+    line-height: 1.4;
+  }
+
+  .cart-drawer__discount-note svg {
+    flex-shrink: 0;
+    stroke: #9ca3af;
+    margin-top: 0.0625rem;
+  }
+
+  /* Summary */
   .cart-drawer__summary {
     padding: 1.25rem 1.5rem;
   }
@@ -503,6 +761,14 @@
     font-size: 0.875rem;
     color: #374151;
     padding: 0.5rem 0;
+  }
+
+  .cart-drawer__summary-row--discount {
+    color: #059669;
+  }
+
+  .cart-drawer__summary-row--discount span:last-child {
+    font-weight: 600;
   }
 
   .cart-drawer__summary-row--total {
@@ -565,6 +831,7 @@ document.addEventListener('DOMContentLoaded', function() {
     drawer.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
     updateShippingProgress();
+    initDiscountSection();
   };
 
   // Close drawer
@@ -640,6 +907,237 @@ document.addEventListener('DOMContentLoaded', function() {
     if (shippingEl) {
       shippingEl.textContent = subtotalCents >= FREE_SHIPPING_THRESHOLD ? 'Kostenlos' : 'Wird berechnet';
     }
+  }
+
+  // ==========================================
+  // DISCOUNT CODE FUNCTIONALITY
+  // ==========================================
+  
+  function initDiscountSection() {
+    const discountInput = drawer.querySelector('[data-discount-input]');
+    const discountBtn = drawer.querySelector('[data-discount-apply]');
+    const discountRemove = drawer.querySelector('[data-discount-remove]');
+    
+    if (!discountInput || !discountBtn) return;
+    
+    // Check for existing discounts on load
+    checkExistingDiscounts();
+    
+    // Apply button click
+    discountBtn.addEventListener('click', handleApplyDiscount);
+    
+    // Enter key in input
+    discountInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleApplyDiscount();
+      }
+    });
+    
+    // Clear error on input
+    discountInput.addEventListener('input', () => {
+      hideDiscountMessages();
+      discountInput.classList.remove('is-error', 'is-success');
+    });
+    
+    // Remove discount
+    if (discountRemove) {
+      discountRemove.addEventListener('click', handleRemoveDiscount);
+    }
+  }
+  
+  async function checkExistingDiscounts() {
+    try {
+      const response = await fetch('/cart.js');
+      const cart = await response.json();
+      
+      // Check for cart-level discounts
+      if (cart.cart_level_discount_applications && cart.cart_level_discount_applications.length > 0) {
+        const discount = cart.cart_level_discount_applications[0];
+        showAppliedDiscount(discount.title, discount.total_allocated_amount);
+      }
+      // Also check total_discount
+      else if (cart.total_discount > 0) {
+        // Try to get discount code from line items
+        let discountTitle = 'Rabatt';
+        cart.items.forEach(item => {
+          if (item.discounts && item.discounts.length > 0) {
+            discountTitle = item.discounts[0].title || 'Rabatt';
+          }
+        });
+        showAppliedDiscount(discountTitle, cart.total_discount);
+      }
+    } catch (error) {
+      console.error('Error checking discounts:', error);
+    }
+  }
+  
+  async function handleApplyDiscount() {
+    const discountInput = drawer.querySelector('[data-discount-input]');
+    const discountBtn = drawer.querySelector('[data-discount-apply]');
+    const code = discountInput.value.trim().toUpperCase();
+    
+    if (!code) {
+      showDiscountError('Bitte geben Sie einen Rabattcode ein.');
+      discountInput.classList.add('is-error');
+      return;
+    }
+    
+    // Set loading state
+    discountBtn.classList.add('is-loading');
+    discountBtn.disabled = true;
+    hideDiscountMessages();
+    
+    try {
+      // Apply discount via AJAX API
+      const response = await fetch(window.Shopify?.routes?.root ? window.Shopify.routes.root + 'cart/update.js' : '/cart/update.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ discount: code })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      
+      // Wait a moment for Shopify to process
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      // Fetch updated cart to verify discount was applied
+      const cartResponse = await fetch('/cart.js');
+      const cart = await cartResponse.json();
+      
+      // Check if discount was applied
+      const discountApplied = checkDiscountApplied(cart, code);
+      
+      if (discountApplied.success) {
+        // Success!
+        discountInput.value = '';
+        discountInput.classList.add('is-success');
+        showDiscountSuccess(`Code "${code}" wurde angewendet!`);
+        showAppliedDiscount(code, discountApplied.amount);
+        
+        // Refresh cart drawer to show updated totals
+        await refreshDrawer();
+      } else {
+        // Invalid code
+        discountInput.classList.add('is-error');
+        showDiscountError('Ungültiger Rabattcode. Bitte überprüfen Sie Ihre Eingabe.');
+      }
+      
+    } catch (error) {
+      console.error('Discount error:', error);
+      showDiscountError('Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.');
+      discountInput.classList.add('is-error');
+    } finally {
+      discountBtn.classList.remove('is-loading');
+      discountBtn.disabled = false;
+    }
+  }
+  
+  function checkDiscountApplied(cart, code) {
+    // Check cart-level discounts
+    if (cart.cart_level_discount_applications && cart.cart_level_discount_applications.length > 0) {
+      const match = cart.cart_level_discount_applications.find(
+        d => d.title.toLowerCase() === code.toLowerCase()
+      );
+      if (match) {
+        return { success: true, amount: match.total_allocated_amount };
+      }
+    }
+    
+    // Check line item discounts
+    let totalDiscount = 0;
+    let found = false;
+    cart.items.forEach(item => {
+      if (item.discounts && item.discounts.length > 0) {
+        item.discounts.forEach(d => {
+          if (d.title && d.title.toLowerCase() === code.toLowerCase()) {
+            found = true;
+            totalDiscount += d.amount;
+          }
+        });
+      }
+    });
+    
+    if (found) {
+      return { success: true, amount: totalDiscount };
+    }
+    
+    // Check if total_discount increased (fallback check)
+    if (cart.total_discount > 0) {
+      return { success: true, amount: cart.total_discount };
+    }
+    
+    return { success: false, amount: 0 };
+  }
+  
+  function showAppliedDiscount(code, amount) {
+    const appliedEl = drawer.querySelector('[data-discount-applied]');
+    const codeEl = drawer.querySelector('[data-discount-code]');
+    const discountRow = drawer.querySelector('[data-discount-row]');
+    const discountAmount = drawer.querySelector('[data-discount-amount]');
+    
+    if (appliedEl && codeEl) {
+      codeEl.textContent = code;
+      appliedEl.style.display = 'block';
+    }
+    
+    if (discountRow && discountAmount && amount > 0) {
+      discountAmount.textContent = '-' + formatMoney(amount);
+      discountRow.style.display = 'flex';
+    }
+  }
+  
+  async function handleRemoveDiscount() {
+    const appliedEl = drawer.querySelector('[data-discount-applied]');
+    const discountRow = drawer.querySelector('[data-discount-row]');
+    
+    try {
+      // Remove discount by sending empty string
+      await fetch(window.Shopify?.routes?.root ? window.Shopify.routes.root + 'cart/update.js' : '/cart/update.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ discount: '' })
+      });
+      
+      // Hide applied discount UI
+      if (appliedEl) appliedEl.style.display = 'none';
+      if (discountRow) discountRow.style.display = 'none';
+      
+      hideDiscountMessages();
+      
+      // Refresh cart drawer
+      await refreshDrawer();
+      
+    } catch (error) {
+      console.error('Error removing discount:', error);
+    }
+  }
+  
+  function showDiscountSuccess(message) {
+    const successEl = drawer.querySelector('[data-discount-success]');
+    const textEl = drawer.querySelector('[data-discount-success-text]');
+    if (successEl && textEl) {
+      textEl.textContent = message;
+      successEl.style.display = 'flex';
+    }
+  }
+  
+  function showDiscountError(message) {
+    const errorEl = drawer.querySelector('[data-discount-error]');
+    const textEl = drawer.querySelector('[data-discount-error-text]');
+    if (errorEl && textEl) {
+      textEl.textContent = message;
+      errorEl.style.display = 'flex';
+    }
+  }
+  
+  function hideDiscountMessages() {
+    const successEl = drawer.querySelector('[data-discount-success]');
+    const errorEl = drawer.querySelector('[data-discount-error]');
+    if (successEl) successEl.style.display = 'none';
+    if (errorEl) errorEl.style.display = 'none';
   }
 
   // Quantity minus buttons
@@ -731,8 +1229,11 @@ document.addEventListener('DOMContentLoaded', function() {
       const currentFooter = drawer.querySelector('.cart-drawer__footer');
       if (newFooter && currentFooter) {
         currentFooter.outerHTML = newFooter.outerHTML;
+        // Re-initialize discount section after footer refresh
+        initDiscountSection();
       } else if (newFooter && !currentFooter) {
         drawer.querySelector('.cart-drawer__inner').appendChild(newFooter.cloneNode(true));
+        initDiscountSection();
       } else if (!newFooter && currentFooter) {
         currentFooter.remove();
       }
