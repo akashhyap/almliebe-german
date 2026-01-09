@@ -1,3 +1,11 @@
+{%- comment -%}
+  HEADER WITH MEGA MENU - Gymshark Style
+  - Full-width mega menu panel
+  - Multiple columns with category headings
+  - Featured collection images
+  - Dynamic via Shopify menu system + section settings
+{%- endcomment -%}
+
 {%- comment -%} Header Spacer - Prevents content jump when header is fixed {%- endcomment -%}
 <div class="header-spacer"></div>
 
@@ -41,49 +49,109 @@
       </a>
     </div>
 
-    {%- comment -%} Main Navigation {%- endcomment -%}
+    {%- comment -%} Main Navigation with Mega Menu {%- endcomment -%}
     <nav class="header__nav hidden-mobile" role="navigation">
       <ul class="nav-list">
         {% for link in linklists[section.settings.main_menu].links %}
-          <li class="nav-item{% if link.active %} nav-item--active{% endif %}{% if link.links.size > 0 %} nav-item--has-dropdown{% endif %}">
+          {% assign has_mega_menu = false %}
+          {% if link.links.size > 0 %}
+            {% assign has_mega_menu = true %}
+          {% endif %}
+          
+          <li class="nav-item{% if link.active %} nav-item--active{% endif %}{% if has_mega_menu %} nav-item--has-megamenu{% endif %}" data-nav-item="{{ link.title | handleize }}">
             <a href="{{ link.url }}" class="nav-link">
               {{ link.title }}
-              {% if link.links.size > 0 %}
-                <svg class="nav-link__icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                  <path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              {% if has_mega_menu %}
+                <svg class="nav-link__icon" width="10" height="10" viewBox="0 0 12 12" fill="none">
+                  <path d="M2.5 4.5L6 8L9.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               {% endif %}
             </a>
             
-            {%- comment -%} Level 2: Dropdown menu {%- endcomment -%}
-            {% if link.links.size > 0 %}
-              <ul class="dropdown dropdown--level-2">
-                {% for child_link in link.links %}
-                  <li class="dropdown__item{% if child_link.links.size > 0 %} dropdown__item--has-children{% endif %}">
-                    <a href="{{ child_link.url }}" class="dropdown__link">
-                      {{ child_link.title }}
-                      {% if child_link.links.size > 0 %}
-                        <svg class="dropdown__icon" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                          <path d="M4 2L8 6L4 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                        </svg>
-                      {% endif %}
-                    </a>
-                    
-                    {%- comment -%} Level 3: Nested dropdown {%- endcomment -%}
-                    {% if child_link.links.size > 0 %}
-                      <ul class="dropdown dropdown--level-3">
-                        {% for grandchild_link in child_link.links %}
-                          <li class="dropdown__item">
-                            <a href="{{ grandchild_link.url }}" class="dropdown__link">
-                              {{ grandchild_link.title }}
+            {%- comment -%} Mega Menu Panel {%- endcomment -%}
+            {% if has_mega_menu %}
+              <div class="mega-menu" data-mega-menu="{{ link.title | handleize }}">
+                <div class="mega-menu__inner">
+                  <div class="mega-menu__content">
+                    {%- comment -%} Menu Columns {%- endcomment -%}
+                    <div class="mega-menu__columns">
+                      {% for child_link in link.links %}
+                        <div class="mega-menu__column">
+                          {%- comment -%} Column Header - Links to collection/page {%- endcomment -%}
+                          {% if child_link.links.size > 0 %}
+                            <h3 class="mega-menu__column-title">{{ child_link.title }}</h3>
+                          {% else %}
+                            <a href="{{ child_link.url }}" class="mega-menu__column-title mega-menu__column-title--link">
+                              {{ child_link.title }}
                             </a>
-                          </li>
-                        {% endfor %}
-                      </ul>
+                          {% endif %}
+                          
+                          {%- comment -%} Column Links (Level 3) {%- endcomment -%}
+                          {% if child_link.links.size > 0 %}
+                            <ul class="mega-menu__links">
+                              {% for grandchild_link in child_link.links %}
+                                <li>
+                                  <a href="{{ grandchild_link.url }}" class="mega-menu__link">
+                                    {{ grandchild_link.title }}
+                                  </a>
+                                </li>
+                              {% endfor %}
+                              {%- comment -%} View All link {%- endcomment -%}
+                              {% if child_link.url != '#' and child_link.url != '' %}
+                                <li>
+                                  <a href="{{ child_link.url }}" class="mega-menu__link mega-menu__link--view-all">
+                                    Alle anzeigen →
+                                  </a>
+                                </li>
+                              {% endif %}
+                            </ul>
+                          {% endif %}
+                        </div>
+                      {% endfor %}
+                    </div>
+                    
+                    {%- comment -%} Featured Collections - from section settings {%- endcomment -%}
+                    {% assign menu_handle = link.title | handleize %}
+                    {% assign has_featured = false %}
+                    {% for block in section.blocks %}
+                      {% if block.type == 'featured_collection' and block.settings.menu_item == menu_handle %}
+                        {% assign has_featured = true %}
+                        {% break %}
+                      {% endif %}
+                    {% endfor %}
+                    
+                    {% if has_featured %}
+                      <div class="mega-menu__featured">
+                        <h3 class="mega-menu__featured-title">EMPFOHLEN</h3>
+                        <div class="mega-menu__featured-grid">
+                          {% for block in section.blocks %}
+                            {% if block.type == 'featured_collection' and block.settings.menu_item == menu_handle %}
+                              <a href="{{ block.settings.link }}" class="mega-menu__featured-card" {{ block.shopify_attributes }}>
+                                {% if block.settings.image != blank %}
+                                  <div class="mega-menu__featured-image">
+                                    <img 
+                                      src="{{ block.settings.image | image_url: width: 400 }}"
+                                      alt="{{ block.settings.title | escape }}"
+                                      width="200"
+                                      height="250"
+                                      loading="lazy"
+                                    >
+                                  </div>
+                                {% else %}
+                                  <div class="mega-menu__featured-image mega-menu__featured-image--placeholder">
+                                    {{ 'collection-1' | placeholder_svg_tag }}
+                                  </div>
+                                {% endif %}
+                                <span class="mega-menu__featured-label">{{ block.settings.title }}</span>
+                              </a>
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
                     {% endif %}
-                  </li>
-                {% endfor %}
-              </ul>
+                  </div>
+                </div>
+              </div>
             {% endif %}
           </li>
         {% endfor %}
@@ -128,6 +196,9 @@
   </div>
 </header>
 
+{%- comment -%} Mega Menu Overlay {%- endcomment -%}
+<div class="mega-menu__overlay" data-mega-menu-overlay></div>
+
 {%- comment -%} Mobile Menu {%- endcomment -%}
 <div class="mobile-menu" data-mobile-menu>
   <div class="mobile-menu__inner">
@@ -139,7 +210,7 @@
     </div>
 
     <nav class="mobile-menu__nav" role="navigation">
-      <ul class="mobile-nav-list">
+      <ul class="mobile-nav-list" data-mobile-nav-level="1">
         {%- comment -%} Search in mobile menu {%- endcomment -%}
         <li class="mobile-nav-item mobile-nav-item--search">
           <button type="button" class="mobile-nav-link mobile-nav-link--search" data-search-toggle>
@@ -151,21 +222,19 @@
           </button>
         </li>
 
-        {% for link in linklists.main-menu.links %}
-          <li class="mobile-nav-item">
-            <a href="{{ link.url }}" class="mobile-nav-link">
-              {{ link.title }}
-            </a>
+        {% for link in linklists[section.settings.main_menu].links %}
+          <li class="mobile-nav-item{% if link.links.size > 0 %} mobile-nav-item--has-children{% endif %}">
             {% if link.links.size > 0 %}
-              <ul class="mobile-nav-submenu">
-                {% for child_link in link.links %}
-                  <li class="mobile-nav-subitem">
-                    <a href="{{ child_link.url }}" class="mobile-nav-sublink">
-                      {{ child_link.title }}
-                    </a>
-                  </li>
-                {% endfor %}
-              </ul>
+              <button type="button" class="mobile-nav-link" data-mobile-submenu-toggle="{{ forloop.index }}">
+                <span>{{ link.title }}</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M9 18l6-6-6-6"/>
+                </svg>
+              </button>
+            {% else %}
+              <a href="{{ link.url }}" class="mobile-nav-link">
+                <span>{{ link.title }}</span>
+              </a>
             {% endif %}
           </li>
         {% endfor %}
@@ -189,6 +258,70 @@
           </a>
         </li>
       </ul>
+
+      {%- comment -%} Mobile Submenus (Level 2) {%- endcomment -%}
+      {% for link in linklists[section.settings.main_menu].links %}
+        {% if link.links.size > 0 %}
+          <div class="mobile-submenu" data-mobile-submenu="{{ forloop.index }}">
+            <button type="button" class="mobile-submenu__back" data-mobile-submenu-back>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M15 18l-6-6 6-6"/>
+              </svg>
+              <span>Zurück</span>
+            </button>
+            <a href="{{ link.url }}" class="mobile-submenu__title">{{ link.title }}</a>
+            
+            <ul class="mobile-nav-list" data-mobile-nav-level="2">
+              {% for child_link in link.links %}
+                <li class="mobile-nav-item{% if child_link.links.size > 0 %} mobile-nav-item--has-children{% endif %}">
+                  {% if child_link.links.size > 0 %}
+                    <button type="button" class="mobile-nav-link" data-mobile-submenu-toggle="{{ forloop.parentloop.index }}-{{ forloop.index }}">
+                      <span>{{ child_link.title }}</span>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M9 18l6-6-6-6"/>
+                      </svg>
+                    </button>
+                  {% else %}
+                    <a href="{{ child_link.url }}" class="mobile-nav-link">
+                      <span>{{ child_link.title }}</span>
+                    </a>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+
+            {%- comment -%} Mobile Submenus (Level 3) {%- endcomment -%}
+            {% for child_link in link.links %}
+              {% if child_link.links.size > 0 %}
+                <div class="mobile-submenu mobile-submenu--level-3" data-mobile-submenu="{{ forloop.parentloop.index }}-{{ forloop.index }}">
+                  <button type="button" class="mobile-submenu__back" data-mobile-submenu-back>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                      <path d="M15 18l-6-6 6-6"/>
+                    </svg>
+                    <span>Zurück</span>
+                  </button>
+                  <a href="{{ child_link.url }}" class="mobile-submenu__title">{{ child_link.title }}</a>
+                  
+                  <ul class="mobile-nav-list" data-mobile-nav-level="3">
+                    {% for grandchild_link in child_link.links %}
+                      <li class="mobile-nav-item">
+                        <a href="{{ grandchild_link.url }}" class="mobile-nav-link">
+                          <span>{{ grandchild_link.title }}</span>
+                        </a>
+                      </li>
+                    {% endfor %}
+                    <li class="mobile-nav-item">
+                      <a href="{{ child_link.url }}" class="mobile-nav-link mobile-nav-link--view-all">
+                        <span>Alle {{ child_link.title }} anzeigen</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endfor %}
     </nav>
   </div>
 </div>
@@ -208,12 +341,12 @@
     }
   }
 
-  /* Header Spacer - Accounts for both notification bar and header */
+  /* Header Spacer */
   .header-spacer {
     height: calc(var(--notification-bar-height, 0px) + var(--header-height, 70px));
   }
 
-  /* Header - Fixed Position with notification bar offset */
+  /* Header */
   .header {
     position: fixed;
     top: var(--notification-bar-height, 0px);
@@ -285,27 +418,35 @@
 
   /* Navigation */
   .header__nav {
-    justify-self: start;
+    flex: 1;
+    display: flex;
+    justify-content: center;
   }
 
   .nav-list {
     display: flex;
     align-items: center;
-    gap: 2.5rem;
+    gap: 2rem;
     list-style: none;
     margin: 0;
     padding: 0;
   }
 
+  @media (min-width: 1200px) {
+    .nav-list {
+      gap: 2.5rem;
+    }
+  }
+
   .nav-item {
-    position: relative;
+    position: static;
   }
 
   .nav-link {
     display: flex;
     align-items: center;
-    gap: 0.25rem;
-    font-size: 0.875rem;
+    gap: 0.375rem;
+    font-size: 0.8125rem;
     font-weight: 600;
     color: #000000;
     text-decoration: none;
@@ -313,14 +454,14 @@
     letter-spacing: 0.5px;
     padding: 0.5rem 0;
     transition: opacity 0.2s ease;
+    white-space: nowrap;
   }
 
   .nav-link__icon {
-    margin-left: 0.25rem;
     transition: transform 0.2s ease;
   }
 
-  .nav-item--has-dropdown:hover .nav-link__icon {
+  .nav-item--has-megamenu:hover .nav-link__icon {
     transform: rotate(180deg);
   }
 
@@ -342,93 +483,204 @@
     background: #000000;
   }
 
-  /* Dropdown */
-  .dropdown {
-    position: absolute;
-    min-width: 240px;
+  /* ==========================================
+     MEGA MENU - Gymshark Style
+     ========================================== */
+  
+  .mega-menu {
+    position: fixed;
+    top: calc(var(--notification-bar-height, 0px) + var(--header-height, 70px));
+    left: 0;
+    right: 0;
     background: #FFFFFF;
-    border: 1px solid #E8E8E8;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    border-top: 1px solid #E8E8E8;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
     opacity: 0;
     visibility: hidden;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    list-style: none;
-    margin: 0;
-    padding: 0.75rem 0;
-    z-index: 100;
+    transform: translateY(-10px);
+    transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+    z-index: 999;
   }
 
-  .dropdown--level-2 {
-    top: calc(100% + 5px);
-    left: 0;
+  .header.is-scrolled .mega-menu {
+    top: var(--header-height, 70px);
   }
 
-  .nav-item:hover > .dropdown--level-2 {
+  .nav-item--has-megamenu:hover .mega-menu {
     opacity: 1;
     visibility: visible;
+    transform: translateY(0);
   }
 
-  .dropdown--level-3 {
-    top: -0.75rem;
-    left: 100%;
-    margin-left: -1px;
+  .mega-menu__inner {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 2rem;
   }
 
-  .dropdown__item--has-children:hover > .dropdown--level-3 {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  .dropdown__item {
-    margin: 0;
-    position: relative;
-  }
-
-  .dropdown__item--has-children > .dropdown__link {
+  .mega-menu__content {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-right: 1rem;
+    gap: 3rem;
   }
 
-  .dropdown__link {
-    display: block;
-    padding: 0.625rem 1.25rem;
-    font-size: 0.8125rem;
-    font-weight: 500;
+  .mega-menu__columns {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 2rem 2.5rem;
+  }
+
+  .mega-menu__column {
+    min-width: 0;
+  }
+
+  .mega-menu__column-title {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #9ca3af;
+    margin: 0 0 1rem;
+  }
+
+  .mega-menu__column-title--link {
     color: #000000;
     text-decoration: none;
-    transition: background 0.2s ease;
+    display: block;
+    transition: opacity 0.2s;
   }
 
-  .dropdown__link:hover {
-    background: #F5F5F5;
+  .mega-menu__column-title--link:hover {
+    opacity: 0.6;
   }
 
-  .dropdown__icon {
+  .mega-menu__links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .mega-menu__links li {
+    margin-bottom: 0.625rem;
+  }
+
+  .mega-menu__link {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #000000;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    display: inline-block;
+  }
+
+  .mega-menu__link:hover {
+    opacity: 0.6;
+  }
+
+  .mega-menu__link--view-all {
+    font-weight: 500;
+    color: #6b7280;
+    margin-top: 0.25rem;
+  }
+
+  /* Featured Collections */
+  .mega-menu__featured {
     flex-shrink: 0;
-    margin-left: auto;
-    opacity: 0.5;
+    width: 440px;
+    padding-left: 2rem;
+    border-left: 1px solid #e5e7eb;
   }
 
-  .dropdown--level-2 {
+  .mega-menu__featured-title {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #9ca3af;
+    margin: 0 0 1rem;
+  }
+
+  .mega-menu__featured-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .mega-menu__featured-card {
+    display: block;
+    text-decoration: none;
+    border-radius: 4px;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+  }
+
+  .mega-menu__featured-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .mega-menu__featured-card:hover .mega-menu__featured-image img {
+    transform: scale(1.03);
+  }
+
+  .mega-menu__featured-image {
+    position: relative;
+    aspect-ratio: 4/5;
+    background: #f3f4f6;
+    overflow: hidden;
+  }
+
+  .mega-menu__featured-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+
+  .mega-menu__featured-image--placeholder {
     display: flex;
-    flex-direction: column;
-    max-height: 80vh;
-    overflow-y: auto;
+    align-items: center;
+    justify-content: center;
   }
 
-  .dropdown--level-2::-webkit-scrollbar {
-    width: 6px;
+  .mega-menu__featured-image--placeholder svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
   }
 
-  .dropdown--level-2::-webkit-scrollbar-track {
-    background: #F5F5F5;
+  .mega-menu__featured-label {
+    display: block;
+    padding: 0.75rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #000000;
+    background: #f9fafb;
+    text-align: center;
   }
 
-  .dropdown--level-2::-webkit-scrollbar-thumb {
-    background: #CCCCCC;
-    border-radius: 3px;
+  /* Mega Menu Overlay */
+  .mega-menu__overlay {
+    position: fixed;
+    inset: 0;
+    top: calc(var(--notification-bar-height, 0px) + var(--header-height, 70px));
+    background: rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    z-index: 998;
+    pointer-events: none;
+  }
+
+  .header.is-scrolled ~ .mega-menu__overlay {
+    top: var(--header-height, 70px);
+  }
+
+  .nav-item--has-megamenu:hover ~ .mega-menu__overlay,
+  .header:has(.nav-item--has-megamenu:hover) ~ .mega-menu__overlay {
+    opacity: 1;
+    visibility: visible;
   }
 
   /* Header Actions */
@@ -520,7 +772,10 @@
     height: 22px;
   }
 
-  /* Mobile Menu */
+  /* ==========================================
+     MOBILE MENU - Slide-in panels
+     ========================================== */
+  
   .mobile-menu {
     position: fixed;
     top: 0;
@@ -528,11 +783,12 @@
     width: 100%;
     max-width: 400px;
     height: 100vh;
+    height: 100dvh;
     background: #FFFFFF;
     z-index: 1010;
     transform: translateX(-100%);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow-y: auto;
+    overflow: hidden;
   }
 
   .mobile-menu.is-active {
@@ -540,20 +796,22 @@
   }
 
   .mobile-menu__inner {
-    padding: 1.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
   .mobile-menu__header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 2rem;
-    padding-bottom: 1rem;
+    padding: 1rem 1.5rem;
     border-bottom: 1px solid #E8E8E8;
+    flex-shrink: 0;
   }
 
   .mobile-menu__title {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 700;
     margin: 0;
     text-transform: uppercase;
@@ -569,40 +827,59 @@
     background: transparent;
     border: none;
     cursor: pointer;
+    margin-right: -0.5rem;
+  }
+
+  .mobile-menu__nav {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
   }
 
   .mobile-nav-list {
     list-style: none;
     margin: 0;
     padding: 0;
+    height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .mobile-nav-item {
-    border-bottom: 1px solid #E8E8E8;
+    border-bottom: 1px solid #f3f4f6;
   }
 
   .mobile-nav-link {
-    display: block;
-    padding: 1.25rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1rem 1.5rem;
     font-size: 0.9375rem;
-    font-weight: 600;
+    font-weight: 500;
     color: #000000;
     text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
     background: none;
     border: none;
-    width: 100%;
-    text-align: left;
     cursor: pointer;
+    text-align: left;
+  }
+
+  .mobile-nav-link svg {
+    flex-shrink: 0;
+    opacity: 0.4;
   }
 
   .mobile-nav-item--search .mobile-nav-link,
   .mobile-nav-item--account .mobile-nav-link,
   .mobile-nav-item--wishlist .mobile-nav-link {
-    display: flex;
-    align-items: center;
     gap: 0.75rem;
+    justify-content: flex-start;
+  }
+
+  .mobile-nav-link--view-all {
+    color: #6b7280;
+    font-weight: 400;
   }
 
   .mobile-nav-wishlist-count {
@@ -624,19 +901,55 @@
     display: none;
   }
 
-  .mobile-nav-submenu {
-    list-style: none;
-    margin: 0;
-    padding: 0 0 1rem 1.5rem;
+  /* Mobile Submenus - Slide-in panels */
+  .mobile-submenu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #FFFFFF;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
 
-  .mobile-nav-sublink {
-    display: block;
-    padding: 0.75rem 0;
+  .mobile-submenu.is-active {
+    transform: translateX(0);
+  }
+
+  .mobile-submenu__back {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 1rem 1.5rem;
     font-size: 0.875rem;
     font-weight: 500;
-    color: #666666;
+    color: #6b7280;
+    background: #f9fafb;
+    border: none;
+    border-bottom: 1px solid #e5e7eb;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .mobile-submenu__title {
+    display: block;
+    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #000000;
     text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .mobile-submenu .mobile-nav-list {
+    flex: 1;
   }
 
   .mobile-menu__overlay {
@@ -653,12 +966,28 @@
     opacity: 1;
     visibility: visible;
   }
+
+  /* Responsive adjustments */
+  @media (max-width: 1200px) {
+    .mega-menu__featured {
+      width: 360px;
+    }
+  }
+
+  @media (max-width: 1100px) {
+    .mega-menu__featured {
+      width: 300px;
+    }
+    
+    .mega-menu__featured-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const header = document.querySelector('[data-header]');
-  const headerSpacer = document.querySelector('.header-spacer');
   const notificationBar = document.querySelector('.notification-bar, [data-notification-bar], .announcement-bar');
   
   // Set notification bar height as CSS variable
@@ -667,18 +996,14 @@ document.addEventListener('DOMContentLoaded', function() {
     document.documentElement.style.setProperty('--notification-bar-height', height + 'px');
   }
   
-  // Initial calculation
   updateNotificationBarHeight();
-  
-  // Recalculate on resize
   window.addEventListener('resize', updateNotificationBarHeight);
   
-  // Also recalculate after fonts load (can affect height)
   if (document.fonts && document.fonts.ready) {
     document.fonts.ready.then(updateNotificationBarHeight);
   }
   
-  // Header scroll effect - moves to top when scrolled past notification bar
+  // Header scroll effect
   if (header) {
     let ticking = false;
     
@@ -701,50 +1026,115 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }, { passive: true });
     
-    // Initial check
     handleScroll();
   }
 
-  // Mobile menu toggle
-  const mobileMenuToggles = document.querySelectorAll('[data-mobile-menu-toggle]');
+  // ==========================================
+  // MOBILE MENU
+  // ==========================================
+  
   const mobileMenu = document.querySelector('[data-mobile-menu]');
   const mobileMenuOverlay = document.querySelector('[data-mobile-menu-overlay]');
+  const mobileMenuToggles = document.querySelectorAll('[data-mobile-menu-toggle]');
   
-  function toggleMobileMenu() {
-    mobileMenu?.classList.toggle('is-active');
-    mobileMenuOverlay?.classList.toggle('is-active');
-    document.body.classList.toggle('mobile-menu-open');
+  function openMobileMenu() {
+    mobileMenu?.classList.add('is-active');
+    mobileMenuOverlay?.classList.add('is-active');
+    document.body.style.overflow = 'hidden';
   }
   
   function closeMobileMenu() {
     mobileMenu?.classList.remove('is-active');
     mobileMenuOverlay?.classList.remove('is-active');
-    document.body.classList.remove('mobile-menu-open');
+    document.body.style.overflow = '';
+    
+    // Close all submenus
+    document.querySelectorAll('.mobile-submenu.is-active').forEach(submenu => {
+      submenu.classList.remove('is-active');
+    });
   }
   
   mobileMenuToggles.forEach(toggle => {
-    toggle.addEventListener('click', toggleMobileMenu);
+    toggle.addEventListener('click', function() {
+      if (mobileMenu?.classList.contains('is-active')) {
+        closeMobileMenu();
+      } else {
+        openMobileMenu();
+      }
+    });
   });
   
-  mobileMenuOverlay?.addEventListener('click', toggleMobileMenu);
+  mobileMenuOverlay?.addEventListener('click', closeMobileMenu);
 
-  // Search toggle - opens predictive search
+  // Mobile submenu toggles
+  document.querySelectorAll('[data-mobile-submenu-toggle]').forEach(toggle => {
+    toggle.addEventListener('click', function() {
+      const submenuId = this.getAttribute('data-mobile-submenu-toggle');
+      const submenu = document.querySelector(`[data-mobile-submenu="${submenuId}"]`);
+      submenu?.classList.add('is-active');
+    });
+  });
+
+  // Mobile submenu back buttons
+  document.querySelectorAll('[data-mobile-submenu-back]').forEach(back => {
+    back.addEventListener('click', function() {
+      const submenu = this.closest('.mobile-submenu');
+      submenu?.classList.remove('is-active');
+    });
+  });
+
+  // ==========================================
+  // SEARCH TOGGLE
+  // ==========================================
+  
   const searchToggles = document.querySelectorAll('[data-search-toggle]');
   
   searchToggles.forEach(toggle => {
     toggle.addEventListener('click', function(e) {
       e.preventDefault();
-      
-      // Close mobile menu if open
       closeMobileMenu();
       
-      // Open predictive search
       if (typeof window.openPredictiveSearch === 'function') {
         window.openPredictiveSearch();
       } else if (typeof window.PredictiveSearch?.open === 'function') {
         window.PredictiveSearch.open();
       }
     });
+  });
+
+  // ==========================================
+  // MEGA MENU ACCESSIBILITY
+  // ==========================================
+  
+  // Close mega menu when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.nav-item--has-megamenu') && !e.target.closest('.mega-menu')) {
+      // Mega menus close automatically via CSS :hover
+    }
+  });
+
+  // Keyboard navigation for mega menu
+  document.querySelectorAll('.nav-item--has-megamenu').forEach(item => {
+    const link = item.querySelector('.nav-link');
+    const megaMenu = item.querySelector('.mega-menu');
+    
+    // Open on Enter/Space
+    link?.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        megaMenu?.classList.toggle('is-keyboard-open');
+      }
+    });
+  });
+
+  // Close mega menu on Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.mega-menu.is-keyboard-open').forEach(menu => {
+        menu.classList.remove('is-keyboard-open');
+      });
+      closeMobileMenu();
+    }
   });
 });
 </script>
@@ -761,7 +1151,7 @@ document.addEventListener('DOMContentLoaded', function() {
       "type": "image_picker",
       "id": "logo",
       "label": "Logo Image",
-      "info": "Upload your logo (SVG, PNG, or JPG). Falls back to assets/almliebe_logo.svg if not set."
+      "info": "Upload your logo (SVG, PNG, or JPG)"
     },
     {
       "type": "range",
@@ -782,6 +1172,36 @@ document.addEventListener('DOMContentLoaded', function() {
       "id": "main_menu",
       "label": "Main menu",
       "default": "main-menu"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "featured_collection",
+      "name": "Featured Collection",
+      "settings": [
+        {
+          "type": "text",
+          "id": "menu_item",
+          "label": "Menu Item Handle",
+          "info": "Enter the menu item handle (e.g., 'damen', 'herren'). Use lowercase with hyphens."
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Featured Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "New Collection"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
     }
   ]
 }
