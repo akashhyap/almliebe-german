@@ -197,31 +197,37 @@
 <div class="mobile-menu__overlay" data-mobile-menu-overlay></div>
 
 <style>
-  /* Header Spacer - Matches header height */
-  .header-spacer {
-    height: 70px;
+  :root {
+    --notification-bar-height: 0px;
+    --header-height: 70px;
   }
-
+  
   @media (max-width: 1023px) {
-    .header-spacer {
-      height: 60px;
+    :root {
+      --header-height: 60px;
     }
   }
 
-  /* Header - Fixed Position */
+  /* Header Spacer - Accounts for both notification bar and header */
+  .header-spacer {
+    height: calc(var(--notification-bar-height, 0px) + var(--header-height, 70px));
+  }
+
+  /* Header - Fixed Position with notification bar offset */
   .header {
     position: fixed;
-    top: 0;
+    top: var(--notification-bar-height, 0px);
     left: 0;
     right: 0;
     width: 100%;
     background: #FFFFFF;
     border-bottom: 1px solid #E8E8E8;
     z-index: 1000;
-    transition: box-shadow 0.3s ease, background 0.3s ease;
+    transition: top 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
   }
 
   .header.is-scrolled {
+    top: 0;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(8px);
@@ -235,14 +241,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 70px;
+    height: var(--header-height, 70px);
     gap: 2rem;
   }
 
   @media (max-width: 1023px) {
     .header__inner {
       padding: 0 1rem;
-      height: 60px;
     }
   }
 
@@ -652,6 +657,54 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  const header = document.querySelector('[data-header]');
+  const headerSpacer = document.querySelector('.header-spacer');
+  const notificationBar = document.querySelector('.notification-bar, [data-notification-bar], .announcement-bar');
+  
+  // Set notification bar height as CSS variable
+  function updateNotificationBarHeight() {
+    const height = notificationBar ? notificationBar.offsetHeight : 0;
+    document.documentElement.style.setProperty('--notification-bar-height', height + 'px');
+  }
+  
+  // Initial calculation
+  updateNotificationBarHeight();
+  
+  // Recalculate on resize
+  window.addEventListener('resize', updateNotificationBarHeight);
+  
+  // Also recalculate after fonts load (can affect height)
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(updateNotificationBarHeight);
+  }
+  
+  // Header scroll effect - moves to top when scrolled past notification bar
+  if (header) {
+    let ticking = false;
+    
+    function handleScroll() {
+      const notificationHeight = notificationBar ? notificationBar.offsetHeight : 0;
+      
+      if (window.scrollY > notificationHeight) {
+        header.classList.add('is-scrolled');
+      } else {
+        header.classList.remove('is-scrolled');
+      }
+      
+      ticking = false;
+    }
+    
+    window.addEventListener('scroll', function() {
+      if (!ticking) {
+        window.requestAnimationFrame(handleScroll);
+        ticking = true;
+      }
+    }, { passive: true });
+    
+    // Initial check
+    handleScroll();
+  }
+
   // Mobile menu toggle
   const mobileMenuToggles = document.querySelectorAll('[data-mobile-menu-toggle]');
   const mobileMenu = document.querySelector('[data-mobile-menu]');
@@ -674,19 +727,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   
   mobileMenuOverlay?.addEventListener('click', toggleMobileMenu);
-
-  // Header scroll effect
-  const header = document.querySelector('[data-header]');
-  
-  if (header) {
-    window.addEventListener('scroll', function() {
-      if (window.scrollY > 50) {
-        header.classList.add('is-scrolled');
-      } else {
-        header.classList.remove('is-scrolled');
-      }
-    }, { passive: true });
-  }
 
   // Search toggle - opens predictive search
   const searchToggles = document.querySelectorAll('[data-search-toggle]');
