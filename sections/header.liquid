@@ -465,7 +465,7 @@
     transition: transform 0.2s ease;
   }
 
-  .nav-item--has-megamenu:hover .nav-link__icon {
+  .nav-item--has-megamenu.is-open .nav-link__icon {
     transform: rotate(180deg);
   }
 
@@ -502,7 +502,7 @@
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
-    transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
     z-index: 999;
   }
 
@@ -510,7 +510,8 @@
     top: var(--header-height, 70px);
   }
 
-  .nav-item--has-megamenu:hover .mega-menu {
+  /* JS-controlled open state (with delays) */
+  .nav-item--has-megamenu.is-open .mega-menu {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
@@ -748,10 +749,11 @@
     top: var(--header-height, 70px);
   }
 
-  .nav-item--has-megamenu:hover ~ .mega-menu__overlay,
-  .header:has(.nav-item--has-megamenu:hover) ~ .mega-menu__overlay {
+  /* JS-controlled overlay visibility */
+  .mega-menu__overlay.is-visible {
     opacity: 1;
     visibility: visible;
+    pointer-events: auto;
   }
 
   /* Header Actions */
@@ -1135,6 +1137,104 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // ==========================================
+  // MEGA MENU - Hover with delays
+  // ==========================================
+  
+  const megaMenuItems = document.querySelectorAll('.nav-item--has-megamenu');
+  const megaMenuOverlay = document.querySelector('[data-mega-menu-overlay]');
+  
+  const OPEN_DELAY = 80;   // ms before opening
+  const CLOSE_DELAY = 150; // ms before closing
+  
+  let openTimeout = null;
+  let closeTimeout = null;
+  let currentOpenMenu = null;
+  
+  function openMegaMenu(item) {
+    clearTimeout(closeTimeout);
+    clearTimeout(openTimeout);
+    
+    // Close any other open menu immediately
+    if (currentOpenMenu && currentOpenMenu !== item) {
+      currentOpenMenu.classList.remove('is-open');
+    }
+    
+    openTimeout = setTimeout(() => {
+      item.classList.add('is-open');
+      megaMenuOverlay?.classList.add('is-visible');
+      currentOpenMenu = item;
+    }, OPEN_DELAY);
+  }
+  
+  function closeMegaMenu(item) {
+    clearTimeout(openTimeout);
+    clearTimeout(closeTimeout);
+    
+    closeTimeout = setTimeout(() => {
+      item.classList.remove('is-open');
+      megaMenuOverlay?.classList.remove('is-visible');
+      if (currentOpenMenu === item) {
+        currentOpenMenu = null;
+      }
+    }, CLOSE_DELAY);
+  }
+  
+  function closeAllMegaMenus() {
+    clearTimeout(openTimeout);
+    clearTimeout(closeTimeout);
+    
+    megaMenuItems.forEach(item => {
+      item.classList.remove('is-open');
+    });
+    megaMenuOverlay?.classList.remove('is-visible');
+    currentOpenMenu = null;
+  }
+  
+  megaMenuItems.forEach(item => {
+    const megaMenu = item.querySelector('.mega-menu');
+    
+    // Mouse enter nav item
+    item.addEventListener('mouseenter', () => openMegaMenu(item));
+    
+    // Mouse leave nav item
+    item.addEventListener('mouseleave', (e) => {
+      // Check if moving to the mega menu
+      const toElement = e.relatedTarget;
+      if (megaMenu && megaMenu.contains(toElement)) {
+        return; // Don't close, cursor moved into mega menu
+      }
+      closeMegaMenu(item);
+    });
+    
+    // Keep open when hovering mega menu
+    if (megaMenu) {
+      megaMenu.addEventListener('mouseenter', () => {
+        clearTimeout(closeTimeout);
+      });
+      
+      megaMenu.addEventListener('mouseleave', (e) => {
+        // Check if moving back to nav item
+        const toElement = e.relatedTarget;
+        if (item.contains(toElement)) {
+          return;
+        }
+        closeMegaMenu(item);
+      });
+    }
+  });
+  
+  // Close when clicking overlay
+  megaMenuOverlay?.addEventListener('click', closeAllMegaMenus);
+  
+  // Close on escape (both mega menu and mobile menu)
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeAllMegaMenus();
+      closeMobileMenu();
+    }
+  });
+
+  // ==========================================
   // MOBILE MENU
   // ==========================================
   
@@ -1221,25 +1321,21 @@ document.addEventListener('DOMContentLoaded', function() {
   // Keyboard navigation for mega menu
   document.querySelectorAll('.nav-item--has-megamenu').forEach(item => {
     const link = item.querySelector('.nav-link');
-    const megaMenu = item.querySelector('.mega-menu');
     
-    // Open on Enter/Space
+    // Toggle on Enter/Space
     link?.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        megaMenu?.classList.toggle('is-keyboard-open');
+        if (item.classList.contains('is-open')) {
+          item.classList.remove('is-open');
+          megaMenuOverlay?.classList.remove('is-visible');
+        } else {
+          closeAllMegaMenus();
+          item.classList.add('is-open');
+          megaMenuOverlay?.classList.add('is-visible');
+        }
       }
     });
-  });
-
-  // Close mega menu on Escape
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.mega-menu.is-keyboard-open').forEach(menu => {
-        menu.classList.remove('is-keyboard-open');
-      });
-      closeMobileMenu();
-    }
   });
 });
 </script>
