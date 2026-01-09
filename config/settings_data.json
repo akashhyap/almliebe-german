@@ -70,9 +70,10 @@
           "featured_collection_fTc6Ci": {
             "type": "featured_collection",
             "settings": {
-              "menu_item": "",
-              "title": "New Collection",
-              "link": ""
+              "menu_item": "damen",
+              "image": "shopify://shop_images/gottseidank-trachtenjacke-lea-kirsche-5.jpg",
+              "title": "Neue Masche",
+              "link": "shopify://collections/strickjanker"
             }
           },
           "featured_collection_TpX6hD": {
