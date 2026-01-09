@@ -13,6 +13,10 @@
 {%- liquid
   assign products_per_page = section.settings.products_per_page | default: 24
   
+  # Default sort: price-descending (high to low)
+  assign default_sort = 'price-descending'
+  assign sort_by = collection.sort_by | default: default_sort
+  
   # Count active filters
   assign total_active_filters = 0
   for filter in collection.filters
@@ -31,6 +35,19 @@
   assign sidebar_menu_handle = collection.handle | append: '-sidebar'
   assign sidebar_menu = linklists[sidebar_menu_handle]
 -%}
+
+{%- comment -%} Auto-apply default sort if none specified {%- endcomment -%}
+{%- unless request.path contains 'sort_by' or collection.sort_by != blank -%}
+<script>
+  (function() {
+    if (!window.location.search.includes('sort_by')) {
+      var url = new URL(window.location);
+      url.searchParams.set('sort_by', '{{ default_sort }}');
+      window.location.replace(url);
+    }
+  })();
+</script>
+{%- endunless -%}
 
 <section class="collection-page" data-collection-page data-collection-url="{{ collection.url }}">
   <div class="collection-page__container">
@@ -89,7 +106,6 @@
           {%- endif -%}
           
           {%- comment -%} ===== SORT BY Section ===== {%- endcomment -%}
-          {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
           <details class="filter-group filter-group--sort" open>
             <summary class="filter-group__header">
               <span class="filter-group__title">SORTIEREN</span>
