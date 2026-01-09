@@ -124,16 +124,18 @@
                       <div class="mega-menu__featured">
                         <h3 class="mega-menu__featured-title">EMPFOHLEN</h3>
                         <div class="mega-menu__featured-grid">
+                          {% assign featured_count = 0 %}
                           {% for block in section.blocks %}
-                            {% if block.type == 'featured_collection' and block.settings.menu_item == menu_handle %}
+                            {% if block.type == 'featured_collection' and block.settings.menu_item == menu_handle and featured_count < 2 %}
+                              {% assign featured_count = featured_count | plus: 1 %}
                               <a href="{{ block.settings.link }}" class="mega-menu__featured-card" {{ block.shopify_attributes }}>
                                 {% if block.settings.image != blank %}
                                   <div class="mega-menu__featured-image">
                                     <img 
-                                      src="{{ block.settings.image | image_url: width: 400 }}"
+                                      src="{{ block.settings.image | image_url: width: 800 }}"
                                       alt="{{ block.settings.title | escape }}"
-                                      width="200"
-                                      height="250"
+                                      width="400"
+                                      height="225"
                                       loading="lazy"
                                     >
                                   </div>
@@ -587,7 +589,7 @@
   /* Featured Collections */
   .mega-menu__featured {
     flex-shrink: 0;
-    width: 440px;
+    width: 340px;
     padding-left: 2rem;
     border-left: 1px solid #e5e7eb;
   }
@@ -602,31 +604,51 @@
   }
 
   .mega-menu__featured-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
   }
 
   .mega-menu__featured-card {
     display: block;
+    position: relative;
     text-decoration: none;
-    border-radius: 4px;
+    border-radius: 8px;
     overflow: hidden;
-    transition: transform 0.2s ease;
+    aspect-ratio: 16/9;
+    background: #1a1a1a;
   }
 
-  .mega-menu__featured-card:hover {
-    transform: translateY(-2px);
+  .mega-menu__featured-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.6) 0%,
+      rgba(0, 0, 0, 0.2) 50%,
+      rgba(0, 0, 0, 0) 100%
+    );
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .mega-menu__featured-card:hover::after {
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(0, 0, 0, 0.3) 50%,
+      rgba(0, 0, 0, 0.05) 100%
+    );
   }
 
   .mega-menu__featured-card:hover .mega-menu__featured-image img {
-    transform: scale(1.03);
+    transform: scale(1.05);
   }
 
   .mega-menu__featured-image {
-    position: relative;
-    aspect-ratio: 4/5;
-    background: #f3f4f6;
+    position: absolute;
+    inset: 0;
     overflow: hidden;
   }
 
@@ -634,31 +656,35 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s ease;
   }
 
   .mega-menu__featured-image--placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
+    background: #2a2a2a;
   }
 
   .mega-menu__featured-image--placeholder svg {
-    width: 60%;
-    height: 60%;
+    width: 50%;
+    height: 50%;
     opacity: 0.3;
   }
 
   .mega-menu__featured-label {
-    display: block;
-    padding: 0.75rem 0.5rem;
-    font-size: 0.75rem;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem 1.25rem;
+    font-size: 0.9375rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #000000;
-    background: #f9fafb;
-    text-align: center;
+    letter-spacing: 0.02em;
+    color: #ffffff;
+    z-index: 1;
+    line-height: 1.2;
   }
 
   /* Mega Menu Overlay */
@@ -971,17 +997,18 @@
   /* Responsive adjustments */
   @media (max-width: 1200px) {
     .mega-menu__featured {
-      width: 360px;
+      width: 300px;
     }
   }
 
   @media (max-width: 1100px) {
     .mega-menu__featured {
-      width: 300px;
+      width: 280px;
     }
     
-    .mega-menu__featured-grid {
-      grid-template-columns: 1fr;
+    .mega-menu__featured-label {
+      font-size: 0.8125rem;
+      padding: 0.875rem 1rem;
     }
   }
 </style>
@@ -1184,12 +1211,13 @@ document.addEventListener('DOMContentLoaded', function() {
           "type": "text",
           "id": "menu_item",
           "label": "Menu Item Handle",
-          "info": "Enter the menu item handle (e.g., 'damen', 'herren'). Use lowercase with hyphens."
+          "info": "Enter the menu item handle (e.g., 'damen', 'herren'). Add up to 2 per menu item."
         },
         {
           "type": "image_picker",
           "id": "image",
-          "label": "Featured Image"
+          "label": "Featured Image",
+          "info": "Recommended: 800x450px (16:9 landscape)"
         },
         {
           "type": "text",
@@ -1204,6 +1232,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       ]
     }
-  ]
+  ],
+  "max_blocks": 14
 }
 {% endschema %}
