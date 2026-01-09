@@ -67,6 +67,15 @@
       "header": {
         "type": "header",
         "blocks": {
+          "featured_collection_bfVx3z": {
+            "type": "featured_collection",
+            "settings": {
+              "menu_item": "herren",
+              "image": "shopify://shop_images/liebling-janker-alex-navy-grau-1_1.jpg",
+              "title": "Männer Janker",
+              "link": "shopify://collections/strickjanker"
+            }
+          },
           "featured_collection_fTc6Ci": {
             "type": "featured_collection",
             "settings": {
@@ -87,6 +96,7 @@
           }
         },
         "block_order": [
+          "featured_collection_bfVx3z",
           "featured_collection_fTc6Ci",
           "featured_collection_TpX6hD"
         ],
