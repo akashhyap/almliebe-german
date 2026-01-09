@@ -67,6 +67,15 @@
       "header": {
         "type": "header",
         "blocks": {
+          "featured_collection_r8NQWc": {
+            "type": "featured_collection",
+            "settings": {
+              "menu_item": "herren",
+              "image": "shopify://shop_images/220322_2067.jpg",
+              "title": "Herrenjanker",
+              "link": "shopify://collections/herrenjanker"
+            }
+          },
           "featured_collection_bfVx3z": {
             "type": "featured_collection",
             "settings": {
@@ -96,6 +105,7 @@
           }
         },
         "block_order": [
+          "featured_collection_r8NQWc",
           "featured_collection_bfVx3z",
           "featured_collection_fTc6Ci",
           "featured_collection_TpX6hD"
