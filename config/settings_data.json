@@ -66,6 +66,20 @@
     "sections": {
       "header": {
         "type": "header",
+        "blocks": {
+          "featured_collection_TpX6hD": {
+            "type": "featured_collection",
+            "settings": {
+              "menu_item": "damen",
+              "image": "shopify://shop_images/heimatglueck-dirndl-rot-5.jpg",
+              "title": "Featured",
+              "link": "shopify://collections/dirndl"
+            }
+          }
+        },
+        "block_order": [
+          "featured_collection_TpX6hD"
+        ],
         "settings": {
           "logo": "shopify://shop_images/almliebe_logo.svg",
           "logo_width": 150,
