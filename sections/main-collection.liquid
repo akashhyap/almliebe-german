@@ -455,12 +455,12 @@
 </section>
 
 {%- comment -%} ========== BOTTOM CONTENT (from Metafield) ========== {%- endcomment -%}
-{%- assign bottom_content = collection.metafields.custom.bottom_content.value -%}
-{%- if bottom_content != blank -%}
+{%- assign bottom_content_metafield = collection.metafields.custom.bottom_content -%}
+{%- if bottom_content_metafield != blank -%}
   <section class="collection-bottom-content">
     <div class="collection-bottom-content__inner">
       <div class="collection-bottom-content__text rte">
-        {{ bottom_content }}
+        {{ bottom_content_metafield | metafield_tag }}
       </div>
     </div>
   </section>
