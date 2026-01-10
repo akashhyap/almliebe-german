@@ -53,31 +53,39 @@
         </div>
       {%- endif -%}
       
-      {%- comment -%} Sub-collection Cards (Gymshark-style) {%- endcomment -%}
-      {%- if section.blocks.size > 0 -%}
+      {%- comment -%} Sub-collection Cards (from Collection Metafields) {%- endcomment -%}
+      {%- assign subcollections_list = collection.metafields.custom.subcollections.value -%}
+      
+      {%- if subcollections_list != blank and subcollections_list.size > 0 -%}
         <div class="subcollection-cards">
           <div class="subcollection-cards__grid">
-            {%- for block in section.blocks -%}
-              {%- if block.type == 'subcollection_card' -%}
-                <a href="{{ block.settings.link }}" class="subcollection-card" {{ block.shopify_attributes }}>
-                  <div class="subcollection-card__image">
-                    {%- if block.settings.image != blank -%}
-                      <img 
-                        src="{{ block.settings.image | image_url: width: 600 }}"
-                        alt="{{ block.settings.title | escape }}"
-                        width="300"
-                        height="400"
-                        loading="lazy"
-                      >
-                    {%- else -%}
-                      <div class="subcollection-card__placeholder">
-                        {{ 'collection-1' | placeholder_svg_tag }}
-                      </div>
-                    {%- endif -%}
-                  </div>
-                  <h3 class="subcollection-card__title">{{ block.settings.title }}</h3>
-                </a>
-              {%- endif -%}
+            {%- for subcollection in subcollections_list limit: 6 -%}
+              <a href="{{ subcollection.url }}" class="subcollection-card">
+                <div class="subcollection-card__image">
+                  {%- if subcollection.image != blank -%}
+                    <img 
+                      src="{{ subcollection.image | image_url: width: 600 }}"
+                      alt="{{ subcollection.title | escape }}"
+                      width="300"
+                      height="400"
+                      loading="lazy"
+                    >
+                  {%- elsif subcollection.products.first.featured_image != blank -%}
+                    <img 
+                      src="{{ subcollection.products.first.featured_image | image_url: width: 600 }}"
+                      alt="{{ subcollection.title | escape }}"
+                      width="300"
+                      height="400"
+                      loading="lazy"
+                    >
+                  {%- else -%}
+                    <div class="subcollection-card__placeholder">
+                      {{ 'collection-1' | placeholder_svg_tag }}
+                    </div>
+                  {%- endif -%}
+                </div>
+                <h3 class="subcollection-card__title">{{ subcollection.title }}</h3>
+              </a>
             {%- endfor -%}
           </div>
         </div>
@@ -457,6 +465,7 @@
     max-width: 1400px;
     margin: 0 auto;
     padding: 2rem 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
   }
   
   @media (min-width: 1024px) {
@@ -495,7 +504,10 @@
     line-height: 1.6;
     color: #374151;
     max-width: 800px;
-    margin-bottom: 1.5rem;
+  }
+  
+  .collection-description:last-child {
+    margin-bottom: 0;
   }
   
   .collection-description p {
@@ -510,7 +522,6 @@
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
-    border-top: 1px solid #e5e7eb;
   }
   
   /* Mobile Filter Bar */
@@ -560,7 +571,7 @@
   @media (min-width: 1024px) {
     .collection-page__body {
       grid-template-columns: 240px 1fr;
-      padding: 0 3rem;
+      padding: 2rem 3rem 0;
       gap: 3rem;
       align-items: start;
     }
@@ -568,7 +579,7 @@
   
   @media (min-width: 1200px) {
     .collection-page__body {
-      padding: 0 4rem;
+      padding: 2rem 4rem 0;
       gap: 4rem;
     }
   }
@@ -1563,30 +1574,6 @@ document.addEventListener('DOMContentLoaded', function() {
       "step": 4,
       "default": 24
     }
-  ],
-  "blocks": [
-    {
-      "type": "subcollection_card",
-      "name": "Sub-collection Card",
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Title"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Link"
-        }
-      ]
-    }
-  ],
-  "max_blocks": 6
+  ]
 }
 {% endschema %}
