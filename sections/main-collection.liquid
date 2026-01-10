@@ -13,8 +13,9 @@
 {%- liquid
   assign products_per_page = section.settings.products_per_page | default: 24
   
-  # Sort: uses collection's default sort (set in Shopify Admin) or URL parameter
-  assign sort_by = collection.sort_by | default: collection.default_sort_by
+  # Default sort: price-descending (high to low)
+  assign default_sort = 'price-descending'
+  assign sort_by = collection.sort_by | default: default_sort
   
   # Count active filters
   assign total_active_filters = 0
@@ -35,75 +36,21 @@
   assign sidebar_menu = linklists[sidebar_menu_handle]
 -%}
 
+{%- comment -%} Auto-apply default sort if none specified {%- endcomment -%}
+{%- unless request.path contains 'sort_by' or collection.sort_by != blank -%}
+<script>
+  (function() {
+    if (!window.location.search.includes('sort_by')) {
+      var url = new URL(window.location);
+      url.searchParams.set('sort_by', '{{ default_sort }}');
+      window.location.replace(url);
+    }
+  })();
+</script>
+{%- endunless -%}
+
 <section class="collection-page" data-collection-page data-collection-url="{{ collection.url }}">
-  
-  {%- comment -%} ========== FULL WIDTH TOP SECTION ========== {%- endcomment -%}
-  <div class="collection-page__top">
-    <div class="collection-page__top-inner">
-      {%- comment -%} Product Count {%- endcomment -%}
-      <p class="collection-count">{{ collection.products_count }} {{ 'collections.general.products' | t | default: 'Produkte' }}</p>
-      
-      {%- comment -%} Collection Title {%- endcomment -%}
-      <h1 class="collection-title">{{ collection.title }}</h1>
-      
-      {%- comment -%} Collection Description {%- endcomment -%}
-      {%- if collection.description != blank and section.settings.show_description -%}
-        <div class="collection-description rte">
-          {{ collection.description }}
-        </div>
-      {%- endif -%}
-      
-      {%- comment -%} Sub-collection Cards (Gymshark-style) {%- endcomment -%}
-      {%- if section.blocks.size > 0 -%}
-        <div class="subcollection-cards">
-          <div class="subcollection-cards__grid">
-            {%- for block in section.blocks -%}
-              {%- if block.type == 'subcollection_card' -%}
-                <a href="{{ block.settings.link }}" class="subcollection-card" {{ block.shopify_attributes }}>
-                  <div class="subcollection-card__image">
-                    {%- if block.settings.image != blank -%}
-                      <img 
-                        src="{{ block.settings.image | image_url: width: 600 }}"
-                        alt="{{ block.settings.title | escape }}"
-                        width="300"
-                        height="400"
-                        loading="lazy"
-                      >
-                    {%- else -%}
-                      <div class="subcollection-card__placeholder">
-                        {{ 'collection-1' | placeholder_svg_tag }}
-                      </div>
-                    {%- endif -%}
-                  </div>
-                  <h3 class="subcollection-card__title">{{ block.settings.title }}</h3>
-                </a>
-              {%- endif -%}
-            {%- endfor -%}
-          </div>
-        </div>
-      {%- endif -%}
-    </div>
-  </div>
-  
-  {%- comment -%} ========== TWO COLUMN BODY ========== {%- endcomment -%}
-  <div class="collection-page__body">
-    
-    {%- comment -%} Mobile Filter Toggle {%- endcomment -%}
-    <div class="collection-mobile-bar">
-      <button type="button" class="collection-mobile-bar__filter" data-filter-open>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/>
-          <line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/>
-          <line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/>
-          <line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/>
-          <line x1="17" y1="16" x2="23" y2="16"/>
-        </svg>
-        <span>{{ 'collections.filtering.filter_and_sort' | t }}</span>
-        {%- if total_active_filters > 0 -%}
-          <span class="collection-mobile-bar__count">{{ total_active_filters }}</span>
-        {%- endif -%}
-      </button>
-    </div>
+  <div class="collection-page__container">
     
     {%- comment -%} ========== FILTERS SIDEBAR ========== {%- endcomment -%}
     {%- if section.settings.enable_filtering -%}
@@ -111,14 +58,9 @@
         <div class="collection-filters__overlay" data-filter-close></div>
         
         <div class="collection-filters__panel">
-          {%- comment -%} Sidebar Header (Gymshark style) {%- endcomment -%}
+          {%- comment -%} Mobile Header {%- endcomment -%}
           <div class="collection-filters__header">
-            <h2 class="collection-filters__title">{{ 'collections.filtering.filter_and_sort' | t | upcase }}</h2>
-            {%- if total_active_filters > 0 -%}
-              <a href="{{ collection.url }}" class="collection-filters__clear-all">
-                {{ 'collections.filtering.clear_all' | t | default: 'Alle löschen' }}
-              </a>
-            {%- endif -%}
+            <h2 class="collection-filters__title">Filter</h2>
             <button type="button" class="collection-filters__close" data-filter-close aria-label="Schließen">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
@@ -157,6 +99,9 @@
                   {%- endif -%}
                 {%- endfor -%}
               </div>
+              <a href="{{ collection.url }}" class="collection-filters__clear">
+                {{ 'collections.filtering.clear_all' | t | default: 'Alle Filter löschen' }}
+              </a>
             </div>
           {%- endif -%}
           
@@ -372,6 +317,18 @@
 
     {%- comment -%} ========== MAIN CONTENT ========== {%- endcomment -%}
     <div class="collection-main">
+      
+      {%- comment -%} Collection Header {%- endcomment -%}
+      <header class="collection-header">
+        <h1 class="collection-header__title">{{ collection.title }}</h1>
+        
+        {%- if collection.description != blank and section.settings.show_description -%}
+          <div class="collection-header__description rte">
+            {{ collection.description }}
+          </div>
+        {%- endif -%}
+      </header>
+
       {%- comment -%} Product Grid {%- endcomment -%}
       {%- paginate collection.products by products_per_page -%}
         {%- if collection.products.size > 0 -%}
@@ -449,116 +406,20 @@
 <style>
   /* ========== COLLECTION PAGE LAYOUT ========== */
   .collection-page {
-    padding: 0 0 4rem;
+    padding: 2rem 0 4rem;
   }
   
-  /* Full-width top section */
-  .collection-page__top {
+  .collection-page__container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 2rem 1.5rem;
-  }
-  
-  @media (min-width: 1024px) {
-    .collection-page__top {
-      padding: 2rem 3rem;
-    }
-  }
-  
-  @media (min-width: 1200px) {
-    .collection-page__top {
-      padding: 2rem 4rem;
-    }
-  }
-  
-  .collection-count {
-    font-size: 0.8125rem;
-    color: #6b7280;
-    margin: 0 0 0.5rem;
-  }
-  
-  .collection-title {
-    font-size: 1.75rem;
-    font-weight: 700;
-    margin: 0 0 1rem;
-    color: #111827;
-  }
-  
-  @media (min-width: 768px) {
-    .collection-title {
-      font-size: 2.25rem;
-    }
-  }
-  
-  .collection-description {
-    font-size: 0.9375rem;
-    line-height: 1.6;
-    color: #374151;
-    max-width: 800px;
-    margin-bottom: 1.5rem;
-  }
-  
-  .collection-description p {
-    margin: 0;
-  }
-  
-  /* Two-column body */
-  .collection-page__body {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem 0;
+    padding: 0 1.5rem;
     display: grid;
     grid-template-columns: 1fr;
     gap: 2rem;
-    border-top: 1px solid #e5e7eb;
-  }
-  
-  /* Mobile Filter Bar */
-  .collection-mobile-bar {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-    grid-column: 1 / -1; /* Span full width on any grid */
   }
   
   @media (min-width: 1024px) {
-    .collection-mobile-bar {
-      display: none;
-    }
-  }
-  
-  .collection-mobile-bar__filter {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.75rem 1rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: border-color 0.15s;
-  }
-  
-  .collection-mobile-bar__filter:hover {
-    border-color: #9ca3af;
-  }
-  
-  .collection-mobile-bar__count {
-    min-width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
-    background: #111827;
-    color: #ffffff;
-    border-radius: 10px;
-  }
-  
-  @media (min-width: 1024px) {
-    .collection-page__body {
+    .collection-page__container {
       grid-template-columns: 240px 1fr;
       padding: 0 3rem;
       gap: 3rem;
@@ -567,7 +428,7 @@
   }
   
   @media (min-width: 1200px) {
-    .collection-page__body {
+    .collection-page__container {
       padding: 0 4rem;
       gap: 4rem;
     }
@@ -658,37 +519,14 @@
   
   @media (min-width: 1024px) {
     .collection-filters__header {
-      padding: 0 0 1rem;
-      border-bottom: 1px solid #e5e7eb;
-      margin-bottom: 1rem;
+      display: none;
     }
   }
   
   .collection-filters__title {
-    font-size: 0.8125rem;
-    font-weight: 700;
+    font-size: 1.125rem;
+    font-weight: 600;
     margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 0.025em;
-  }
-  
-  .collection-filters__clear-all {
-    font-size: 0.8125rem;
-    color: #6b7280;
-    text-decoration: none;
-    margin-left: auto;
-    margin-right: 1rem;
-  }
-  
-  .collection-filters__clear-all:hover {
-    color: #111827;
-    text-decoration: underline;
-  }
-  
-  @media (min-width: 1024px) {
-    .collection-filters__clear-all {
-      margin-right: 0;
-    }
   }
   
   .collection-filters__close {
@@ -702,12 +540,6 @@
   
   .collection-filters__close:hover {
     color: #111827;
-  }
-  
-  @media (min-width: 1024px) {
-    .collection-filters__close {
-      display: none;
-    }
   }
   
   /* Active Filters */
@@ -749,6 +581,17 @@
   
   .filter-tag svg {
     flex-shrink: 0;
+  }
+  
+  .collection-filters__clear {
+    font-size: 0.8125rem;
+    color: #6b7280;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  
+  .collection-filters__clear:hover {
+    color: #111827;
   }
   
   /* Filter Form */
@@ -1185,96 +1028,36 @@
     min-width: 0;
   }
   
-  /* ========== SUB-COLLECTION CARDS ========== */
-  .subcollection-cards {
-    margin-top: 1.5rem;
+  /* Collection Header */
+  .collection-header {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
   }
   
-  .subcollection-cards__grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-  
-  @media (min-width: 640px) {
-    .subcollection-cards__grid {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.25rem;
-    }
-  }
-  
-  @media (min-width: 900px) {
-    .subcollection-cards__grid {
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.5rem;
-    }
-  }
-  
-  @media (min-width: 1200px) {
-    .subcollection-cards__grid {
-      grid-template-columns: repeat(5, 1fr);
-      gap: 1.5rem;
-    }
-  }
-  
-  .subcollection-card {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-    transition: transform 0.2s ease;
-  }
-  
-  .subcollection-card:hover {
-    transform: translateY(-4px);
-  }
-  
-  .subcollection-card__image {
-    position: relative;
-    aspect-ratio: 3 / 4;
-    overflow: hidden;
-    border-radius: 8px;
-    background: #f3f4f6;
-    margin-bottom: 0.75rem;
-  }
-  
-  .subcollection-card__image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.4s ease;
-  }
-  
-  .subcollection-card:hover .subcollection-card__image img {
-    transform: scale(1.05);
-  }
-  
-  .subcollection-card__placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #f3f4f6;
-  }
-  
-  .subcollection-card__placeholder svg {
-    width: 60%;
-    height: 60%;
-    opacity: 0.3;
-  }
-  
-  .subcollection-card__title {
-    font-size: 0.875rem;
-    font-weight: 500;
-    margin: 0;
-    text-align: center;
+  .collection-header__title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    margin: 0 0 0.5rem;
     color: #111827;
   }
   
   @media (min-width: 768px) {
-    .subcollection-card__title {
-      font-size: 0.9375rem;
+    .collection-header__title {
+      font-size: 2.25rem;
+      margin-bottom: 0.75rem;
     }
+  }
+  
+  .collection-header__description {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: #6b7280;
+    max-width: 700px;
+  }
+  
+  .collection-header__description p {
+    margin: 0;
   }
 
   /* ========== PRODUCT GRID ========== */
@@ -1400,7 +1183,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const collectionUrl = page.dataset.collectionUrl;
   const filtersEl = document.querySelector('[data-collection-filters]');
   const filterCloseButtons = document.querySelectorAll('[data-filter-close]');
-  const filterOpenButton = document.querySelector('[data-filter-open]');
   const filterForm = document.querySelector('[data-filter-form]');
   const grid = document.querySelector('[data-collection-grid]');
   const loadMoreContainer = document.querySelector('[data-load-more-container]');
@@ -1415,8 +1197,6 @@ document.addEventListener('DOMContentLoaded', function() {
     filtersEl?.classList.remove('is-open');
     document.body.style.overflow = '';
   }
-  
-  filterOpenButton?.addEventListener('click', openFilters);
   
   filterCloseButtons.forEach(btn => {
     btn.addEventListener('click', closeFilters);
@@ -1563,30 +1343,6 @@ document.addEventListener('DOMContentLoaded', function() {
       "step": 4,
       "default": 24
     }
-  ],
-  "blocks": [
-    {
-      "type": "subcollection_card",
-      "name": "Sub-collection Card",
-      "settings": [
-        {
-          "type": "image_picker",
-          "id": "image",
-          "label": "Image"
-        },
-        {
-          "type": "text",
-          "id": "title",
-          "label": "Title"
-        },
-        {
-          "type": "url",
-          "id": "link",
-          "label": "Link"
-        }
-      ]
-    }
-  ],
-  "max_blocks": 6
+  ]
 }
 {% endschema %}
