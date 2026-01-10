@@ -454,6 +454,18 @@
   </div>
 </section>
 
+{%- comment -%} ========== BOTTOM CONTENT (from Metafield) ========== {%- endcomment -%}
+{%- assign bottom_content = collection.metafields.custom.bottom_content.value -%}
+{%- if bottom_content != blank -%}
+  <section class="collection-bottom-content">
+    <div class="collection-bottom-content__inner">
+      <div class="collection-bottom-content__text rte">
+        {{ bottom_content }}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
 <style>
   /* ========== COLLECTION PAGE LAYOUT ========== */
   .collection-page {
@@ -1386,6 +1398,84 @@
   
   .collection-empty__btn:hover {
     background: #000000;
+  }
+
+  /* ========== BOTTOM CONTENT (SEO/Additional Text) ========== */
+  .collection-bottom-content {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 0;
+  }
+  
+  @media (min-width: 1024px) {
+    .collection-bottom-content {
+      padding: 4rem 2rem 0;
+    }
+  }
+  
+  .collection-bottom-content__inner {
+    max-width: 900px;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 2rem;
+  }
+  
+  .collection-bottom-content__text {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: #374151;
+  }
+  
+  .collection-bottom-content__text h2,
+  .collection-bottom-content__text h3,
+  .collection-bottom-content__text h4 {
+    font-weight: 600;
+    color: #111827;
+    margin: 1.5rem 0 0.75rem;
+  }
+  
+  .collection-bottom-content__text h2:first-child,
+  .collection-bottom-content__text h3:first-child,
+  .collection-bottom-content__text h4:first-child {
+    margin-top: 0;
+  }
+  
+  .collection-bottom-content__text h2 {
+    font-size: 1.5rem;
+  }
+  
+  .collection-bottom-content__text h3 {
+    font-size: 1.25rem;
+  }
+  
+  .collection-bottom-content__text h4 {
+    font-size: 1.125rem;
+  }
+  
+  .collection-bottom-content__text p {
+    margin: 0 0 1rem;
+  }
+  
+  .collection-bottom-content__text p:last-child {
+    margin-bottom: 0;
+  }
+  
+  .collection-bottom-content__text ul,
+  .collection-bottom-content__text ol {
+    margin: 0 0 1rem;
+    padding-left: 1.5rem;
+  }
+  
+  .collection-bottom-content__text li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .collection-bottom-content__text a {
+    color: #111827;
+    text-decoration: underline;
+  }
+  
+  .collection-bottom-content__text a:hover {
+    color: #000000;
   }
 </style>
 
