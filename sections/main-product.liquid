@@ -633,22 +633,22 @@
 
   @media (min-width: 1024px) {
     .product-page__grid {
-      grid-template-columns: minmax(400px, 550px) 420px;
-      gap: 2.5rem;
-      justify-content: space-between;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 2rem;
+      align-items: start;
     }
   }
   
   @media (min-width: 1400px) {
     .product-page__grid {
-      grid-template-columns: minmax(450px, 620px) 450px;
-      gap: 3rem;
+      gap: 2.5rem;
     }
   }
-
+  
   /* Gallery */
   .product__gallery {
     position: relative;
+    max-width: 750px;
   }
 
   .product__media-main {
