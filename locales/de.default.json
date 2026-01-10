@@ -157,6 +157,7 @@
     "filtering": {
       "filter": "Filter",
       "filters": "Filter",
+      "filter_and_sort": "Filter & Sortieren",
       "filters_active": "Filter aktiv",
       "clear_all": "Alle Filter löschen",
       "clear": "Löschen",
