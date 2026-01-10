@@ -633,14 +633,15 @@
 
   @media (min-width: 1024px) {
     .product-page__grid {
-      grid-template-columns: 1fr 420px;
+      grid-template-columns: minmax(400px, 550px) 420px;
       gap: 2.5rem;
+      justify-content: space-between;
     }
   }
   
   @media (min-width: 1400px) {
     .product-page__grid {
-      grid-template-columns: 1fr 450px;
+      grid-template-columns: minmax(450px, 620px) 450px;
       gap: 3rem;
     }
   }
