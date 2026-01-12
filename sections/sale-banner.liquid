@@ -129,16 +129,20 @@
   }
   
   /* Height Options */
+  .sale-banner--xsmall {
+    aspect-ratio: 4 / 1;
+  }
+  
   .sale-banner--small {
-    aspect-ratio: 21 / 9;
+    aspect-ratio: 3 / 1;
   }
   
   .sale-banner--medium {
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 21 / 9;
   }
   
   .sale-banner--large {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 16 / 9;
   }
   
   .sale-banner--fullscreen {
@@ -147,17 +151,24 @@
   }
   
   @media (max-width: 767px) {
-    .sale-banner--small,
+    .sale-banner--xsmall {
+      aspect-ratio: 16 / 9;
+    }
+    
+    .sale-banner--small {
+      aspect-ratio: 16 / 9;
+    }
+    
     .sale-banner--medium {
       aspect-ratio: 4 / 3;
     }
     
     .sale-banner--large {
-      aspect-ratio: 3 / 4;
+      aspect-ratio: 4 / 3;
     }
     
     .sale-banner--fullscreen {
-      min-height: 80vh;
+      min-height: 70vh;
     }
   }
   
@@ -242,11 +253,23 @@
     width: 100%;
     max-width: 1600px;
     margin: 0 auto;
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
   }
   
   @media (min-width: 768px) {
     .sale-banner__wrapper {
+      padding: 2rem;
+    }
+  }
+  
+  .sale-banner--large .sale-banner__wrapper,
+  .sale-banner--fullscreen .sale-banner__wrapper {
+    padding: 2rem 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .sale-banner--large .sale-banner__wrapper,
+    .sale-banner--fullscreen .sale-banner__wrapper {
       padding: 3rem 2rem;
     }
   }
@@ -261,7 +284,7 @@
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 2px;
-    margin: 0 0 0.75rem;
+    margin: 0 0 0.5rem;
     color: var(--text-color);
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
   }
@@ -270,7 +293,7 @@
     font-size: var(--title-size);
     font-weight: 700;
     line-height: 1.1;
-    margin: 0 0 1rem;
+    margin: 0 0 0.75rem;
     color: var(--text-color);
     text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
     text-transform: uppercase;
@@ -279,8 +302,8 @@
   .sale-banner__description {
     font-size: var(--description-size);
     font-weight: 400;
-    line-height: 1.6;
-    margin: 0 0 1.5rem;
+    line-height: 1.5;
+    margin: 0 0 1rem;
     color: var(--text-color);
     text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     opacity: 0.95;
@@ -288,7 +311,7 @@
   
   @media (min-width: 768px) {
     .sale-banner__description {
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
   }
   
@@ -309,8 +332,8 @@
   
   .sale-banner__btn {
     display: inline-block;
-    padding: 1rem 2rem;
-    font-size: 0.9375rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.875rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -322,8 +345,8 @@
   
   @media (min-width: 768px) {
     .sale-banner__btn {
-      padding: 1.125rem 2.5rem;
-      font-size: 1rem;
+      padding: 1rem 2rem;
+      font-size: 0.9375rem;
     }
   }
   
@@ -387,23 +410,27 @@
       "label": "Banner Height",
       "options": [
         {
+          "value": "xsmall",
+          "label": "Extra Small (4:1)"
+        },
+        {
           "value": "small",
-          "label": "Small"
+          "label": "Small (3:1)"
         },
         {
           "value": "medium",
-          "label": "Medium"
+          "label": "Medium (21:9)"
         },
         {
           "value": "large",
-          "label": "Large"
+          "label": "Large (16:9)"
         },
         {
           "value": "fullscreen",
           "label": "Full Screen"
         }
       ],
-      "default": "medium"
+      "default": "small"
     },
     {
       "type": "header",
@@ -641,7 +668,7 @@
         "heading": "Up to 50% Off",
         "description": "Shop our biggest sale of the season",
         "button_label": "Shop Sale",
-        "banner_height": "medium",
+        "banner_height": "small",
         "content_horizontal_position": "center",
         "content_vertical_position": "center",
         "overlay_opacity": 30
