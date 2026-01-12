@@ -102,70 +102,12 @@
         "title": "Unsere Herkunft. Unsere Leidenschaft.",
         "content": "<p>Aufgewachsen sprichwörtlich unter der Ladentheke unserer Eltern im niederbayerischen Pocking zogen wir erstmal in die Welt hinaus auf der Suche nach anderen Herausforderungen. Aber schon nach einigen Jahren, nach Studium und anderen Job-Abenteuern, meldete sich unser Unternehmer-Gen und uns wurde klar, dass wir unsere Wurzeln nicht verleugnen sondern nutzen wollen. Die Leidenschaft für den Handel war immer personifiziert in unserer Oma Lina Ragaller, die als starke Trümmerfrau die Sattlerei ihrer Schwiegereltern übernahm und in den Nachkriegsjahren alles verkaufte, was die Leute brauchten, von Eiern über Möbel, von Benzin bis Bekleidung. Unser Papa Klaus Ragaller hat mit unserer Mama Eva den Handels-Geist weitergetragen und das Geschäft in den 70er Jahren sehr erfolgreich zum Modehaus umgebaut. 2012 eröffneten wir genau hier im Modehaus Ragaller unseren Almliebe-Store und das Lager für unseren Online-Shop.</p><p>Moderne Tracht, traditionelle Mode, alpinen Lifestyle – bei Almliebe findet man ausgefallene, hochwertige Dirndl von bayerischen und österreichischen Trachten-Marken wie Gottseidank, Lena Hoschek, Kinga Mathé, CocoVero, Anno Domini, Wenger und Hammerschmid, kurze Hirsch Lederhosen vom Traditions-Unternehmen Meindl aber auch hochwertige Lederhosen aus Ziegenleder von Ostarrichi, Beckert und Ledergott. Dazu kommt eine große Auswahl an Strickjankern aus Merino-Wolle mit und ohne Kapuze zum Beispiel vom Trachten-Pionier Liebling in Bad Tölz, von Grenzgang aus dem Allgäu, von Astrifa aus Niederbayern sowie vom innovativen Münchner Label Gottseidank. Trachten Sakkos von Luis Trenker oder von der Manufaktur Grasegger in Garmisch, Haferlschuhe, Trachten-Taschen, Schmuck, Gürtel, Trachten-Socken der Marken Lusana, Meindl und Dirndl&Bua runden das Sortiment ab.</p><p>Das gesamte Almliebe-Sortiment zeichnet sich aus durch den hohen Qualitätsanspruch, die Authentizität, das Zeitlose und verkörpert das Lebensgefühl, das wir mit vielen anderen teilen, die auf La Brass Banda und Kofelgschroa-Konzerte gehen, auf Wald- und Oktoberfeste, die Muh, Servus oder Landlust lesen, Ski- und Bergtouren gehen, an der Isar grillen, am Kaminfeuer chillen.</p>"
       }
-    },
-    "gallery": {
-      "type": "about-gallery",
-      "blocks": {
-        "image_F8BUbj": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/unterseite_galerie_3_420x420_0f454b32-f366-4237-80b4-45640522c6b3.jpg",
-            "caption": "",
-            "size": "medium"
-          }
-        },
-        "image_9cU9Eq": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/unterseite_galerie_3_420x4203_2e0fb57c-9c0c-4187-9979-b7b2e61d64c0.jpg",
-            "caption": "",
-            "size": "medium"
-          }
-        },
-        "image_wrfLzd": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/unterseite_galerie_3_420x4202_70a09d6b-0a32-4986-91ec-68a8d53bb213.jpg",
-            "caption": "",
-            "size": "medium"
-          }
-        },
-        "image_ktRY8L": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/unterseite_galerie_3_420x4204_6b28c05a-d4e2-4090-823e-34b965a02a02.jpg",
-            "caption": "",
-            "size": "medium"
-          }
-        },
-        "image_xpkMD7": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/unterseite_galerie_2_587x587_f6fb5079-2d3b-48a9-8f0b-c762e14b9787.jpg",
-            "caption": "",
-            "size": "large"
-          }
-        }
-      },
-      "block_order": [
-        "image_F8BUbj",
-        "image_9cU9Eq",
-        "image_wrfLzd",
-        "image_ktRY8L",
-        "image_xpkMD7"
-      ],
-      "settings": {
-        "subtitle": "Einblicke",
-        "title": "Unsere Galerie",
-        "background_color": "#ffffff"
-      }
     }
   },
   "order": [
     "about-hero",
     "text-image-1",
     "social-links",
-    "content",
-    "gallery"
+    "content"
   ]
 }
