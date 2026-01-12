@@ -49,19 +49,7 @@
 {%- comment -%} Newsletter Modal {%- endcomment -%}
 <div class="newsletter-modal" data-newsletter-modal>
   <div class="newsletter-modal__overlay" data-newsletter-close></div>
-  <div class="newsletter-modal__container"
-       style="{% if section.settings.modal_use_image and section.settings.modal_image != blank %}{% else %}--modal-bg-color: {{ section.settings.modal_background_color }};{% endif %}">
-    
-    {%- if section.settings.modal_use_image and section.settings.modal_image != blank -%}
-      <div class="newsletter-modal__media">
-        <img
-          src="{{ section.settings.modal_image | image_url: width: 1200 }}"
-          alt=""
-          class="newsletter-modal__img"
-        >
-        <div class="newsletter-modal__img-overlay" style="opacity: {{ section.settings.modal_overlay_opacity | divided_by: 100.0 }};"></div>
-      </div>
-    {%- endif -%}
+  <div class="newsletter-modal__container" style="background-color: {{ section.settings.modal_background_color }};">
     
     <button type="button" class="newsletter-modal__close" data-newsletter-close aria-label="Close">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -302,32 +290,12 @@
     max-width: 600px;
     max-height: 90vh;
     overflow-y: auto;
-    background-color: var(--modal-bg-color, #ffffff);
     transform: scale(0.95) translateY(20px);
     transition: transform 0.3s ease;
   }
   
   .newsletter-modal.is-open .newsletter-modal__container {
     transform: scale(1) translateY(0);
-  }
-  
-  /* Modal Media */
-  .newsletter-modal__media {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-  }
-  
-  .newsletter-modal__img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  
-  .newsletter-modal__img-overlay {
-    position: absolute;
-    inset: 0;
-    background: #000000;
   }
   
   /* Close Button */
@@ -357,8 +325,6 @@
   
   /* Modal Content */
   .newsletter-modal__content {
-    position: relative;
-    z-index: 1;
     padding: 3rem 2rem;
   }
   
@@ -685,32 +651,10 @@ document.addEventListener('DOMContentLoaded', function() {
       "content": "Modal Background"
     },
     {
-      "type": "checkbox",
-      "id": "modal_use_image",
-      "label": "Use background image",
-      "default": true
-    },
-    {
-      "type": "image_picker",
-      "id": "modal_image",
-      "label": "Modal Background Image"
-    },
-    {
-      "type": "range",
-      "id": "modal_overlay_opacity",
-      "min": 0,
-      "max": 80,
-      "step": 5,
-      "unit": "%",
-      "label": "Modal Overlay Opacity",
-      "default": 20
-    },
-    {
       "type": "color",
       "id": "modal_background_color",
       "label": "Modal Background Color",
-      "default": "#ffffff",
-      "info": "Used when image is disabled"
+      "default": "#ffffff"
     },
     {
       "type": "header",
