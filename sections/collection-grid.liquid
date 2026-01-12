@@ -1,0 +1,499 @@
+{% comment %}
+  COLLECTION GRID / CAROUSEL
+  Display multiple collections as cards with carousel navigation
+  
+  Features:
+  - Add multiple collections via blocks
+  - Subtitle and title customizable
+  - View All link option
+  - Grid display (up to 5 visible)
+  - Carousel when more than 5 collections
+  - Navigation arrows
+{% endcomment %}
+
+{%- liquid
+  assign subtitle = section.settings.subtitle
+  assign custom_title = section.settings.title
+  assign show_view_all = section.settings.show_view_all
+  assign view_all_link = section.settings.view_all_link
+  assign view_all_text = section.settings.view_all_text | default: 'Alle ansehen'
+  assign collections_count = section.blocks.size
+  assign enable_carousel = false
+  if collections_count > 5
+    assign enable_carousel = true
+  endif
+-%}
+
+{%- if collections_count > 0 -%}
+  <section class="collection-grid-section{% if enable_carousel %} has-carousel{% endif %}" data-collection-grid-section>
+    <div class="collection-grid-section__container">
+      
+      {%- comment -%} Header {%- endcomment -%}
+      <div class="collection-grid-section__header">
+        <div class="collection-grid-section__titles">
+          {%- if subtitle != blank -%}
+            <p class="collection-grid-section__subtitle">{{ subtitle }}</p>
+          {%- endif -%}
+          {%- if custom_title != blank -%}
+            <h2 class="collection-grid-section__title">{{ custom_title }}</h2>
+          {%- endif -%}
+          {%- if show_view_all and view_all_link != blank -%}
+            <a href="{{ view_all_link }}" class="collection-grid-section__view-all">
+              {{ view_all_text }}
+            </a>
+          {%- endif -%}
+        </div>
+        
+        {%- comment -%} Navigation Arrows (only for carousel) {%- endcomment -%}
+        {%- if enable_carousel -%}
+          <div class="collection-grid-section__nav">
+            <button type="button" class="collection-grid-section__nav-btn collection-grid-section__nav-btn--prev" data-slider-prev aria-label="Previous" disabled>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"/>
+              </svg>
+            </button>
+            <button type="button" class="collection-grid-section__nav-btn collection-grid-section__nav-btn--next" data-slider-next aria-label="Next">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </button>
+          </div>
+        {%- endif -%}
+      </div>
+      
+      {%- comment -%} Collection Grid / Slider {%- endcomment -%}
+      <div class="collection-grid-section__slider" data-slider>
+        <div class="collection-grid-section__track{% unless enable_carousel %} collection-grid-section__track--grid{% endunless %}" data-slider-track>
+          {%- for block in section.blocks -%}
+            {%- assign block_collection = collections[block.settings.collection] -%}
+            {%- assign custom_image = block.settings.image -%}
+            {%- assign custom_card_title = block.settings.title -%}
+            {%- assign custom_link = block.settings.link -%}
+            
+            <div class="collection-grid-section__item" {{ block.shopify_attributes }}>
+              <a href="{{ custom_link | default: block_collection.url }}" class="collection-card">
+                <div class="collection-card__image">
+                  {%- if custom_image != blank -%}
+                    <img 
+                      src="{{ custom_image | image_url: width: 600 }}"
+                      alt="{{ custom_card_title | default: block_collection.title | escape }}"
+                      width="300"
+                      height="400"
+                      loading="lazy"
+                    >
+                  {%- elsif block_collection.image != blank -%}
+                    <img 
+                      src="{{ block_collection.image | image_url: width: 600 }}"
+                      alt="{{ block_collection.title | escape }}"
+                      width="300"
+                      height="400"
+                      loading="lazy"
+                    >
+                  {%- elsif block_collection.products.first.featured_image != blank -%}
+                    <img 
+                      src="{{ block_collection.products.first.featured_image | image_url: width: 600 }}"
+                      alt="{{ block_collection.title | escape }}"
+                      width="300"
+                      height="400"
+                      loading="lazy"
+                    >
+                  {%- else -%}
+                    <div class="collection-card__placeholder">
+                      {{ 'collection-1' | placeholder_svg_tag }}
+                    </div>
+                  {%- endif -%}
+                </div>
+                <h3 class="collection-card__title">
+                  {{ custom_card_title | default: block_collection.title }}
+                </h3>
+              </a>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+      
+    </div>
+  </section>
+{%- endif -%}
+
+<style>
+  .collection-grid-section {
+    padding: 3rem 0;
+  }
+  
+  @media (min-width: 768px) {
+    .collection-grid-section {
+      padding: 4rem 0;
+    }
+  }
+  
+  .collection-grid-section__container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .collection-grid-section__container {
+      padding: 0 2rem;
+    }
+  }
+  
+  /* Header */
+  .collection-grid-section__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+  }
+  
+  .collection-grid-section__titles {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1.5rem;
+  }
+  
+  .collection-grid-section__subtitle {
+    width: 100%;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #111827;
+    margin: 0;
+  }
+  
+  .collection-grid-section__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+    color: #111827;
+    margin: 0;
+  }
+  
+  @media (min-width: 768px) {
+    .collection-grid-section__title {
+      font-size: 2rem;
+    }
+  }
+  
+  .collection-grid-section__view-all {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: #111827;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  
+  .collection-grid-section__view-all:hover {
+    color: #000;
+  }
+  
+  /* Navigation */
+  .collection-grid-section__nav {
+    display: none;
+    gap: 0.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .collection-grid-section__nav {
+      display: flex;
+    }
+  }
+  
+  .collection-grid-section__nav-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .collection-grid-section__nav-btn:hover:not(:disabled) {
+    background: #111827;
+    border-color: #111827;
+    color: #ffffff;
+  }
+  
+  .collection-grid-section__nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  
+  .collection-grid-section__nav-btn svg {
+    stroke: currentColor;
+  }
+  
+  /* Slider Container */
+  .collection-grid-section__slider {
+    overflow: hidden;
+    margin: 0 -1rem;
+    padding: 0 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .collection-grid-section__slider {
+      margin: 0;
+      padding: 0;
+    }
+  }
+  
+  /* Track - Carousel Mode */
+  .collection-grid-section__track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-snap-type: x mandatory;
+  }
+  
+  .collection-grid-section__track::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Track - Grid Mode (5 or fewer items) */
+  .collection-grid-section__track--grid {
+    overflow-x: visible;
+    scroll-snap-type: none;
+  }
+  
+  @media (min-width: 768px) {
+    .collection-grid-section__track--grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .collection-grid-section__track--grid {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+  
+  /* Grid Item */
+  .collection-grid-section__item {
+    flex: 0 0 calc(50% - 0.5rem);
+    scroll-snap-align: start;
+    min-width: 0;
+  }
+  
+  @media (min-width: 640px) {
+    .collection-grid-section__item {
+      flex: 0 0 calc(33.333% - 0.667rem);
+    }
+  }
+  
+  @media (min-width: 900px) {
+    .collection-grid-section__item {
+      flex: 0 0 calc(25% - 0.75rem);
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    .collection-grid-section__item {
+      flex: 0 0 calc(20% - 0.8rem);
+    }
+  }
+  
+  /* Grid mode - items fill evenly */
+  .collection-grid-section__track--grid .collection-grid-section__item {
+    flex: 1;
+  }
+  
+  @media (min-width: 768px) {
+    .collection-grid-section__track--grid .collection-grid-section__item {
+      flex: none;
+    }
+  }
+  
+  /* Collection Card */
+  .collection-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .collection-card__image {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: #f3f4f6;
+    margin-bottom: 0.75rem;
+  }
+  
+  .collection-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+  
+  .collection-card:hover .collection-card__image img {
+    transform: scale(1.05);
+  }
+  
+  .collection-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3f4f6;
+  }
+  
+  .collection-card__placeholder svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+  
+  .collection-card__title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-align: center;
+    color: #111827;
+    margin: 0;
+    transition: text-decoration 0.2s;
+  }
+  
+  @media (min-width: 768px) {
+    .collection-card__title {
+      font-size: 0.9375rem;
+    }
+  }
+  
+  .collection-card:hover .collection-card__title {
+    text-decoration: underline;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const sections = document.querySelectorAll('[data-collection-grid-section]');
+  
+  sections.forEach(section => {
+    const track = section.querySelector('[data-slider-track]');
+    const prevBtn = section.querySelector('[data-slider-prev]');
+    const nextBtn = section.querySelector('[data-slider-next]');
+    
+    // Only initialize slider if carousel is enabled
+    if (!track || !prevBtn || !nextBtn) return;
+    
+    const updateButtons = () => {
+      const scrollLeft = track.scrollLeft;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      
+      prevBtn.disabled = scrollLeft <= 10;
+      nextBtn.disabled = scrollLeft >= maxScroll - 10;
+    };
+    
+    const getSlideWidth = () => {
+      const slide = track.querySelector('.collection-grid-section__item');
+      if (!slide) return 300;
+      const style = getComputedStyle(track);
+      const gap = parseFloat(style.gap) || 16;
+      return slide.offsetWidth + gap;
+    };
+    
+    prevBtn.addEventListener('click', () => {
+      track.scrollBy({ left: -getSlideWidth() * 2, behavior: 'smooth' });
+    });
+    
+    nextBtn.addEventListener('click', () => {
+      track.scrollBy({ left: getSlideWidth() * 2, behavior: 'smooth' });
+    });
+    
+    track.addEventListener('scroll', updateButtons);
+    window.addEventListener('resize', updateButtons);
+    
+    // Initial state
+    setTimeout(updateButtons, 100);
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Collection Grid",
+  "tag": "section",
+  "class": "section-collection-grid",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "info": "Small text above the title"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View All' link",
+      "default": false
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "'View All' link URL"
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "'View All' text",
+      "default": "Alle ansehen"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom Image",
+          "info": "Override the collection image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Custom Title",
+          "info": "Override the collection title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Custom Link",
+          "info": "Override the collection link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Grid",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}
