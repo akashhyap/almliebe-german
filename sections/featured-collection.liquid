@@ -1,55 +1,630 @@
-<div class="featured-collection section">
-  <div class="container">
-    {% if section.settings.title != blank %}
-      <h2 class="section-heading text-center">{{ section.settings.title }}</h2>
-    {% endif %}
-    
-    {% if section.settings.collection != blank %}
-      <div class="product-grid grid grid--2-col grid--3-col-tablet grid--4-col-desktop">
-        {% for product in section.settings.collection.products limit: section.settings.products_to_show %}
-          <div class="product-card">
-            <a href="{{ product.url }}">
-              {% if product.featured_image %}
-                <img src="{{ product.featured_image | image_url: width: 500 }}" alt="{{ product.title | escape }}" loading="lazy">
-              {% endif %}
-              <h3>{{ product.title }}</h3>
-              <p>{{ product.price | money }}</p>
+{% comment %}
+  FEATURED COLLECTION SECTION
+  Gymshark-style horizontal product slider with admin controls
+  
+  Features:
+  - Collection picker from admin
+  - Custom subtitle/category label
+  - Custom title (or uses collection title)
+  - View All link
+  - Horizontal scrolling product carousel
+  - Navigation arrows
+  - Product cards with wishlist, badges, quick info
+{% endcomment %}
+
+{%- liquid
+  assign collection = collections[section.settings.collection]
+  assign products_to_show = section.settings.products_to_show | default: 12
+  assign subtitle = section.settings.subtitle
+  assign custom_title = section.settings.title
+  assign show_view_all = section.settings.show_view_all
+-%}
+
+{%- if collection != blank and collection.products.size > 0 -%}
+  <section class="featured-collection" data-featured-collection>
+    <div class="featured-collection__container">
+      
+      {%- comment -%} Header {%- endcomment -%}
+      <div class="featured-collection__header">
+        <div class="featured-collection__titles">
+          {%- if subtitle != blank -%}
+            <p class="featured-collection__subtitle">{{ subtitle }}</p>
+          {%- endif -%}
+          <h2 class="featured-collection__title">
+            {{ custom_title | default: collection.title }}
+          </h2>
+          {%- if show_view_all -%}
+            <a href="{{ collection.url }}" class="featured-collection__view-all">
+              {{ section.settings.view_all_text | default: 'View All' }}
             </a>
-          </div>
-        {% endfor %}
+          {%- endif -%}
+        </div>
+        
+        {%- comment -%} Navigation Arrows {%- endcomment -%}
+        <div class="featured-collection__nav">
+          <button type="button" class="featured-collection__nav-btn featured-collection__nav-btn--prev" data-slider-prev aria-label="Previous">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </button>
+          <button type="button" class="featured-collection__nav-btn featured-collection__nav-btn--next" data-slider-next aria-label="Next">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+        </div>
       </div>
-    {% endif %}
-  </div>
-</div>
+      
+      {%- comment -%} Product Slider {%- endcomment -%}
+      <div class="featured-collection__slider" data-slider>
+        <div class="featured-collection__track" data-slider-track>
+          {%- for product in collection.products limit: products_to_show -%}
+            <div class="featured-collection__slide">
+              <div class="fc-product-card">
+                {%- comment -%} Image Container {%- endcomment -%}
+                <a href="{{ product.url }}" class="fc-product-card__image-link">
+                  <div class="fc-product-card__image">
+                    {%- if product.featured_media -%}
+                      <img 
+                        src="{{ product.featured_media | image_url: width: 600 }}"
+                        alt="{{ product.title | escape }}"
+                        width="300"
+                        height="400"
+                        loading="lazy"
+                      >
+                      {%- if product.media.size > 1 -%}
+                        <img 
+                          class="fc-product-card__image-hover"
+                          src="{{ product.media[1] | image_url: width: 600 }}"
+                          alt="{{ product.title | escape }}"
+                          width="300"
+                          height="400"
+                          loading="lazy"
+                        >
+                      {%- endif -%}
+                    {%- else -%}
+                      <div class="fc-product-card__placeholder">
+                        {{ 'product-1' | placeholder_svg_tag }}
+                      </div>
+                    {%- endif -%}
+                    
+                    {%- comment -%} Badges {%- endcomment -%}
+                    <div class="fc-product-card__badges">
+                      {%- if product.available == false -%}
+                        <span class="fc-product-card__badge fc-product-card__badge--soldout">Ausverkauft</span>
+                      {%- elsif product.created_at > 'now' | date: '%s' | minus: 2592000 | date: '%Y-%m-%dT%H:%M:%S' -%}
+                        <span class="fc-product-card__badge fc-product-card__badge--new">NEU</span>
+                      {%- endif -%}
+                      
+                      {%- if product.compare_at_price > product.price -%}
+                        {%- assign discount = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}
+                        <span class="fc-product-card__badge fc-product-card__badge--sale">-{{ discount }}%</span>
+                      {%- endif -%}
+                    </div>
+                    
+                    {%- comment -%} Wishlist Button {%- endcomment -%}
+                    <button 
+                      type="button" 
+                      class="fc-product-card__wishlist"
+                      data-wishlist-toggle="{{ product.id }}"
+                      data-product-handle="{{ product.handle }}"
+                      data-product-title="{{ product.title | escape }}"
+                      data-product-image="{{ product.featured_image | image_url: width: 400 }}"
+                      data-product-price="{{ product.price | money }}"
+                      data-product-url="{{ product.url }}"
+                      aria-label="Zur Wunschliste hinzufügen"
+                    >
+                      <svg class="icon-heart" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                      </svg>
+                    </button>
+                  </div>
+                </a>
+                
+                {%- comment -%} Product Info {%- endcomment -%}
+                <div class="fc-product-card__info">
+                  <a href="{{ product.url }}" class="fc-product-card__title">
+                    {{ product.title }}
+                  </a>
+                  
+                  {%- comment -%} Optional: Product Type or Vendor {%- endcomment -%}
+                  {%- if section.settings.show_vendor and product.vendor != blank -%}
+                    <p class="fc-product-card__vendor">{{ product.vendor }}</p>
+                  {%- endif -%}
+                  
+                  {%- comment -%} Color variants indicator {%- endcomment -%}
+                  {%- assign color_count = 0 -%}
+                  {%- for option in product.options_with_values -%}
+                    {%- assign option_name_lower = option.name | downcase -%}
+                    {%- if option_name_lower == 'color' or option_name_lower == 'colour' or option_name_lower == 'farbe' -%}
+                      {%- assign color_count = option.values.size -%}
+                      {%- break -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                  {%- if color_count > 1 -%}
+                    <p class="fc-product-card__colors">{{ color_count }} Farben</p>
+                  {%- endif -%}
+                  
+                  {%- comment -%} Price {%- endcomment -%}
+                  <div class="fc-product-card__price">
+                    {%- if product.compare_at_price > product.price -%}
+                      <span class="fc-product-card__price-sale">{{ product.price | money }}</span>
+                      <span class="fc-product-card__price-compare">{{ product.compare_at_price | money }}</span>
+                    {%- else -%}
+                      <span class="fc-product-card__price-regular">{{ product.price | money }}</span>
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+      
+    </div>
+  </section>
+{%- endif -%}
+
+<style>
+  .featured-collection {
+    padding: 3rem 0;
+  }
+  
+  @media (min-width: 768px) {
+    .featured-collection {
+      padding: 4rem 0;
+    }
+  }
+  
+  .featured-collection__container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .featured-collection__container {
+      padding: 0 2rem;
+    }
+  }
+  
+  /* Header */
+  .featured-collection__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+  }
+  
+  .featured-collection__titles {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1.5rem;
+  }
+  
+  .featured-collection__subtitle {
+    width: 100%;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #111827;
+    margin: 0;
+  }
+  
+  .featured-collection__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+    color: #111827;
+    margin: 0;
+  }
+  
+  @media (min-width: 768px) {
+    .featured-collection__title {
+      font-size: 2rem;
+    }
+  }
+  
+  .featured-collection__view-all {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: #111827;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  
+  .featured-collection__view-all:hover {
+    color: #000;
+  }
+  
+  /* Navigation */
+  .featured-collection__nav {
+    display: none;
+    gap: 0.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .featured-collection__nav {
+      display: flex;
+    }
+  }
+  
+  .featured-collection__nav-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .featured-collection__nav-btn:hover:not(:disabled) {
+    background: #111827;
+    border-color: #111827;
+    color: #ffffff;
+  }
+  
+  .featured-collection__nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  
+  .featured-collection__nav-btn svg {
+    stroke: currentColor;
+  }
+  
+  /* Slider */
+  .featured-collection__slider {
+    overflow: hidden;
+    margin: 0 -1rem;
+    padding: 0 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .featured-collection__slider {
+      margin: 0;
+      padding: 0;
+    }
+  }
+  
+  .featured-collection__track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-snap-type: x mandatory;
+  }
+  
+  .featured-collection__track::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .featured-collection__slide {
+    flex: 0 0 calc(50% - 0.5rem);
+    scroll-snap-align: start;
+  }
+  
+  @media (min-width: 640px) {
+    .featured-collection__slide {
+      flex: 0 0 calc(33.333% - 0.667rem);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .featured-collection__slide {
+      flex: 0 0 calc(25% - 0.75rem);
+    }
+  }
+  
+  @media (min-width: 1400px) {
+    .featured-collection__slide {
+      flex: 0 0 calc(20% - 0.8rem);
+    }
+  }
+  
+  /* Product Card */
+  .fc-product-card {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .fc-product-card__image-link {
+    display: block;
+    text-decoration: none;
+  }
+  
+  .fc-product-card__image {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: #f3f4f6;
+  }
+  
+  .fc-product-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.3s ease;
+  }
+  
+  .fc-product-card__image-hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+  }
+  
+  .fc-product-card:hover .fc-product-card__image-hover {
+    opacity: 1;
+  }
+  
+  .fc-product-card:hover .fc-product-card__image > img:first-child {
+    opacity: 0;
+  }
+  
+  .fc-product-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .fc-product-card__placeholder svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+  
+  /* Badges */
+  .fc-product-card__badges {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 0.75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+  }
+  
+  .fc-product-card__badge {
+    padding: 0.375rem 0.625rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 2px;
+  }
+  
+  .fc-product-card__badge--new {
+    background: #111827;
+    color: #ffffff;
+  }
+  
+  .fc-product-card__badge--sale {
+    background: #dc2626;
+    color: #ffffff;
+  }
+  
+  .fc-product-card__badge--soldout {
+    background: #6b7280;
+    color: #ffffff;
+  }
+  
+  /* Wishlist */
+  .fc-product-card__wishlist {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+    opacity: 0;
+  }
+  
+  .fc-product-card:hover .fc-product-card__wishlist {
+    opacity: 1;
+  }
+  
+  /* Always show on touch devices */
+  @media (hover: none) {
+    .fc-product-card__wishlist {
+      opacity: 1;
+    }
+  }
+  
+  .fc-product-card__wishlist:hover {
+    background: #ffffff;
+    transform: scale(1.1);
+  }
+  
+  .fc-product-card__wishlist svg {
+    stroke: #111827;
+    fill: none;
+    transition: fill 0.2s;
+  }
+  
+  .fc-product-card__wishlist.is-active svg {
+    fill: #111827;
+  }
+  
+  /* Product Info */
+  .fc-product-card__info {
+    padding: 0.75rem 0 0;
+  }
+  
+  .fc-product-card__title {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #111827;
+    text-decoration: none;
+    margin-bottom: 0.25rem;
+    line-height: 1.4;
+  }
+  
+  .fc-product-card__title:hover {
+    text-decoration: underline;
+  }
+  
+  .fc-product-card__vendor {
+    font-size: 0.8125rem;
+    color: #6b7280;
+    margin: 0 0 0.25rem;
+  }
+  
+  .fc-product-card__colors {
+    font-size: 0.8125rem;
+    color: #6b7280;
+    margin: 0 0 0.25rem;
+  }
+  
+  .fc-product-card__price {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  
+  .fc-product-card__price-regular {
+    color: #111827;
+  }
+  
+  .fc-product-card__price-sale {
+    color: #dc2626;
+  }
+  
+  .fc-product-card__price-compare {
+    color: #9ca3af;
+    text-decoration: line-through;
+    font-weight: 400;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const sections = document.querySelectorAll('[data-featured-collection]');
+  
+  sections.forEach(section => {
+    const track = section.querySelector('[data-slider-track]');
+    const prevBtn = section.querySelector('[data-slider-prev]');
+    const nextBtn = section.querySelector('[data-slider-next]');
+    
+    if (!track || !prevBtn || !nextBtn) return;
+    
+    const updateButtons = () => {
+      const scrollLeft = track.scrollLeft;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      
+      prevBtn.disabled = scrollLeft <= 10;
+      nextBtn.disabled = scrollLeft >= maxScroll - 10;
+    };
+    
+    const getSlideWidth = () => {
+      const slide = track.querySelector('.featured-collection__slide');
+      if (!slide) return 300;
+      const style = getComputedStyle(track);
+      const gap = parseFloat(style.gap) || 16;
+      return slide.offsetWidth + gap;
+    };
+    
+    prevBtn.addEventListener('click', () => {
+      track.scrollBy({ left: -getSlideWidth() * 2, behavior: 'smooth' });
+    });
+    
+    nextBtn.addEventListener('click', () => {
+      track.scrollBy({ left: getSlideWidth() * 2, behavior: 'smooth' });
+    });
+    
+    track.addEventListener('scroll', updateButtons);
+    window.addEventListener('resize', updateButtons);
+    
+    // Initial state
+    updateButtons();
+    
+    // Initialize wishlist states
+    if (typeof window.updateWishlistUI === 'function') {
+      window.updateWishlistUI();
+    }
+  });
+});
+</script>
 
 {% schema %}
 {
   "name": "Featured Collection",
+  "tag": "section",
+  "class": "section-featured-collection",
   "settings": [
-    {
-      "type": "text",
-      "id": "title",
-      "label": "Heading",
-      "default": "Featured Collection"
-    },
     {
       "type": "collection",
       "id": "collection",
       "label": "Collection"
     },
     {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "info": "Small text above the title (e.g., 'DAMEN', 'HERREN')"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "info": "Leave blank to use collection title"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View All' link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "'View All' text",
+      "default": "Alle ansehen"
+    },
+    {
       "type": "range",
       "id": "products_to_show",
-      "min": 2,
-      "max": 12,
-      "step": 1,
       "label": "Products to show",
-      "default": 8
+      "min": 4,
+      "max": 24,
+      "step": 2,
+      "default": 12
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show product vendor",
+      "default": false
     }
   ],
   "presets": [
     {
-      "name": "Featured Collection"
+      "name": "Featured Collection",
+      "settings": {
+        "show_view_all": true,
+        "products_to_show": 12
+      }
     }
   ]
 }
