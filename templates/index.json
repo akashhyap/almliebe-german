@@ -329,6 +329,31 @@
         "view_all_link": "shopify://collections",
         "view_all_text": "Alle ansehen"
       }
+    },
+    "sale_banner_EKgWwf": {
+      "type": "sale-banner",
+      "name": "Sale Banner",
+      "settings": {
+        "image": "shopify://shop_images/unterseite_header_1930x882_ueberuns.jpg",
+        "banner_height": "xsmall",
+        "image_position": "center",
+        "content_horizontal_position": "center",
+        "content_vertical_position": "center",
+        "subtitle": "Almliebe Community",
+        "subtitle_size": "medium",
+        "heading": "Erhalte unseren Newsletter",
+        "title_size": "medium",
+        "description": "",
+        "description_size": "medium",
+        "button_label": "Shop Sale",
+        "button_link": "",
+        "button_style": "primary",
+        "button_label_2": "",
+        "button_link_2": "",
+        "button_style_2": "secondary",
+        "overlay_opacity": 30,
+        "text_color": "#FFFFFF"
+      }
     }
   },
   "order": [
@@ -337,6 +362,7 @@
     "sale_banner_icJCCE",
     "new_arrivals_ftVbea",
     "events_kKz83C",
-    "collection_grid_WHKRj8"
+    "collection_grid_WHKRj8",
+    "sale_banner_EKgWwf"
   ]
 }
