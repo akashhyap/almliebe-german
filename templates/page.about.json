@@ -37,17 +37,6 @@
         "image": "shopify://shop_images/about.jpg"
       }
     },
-    "content": {
-      "type": "about-content",
-      "settings": {
-        "content_width": "medium",
-        "text_alignment": "left",
-        "background_color": "#ffffff",
-        "subtitle": "",
-        "title": "Unsere Herkunft. Unsere Leidenschaft.",
-        "content": "<p>Aufgewachsen sprichwörtlich unter der Ladentheke unserer Eltern im niederbayerischen Pocking zogen wir erstmal in die Welt hinaus auf der Suche nach anderen Herausforderungen. Aber schon nach einigen Jahren, nach Studium und anderen Job-Abenteuern, meldete sich unser Unternehmer-Gen und uns wurde klar, dass wir unsere Wurzeln nicht verleugnen sondern nutzen wollen. Die Leidenschaft für den Handel war immer personifiziert in unserer Oma Lina Ragaller, die als starke Trümmerfrau die Sattlerei ihrer Schwiegereltern übernahm und in den Nachkriegsjahren alles verkaufte, was die Leute brauchten, von Eiern über Möbel, von Benzin bis Bekleidung. Unser Papa Klaus Ragaller hat mit unserer Mama Eva den Handels-Geist weitergetragen und das Geschäft in den 70er Jahren sehr erfolgreich zum Modehaus umgebaut. 2012 eröffneten wir genau hier im Modehaus Ragaller unseren Almliebe-Store und das Lager für unseren Online-Shop.</p><p>Moderne Tracht, traditionelle Mode, alpinen Lifestyle – bei Almliebe findet man ausgefallene, hochwertige Dirndl von bayerischen und österreichischen Trachten-Marken wie Gottseidank, Lena Hoschek, Kinga Mathé, CocoVero, Anno Domini, Wenger und Hammerschmid, kurze Hirsch Lederhosen vom Traditions-Unternehmen Meindl aber auch hochwertige Lederhosen aus Ziegenleder von Ostarrichi, Beckert und Ledergott. Dazu kommt eine große Auswahl an Strickjankern aus Merino-Wolle mit und ohne Kapuze zum Beispiel vom Trachten-Pionier Liebling in Bad Tölz, von Grenzgang aus dem Allgäu, von Astrifa aus Niederbayern sowie vom innovativen Münchner Label Gottseidank. Trachten Sakkos von Luis Trenker oder von der Manufaktur Grasegger in Garmisch, Haferlschuhe, Trachten-Taschen, Schmuck, Gürtel, Trachten-Socken der Marken Lusana, Meindl und Dirndl&Bua runden das Sortiment ab.</p><p>Das gesamte Almliebe-Sortiment zeichnet sich aus durch den hohen Qualitätsanspruch, die Authentizität, das Zeitlose und verkörpert das Lebensgefühl, das wir mit vielen anderen teilen, die auf La Brass Banda und Kofelgschroa-Konzerte gehen, auf Wald- und Oktoberfeste, die Muh, Servus oder Landlust lesen, Ski- und Bergtouren gehen, an der Isar grillen, am Kaminfeuer chillen.</p>"
-      }
-    },
     "social-links": {
       "type": "about-social-links",
       "blocks": {
@@ -103,6 +92,17 @@
         "background_color": "#f9fafb"
       }
     },
+    "content": {
+      "type": "about-content",
+      "settings": {
+        "content_width": "medium",
+        "text_alignment": "left",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "Unsere Herkunft. Unsere Leidenschaft.",
+        "content": "<p>Aufgewachsen sprichwörtlich unter der Ladentheke unserer Eltern im niederbayerischen Pocking zogen wir erstmal in die Welt hinaus auf der Suche nach anderen Herausforderungen. Aber schon nach einigen Jahren, nach Studium und anderen Job-Abenteuern, meldete sich unser Unternehmer-Gen und uns wurde klar, dass wir unsere Wurzeln nicht verleugnen sondern nutzen wollen. Die Leidenschaft für den Handel war immer personifiziert in unserer Oma Lina Ragaller, die als starke Trümmerfrau die Sattlerei ihrer Schwiegereltern übernahm und in den Nachkriegsjahren alles verkaufte, was die Leute brauchten, von Eiern über Möbel, von Benzin bis Bekleidung. Unser Papa Klaus Ragaller hat mit unserer Mama Eva den Handels-Geist weitergetragen und das Geschäft in den 70er Jahren sehr erfolgreich zum Modehaus umgebaut. 2012 eröffneten wir genau hier im Modehaus Ragaller unseren Almliebe-Store und das Lager für unseren Online-Shop.</p><p>Moderne Tracht, traditionelle Mode, alpinen Lifestyle – bei Almliebe findet man ausgefallene, hochwertige Dirndl von bayerischen und österreichischen Trachten-Marken wie Gottseidank, Lena Hoschek, Kinga Mathé, CocoVero, Anno Domini, Wenger und Hammerschmid, kurze Hirsch Lederhosen vom Traditions-Unternehmen Meindl aber auch hochwertige Lederhosen aus Ziegenleder von Ostarrichi, Beckert und Ledergott. Dazu kommt eine große Auswahl an Strickjankern aus Merino-Wolle mit und ohne Kapuze zum Beispiel vom Trachten-Pionier Liebling in Bad Tölz, von Grenzgang aus dem Allgäu, von Astrifa aus Niederbayern sowie vom innovativen Münchner Label Gottseidank. Trachten Sakkos von Luis Trenker oder von der Manufaktur Grasegger in Garmisch, Haferlschuhe, Trachten-Taschen, Schmuck, Gürtel, Trachten-Socken der Marken Lusana, Meindl und Dirndl&Bua runden das Sortiment ab.</p><p>Das gesamte Almliebe-Sortiment zeichnet sich aus durch den hohen Qualitätsanspruch, die Authentizität, das Zeitlose und verkörpert das Lebensgefühl, das wir mit vielen anderen teilen, die auf La Brass Banda und Kofelgschroa-Konzerte gehen, auf Wald- und Oktoberfeste, die Muh, Servus oder Landlust lesen, Ski- und Bergtouren gehen, an der Isar grillen, am Kaminfeuer chillen.</p>"
+      }
+    },
     "gallery": {
       "type": "about-gallery",
       "settings": {
@@ -115,8 +115,8 @@
   "order": [
     "about-hero",
     "text-image-1",
-    "content",
     "social-links",
+    "content",
     "gallery"
   ]
 }
