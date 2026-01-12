@@ -345,7 +345,7 @@
         "button_label": "Subscribe",
         "text_alignment": "center",
         "text_color": "#ebebeb",
-        "modal_use_image": true,
+        "modal_use_image": false,
         "modal_image": "shopify://shop_images/ALMLEBE-HW22-9629_1_2x_d88fab76-41b2-4234-8c4e-542a6f683b0a.png",
         "modal_overlay_opacity": 20,
         "modal_background_color": "#ffffff",
