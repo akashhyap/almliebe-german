@@ -1,9 +1,9 @@
 {% comment %}
   NEW ARRIVALS / FEATURED PRODUCTS SECTION
-  Gymshark-style product carousel with admin controls
+  Gymshark-style product carousel with manual product selection
   
   Features:
-  - Collection picker from admin
+  - Manually add products via blocks
   - Subtitle and title customizable
   - View All link
   - Grid display (up to 5 products)
@@ -12,26 +12,20 @@
 {% endcomment %}
 
 {%- liquid
-  assign collection = collections[section.settings.collection]
-  assign products_to_show = section.settings.products_to_show | default: 12
   assign subtitle = section.settings.subtitle
   assign custom_title = section.settings.title
   assign show_view_all = section.settings.show_view_all
-  assign view_all_text = section.settings.view_all_text | default: 'View All'
+  assign view_all_link = section.settings.view_all_link
+  assign view_all_text = section.settings.view_all_text | default: 'Alle ansehen'
+  assign products_count = section.blocks.size
   
   assign enable_carousel = false
-  if collection.products.size > 5
-    assign products_count = collection.products.size
-    if products_count > products_to_show
-      assign products_count = products_to_show
-    endif
-    if products_count > 5
-      assign enable_carousel = true
-    endif
+  if products_count > 5
+    assign enable_carousel = true
   endif
 -%}
 
-{%- if collection != blank and collection.products.size > 0 -%}
+{%- if products_count > 0 -%}
   <section class="new-arrivals-section{% if enable_carousel %} has-carousel{% endif %}" data-new-arrivals-section>
     <div class="new-arrivals-section__container">
       
@@ -41,11 +35,11 @@
           {%- if subtitle != blank -%}
             <p class="new-arrivals-section__subtitle">{{ subtitle }}</p>
           {%- endif -%}
-          <h2 class="new-arrivals-section__title">
-            {{ custom_title | default: collection.title }}
-          </h2>
-          {%- if show_view_all -%}
-            <a href="{{ collection.url }}" class="new-arrivals-section__view-all">
+          {%- if custom_title != blank -%}
+            <h2 class="new-arrivals-section__title">{{ custom_title }}</h2>
+          {%- endif -%}
+          {%- if show_view_all and view_all_link != blank -%}
+            <a href="{{ view_all_link }}" class="new-arrivals-section__view-all">
               {{ view_all_text }}
             </a>
           {%- endif -%}
@@ -71,10 +65,13 @@
       {%- comment -%} Product Grid / Slider {%- endcomment -%}
       <div class="new-arrivals-section__slider" data-slider>
         <div class="new-arrivals-section__track{% unless enable_carousel %} new-arrivals-section__track--grid{% endunless %}" data-slider-track>
-          {%- for product in collection.products limit: products_to_show -%}
-            <div class="new-arrivals-section__item">
-              {%- render 'product-card', product: product, lazy: true, card_index: forloop.index -%}
-            </div>
+          {%- for block in section.blocks -%}
+            {%- assign product = block.settings.product -%}
+            {%- if product != blank -%}
+              <div class="new-arrivals-section__item" {{ block.shopify_attributes }}>
+                {%- render 'product-card', product: product, lazy: true, card_index: forloop.index -%}
+              </div>
+            {%- endif -%}
           {%- endfor -%}
         </div>
       </div>
@@ -134,7 +131,7 @@
   
   .new-arrivals-section__title {
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 600;
     text-transform: uppercase;
     letter-spacing: -0.5px;
     color: #111827;
@@ -351,12 +348,6 @@ document.addEventListener('DOMContentLoaded', function() {
   "class": "section-new-arrivals",
   "settings": [
     {
-      "type": "collection",
-      "id": "collection",
-      "label": "Collection",
-      "info": "Select a collection to display products from"
-    },
-    {
       "type": "text",
       "id": "subtitle",
       "label": "Subtitle",
@@ -367,7 +358,6 @@ document.addEventListener('DOMContentLoaded', function() {
       "type": "text",
       "id": "title",
       "label": "Title",
-      "info": "Leave blank to use collection title",
       "placeholder": "NEW ARRIVALS"
     },
     {
@@ -377,28 +367,37 @@ document.addEventListener('DOMContentLoaded', function() {
       "default": true
     },
     {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "'View All' link URL"
+    },
+    {
       "type": "text",
       "id": "view_all_text",
       "label": "'View All' text",
       "default": "Alle ansehen"
-    },
+    }
+  ],
+  "blocks": [
     {
-      "type": "range",
-      "id": "products_to_show",
-      "label": "Maximum products to show",
-      "min": 4,
-      "max": 24,
-      "step": 1,
-      "default": 12
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
     }
   ],
   "presets": [
     {
       "name": "New Arrivals",
       "settings": {
-        "show_view_all": true,
-        "products_to_show": 12
-      }
+        "show_view_all": true
+      },
+      "blocks": []
     }
   ]
 }
