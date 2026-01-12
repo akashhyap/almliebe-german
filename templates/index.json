@@ -269,14 +269,16 @@
           "settings": {
             "collection": "sale-damen",
             "title": "",
+            "description": "In unserer Sale Kategorie finden sie günstige Trachtenmode und reduzierte Angebote für Ihren Wiesenlook.",
             "link": ""
           }
         },
         "collection_TwaHkB": {
           "type": "collection",
           "settings": {
-            "collection": "gottseidank",
+            "collection": "trachtenblusen",
             "title": "",
+            "description": "Die Trachtenbluse ist ein Evergreen der Trachtenmode.",
             "link": ""
           }
         },
@@ -285,6 +287,7 @@
           "settings": {
             "collection": "braut-drindl",
             "title": "",
+            "description": "Nichts verkörpert Heimat, Tradition und Brauchtum mehr als ein Dirndl. ",
             "link": ""
           }
         },
@@ -293,6 +296,7 @@
           "settings": {
             "collection": "dirndl-kleider",
             "title": "",
+            "description": "",
             "link": ""
           }
         },
@@ -301,6 +305,7 @@
           "settings": {
             "collection": "damenjanker",
             "title": "",
+            "description": "",
             "link": ""
           }
         },
@@ -309,6 +314,7 @@
           "settings": {
             "collection": "blusen-meider",
             "title": "",
+            "description": "",
             "link": ""
           }
         }
