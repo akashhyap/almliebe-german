@@ -96,6 +96,81 @@
         "show_vendor": true
       }
     },
+    "events_kKz83C": {
+      "type": "events",
+      "blocks": {
+        "event_ncftkt": {
+          "type": "event",
+          "settings": {
+            "image": "shopify://shop_images/2024_Fall_04_Almlieb_2110_2x_c.webp",
+            "title": "Weihnachten",
+            "description": "Festliche Dirndl für die staade Zeit!",
+            "link": ""
+          }
+        },
+        "event_XDp9Xt": {
+          "type": "event",
+          "settings": {
+            "image": "shopify://shop_images/festivals.jpg",
+            "title": "Festivals",
+            "description": "Coole Trachtenstyles für Festivals und Konzerte!",
+            "link": ""
+          }
+        },
+        "event_zwWhiq": {
+          "type": "event",
+          "settings": {
+            "image": "shopify://shop_images/trachtenhochzeit-almliebe-1_2x_4b42212a-77c4-40c7-aff6-386bfead4dd4.jpg",
+            "title": "Hochzeit in Tracht",
+            "description": "Tracht für das Brautpaar und die Gäste!",
+            "link": ""
+          }
+        },
+        "event_pJtNVX": {
+          "type": "event",
+          "settings": {
+            "image": "shopify://shop_images/2024-02-2111.55.24_2x_6c33e4c6-ce49-4682-9b0b-403cdf558ee1.jpg",
+            "title": "Kommunion",
+            "description": "Die passende Tracht für Groß und Klein!",
+            "link": ""
+          }
+        },
+        "event_K37DTR": {
+          "type": "event",
+          "settings": {
+            "image": "shopify://shop_images/dirndl-and-lederhosen.webp",
+            "title": "Oktoberfest",
+            "description": "Finde Dein perfektes Wiesn-Outfit!",
+            "link": ""
+          }
+        },
+        "event_CAJyGD": {
+          "type": "event",
+          "settings": {
+            "image": "shopify://shop_images/ALMLIEBE23HW1409K_2x-volk.jpg",
+            "title": "Volksfeste",
+            "description": "Unsere Tipps für festliche Tracht!",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "event_ncftkt",
+        "event_XDp9Xt",
+        "event_zwWhiq",
+        "event_pJtNVX",
+        "event_K37DTR",
+        "event_CAJyGD"
+      ],
+      "name": "Events",
+      "settings": {
+        "subtitle": "TRACHTEN TRENDS UND STYLING TIPPS",
+        "title": "Tracht für alle Anlässe",
+        "show_view_all": false,
+        "view_all_link": "",
+        "view_all_text": "Alle ansehen"
+      }
+    },
     "new_arrivals_ftVbea": {
       "type": "new-arrivals",
       "blocks": {
@@ -229,88 +304,13 @@
         "view_all_link": "shopify://collections",
         "view_all_text": "Alle ansehen"
       }
-    },
-    "events_kKz83C": {
-      "type": "events",
-      "blocks": {
-        "event_ncftkt": {
-          "type": "event",
-          "settings": {
-            "image": "shopify://shop_images/2024_Fall_04_Almlieb_2110_2x_c.webp",
-            "title": "Weihnachten",
-            "description": "Festliche Dirndl für die staade Zeit!",
-            "link": ""
-          }
-        },
-        "event_XDp9Xt": {
-          "type": "event",
-          "settings": {
-            "image": "shopify://shop_images/festivals.jpg",
-            "title": "Festivals",
-            "description": "Coole Trachtenstyles für Festivals und Konzerte!",
-            "link": ""
-          }
-        },
-        "event_zwWhiq": {
-          "type": "event",
-          "settings": {
-            "image": "shopify://shop_images/trachtenhochzeit-almliebe-1_2x_4b42212a-77c4-40c7-aff6-386bfead4dd4.jpg",
-            "title": "Hochzeit in Tracht",
-            "description": "Tracht für das Brautpaar und die Gäste!",
-            "link": ""
-          }
-        },
-        "event_pJtNVX": {
-          "type": "event",
-          "settings": {
-            "image": "shopify://shop_images/2024-02-2111.55.24_2x_6c33e4c6-ce49-4682-9b0b-403cdf558ee1.jpg",
-            "title": "Kommunion",
-            "description": "Die passende Tracht für Groß und Klein!",
-            "link": ""
-          }
-        },
-        "event_K37DTR": {
-          "type": "event",
-          "settings": {
-            "image": "shopify://shop_images/dirndl-and-lederhosen.webp",
-            "title": "Oktoberfest",
-            "description": "Finde Dein perfektes Wiesn-Outfit!",
-            "link": ""
-          }
-        },
-        "event_CAJyGD": {
-          "type": "event",
-          "settings": {
-            "image": "shopify://shop_images/ALMLIEBE23HW1409K_2x-volk.jpg",
-            "title": "Volksfeste",
-            "description": "Unsere Tipps für festliche Tracht!",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "event_ncftkt",
-        "event_XDp9Xt",
-        "event_zwWhiq",
-        "event_pJtNVX",
-        "event_K37DTR",
-        "event_CAJyGD"
-      ],
-      "name": "Events",
-      "settings": {
-        "subtitle": "TRACHTEN TRENDS UND STYLING TIPPS",
-        "title": "Tracht für alle Anlässe",
-        "show_view_all": false,
-        "view_all_link": "",
-        "view_all_text": "Alle ansehen"
-      }
     }
   },
   "order": [
     "hero",
     "new_arrivals_me89n4",
+    "events_kKz83C",
     "new_arrivals_ftVbea",
-    "collection_grid_WHKRj8",
-    "events_kKz83C"
+    "collection_grid_WHKRj8"
   ]
 }
