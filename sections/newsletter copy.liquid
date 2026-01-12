@@ -1,0 +1,733 @@
+{% comment %}
+  NEWSLETTER SECTION
+  Banner with modal popup for email subscription
+  
+  Features:
+  - Image or solid background color
+  - Subtitle, title, button
+  - Modal popup with form
+  - Klaviyo/Shopify form integration ready
+{% endcomment %}
+
+<section class="newsletter-section newsletter-section--{{ section.settings.banner_height }}"
+         style="{% if section.settings.use_image and section.settings.image != blank %}{% else %}--bg-color: {{ section.settings.background_color }};{% endif %}">
+  
+  {%- if section.settings.use_image and section.settings.image != blank -%}
+    <div class="newsletter-section__media">
+      <img
+        src="{{ section.settings.image | image_url: width: 1920 }}"
+        alt="{{ section.settings.image.alt | escape }}"
+        width="1920"
+        height="auto"
+        loading="lazy"
+        class="newsletter-section__img"
+        style="object-position: {{ section.settings.image_position }};"
+      >
+      <div class="newsletter-section__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+    </div>
+  {%- endif -%}
+  
+  <div class="newsletter-section__wrapper">
+    <div class="newsletter-section__content newsletter-section__content--{{ section.settings.text_alignment }}">
+      {%- if section.settings.subtitle != blank -%}
+        <p class="newsletter-section__subtitle" style="color: {{ section.settings.text_color }};">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+      
+      {%- if section.settings.title != blank -%}
+        <h2 class="newsletter-section__title" style="color: {{ section.settings.text_color }};">{{ section.settings.title }}</h2>
+      {%- endif -%}
+      
+      {%- if section.settings.button_label != blank -%}
+        <button type="button" class="newsletter-section__btn" data-newsletter-open>
+          {{ section.settings.button_label }}
+        </button>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{%- comment -%} Newsletter Modal {%- endcomment -%}
+<div class="newsletter-modal" data-newsletter-modal>
+  <div class="newsletter-modal__overlay" data-newsletter-close></div>
+  <div class="newsletter-modal__container" style="background-color: {{ section.settings.modal_background_color }};">
+    
+    <button type="button" class="newsletter-modal__close" data-newsletter-close aria-label="Close">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    
+    <div class="newsletter-modal__content">
+      {%- if section.settings.modal_title != blank -%}
+        <h3 class="newsletter-modal__title">{{ section.settings.modal_title }}</h3>
+      {%- endif -%}
+      
+      {%- if section.settings.modal_text != blank -%}
+        <div class="newsletter-modal__text">{{ section.settings.modal_text }}</div>
+      {%- endif -%}
+      
+      <form method="post" action="/contact#newsletter-{{ section.id }}" class="newsletter-modal__form" data-newsletter-form id="newsletter-{{ section.id }}">
+        <input type="hidden" name="form_type" value="customer">
+        <input type="hidden" name="utf8" value="✓">
+        <input type="hidden" name="contact[tags]" value="newsletter">
+        
+        <div class="newsletter-modal__field">
+          <input 
+            type="email" 
+            name="contact[email]"
+            placeholder="{{ section.settings.email_placeholder | default: 'E-Mail *' }}"
+            required
+            class="newsletter-modal__input"
+            autocomplete="email"
+          >
+        </div>
+        
+        {%- if section.settings.show_consent -%}
+          <div class="newsletter-modal__consent">
+            <label class="newsletter-modal__checkbox">
+              <input type="checkbox" name="contact[accepts_marketing]" value="true" required>
+              <span>{{ section.settings.consent_text | default: 'Ich stimme den Datenschutzbestimmungen zu *' }}</span>
+            </label>
+          </div>
+        {%- endif -%}
+        
+        {%- if section.settings.show_recaptcha_notice -%}
+          <p class="newsletter-modal__notice">
+            Diese Website ist durch reCAPTCHA geschützt und es gelten die Google 
+            <a href="https://policies.google.com/privacy" target="_blank">Datenschutzrichtlinien</a> und 
+            <a href="https://policies.google.com/terms" target="_blank">Nutzungsbedingung</a>.
+          </p>
+        {%- endif -%}
+        
+        <button type="submit" class="newsletter-modal__submit">
+          {{ section.settings.submit_button_label | default: 'Abonnieren' }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ========== NEWSLETTER SECTION ========== */
+  .newsletter-section {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-color: var(--bg-color, #f3f4f6);
+  }
+  
+  /* Height Options */
+  .newsletter-section--xsmall {
+    padding: 2rem 0;
+  }
+  
+  .newsletter-section--small {
+    padding: 3rem 0;
+  }
+  
+  .newsletter-section--medium {
+    padding: 4rem 0;
+  }
+  
+  .newsletter-section--large {
+    padding: 5rem 0;
+  }
+  
+  @media (min-width: 768px) {
+    .newsletter-section--xsmall {
+      padding: 2.5rem 0;
+    }
+    
+    .newsletter-section--small {
+      padding: 4rem 0;
+    }
+    
+    .newsletter-section--medium {
+      padding: 5rem 0;
+    }
+    
+    .newsletter-section--large {
+      padding: 6rem 0;
+    }
+  }
+  
+  /* Media */
+  .newsletter-section__media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  
+  .newsletter-section__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .newsletter-section__overlay {
+    position: absolute;
+    inset: 0;
+    background: #000000;
+  }
+  
+  /* Wrapper */
+  .newsletter-section__wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .newsletter-section__wrapper {
+      padding: 0 2rem;
+    }
+  }
+  
+  /* Content */
+  .newsletter-section__content {
+    max-width: 600px;
+  }
+  
+  .newsletter-section__content--left {
+    margin-right: auto;
+    text-align: left;
+  }
+  
+  .newsletter-section__content--center {
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .newsletter-section__content--right {
+    margin-left: auto;
+    text-align: right;
+  }
+  
+  .newsletter-section__subtitle {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 0.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .newsletter-section__subtitle {
+      font-size: 1rem;
+    }
+  }
+  
+  .newsletter-section__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 1.25rem;
+  }
+  
+  @media (min-width: 768px) {
+    .newsletter-section__title {
+      font-size: 2rem;
+    }
+  }
+  
+  .newsletter-section__btn {
+    display: inline-block;
+    padding: 0.875rem 2rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: #000000;
+    color: #ffffff;
+    border: 2px solid #000000;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .newsletter-section__btn:hover {
+    background: #333333;
+    border-color: #333333;
+  }
+  
+  /* ========== NEWSLETTER MODAL ========== */
+  .newsletter-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+  
+  .newsletter-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .newsletter-modal__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+  }
+  
+  .newsletter-modal__container {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: scale(0.95) translateY(20px);
+    transition: transform 0.3s ease;
+  }
+  
+  .newsletter-modal.is-open .newsletter-modal__container {
+    transform: scale(1) translateY(0);
+  }
+  
+  /* Close Button */
+  .newsletter-modal__close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 10;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  
+  .newsletter-modal__close:hover {
+    background: #ffffff;
+  }
+  
+  .newsletter-modal__close svg {
+    stroke: #111827;
+  }
+  
+  /* Modal Content */
+  .newsletter-modal__content {
+    padding: 3rem 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .newsletter-modal__content {
+      padding: 3.5rem 3rem;
+    }
+  }
+  
+  .newsletter-modal__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 0 1.5rem;
+    color: #111827;
+  }
+  
+  @media (min-width: 768px) {
+    .newsletter-modal__title {
+      font-size: 1.75rem;
+    }
+  }
+  
+  .newsletter-modal__text {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: #374151;
+    margin-bottom: 2rem;
+  }
+  
+  .newsletter-modal__text ul {
+    margin: 1rem 0;
+    padding-left: 1.25rem;
+  }
+  
+  .newsletter-modal__text li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .newsletter-modal__text strong {
+    font-weight: 600;
+  }
+  
+  /* Form */
+  .newsletter-modal__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .newsletter-modal__field {
+    width: 100%;
+  }
+  
+  .newsletter-modal__input {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    border: 1px solid #d1d5db;
+    background: #ffffff;
+    transition: border-color 0.2s;
+  }
+  
+  .newsletter-modal__input:focus {
+    outline: none;
+    border-color: #111827;
+  }
+  
+  .newsletter-modal__input::placeholder {
+    color: #6b7280;
+  }
+  
+  /* Consent */
+  .newsletter-modal__consent {
+    margin-top: 0.5rem;
+  }
+  
+  .newsletter-modal__checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    color: #374151;
+    cursor: pointer;
+  }
+  
+  .newsletter-modal__checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  
+  /* Notice */
+  .newsletter-modal__notice {
+    font-size: 0.75rem;
+    color: #6b7280;
+    line-height: 1.5;
+    margin: 0.5rem 0;
+  }
+  
+  .newsletter-modal__notice a {
+    color: #111827;
+    text-decoration: underline;
+  }
+  
+  /* Submit Button */
+  .newsletter-modal__submit {
+    width: 100%;
+    max-width: 280px;
+    margin: 1rem auto 0;
+    padding: 1rem 2rem;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: #000000;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .newsletter-modal__submit:hover {
+    background: #333333;
+  }
+  
+  /* Success Message */
+  .newsletter-modal__success {
+    text-align: center;
+    padding: 2rem 0;
+  }
+  
+  .newsletter-modal__success svg {
+    stroke: #10b981;
+    margin-bottom: 1rem;
+  }
+  
+  .newsletter-modal__success p {
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #111827;
+    margin: 0;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const openBtns = document.querySelectorAll('[data-newsletter-open]');
+  const modal = document.querySelector('[data-newsletter-modal]');
+  const closeBtns = document.querySelectorAll('[data-newsletter-close]');
+  const form = document.querySelector('[data-newsletter-form]');
+  
+  if (!modal) return;
+  
+  // Open modal
+  openBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      modal.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+  
+  // Close modal
+  const closeModal = () => {
+    modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+  };
+  
+  closeBtns.forEach(btn => {
+    btn.addEventListener('click', closeModal);
+  });
+  
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) {
+      closeModal();
+    }
+  });
+  
+  // AJAX Form submission for better UX
+  if (form) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const submitBtn = form.querySelector('.newsletter-modal__submit');
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'Wird gesendet...';
+      submitBtn.disabled = true;
+      
+      const formData = new FormData(form);
+      
+      fetch('/contact', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json, text/html'
+        }
+      })
+      .then(response => {
+        // Show success message
+        form.style.display = 'none';
+        
+        // Create and show success element
+        const successDiv = document.createElement('div');
+        successDiv.className = 'newsletter-modal__success';
+        successDiv.innerHTML = `
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+          <p>{{ section.settings.success_message | default: 'Vielen Dank für Ihre Anmeldung!' }}</p>
+        `;
+        form.parentNode.appendChild(successDiv);
+      })
+      .catch(error => {
+        // Reset button on error
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+        alert('Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.');
+      });
+    });
+  }
+  
+  // Auto-open modal if form was just submitted successfully (fallback for non-JS)
+  if (window.location.hash.includes('newsletter-')) {
+    modal.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Background"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_image",
+      "label": "Use background image",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background Image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image Position",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Image Overlay Opacity",
+      "default": 30
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#f3f4f6",
+      "info": "Used when image is disabled"
+    },
+    {
+      "type": "select",
+      "id": "banner_height",
+      "label": "Section Height",
+      "options": [
+        { "value": "xsmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "small"
+    },
+    {
+      "type": "header",
+      "content": "Section Content"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Join Our Newsletter"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "default": "Subscribe"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#111827"
+    },
+    {
+      "type": "header",
+      "content": "Modal Background"
+    },
+    {
+      "type": "color",
+      "id": "modal_background_color",
+      "label": "Modal Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Modal Content"
+    },
+    {
+      "type": "text",
+      "id": "modal_title",
+      "label": "Modal Title",
+      "default": "Almliebe Newsletter"
+    },
+    {
+      "type": "richtext",
+      "id": "modal_text",
+      "label": "Modal Text",
+      "default": "<p>Abonniere unseren wöchentlichen Newsletter und erhalte <strong>5% Rabatt</strong> auf deine erste Bestellung im Online-Shop!</p><p>Deine Vorteile:</p><ul><li>Exklusive Events, Termine & Sales-Aktionen</li><li>Aktuelle Infos über die Trachten-Trends</li><li>Alpine Looks und Hotel-Tipps für die Berge</li></ul>"
+    },
+    {
+      "type": "header",
+      "content": "Form Settings"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email Placeholder",
+      "default": "E-Mail *"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_consent",
+      "label": "Show consent checkbox",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "consent_text",
+      "label": "Consent Text",
+      "default": "Ich stimme den Datenschutzbestimmungen zu *"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_recaptcha_notice",
+      "label": "Show reCAPTCHA notice",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "submit_button_label",
+      "label": "Submit Button Label",
+      "default": "Abonnieren"
+    },
+    {
+      "type": "text",
+      "id": "success_message",
+      "label": "Success Message",
+      "default": "Vielen Dank für Ihre Anmeldung!"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter",
+      "settings": {
+        "title": "Join Our Newsletter",
+        "button_label": "Subscribe",
+        "modal_title": "Almliebe Newsletter"
+      }
+    }
+  ]
+}
+{% endschema %}
