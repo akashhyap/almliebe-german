@@ -1,6 +1,6 @@
 {% comment %}
   ABOUT GALLERY SECTION
-  Masonry grid image gallery
+  True Masonry grid with JavaScript (Pinterest-style, left-to-right order)
   Admin can add as many images as they want
 {% endcomment %}
 
@@ -20,26 +20,29 @@
     {%- endif -%}
     
     {%- if section.blocks.size > 0 -%}
-      <div class="about-gallery__masonry" 
-           data-gallery-masonry
-           style="--columns-desktop: {{ section.settings.columns_desktop }}; --gap: {{ section.settings.gap }}px;">
+      <div class="masonry-grid" 
+           data-masonry-grid
+           data-columns-mobile="2"
+           data-columns-tablet="3"
+           data-columns-desktop="{{ section.settings.columns_desktop }}"
+           data-gap="{{ section.settings.gap }}">
         {%- for block in section.blocks -%}
           {%- if block.settings.image != blank -%}
-            <div class="about-gallery__item" {{ block.shopify_attributes }}>
-              <a href="{{ block.settings.image | image_url: width: 1600 }}" class="about-gallery__link" data-gallery-lightbox>
+            <div class="masonry-grid__item" data-masonry-item {{ block.shopify_attributes }}>
+              <a href="{{ block.settings.image | image_url: width: 1600 }}" class="masonry-grid__link" data-gallery-lightbox>
                 <img
                   src="{{ block.settings.image | image_url: width: 800 }}"
                   alt="{{ block.settings.image.alt | default: block.settings.caption | escape }}"
                   width="{{ block.settings.image.width }}"
                   height="{{ block.settings.image.height }}"
                   loading="lazy"
-                  class="about-gallery__img"
+                  class="masonry-grid__img"
                 >
-                <div class="about-gallery__overlay">
+                <div class="masonry-grid__overlay">
                   {%- if block.settings.caption != blank -%}
-                    <p class="about-gallery__caption">{{ block.settings.caption }}</p>
+                    <span class="masonry-grid__caption">{{ block.settings.caption }}</span>
                   {%- endif -%}
-                  <span class="about-gallery__zoom">
+                  <span class="masonry-grid__zoom">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                       <circle cx="11" cy="11" r="8"></circle>
                       <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -138,55 +141,44 @@
     }
   }
   
-  /* Masonry Grid */
-  .about-gallery__masonry {
-    column-count: 2;
-    column-gap: var(--gap, 16px);
-  }
-  
-  @media (min-width: 640px) {
-    .about-gallery__masonry {
-      column-count: 3;
-    }
-  }
-  
-  @media (min-width: 1024px) {
-    .about-gallery__masonry {
-      column-count: var(--columns-desktop, 4);
-    }
-  }
-  
-  /* Gallery Item */
-  .about-gallery__item {
-    break-inside: avoid;
-    -webkit-column-break-inside: avoid;
-    page-break-inside: avoid;
-    margin-bottom: var(--gap, 16px);
-    display: inline-block;
+  /* ========== MASONRY GRID ========== */
+  .masonry-grid {
+    position: relative;
     width: 100%;
+    min-height: 200px;
   }
   
-  .about-gallery__link {
+  .masonry-grid__item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  
+  .masonry-grid__item.is-positioned {
+    opacity: 1;
+  }
+  
+  .masonry-grid__link {
     display: block;
     position: relative;
     overflow: hidden;
-    line-height: 0;
   }
   
-  .about-gallery__img {
+  .masonry-grid__img {
+    display: block;
     width: 100%;
     height: auto;
-    display: block;
     transition: transform 0.5s ease;
-    vertical-align: bottom;
   }
   
-  .about-gallery__link:hover .about-gallery__img {
+  .masonry-grid__link:hover .masonry-grid__img {
     transform: scale(1.05);
   }
   
   /* Overlay */
-  .about-gallery__overlay {
+  .masonry-grid__overlay {
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, 0);
@@ -197,11 +189,11 @@
     transition: background 0.3s ease;
   }
   
-  .about-gallery__link:hover .about-gallery__overlay {
+  .masonry-grid__link:hover .masonry-grid__overlay {
     background: rgba(0, 0, 0, 0.5);
   }
   
-  .about-gallery__caption {
+  .masonry-grid__caption {
     color: #ffffff;
     font-size: 0.875rem;
     font-weight: 500;
@@ -213,19 +205,19 @@
     transition: all 0.3s ease;
   }
   
-  .about-gallery__link:hover .about-gallery__caption {
+  .masonry-grid__link:hover .masonry-grid__caption {
     opacity: 1;
     transform: translateY(0);
   }
   
-  .about-gallery__zoom {
+  .masonry-grid__zoom {
     color: #ffffff;
     opacity: 0;
     transform: scale(0.8);
     transition: all 0.3s ease;
   }
   
-  .about-gallery__link:hover .about-gallery__zoom {
+  .masonry-grid__link:hover .masonry-grid__zoom {
     opacity: 1;
     transform: scale(1);
   }
@@ -313,70 +305,181 @@
 </style>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const lightbox = document.querySelector('[data-lightbox]');
-  const lightboxImg = document.querySelector('[data-lightbox-img]');
-  const closeBtn = document.querySelector('[data-lightbox-close]');
-  const prevBtn = document.querySelector('[data-lightbox-prev]');
-  const nextBtn = document.querySelector('[data-lightbox-next]');
-  const galleryLinks = document.querySelectorAll('[data-gallery-lightbox]');
-  
-  if (!lightbox || !galleryLinks.length) return;
-  
-  let currentIndex = 0;
-  const images = Array.from(galleryLinks).map(link => link.href);
-  
-  const openLightbox = (index) => {
-    currentIndex = index;
-    lightboxImg.src = images[currentIndex];
-    lightbox.classList.add('is-open');
-    document.body.style.overflow = 'hidden';
-  };
-  
-  const closeLightbox = () => {
-    lightbox.classList.remove('is-open');
-    document.body.style.overflow = '';
-    setTimeout(() => {
-      lightboxImg.src = '';
-    }, 300);
-  };
-  
-  const showPrev = () => {
-    currentIndex = (currentIndex - 1 + images.length) % images.length;
-    lightboxImg.src = images[currentIndex];
-  };
-  
-  const showNext = () => {
-    currentIndex = (currentIndex + 1) % images.length;
-    lightboxImg.src = images[currentIndex];
-  };
-  
-  // Event Listeners
-  galleryLinks.forEach((link, index) => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      openLightbox(index);
-    });
-  });
-  
-  closeBtn.addEventListener('click', closeLightbox);
-  prevBtn.addEventListener('click', showPrev);
-  nextBtn.addEventListener('click', showNext);
-  
-  lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) {
-      closeLightbox();
-    }
-  });
-  
-  document.addEventListener('keydown', (e) => {
-    if (!lightbox.classList.contains('is-open')) return;
+(function() {
+  // Masonry Layout Engine - Left to Right Order
+  function initMasonry() {
+    const grid = document.querySelector('[data-masonry-grid]');
+    if (!grid) return;
     
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft') showPrev();
-    if (e.key === 'ArrowRight') showNext();
-  });
-});
+    const items = Array.from(grid.querySelectorAll('[data-masonry-item]'));
+    if (!items.length) return;
+    
+    const gap = parseInt(grid.dataset.gap) || 12;
+    const colsMobile = parseInt(grid.dataset.columnsMobile) || 2;
+    const colsTablet = parseInt(grid.dataset.columnsTablet) || 3;
+    const colsDesktop = parseInt(grid.dataset.columnsDesktop) || 4;
+    
+    function getColumnCount() {
+      const width = window.innerWidth;
+      if (width >= 1024) return colsDesktop;
+      if (width >= 640) return colsTablet;
+      return colsMobile;
+    }
+    
+    function layout() {
+      const columnCount = getColumnCount();
+      const gridWidth = grid.offsetWidth;
+      const columnWidth = (gridWidth - (gap * (columnCount - 1))) / columnCount;
+      
+      // Track the height of each column
+      const columnHeights = new Array(columnCount).fill(0);
+      
+      items.forEach((item) => {
+        // Find the shortest column
+        const minHeight = Math.min(...columnHeights);
+        const shortestColumn = columnHeights.indexOf(minHeight);
+        
+        // Calculate position
+        const x = shortestColumn * (columnWidth + gap);
+        const y = columnHeights[shortestColumn];
+        
+        // Set item dimensions and position
+        item.style.width = columnWidth + 'px';
+        item.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        item.classList.add('is-positioned');
+        
+        // Update column height
+        const itemHeight = item.offsetHeight;
+        columnHeights[shortestColumn] += itemHeight + gap;
+      });
+      
+      // Set grid height to tallest column
+      const maxHeight = Math.max(...columnHeights);
+      grid.style.height = (maxHeight - gap) + 'px';
+    }
+    
+    // Wait for images to load before initial layout
+    function waitForImages(callback) {
+      const images = grid.querySelectorAll('img');
+      let loaded = 0;
+      const total = images.length;
+      
+      if (total === 0) {
+        callback();
+        return;
+      }
+      
+      function checkComplete() {
+        loaded++;
+        if (loaded >= total) {
+          callback();
+        }
+      }
+      
+      images.forEach(img => {
+        if (img.complete && img.naturalHeight !== 0) {
+          checkComplete();
+        } else {
+          img.addEventListener('load', checkComplete);
+          img.addEventListener('error', checkComplete);
+        }
+      });
+      
+      // Fallback - layout after 3 seconds even if images haven't loaded
+      setTimeout(callback, 3000);
+    }
+    
+    // Initial layout after images load
+    waitForImages(layout);
+    
+    // Relayout on resize (debounced)
+    let resizeTimer;
+    window.addEventListener('resize', function() {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(layout, 150);
+    });
+    
+    // Expose for manual triggering if needed
+    window.masonryLayout = layout;
+  }
+  
+  // Lightbox
+  function initLightbox() {
+    const lightbox = document.querySelector('[data-lightbox]');
+    const lightboxImg = document.querySelector('[data-lightbox-img]');
+    const closeBtn = document.querySelector('[data-lightbox-close]');
+    const prevBtn = document.querySelector('[data-lightbox-prev]');
+    const nextBtn = document.querySelector('[data-lightbox-next]');
+    const galleryLinks = document.querySelectorAll('[data-gallery-lightbox]');
+    
+    if (!lightbox || !galleryLinks.length) return;
+    
+    let currentIndex = 0;
+    const images = Array.from(galleryLinks).map(link => link.href);
+    
+    function openLightbox(index) {
+      currentIndex = index;
+      lightboxImg.src = images[currentIndex];
+      lightbox.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeLightbox() {
+      lightbox.classList.remove('is-open');
+      document.body.style.overflow = '';
+      setTimeout(() => {
+        lightboxImg.src = '';
+      }, 300);
+    }
+    
+    function showPrev() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      lightboxImg.src = images[currentIndex];
+    }
+    
+    function showNext() {
+      currentIndex = (currentIndex + 1) % images.length;
+      lightboxImg.src = images[currentIndex];
+    }
+    
+    // Event Listeners
+    galleryLinks.forEach((link, index) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        openLightbox(index);
+      });
+    });
+    
+    closeBtn.addEventListener('click', closeLightbox);
+    prevBtn.addEventListener('click', showPrev);
+    nextBtn.addEventListener('click', showNext);
+    
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) {
+        closeLightbox();
+      }
+    });
+    
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('is-open')) return;
+      
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') showPrev();
+      if (e.key === 'ArrowRight') showNext();
+    });
+  }
+  
+  // Initialize on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+      initMasonry();
+      initLightbox();
+    });
+  } else {
+    initMasonry();
+    initLightbox();
+  }
+})();
 </script>
 
 {% schema %}
@@ -417,12 +520,12 @@ document.addEventListener('DOMContentLoaded', function() {
     {
       "type": "range",
       "id": "gap",
-      "min": 8,
+      "min": 4,
       "max": 24,
-      "step": 4,
+      "step": 2,
       "unit": "px",
       "label": "Gap between images",
-      "default": 16
+      "default": 12
     },
     {
       "type": "color",
@@ -452,8 +555,7 @@ document.addEventListener('DOMContentLoaded', function() {
   ],
   "presets": [
     {
-      "name": "About Gallery",
-      "blocks": []
+      "name": "About Gallery"
     }
   ]
 }
