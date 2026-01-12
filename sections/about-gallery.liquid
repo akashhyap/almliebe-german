@@ -178,8 +178,16 @@
     aspect-ratio: 1 / 1;
   }
   
-  .masonry-grid__item--tall .masonry-grid__link {
+  .masonry-grid__item--square-medium .masonry-grid__link {
+    aspect-ratio: 4 / 5;
+  }
+  
+  .masonry-grid__item--square-large .masonry-grid__link {
     aspect-ratio: 3 / 4;
+  }
+  
+  .masonry-grid__item--tall .masonry-grid__link {
+    aspect-ratio: 2 / 3;
   }
   
   .masonry-grid__item--short .masonry-grid__link {
@@ -188,10 +196,6 @@
   
   .masonry-grid__item--wide .masonry-grid__link {
     aspect-ratio: 16 / 9;
-  }
-  
-  .masonry-grid__item--portrait .masonry-grid__link {
-    aspect-ratio: 2 / 3;
   }
   
   .masonry-grid__link:hover .masonry-grid__img {
@@ -571,8 +575,9 @@
           "label": "Display Size",
           "options": [
             { "value": "normal", "label": "Square (1:1)" },
-            { "value": "tall", "label": "Tall (3:4)" },
-            { "value": "portrait", "label": "Portrait (2:3)" },
+            { "value": "square-medium", "label": "Square Medium (4:5)" },
+            { "value": "square-large", "label": "Square Large (3:4)" },
+            { "value": "tall", "label": "Tall (2:3)" },
             { "value": "short", "label": "Landscape (4:3)" },
             { "value": "wide", "label": "Wide (16:9)" }
           ],
