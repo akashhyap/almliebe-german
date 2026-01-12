@@ -27,6 +27,30 @@
     "collection_grid_WHKRj8": {
       "type": "collection-grid",
       "blocks": {
+        "collection_rPpwFL": {
+          "type": "collection",
+          "settings": {
+            "collection": "sale-damen",
+            "title": "",
+            "link": ""
+          }
+        },
+        "collection_TwaHkB": {
+          "type": "collection",
+          "settings": {
+            "collection": "gottseidank",
+            "title": "",
+            "link": ""
+          }
+        },
+        "collection_Ynmkt9": {
+          "type": "collection",
+          "settings": {
+            "collection": "braut-drindl",
+            "title": "",
+            "link": ""
+          }
+        },
         "collection_HQjWm8": {
           "type": "collection",
           "settings": {
@@ -53,6 +77,9 @@
         }
       },
       "block_order": [
+        "collection_rPpwFL",
+        "collection_TwaHkB",
+        "collection_Ynmkt9",
         "collection_HQjWm8",
         "collection_NWwXjM",
         "collection_Geck7W"
