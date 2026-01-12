@@ -102,12 +102,92 @@
         "title": "Unsere Herkunft. Unsere Leidenschaft.",
         "content": "<p>Aufgewachsen sprichwörtlich unter der Ladentheke unserer Eltern im niederbayerischen Pocking zogen wir erstmal in die Welt hinaus auf der Suche nach anderen Herausforderungen. Aber schon nach einigen Jahren, nach Studium und anderen Job-Abenteuern, meldete sich unser Unternehmer-Gen und uns wurde klar, dass wir unsere Wurzeln nicht verleugnen sondern nutzen wollen. Die Leidenschaft für den Handel war immer personifiziert in unserer Oma Lina Ragaller, die als starke Trümmerfrau die Sattlerei ihrer Schwiegereltern übernahm und in den Nachkriegsjahren alles verkaufte, was die Leute brauchten, von Eiern über Möbel, von Benzin bis Bekleidung. Unser Papa Klaus Ragaller hat mit unserer Mama Eva den Handels-Geist weitergetragen und das Geschäft in den 70er Jahren sehr erfolgreich zum Modehaus umgebaut. 2012 eröffneten wir genau hier im Modehaus Ragaller unseren Almliebe-Store und das Lager für unseren Online-Shop.</p><p>Moderne Tracht, traditionelle Mode, alpinen Lifestyle – bei Almliebe findet man ausgefallene, hochwertige Dirndl von bayerischen und österreichischen Trachten-Marken wie Gottseidank, Lena Hoschek, Kinga Mathé, CocoVero, Anno Domini, Wenger und Hammerschmid, kurze Hirsch Lederhosen vom Traditions-Unternehmen Meindl aber auch hochwertige Lederhosen aus Ziegenleder von Ostarrichi, Beckert und Ledergott. Dazu kommt eine große Auswahl an Strickjankern aus Merino-Wolle mit und ohne Kapuze zum Beispiel vom Trachten-Pionier Liebling in Bad Tölz, von Grenzgang aus dem Allgäu, von Astrifa aus Niederbayern sowie vom innovativen Münchner Label Gottseidank. Trachten Sakkos von Luis Trenker oder von der Manufaktur Grasegger in Garmisch, Haferlschuhe, Trachten-Taschen, Schmuck, Gürtel, Trachten-Socken der Marken Lusana, Meindl und Dirndl&Bua runden das Sortiment ab.</p><p>Das gesamte Almliebe-Sortiment zeichnet sich aus durch den hohen Qualitätsanspruch, die Authentizität, das Zeitlose und verkörpert das Lebensgefühl, das wir mit vielen anderen teilen, die auf La Brass Banda und Kofelgschroa-Konzerte gehen, auf Wald- und Oktoberfeste, die Muh, Servus oder Landlust lesen, Ski- und Bergtouren gehen, an der Isar grillen, am Kaminfeuer chillen.</p>"
       }
+    },
+    "about_gallery_bHpTKz": {
+      "type": "about-gallery",
+      "blocks": {
+        "image_yLfNaX": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_1_925x925_dfc02e14-2b9d-4fde-ad69-a8ea9a1a79bd.jpg",
+            "caption": ""
+          }
+        },
+        "image_khij8x": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_2_587x5873_219f3d95-306b-479e-bfb8-8dac5a533929.jpg",
+            "caption": ""
+          }
+        },
+        "image_qWf4dX": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_2_587x5872_734d0fad-3642-4df2-bf0c-61d5b62d99fd.jpg",
+            "caption": ""
+          }
+        },
+        "image_LxVwcN": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_2_587x587_f6fb5079-2d3b-48a9-8f0b-c762e14b9787.jpg",
+            "caption": ""
+          }
+        },
+        "image_nUM4x6": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_3_420x4204_6b28c05a-d4e2-4090-823e-34b965a02a02.jpg",
+            "caption": ""
+          }
+        },
+        "image_DaWhkb": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_3_420x4203_2e0fb57c-9c0c-4187-9979-b7b2e61d64c0.jpg",
+            "caption": ""
+          }
+        },
+        "image_ymJh4i": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_3_420x4202_70a09d6b-0a32-4986-91ec-68a8d53bb213.jpg",
+            "caption": ""
+          }
+        },
+        "image_HtCVMP": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_3_420x420_0f454b32-f366-4237-80b4-45640522c6b3.jpg",
+            "caption": ""
+          }
+        }
+      },
+      "block_order": [
+        "image_yLfNaX",
+        "image_khij8x",
+        "image_qWf4dX",
+        "image_LxVwcN",
+        "image_nUM4x6",
+        "image_DaWhkb",
+        "image_ymJh4i",
+        "image_HtCVMP"
+      ],
+      "name": "About Gallery",
+      "settings": {
+        "subtitle": "",
+        "title": "",
+        "columns_desktop": "4",
+        "gap": 16,
+        "background_color": "#ffffff"
+      }
     }
   },
   "order": [
     "about-hero",
     "text-image-1",
     "social-links",
-    "content"
+    "content",
+    "about_gallery_bHpTKz"
   ]
 }
