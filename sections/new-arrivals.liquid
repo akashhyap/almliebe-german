@@ -1,0 +1,405 @@
+{% comment %}
+  NEW ARRIVALS / FEATURED PRODUCTS SECTION
+  Gymshark-style product carousel with admin controls
+  
+  Features:
+  - Collection picker from admin
+  - Subtitle and title customizable
+  - View All link
+  - Grid display (up to 5 products)
+  - Carousel when more than 5 products
+  - Uses same product-card snippet as collection page
+{% endcomment %}
+
+{%- liquid
+  assign collection = collections[section.settings.collection]
+  assign products_to_show = section.settings.products_to_show | default: 12
+  assign subtitle = section.settings.subtitle
+  assign custom_title = section.settings.title
+  assign show_view_all = section.settings.show_view_all
+  assign view_all_text = section.settings.view_all_text | default: 'View All'
+  
+  assign enable_carousel = false
+  if collection.products.size > 5
+    assign products_count = collection.products.size
+    if products_count > products_to_show
+      assign products_count = products_to_show
+    endif
+    if products_count > 5
+      assign enable_carousel = true
+    endif
+  endif
+-%}
+
+{%- if collection != blank and collection.products.size > 0 -%}
+  <section class="new-arrivals-section{% if enable_carousel %} has-carousel{% endif %}" data-new-arrivals-section>
+    <div class="new-arrivals-section__container">
+      
+      {%- comment -%} Header {%- endcomment -%}
+      <div class="new-arrivals-section__header">
+        <div class="new-arrivals-section__titles">
+          {%- if subtitle != blank -%}
+            <p class="new-arrivals-section__subtitle">{{ subtitle }}</p>
+          {%- endif -%}
+          <h2 class="new-arrivals-section__title">
+            {{ custom_title | default: collection.title }}
+          </h2>
+          {%- if show_view_all -%}
+            <a href="{{ collection.url }}" class="new-arrivals-section__view-all">
+              {{ view_all_text }}
+            </a>
+          {%- endif -%}
+        </div>
+        
+        {%- comment -%} Navigation Arrows (only for carousel) {%- endcomment -%}
+        {%- if enable_carousel -%}
+          <div class="new-arrivals-section__nav">
+            <button type="button" class="new-arrivals-section__nav-btn new-arrivals-section__nav-btn--prev" data-slider-prev aria-label="Previous" disabled>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"/>
+              </svg>
+            </button>
+            <button type="button" class="new-arrivals-section__nav-btn new-arrivals-section__nav-btn--next" data-slider-next aria-label="Next">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </button>
+          </div>
+        {%- endif -%}
+      </div>
+      
+      {%- comment -%} Product Grid / Slider {%- endcomment -%}
+      <div class="new-arrivals-section__slider" data-slider>
+        <div class="new-arrivals-section__track{% unless enable_carousel %} new-arrivals-section__track--grid{% endunless %}" data-slider-track>
+          {%- for product in collection.products limit: products_to_show -%}
+            <div class="new-arrivals-section__item">
+              {%- render 'product-card', product: product, lazy: true, card_index: forloop.index -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+      
+    </div>
+  </section>
+{%- endif -%}
+
+<style>
+  .new-arrivals-section {
+    padding: 3rem 0;
+  }
+  
+  @media (min-width: 768px) {
+    .new-arrivals-section {
+      padding: 4rem 0;
+    }
+  }
+  
+  .new-arrivals-section__container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .new-arrivals-section__container {
+      padding: 0 2rem;
+    }
+  }
+  
+  /* Header */
+  .new-arrivals-section__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+  }
+  
+  .new-arrivals-section__titles {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1.5rem;
+  }
+  
+  .new-arrivals-section__subtitle {
+    width: 100%;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #111827;
+    margin: 0;
+  }
+  
+  .new-arrivals-section__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+    color: #111827;
+    margin: 0;
+  }
+  
+  @media (min-width: 768px) {
+    .new-arrivals-section__title {
+      font-size: 2rem;
+    }
+  }
+  
+  .new-arrivals-section__view-all {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: #111827;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  
+  .new-arrivals-section__view-all:hover {
+    color: #000;
+  }
+  
+  /* Navigation */
+  .new-arrivals-section__nav {
+    display: none;
+    gap: 0.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .new-arrivals-section__nav {
+      display: flex;
+    }
+  }
+  
+  .new-arrivals-section__nav-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .new-arrivals-section__nav-btn:hover:not(:disabled) {
+    background: #111827;
+    border-color: #111827;
+    color: #ffffff;
+  }
+  
+  .new-arrivals-section__nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  
+  .new-arrivals-section__nav-btn svg {
+    stroke: currentColor;
+  }
+  
+  /* Slider Container */
+  .new-arrivals-section__slider {
+    overflow: hidden;
+    margin: 0 -1rem;
+    padding: 0 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .new-arrivals-section__slider {
+      margin: 0;
+      padding: 0;
+    }
+  }
+  
+  /* Track - Carousel Mode */
+  .new-arrivals-section__track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-snap-type: x mandatory;
+  }
+  
+  .new-arrivals-section__track::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Track - Grid Mode (5 or fewer items) */
+  .new-arrivals-section__track--grid {
+    overflow-x: visible;
+    scroll-snap-type: none;
+  }
+  
+  @media (min-width: 768px) {
+    .new-arrivals-section__track--grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .new-arrivals-section__track--grid {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+  
+  /* Grid Item - Carousel Mode */
+  .new-arrivals-section__item {
+    flex: 0 0 calc(50% - 0.5rem);
+    scroll-snap-align: start;
+    min-width: 0;
+  }
+  
+  @media (min-width: 640px) {
+    .new-arrivals-section__item {
+      flex: 0 0 calc(33.333% - 0.667rem);
+    }
+  }
+  
+  @media (min-width: 900px) {
+    .new-arrivals-section__item {
+      flex: 0 0 calc(25% - 0.75rem);
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    .new-arrivals-section__item {
+      flex: 0 0 calc(20% - 0.8rem);
+    }
+  }
+  
+  /* Grid mode - items fill evenly */
+  .new-arrivals-section__track--grid .new-arrivals-section__item {
+    flex: 1;
+  }
+  
+  @media (min-width: 768px) {
+    .new-arrivals-section__track--grid .new-arrivals-section__item {
+      flex: none;
+    }
+  }
+  
+  /* Ensure product cards inside have proper styling */
+  .new-arrivals-section__item .product-card {
+    height: 100%;
+  }
+  
+  .new-arrivals-section__item .product-card__image {
+    aspect-ratio: 3 / 4;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const sections = document.querySelectorAll('[data-new-arrivals-section]');
+  
+  sections.forEach(section => {
+    const track = section.querySelector('[data-slider-track]');
+    const prevBtn = section.querySelector('[data-slider-prev]');
+    const nextBtn = section.querySelector('[data-slider-next]');
+    
+    // Only initialize slider if carousel is enabled (has nav buttons)
+    if (!track || !prevBtn || !nextBtn) return;
+    
+    const updateButtons = () => {
+      const scrollLeft = track.scrollLeft;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      
+      prevBtn.disabled = scrollLeft <= 10;
+      nextBtn.disabled = scrollLeft >= maxScroll - 10;
+    };
+    
+    const getSlideWidth = () => {
+      const slide = track.querySelector('.new-arrivals-section__item');
+      if (!slide) return 300;
+      const style = getComputedStyle(track);
+      const gap = parseFloat(style.gap) || 16;
+      return slide.offsetWidth + gap;
+    };
+    
+    prevBtn.addEventListener('click', () => {
+      track.scrollBy({ left: -getSlideWidth() * 2, behavior: 'smooth' });
+    });
+    
+    nextBtn.addEventListener('click', () => {
+      track.scrollBy({ left: getSlideWidth() * 2, behavior: 'smooth' });
+    });
+    
+    track.addEventListener('scroll', updateButtons);
+    window.addEventListener('resize', updateButtons);
+    
+    // Initial state
+    setTimeout(updateButtons, 100);
+    
+    // Initialize wishlist states if function exists
+    if (typeof window.updateWishlistUI === 'function') {
+      window.updateWishlistUI();
+    }
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "New Arrivals",
+  "tag": "section",
+  "class": "section-new-arrivals",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Select a collection to display products from"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "info": "Small text above the title (e.g., 'DAMEN', 'HERREN')",
+      "placeholder": "DAMEN"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "info": "Leave blank to use collection title",
+      "placeholder": "NEW ARRIVALS"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View All' link",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "'View All' text",
+      "default": "Alle ansehen"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "Maximum products to show",
+      "min": 4,
+      "max": 24,
+      "step": 1,
+      "default": 12
+    }
+  ],
+  "presets": [
+    {
+      "name": "New Arrivals",
+      "settings": {
+        "show_view_all": true,
+        "products_to_show": 12
+      }
+    }
+  ]
+}
+{% endschema %}
