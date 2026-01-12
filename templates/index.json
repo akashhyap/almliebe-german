@@ -324,7 +324,7 @@
       "name": "Collection Grid",
       "settings": {
         "subtitle": "",
-        "title": "POPULAR RIGHT NOW",
+        "title": "POPULAR COLLECTIONS",
         "show_view_all": false,
         "view_all_link": "shopify://collections",
         "view_all_text": "Alle ansehen"
@@ -345,9 +345,6 @@
         "button_label": "Subscribe",
         "text_alignment": "center",
         "text_color": "#ebebeb",
-        "modal_use_image": false,
-        "modal_image": "shopify://shop_images/ALMLEBE-HW22-9629_1_2x_d88fab76-41b2-4234-8c4e-542a6f683b0a.png",
-        "modal_overlay_opacity": 20,
         "modal_background_color": "#ffffff",
         "modal_title": "Almliebe Newsletter",
         "modal_text": "<p>Abonniere unseren wöchentlichen Newsletter und erhalte <strong>5% Rabatt</strong> auf deine erste Bestellung im Online-Shop!</p><p>Deine Vorteile:</p><ul><li>Exklusive Events, Termine & Sales-Aktionen</li><li>Aktuelle Infos über die Trachten-Trends</li><li>Alpine Looks und Hotel-Tipps für die Berge</li></ul>",
