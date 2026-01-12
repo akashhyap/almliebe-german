@@ -105,6 +105,55 @@
     },
     "gallery": {
       "type": "about-gallery",
+      "blocks": {
+        "image_F8BUbj": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_3_420x420_0f454b32-f366-4237-80b4-45640522c6b3.jpg",
+            "caption": "",
+            "size": "medium"
+          }
+        },
+        "image_9cU9Eq": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_3_420x4203_2e0fb57c-9c0c-4187-9979-b7b2e61d64c0.jpg",
+            "caption": "",
+            "size": "medium"
+          }
+        },
+        "image_wrfLzd": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_3_420x4202_70a09d6b-0a32-4986-91ec-68a8d53bb213.jpg",
+            "caption": "",
+            "size": "medium"
+          }
+        },
+        "image_ktRY8L": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_3_420x4204_6b28c05a-d4e2-4090-823e-34b965a02a02.jpg",
+            "caption": "",
+            "size": "medium"
+          }
+        },
+        "image_xpkMD7": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_2_587x587_f6fb5079-2d3b-48a9-8f0b-c762e14b9787.jpg",
+            "caption": "",
+            "size": "large"
+          }
+        }
+      },
+      "block_order": [
+        "image_F8BUbj",
+        "image_9cU9Eq",
+        "image_wrfLzd",
+        "image_ktRY8L",
+        "image_xpkMD7"
+      ],
       "settings": {
         "subtitle": "Einblicke",
         "title": "Unsere Galerie",
