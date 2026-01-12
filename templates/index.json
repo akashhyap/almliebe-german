@@ -24,17 +24,51 @@
         "text_color": "#ffffff"
       }
     },
-    "featured_collection": {
-      "type": "featured-collection",
+    "collection_grid_WHKRj8": {
+      "type": "collection-grid",
+      "blocks": {
+        "collection_HQjWm8": {
+          "type": "collection",
+          "settings": {
+            "collection": "dirndl-kleider",
+            "title": "",
+            "link": ""
+          }
+        },
+        "collection_NWwXjM": {
+          "type": "collection",
+          "settings": {
+            "collection": "damenjanker",
+            "title": "",
+            "link": ""
+          }
+        },
+        "collection_Geck7W": {
+          "type": "collection",
+          "settings": {
+            "collection": "blusen-meider",
+            "title": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_HQjWm8",
+        "collection_NWwXjM",
+        "collection_Geck7W"
+      ],
+      "name": "Collection Grid",
       "settings": {
-        "title": "Featured Collection",
-        "collection": "",
-        "products_to_show": 8
+        "subtitle": "",
+        "title": "Featured Collections",
+        "show_view_all": false,
+        "view_all_link": "shopify://collections",
+        "view_all_text": "Alle ansehen"
       }
     }
   },
   "order": [
     "hero",
-    "featured_collection"
+    "collection_grid_WHKRj8"
   ]
 }
