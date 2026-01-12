@@ -186,6 +186,32 @@
         "show_vendor": true
       }
     },
+    "newsletter_HNhrDd": {
+      "type": "newsletter",
+      "name": "Newsletter",
+      "settings": {
+        "use_image": true,
+        "image": "shopify://shop_images/unterseite_header_1930x882_ueberuns.jpg",
+        "image_position": "center",
+        "overlay_opacity": 30,
+        "background_color": "rgba(0,0,0,0)",
+        "banner_height": "small",
+        "subtitle": "Almliebe Community",
+        "title": "Erhalte unseren Newsletter",
+        "button_label": "Subscribe",
+        "text_alignment": "center",
+        "text_color": "#ebebeb",
+        "modal_background_color": "#ffffff",
+        "modal_title": "Almliebe Newsletter",
+        "modal_text": "<p>Abonniere unseren wöchentlichen Newsletter und erhalte <strong>5% Rabatt</strong> auf deine erste Bestellung im Online-Shop!</p><p>Deine Vorteile:</p><ul><li>Exklusive Events, Termine & Sales-Aktionen</li><li>Aktuelle Infos über die Trachten-Trends</li><li>Alpine Looks und Hotel-Tipps für die Berge</li></ul>",
+        "email_placeholder": "E-Mail *",
+        "show_consent": true,
+        "consent_text": "Ich stimme den Datenschutzbestimmungen zu *",
+        "show_recaptcha_notice": true,
+        "submit_button_label": "Abonnieren",
+        "success_message": "Vielen Dank für Ihre Anmeldung!"
+      }
+    },
     "events_kKz83C": {
       "type": "events",
       "blocks": {
@@ -335,32 +361,6 @@
         "view_all_link": "shopify://collections",
         "view_all_text": "Alle ansehen"
       }
-    },
-    "newsletter_HNhrDd": {
-      "type": "newsletter",
-      "name": "Newsletter",
-      "settings": {
-        "use_image": true,
-        "image": "shopify://shop_images/unterseite_header_1930x882_ueberuns.jpg",
-        "image_position": "center",
-        "overlay_opacity": 30,
-        "background_color": "rgba(0,0,0,0)",
-        "banner_height": "small",
-        "subtitle": "Almliebe Community",
-        "title": "Erhalte unseren Newsletter",
-        "button_label": "Subscribe",
-        "text_alignment": "center",
-        "text_color": "#ebebeb",
-        "modal_background_color": "#ffffff",
-        "modal_title": "Almliebe Newsletter",
-        "modal_text": "<p>Abonniere unseren wöchentlichen Newsletter und erhalte <strong>5% Rabatt</strong> auf deine erste Bestellung im Online-Shop!</p><p>Deine Vorteile:</p><ul><li>Exklusive Events, Termine & Sales-Aktionen</li><li>Aktuelle Infos über die Trachten-Trends</li><li>Alpine Looks und Hotel-Tipps für die Berge</li></ul>",
-        "email_placeholder": "E-Mail *",
-        "show_consent": true,
-        "consent_text": "Ich stimme den Datenschutzbestimmungen zu *",
-        "show_recaptcha_notice": true,
-        "submit_button_label": "Abonnieren",
-        "success_message": "Vielen Dank für Ihre Anmeldung!"
-      }
     }
   },
   "order": [
@@ -368,8 +368,8 @@
     "new_arrivals_me89n4",
     "sale_banner_icJCCE",
     "new_arrivals_ftVbea",
-    "events_kKz83C",
     "collection_grid_WHKRj8",
-    "newsletter_HNhrDd"
+    "newsletter_HNhrDd",
+    "events_kKz83C"
   ]
 }
