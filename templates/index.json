@@ -101,7 +101,7 @@
       "name": "Sale Banner",
       "settings": {
         "image": "shopify://shop_images/2024_Fall_02_Almlieb_1150_2x_c.webp",
-        "banner_height": "xsmall",
+        "banner_height": "small",
         "content_horizontal_position": "center",
         "content_vertical_position": "center",
         "subtitle": "Private Sale",
