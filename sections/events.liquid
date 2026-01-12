@@ -1,0 +1,533 @@
+{% comment %}
+  EVENTS SECTION
+  Carousel grid with 16:9 image cards
+  
+  Features:
+  - Add events via blocks
+  - 16:9 aspect ratio images
+  - Title overlay at bottom left
+  - Description on hover
+  - 2 cards visible on desktop
+  - Carousel when more than 2 events
+{% endcomment %}
+
+{%- liquid
+  assign subtitle = section.settings.subtitle
+  assign custom_title = section.settings.title
+  assign show_view_all = section.settings.show_view_all
+  assign view_all_link = section.settings.view_all_link
+  assign view_all_text = section.settings.view_all_text | default: 'Alle ansehen'
+  assign events_count = section.blocks.size
+  
+  assign enable_carousel = false
+  if events_count > 2
+    assign enable_carousel = true
+  endif
+-%}
+
+{%- if events_count > 0 -%}
+  <section class="events-section{% if enable_carousel %} has-carousel{% endif %}" data-events-section>
+    <div class="events-section__container">
+      
+      {%- comment -%} Header {%- endcomment -%}
+      <div class="events-section__header">
+        <div class="events-section__titles">
+          {%- if subtitle != blank -%}
+            <p class="events-section__subtitle">{{ subtitle }}</p>
+          {%- endif -%}
+          {%- if custom_title != blank -%}
+            <h2 class="events-section__title">{{ custom_title }}</h2>
+          {%- endif -%}
+          {%- if show_view_all and view_all_link != blank -%}
+            <a href="{{ view_all_link }}" class="events-section__view-all">
+              {{ view_all_text }}
+            </a>
+          {%- endif -%}
+        </div>
+        
+        {%- comment -%} Navigation Arrows (only for carousel) {%- endcomment -%}
+        {%- if enable_carousel -%}
+          <div class="events-section__nav">
+            <button type="button" class="events-section__nav-btn events-section__nav-btn--prev" data-slider-prev aria-label="Previous" disabled>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"/>
+              </svg>
+            </button>
+            <button type="button" class="events-section__nav-btn events-section__nav-btn--next" data-slider-next aria-label="Next">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </button>
+          </div>
+        {%- endif -%}
+      </div>
+      
+      {%- comment -%} Events Grid / Slider {%- endcomment -%}
+      <div class="events-section__slider" data-slider>
+        <div class="events-section__track{% unless enable_carousel %} events-section__track--grid{% endunless %}" data-slider-track>
+          {%- for block in section.blocks -%}
+            <div class="events-section__item" {{ block.shopify_attributes }}>
+              <a href="{{ block.settings.link | default: '#' }}" class="event-card">
+                <div class="event-card__image">
+                  {%- if block.settings.image != blank -%}
+                    <img 
+                      src="{{ block.settings.image | image_url: width: 1200 }}"
+                      alt="{{ block.settings.title | escape }}"
+                      width="800"
+                      height="450"
+                      loading="lazy"
+                    >
+                  {%- else -%}
+                    <div class="event-card__placeholder">
+                      {{ 'lifestyle-1' | placeholder_svg_tag }}
+                    </div>
+                  {%- endif -%}
+                  
+                  {%- comment -%} Overlay {%- endcomment -%}
+                  <div class="event-card__overlay"></div>
+                  
+                  {%- comment -%} Content {%- endcomment -%}
+                  <div class="event-card__content">
+                    <h3 class="event-card__title">{{ block.settings.title }}</h3>
+                    {%- if block.settings.description != blank -%}
+                      <p class="event-card__description">{{ block.settings.description }}</p>
+                    {%- endif -%}
+                  </div>
+                </div>
+              </a>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+      
+    </div>
+  </section>
+{%- endif -%}
+
+<style>
+  .events-section {
+    padding: 3rem 0;
+  }
+  
+  @media (min-width: 768px) {
+    .events-section {
+      padding: 4rem 0;
+    }
+  }
+  
+  .events-section__container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .events-section__container {
+      padding: 0 2rem;
+    }
+  }
+  
+  /* Header */
+  .events-section__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+  }
+  
+  .events-section__titles {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1.5rem;
+  }
+  
+  .events-section__subtitle {
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #4b5563;
+    margin: 0;
+  }
+  
+  .events-section__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+    color: #111827;
+    margin: 0;
+  }
+  
+  @media (min-width: 768px) {
+    .events-section__title {
+      font-size: 1.8rem;
+    }
+  }
+  
+  .events-section__view-all {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: #111827;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  
+  .events-section__view-all:hover {
+    color: #000;
+  }
+  
+  /* Navigation */
+  .events-section__nav {
+    display: none;
+    gap: 0.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .events-section__nav {
+      display: flex;
+    }
+  }
+  
+  .events-section__nav-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .events-section__nav-btn:hover:not(:disabled) {
+    background: #111827;
+    border-color: #111827;
+    color: #ffffff;
+  }
+  
+  .events-section__nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  
+  .events-section__nav-btn svg {
+    stroke: currentColor;
+  }
+  
+  /* Slider Container */
+  .events-section__slider {
+    overflow: hidden;
+    margin: 0 -1rem;
+    padding: 0 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .events-section__slider {
+      margin: 0;
+      padding: 0;
+    }
+  }
+  
+  /* Track - Carousel Mode */
+  .events-section__track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-snap-type: x mandatory;
+  }
+  
+  .events-section__track::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Track - Grid Mode (2 or fewer items) */
+  .events-section__track--grid {
+    overflow-x: visible;
+    scroll-snap-type: none;
+  }
+  
+  @media (min-width: 768px) {
+    .events-section__track--grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+  }
+  
+  /* Grid Item */
+  .events-section__item {
+    flex: 0 0 85%;
+    scroll-snap-align: start;
+    min-width: 0;
+  }
+  
+  @media (min-width: 640px) {
+    .events-section__item {
+      flex: 0 0 calc(50% - 0.5rem);
+    }
+  }
+  
+  /* Grid mode - items fill evenly */
+  .events-section__track--grid .events-section__item {
+    flex: 1;
+  }
+  
+  @media (min-width: 768px) {
+    .events-section__track--grid .events-section__item {
+      flex: none;
+    }
+  }
+  
+  /* ========== EVENT CARD ========== */
+  .event-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .event-card__image {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #f3f4f6;
+  }
+  
+  .event-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  
+  .event-card:hover .event-card__image img {
+    transform: scale(1.05);
+  }
+  
+  .event-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e5e7eb;
+  }
+  
+  .event-card__placeholder svg {
+    width: 40%;
+    height: 40%;
+    opacity: 0.3;
+  }
+  
+  /* Overlay - gradient from bottom */
+  .event-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(0, 0, 0, 0.3) 40%,
+      rgba(0, 0, 0, 0) 70%
+    );
+    transition: background 0.3s ease;
+  }
+  
+  .event-card:hover .event-card__overlay {
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.85) 0%,
+      rgba(0, 0, 0, 0.5) 50%,
+      rgba(0, 0, 0, 0.2) 100%
+    );
+  }
+  
+  /* Content */
+  .event-card__content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem;
+    color: #ffffff;
+  }
+  
+  @media (min-width: 768px) {
+    .event-card__content {
+      padding: 2rem;
+    }
+  }
+  
+  .event-card__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  
+  @media (min-width: 768px) {
+    .event-card__title {
+      font-size: 1.5rem;
+    }
+  }
+  
+  .event-card__description {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    margin: 0.5rem 0 0;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+  
+  @media (min-width: 768px) {
+    .event-card__description {
+      font-size: 0.9375rem;
+    }
+  }
+  
+  .event-card:hover .event-card__description {
+    opacity: 1;
+    max-height: 100px;
+    margin-top: 0.75rem;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const sections = document.querySelectorAll('[data-events-section]');
+  
+  sections.forEach(section => {
+    const track = section.querySelector('[data-slider-track]');
+    const prevBtn = section.querySelector('[data-slider-prev]');
+    const nextBtn = section.querySelector('[data-slider-next]');
+    
+    // Only initialize slider if carousel is enabled (has nav buttons)
+    if (!track || !prevBtn || !nextBtn) return;
+    
+    const updateButtons = () => {
+      const scrollLeft = track.scrollLeft;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      
+      prevBtn.disabled = scrollLeft <= 10;
+      nextBtn.disabled = scrollLeft >= maxScroll - 10;
+    };
+    
+    const getSlideWidth = () => {
+      const slide = track.querySelector('.events-section__item');
+      if (!slide) return 300;
+      const style = getComputedStyle(track);
+      const gap = parseFloat(style.gap) || 16;
+      return slide.offsetWidth + gap;
+    };
+    
+    prevBtn.addEventListener('click', () => {
+      track.scrollBy({ left: -getSlideWidth(), behavior: 'smooth' });
+    });
+    
+    nextBtn.addEventListener('click', () => {
+      track.scrollBy({ left: getSlideWidth(), behavior: 'smooth' });
+    });
+    
+    track.addEventListener('scroll', updateButtons);
+    window.addEventListener('resize', updateButtons);
+    
+    // Initial state
+    setTimeout(updateButtons, 100);
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Events",
+  "tag": "section",
+  "class": "section-events",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "info": "Small text above the title"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "header",
+      "content": "View All Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View All' link",
+      "default": false
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "Link URL"
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "Link text",
+      "default": "Alle ansehen"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "event",
+      "name": "Event",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Recommended: 16:9 aspect ratio (1920x1080px)"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "info": "Shows on hover"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Events",
+      "settings": {
+        "show_view_all": false
+      },
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}
