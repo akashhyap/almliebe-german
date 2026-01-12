@@ -24,6 +24,77 @@
         "text_color": "#ffffff"
       }
     },
+    "new_arrivals_me89n4": {
+      "type": "new-arrivals",
+      "blocks": {
+        "product_PWXNXH": {
+          "type": "product",
+          "settings": {
+            "product": "rollkragenpulli-janica-black"
+          }
+        },
+        "product_7zEVje": {
+          "type": "product",
+          "settings": {
+            "product": "norweger-pulli-falun-schwarz-94921-f"
+          }
+        },
+        "product_9Hq4gG": {
+          "type": "product",
+          "settings": {
+            "product": "teddyjacke-bella-natur"
+          }
+        },
+        "product_hkj9mU": {
+          "type": "product",
+          "settings": {
+            "product": "teddyweste-ember-natur"
+          }
+        },
+        "product_fEjrNk": {
+          "type": "product",
+          "settings": {
+            "product": "strickpulli-simone-black"
+          }
+        },
+        "product_rJHBGe": {
+          "type": "product",
+          "settings": {
+            "product": "strickpulli-annika-snow"
+          }
+        },
+        "product_iGfxmn": {
+          "type": "product",
+          "settings": {
+            "product": "norwegerpulli-helena-snow"
+          }
+        },
+        "product_b9xLCb": {
+          "type": "product",
+          "settings": {
+            "product": "norwegerpulli-helena-black"
+          }
+        }
+      },
+      "block_order": [
+        "product_PWXNXH",
+        "product_7zEVje",
+        "product_9Hq4gG",
+        "product_hkj9mU",
+        "product_fEjrNk",
+        "product_rJHBGe",
+        "product_iGfxmn",
+        "product_b9xLCb"
+      ],
+      "name": "New Arrivals",
+      "settings": {
+        "subtitle": "",
+        "title": "",
+        "show_view_all": true,
+        "view_all_link": "",
+        "view_all_text": "Alle ansehen"
+      }
+    },
     "collection_grid_WHKRj8": {
       "type": "collection-grid",
       "blocks": {
@@ -96,6 +167,7 @@
   },
   "order": [
     "hero",
+    "new_arrivals_me89n4",
     "collection_grid_WHKRj8"
   ]
 }
