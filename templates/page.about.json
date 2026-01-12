@@ -222,7 +222,7 @@
         "subtitle": "",
         "title": "",
         "columns_desktop": "4",
-        "gap": 16,
+        "gap": 12,
         "background_color": "#ffffff"
       }
     }
