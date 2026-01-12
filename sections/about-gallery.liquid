@@ -20,16 +20,18 @@
     {%- endif -%}
     
     {%- if section.blocks.size > 0 -%}
-      <div class="about-gallery__masonry" data-gallery-masonry>
+      <div class="about-gallery__masonry" 
+           data-gallery-masonry
+           style="--columns-desktop: {{ section.settings.columns_desktop }}; --gap: {{ section.settings.gap }}px;">
         {%- for block in section.blocks -%}
           {%- if block.settings.image != blank -%}
-            <div class="about-gallery__item about-gallery__item--{{ block.settings.size }}" {{ block.shopify_attributes }}>
+            <div class="about-gallery__item" {{ block.shopify_attributes }}>
               <a href="{{ block.settings.image | image_url: width: 1600 }}" class="about-gallery__link" data-gallery-lightbox>
                 <img
                   src="{{ block.settings.image | image_url: width: 800 }}"
                   alt="{{ block.settings.image.alt | default: block.settings.caption | escape }}"
-                  width="400"
-                  height="auto"
+                  width="{{ block.settings.image.width }}"
+                  height="{{ block.settings.image.height }}"
                   loading="lazy"
                   class="about-gallery__img"
                 >
@@ -138,40 +140,37 @@
   
   /* Masonry Grid */
   .about-gallery__masonry {
-    columns: 2;
-    column-gap: 0.75rem;
+    column-count: 2;
+    column-gap: var(--gap, 16px);
   }
   
   @media (min-width: 640px) {
     .about-gallery__masonry {
-      columns: 3;
-      column-gap: 1rem;
+      column-count: 3;
     }
   }
   
   @media (min-width: 1024px) {
     .about-gallery__masonry {
-      columns: 4;
-      column-gap: 1rem;
+      column-count: var(--columns-desktop, 4);
     }
   }
   
   /* Gallery Item */
   .about-gallery__item {
     break-inside: avoid;
-    margin-bottom: 0.75rem;
-  }
-  
-  @media (min-width: 640px) {
-    .about-gallery__item {
-      margin-bottom: 1rem;
-    }
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+    margin-bottom: var(--gap, 16px);
+    display: inline-block;
+    width: 100%;
   }
   
   .about-gallery__link {
     display: block;
     position: relative;
     overflow: hidden;
+    line-height: 0;
   }
   
   .about-gallery__img {
@@ -179,6 +178,7 @@
     height: auto;
     display: block;
     transition: transform 0.5s ease;
+    vertical-align: bottom;
   }
   
   .about-gallery__link:hover .about-gallery__img {
@@ -400,6 +400,31 @@ document.addEventListener('DOMContentLoaded', function() {
       "label": "Title"
     },
     {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "label": "Columns (Desktop)",
+      "options": [
+        { "value": "3", "label": "3 Columns" },
+        { "value": "4", "label": "4 Columns" },
+        { "value": "5", "label": "5 Columns" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 8,
+      "max": 24,
+      "step": 4,
+      "unit": "px",
+      "label": "Gap between images",
+      "default": 16
+    },
+    {
       "type": "color",
       "id": "background_color",
       "label": "Background Color",
@@ -421,18 +446,6 @@ document.addEventListener('DOMContentLoaded', function() {
           "id": "caption",
           "label": "Caption",
           "info": "Shows on hover"
-        },
-        {
-          "type": "select",
-          "id": "size",
-          "label": "Size",
-          "options": [
-            { "value": "small", "label": "Small" },
-            { "value": "medium", "label": "Medium" },
-            { "value": "large", "label": "Large" }
-          ],
-          "default": "medium",
-          "info": "Affects how the image spans in the masonry grid"
         }
       ]
     }
