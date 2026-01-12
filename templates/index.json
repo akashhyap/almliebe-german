@@ -96,6 +96,87 @@
         "show_vendor": true
       }
     },
+    "image_banner_Kh6kLM": {
+      "type": "image-banner",
+      "name": "Image Banner",
+      "settings": {
+        "image": "shopify://shop_images/2601_almliebe_website_header_privatesale_d2.jpg",
+        "banner_height": "medium",
+        "heading": "",
+        "text": "",
+        "text_alignment": "center",
+        "button_label": "Shop Now",
+        "button_link": "",
+        "button_style": "primary",
+        "overlay_opacity": 0,
+        "text_color": "#FFFFFF"
+      }
+    },
+    "new_arrivals_ftVbea": {
+      "type": "new-arrivals",
+      "blocks": {
+        "product_TQAWWj": {
+          "type": "product",
+          "settings": {
+            "product": "kapuzenjacke-aus-walk-herzogstand"
+          }
+        },
+        "product_y9iX6p": {
+          "type": "product",
+          "settings": {
+            "product": "liebling-herren-janker-thomas-ii-grau"
+          }
+        },
+        "product_kQUqJT": {
+          "type": "product",
+          "settings": {
+            "product": "strickjanker-thomas-mit-stehkragen-grau-anthra"
+          }
+        },
+        "product_qmxPk7": {
+          "type": "product",
+          "settings": {
+            "product": "liebling-herren-kapuzenjanker-thomas-ii-navy-grau"
+          }
+        },
+        "product_KhV8i7": {
+          "type": "product",
+          "settings": {
+            "product": "kapuzenjanker-thomas-ii-marmor-truffel"
+          }
+        },
+        "product_jgDQRP": {
+          "type": "product",
+          "settings": {
+            "product": "strickjanker-martl-anthrazit"
+          }
+        },
+        "product_hhetcV": {
+          "type": "product",
+          "settings": {
+            "product": "strickjanker-martl-natur-kiesel"
+          }
+        }
+      },
+      "block_order": [
+        "product_TQAWWj",
+        "product_y9iX6p",
+        "product_kQUqJT",
+        "product_qmxPk7",
+        "product_KhV8i7",
+        "product_jgDQRP",
+        "product_hhetcV"
+      ],
+      "name": "New Arrivals",
+      "settings": {
+        "subtitle": "HERREN",
+        "title": "BUILT FOR THE MOUNTAINS",
+        "show_view_all": true,
+        "view_all_link": "shopify://collections/herren",
+        "view_all_text": "Discover now",
+        "show_vendor": true
+      }
+    },
     "events_kKz83C": {
       "type": "events",
       "blocks": {
@@ -171,71 +252,6 @@
         "view_all_text": "Alle ansehen"
       }
     },
-    "new_arrivals_ftVbea": {
-      "type": "new-arrivals",
-      "blocks": {
-        "product_TQAWWj": {
-          "type": "product",
-          "settings": {
-            "product": "kapuzenjacke-aus-walk-herzogstand"
-          }
-        },
-        "product_y9iX6p": {
-          "type": "product",
-          "settings": {
-            "product": "liebling-herren-janker-thomas-ii-grau"
-          }
-        },
-        "product_kQUqJT": {
-          "type": "product",
-          "settings": {
-            "product": "strickjanker-thomas-mit-stehkragen-grau-anthra"
-          }
-        },
-        "product_qmxPk7": {
-          "type": "product",
-          "settings": {
-            "product": "liebling-herren-kapuzenjanker-thomas-ii-navy-grau"
-          }
-        },
-        "product_KhV8i7": {
-          "type": "product",
-          "settings": {
-            "product": "kapuzenjanker-thomas-ii-marmor-truffel"
-          }
-        },
-        "product_jgDQRP": {
-          "type": "product",
-          "settings": {
-            "product": "strickjanker-martl-anthrazit"
-          }
-        },
-        "product_hhetcV": {
-          "type": "product",
-          "settings": {
-            "product": "strickjanker-martl-natur-kiesel"
-          }
-        }
-      },
-      "block_order": [
-        "product_TQAWWj",
-        "product_y9iX6p",
-        "product_kQUqJT",
-        "product_qmxPk7",
-        "product_KhV8i7",
-        "product_jgDQRP",
-        "product_hhetcV"
-      ],
-      "name": "New Arrivals",
-      "settings": {
-        "subtitle": "HERREN",
-        "title": "BUILT FOR THE MOUNTAINS",
-        "show_view_all": true,
-        "view_all_link": "shopify://collections/herren",
-        "view_all_text": "Discover now",
-        "show_vendor": true
-      }
-    },
     "collection_grid_WHKRj8": {
       "type": "collection-grid",
       "blocks": {
@@ -309,8 +325,9 @@
   "order": [
     "hero",
     "new_arrivals_me89n4",
-    "events_kKz83C",
+    "image_banner_Kh6kLM",
     "new_arrivals_ftVbea",
+    "events_kKz83C",
     "collection_grid_WHKRj8"
   ]
 }
