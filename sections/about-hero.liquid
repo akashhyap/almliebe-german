@@ -1,0 +1,319 @@
+{% comment %}
+  ABOUT HERO SECTION
+  Full-width banner with content overlay for About page
+{% endcomment %}
+
+<section class="about-hero about-hero--{{ section.settings.banner_height }}"
+         style="--text-color: {{ section.settings.text_color }};">
+  
+  {%- if section.settings.image != blank -%}
+    <div class="about-hero__media">
+      <img
+        src="{{ section.settings.image | image_url: width: 1920 }}"
+        alt="{{ section.settings.image.alt | escape }}"
+        width="1920"
+        height="auto"
+        loading="eager"
+        class="about-hero__img"
+        style="object-position: {{ section.settings.image_position }};"
+      >
+      <div class="about-hero__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+    </div>
+  {%- endif -%}
+  
+  <div class="about-hero__wrapper about-hero__wrapper--h-{{ section.settings.content_horizontal }} about-hero__wrapper--v-{{ section.settings.content_vertical }}">
+    <div class="about-hero__content">
+      {%- if section.settings.subtitle != blank -%}
+        <p class="about-hero__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+      
+      {%- if section.settings.title != blank -%}
+        <h1 class="about-hero__title">{{ section.settings.title }}</h1>
+      {%- endif -%}
+      
+      {%- if section.settings.description != blank -%}
+        <p class="about-hero__description">{{ section.settings.description }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-hero {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+    background: #111827;
+  }
+  
+  /* Height Options */
+  .about-hero--small {
+    min-height: 300px;
+  }
+  
+  .about-hero--medium {
+    min-height: 400px;
+  }
+  
+  .about-hero--large {
+    min-height: 500px;
+  }
+  
+  .about-hero--xlarge {
+    min-height: 600px;
+  }
+  
+  @media (min-width: 768px) {
+    .about-hero--small {
+      min-height: 350px;
+    }
+    
+    .about-hero--medium {
+      min-height: 450px;
+    }
+    
+    .about-hero--large {
+      min-height: 550px;
+    }
+    
+    .about-hero--xlarge {
+      min-height: 700px;
+    }
+  }
+  
+  /* Media */
+  .about-hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  
+  .about-hero__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .about-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: #000000;
+  }
+  
+  /* Wrapper */
+  .about-hero__wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 3rem 1rem;
+    display: flex;
+  }
+  
+  @media (min-width: 768px) {
+    .about-hero__wrapper {
+      padding: 4rem 2rem;
+    }
+  }
+  
+  /* Horizontal Position */
+  .about-hero__wrapper--h-left {
+    justify-content: flex-start;
+  }
+  
+  .about-hero__wrapper--h-center {
+    justify-content: center;
+  }
+  
+  .about-hero__wrapper--h-right {
+    justify-content: flex-end;
+  }
+  
+  /* Vertical Position */
+  .about-hero__wrapper--v-top {
+    align-items: flex-start;
+  }
+  
+  .about-hero__wrapper--v-center {
+    align-items: center;
+  }
+  
+  .about-hero__wrapper--v-bottom {
+    align-items: flex-end;
+  }
+  
+  /* Content */
+  .about-hero__content {
+    max-width: 700px;
+  }
+  
+  .about-hero__wrapper--h-center .about-hero__content {
+    text-align: center;
+  }
+  
+  .about-hero__wrapper--h-right .about-hero__content {
+    text-align: right;
+  }
+  
+  .about-hero__subtitle {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0 0 0.75rem;
+    color: var(--text-color);
+    opacity: 0.9;
+  }
+  
+  @media (min-width: 768px) {
+    .about-hero__subtitle {
+      font-size: 1rem;
+    }
+  }
+  
+  .about-hero__title {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0 0 1rem;
+    color: var(--text-color);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  @media (min-width: 768px) {
+    .about-hero__title {
+      font-size: 3rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .about-hero__title {
+      font-size: 3.5rem;
+    }
+  }
+  
+  .about-hero__description {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
+    color: var(--text-color);
+    opacity: 0.9;
+  }
+  
+  @media (min-width: 768px) {
+    .about-hero__description {
+      font-size: 1.125rem;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "About Hero",
+  "tag": "section",
+  "class": "section-about-hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background Image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image Position",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay Opacity",
+      "default": 40
+    },
+    {
+      "type": "select",
+      "id": "banner_height",
+      "label": "Banner Height",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "xlarge", "label": "Extra Large" }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Über Uns"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Content Position"
+    },
+    {
+      "type": "select",
+      "id": "content_horizontal",
+      "label": "Horizontal Position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "content_vertical",
+      "label": "Vertical Position",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Hero"
+    }
+  ]
+}
+{% endschema %}

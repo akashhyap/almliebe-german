@@ -1,0 +1,112 @@
+{
+  "sections": {
+    "about-hero": {
+      "type": "about-hero",
+      "settings": {
+        "title": "Über Uns",
+        "subtitle": "Willkommen bei Almliebe",
+        "description": "Authentische bayerische Mode seit 1985",
+        "banner_height": "large",
+        "content_horizontal": "center",
+        "content_vertical": "center",
+        "image_position": "center",
+        "overlay_opacity": 40,
+        "text_color": "#ffffff"
+      }
+    },
+    "text-image-1": {
+      "type": "about-text-image",
+      "settings": {
+        "layout": "content-first",
+        "subtitle": "Unsere Geschichte",
+        "title": "Tradition trifft Moderne",
+        "content": "<p>Seit über 35 Jahren sind wir Ihr Spezialist für hochwertige Trachtenmode. Was als kleines Familiengeschäft in München begann, hat sich zu einem der führenden Anbieter für authentische bayerische Kleidung entwickelt.</p><p>Unsere Leidenschaft für Qualität und Tradition spiegelt sich in jedem Stück wider, das wir anbieten.</p>",
+        "background_color": "#ffffff"
+      }
+    },
+    "text-image-2": {
+      "type": "about-text-image",
+      "settings": {
+        "layout": "image-first",
+        "subtitle": "Unsere Mission",
+        "title": "Qualität & Handwerk",
+        "content": "<p>Wir arbeiten ausschließlich mit den besten Manufakturen und Designern zusammen, um Ihnen Trachtenmode von höchster Qualität zu bieten.</p><p>Jedes Dirndl, jede Lederhose wird mit Liebe zum Detail gefertigt und verbindet traditionelles Handwerk mit modernem Design.</p>",
+        "background_color": "#f9fafb"
+      }
+    },
+    "content": {
+      "type": "about-content",
+      "settings": {
+        "content_width": "medium",
+        "text_alignment": "left",
+        "subtitle": "Unser Versprechen",
+        "title": "Was uns auszeichnet",
+        "content": "<p>Bei Almliebe finden Sie nicht nur Mode – Sie finden ein Stück bayerische Kultur. Unsere Experten beraten Sie gerne bei der Auswahl des perfekten Outfits für jeden Anlass.</p><h3>Unsere Werte</h3><p>Qualität, Tradition und persönlicher Service stehen bei uns an erster Stelle. Wir glauben daran, dass echte Trachtenmode mehr ist als nur Kleidung – sie ist Ausdruck von Identität und Lebensfreude.</p>",
+        "background_color": "#ffffff"
+      }
+    },
+    "social-links": {
+      "type": "about-social-links",
+      "settings": {
+        "title": "Besuchen Sie uns",
+        "background_color": "#f9fafb"
+      },
+      "blocks": {
+        "instagram": {
+          "type": "link",
+          "settings": {
+            "icon_type": "instagram",
+            "label": "Instagram",
+            "text": "@almliebe",
+            "open_new_tab": true
+          }
+        },
+        "facebook": {
+          "type": "link",
+          "settings": {
+            "icon_type": "facebook",
+            "label": "Facebook",
+            "text": "Almliebe",
+            "open_new_tab": true
+          }
+        },
+        "location-1": {
+          "type": "link",
+          "settings": {
+            "icon_type": "location",
+            "label": "München",
+            "text": "Tal 21, 80331",
+            "open_new_tab": true
+          }
+        },
+        "location-2": {
+          "type": "link",
+          "settings": {
+            "icon_type": "location",
+            "label": "Rosenheim",
+            "text": "Max-Josefs-Platz 5",
+            "open_new_tab": true
+          }
+        }
+      },
+      "block_order": ["instagram", "facebook", "location-1", "location-2"]
+    },
+    "gallery": {
+      "type": "about-gallery",
+      "settings": {
+        "subtitle": "Einblicke",
+        "title": "Unsere Galerie",
+        "background_color": "#ffffff"
+      },
+      "blocks": {}
+    }
+  },
+  "order": [
+    "about-hero",
+    "text-image-1",
+    "text-image-2",
+    "content",
+    "social-links",
+    "gallery"
+  ]
+}
