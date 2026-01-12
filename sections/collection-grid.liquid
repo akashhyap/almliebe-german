@@ -19,7 +19,7 @@
   assign view_all_text = section.settings.view_all_text | default: 'Alle ansehen'
   assign collections_count = section.blocks.size
   assign enable_carousel = false
-  if collections_count > 5
+  if collections_count > 4
     assign enable_carousel = true
   endif
 -%}
@@ -68,6 +68,7 @@
             {%- assign block_collection = collections[block.settings.collection] -%}
             {%- assign custom_image = block.settings.image -%}
             {%- assign custom_card_title = block.settings.title -%}
+            {%- assign custom_description = block.settings.description -%}
             {%- assign custom_link = block.settings.link -%}
             
             <div class="collection-grid-section__item" {{ block.shopify_attributes }}>
@@ -103,9 +104,14 @@
                     </div>
                   {%- endif -%}
                 </div>
-                <h3 class="collection-card__title">
-                  {{ custom_card_title | default: block_collection.title }}
-                </h3>
+                <div class="collection-card__info">
+                  <h3 class="collection-card__title">
+                    {{ custom_card_title | default: block_collection.title }}
+                  </h3>
+                  {%- if custom_description != blank -%}
+                    <p class="collection-card__description">{{ custom_description }}</p>
+                  {%- endif -%}
+                </div>
               </a>
             </div>
           {%- endfor -%}
@@ -261,7 +267,7 @@
     display: none;
   }
   
-  /* Track - Grid Mode (5 or fewer items) */
+  /* Track - Grid Mode (4 or fewer items) */
   .collection-grid-section__track--grid {
     overflow-x: visible;
     scroll-snap-type: none;
@@ -270,14 +276,14 @@
   @media (min-width: 768px) {
     .collection-grid-section__track--grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1rem;
     }
   }
   
   @media (min-width: 1024px) {
     .collection-grid-section__track--grid {
-      grid-template-columns: repeat(5, 1fr);
+      grid-template-columns: repeat(4, 1fr);
     }
   }
   
@@ -297,12 +303,6 @@
   @media (min-width: 900px) {
     .collection-grid-section__item {
       flex: 0 0 calc(25% - 0.75rem);
-    }
-  }
-  
-  @media (min-width: 1200px) {
-    .collection-grid-section__item {
-      flex: 0 0 calc(20% - 0.8rem);
     }
   }
   
@@ -329,7 +329,6 @@
     aspect-ratio: 3 / 4;
     overflow: hidden;
     background: #f3f4f6;
-    margin-bottom: 0.75rem;
   }
   
   .collection-card__image img {
@@ -358,10 +357,15 @@
     opacity: 0.3;
   }
   
+  .collection-card__info {
+    padding: 0.75rem 0 0;
+    text-align: left;
+  }
+  
   .collection-card__title {
     font-size: 0.875rem;
-    font-weight: 500;
-    text-align: center;
+    font-weight: 600;
+    text-align: left;
     color: #111827;
     margin: 0;
     transition: text-decoration 0.2s;
@@ -371,6 +375,14 @@
     .collection-card__title {
       font-size: 0.9375rem;
     }
+  }
+  
+  .collection-card__description {
+    font-size: 0.8125rem;
+    font-weight: 400;
+    color: #6b7280;
+    margin: 0.25rem 0 0;
+    line-height: 1.4;
   }
   
   .collection-card:hover .collection-card__title {
@@ -479,6 +491,12 @@ document.addEventListener('DOMContentLoaded', function() {
           "id": "title",
           "label": "Custom Title",
           "info": "Override the collection title"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "info": "Short description below title"
         },
         {
           "type": "url",
