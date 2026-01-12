@@ -106,66 +106,11 @@
     "about_gallery_bHpTKz": {
       "type": "about-gallery",
       "blocks": {
-        "image_3zaFAG": {
+        "image_HtCVMP": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/unterseite_galerie_3_420x4208_86e8b495-a1a0-4697-b983-00bf52ed91cb.jpg",
-            "caption": ""
-          }
-        },
-        "image_VEBUFV": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/unterseite_galerie_3_420x4207_a1b0b7e9-4fc6-46b7-ac4f-3e57c3f591bb.jpg",
-            "caption": ""
-          }
-        },
-        "image_JPaMqk": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/unterseite_galerie_3_420x4206_441b1115-eb2d-4f49-b557-1a15774fcc1a.jpg",
-            "caption": ""
-          }
-        },
-        "image_yLfNaX": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/unterseite_galerie_1_925x925_dfc02e14-2b9d-4fde-ad69-a8ea9a1a79bd.jpg",
-            "caption": ""
-          }
-        },
-        "image_khij8x": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/unterseite_galerie_2_587x5873_219f3d95-306b-479e-bfb8-8dac5a533929.jpg",
-            "caption": ""
-          }
-        },
-        "image_qWf4dX": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/unterseite_galerie_2_587x5872_734d0fad-3642-4df2-bf0c-61d5b62d99fd.jpg",
-            "caption": ""
-          }
-        },
-        "image_LxVwcN": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/unterseite_galerie_2_587x587_f6fb5079-2d3b-48a9-8f0b-c762e14b9787.jpg",
-            "caption": ""
-          }
-        },
-        "image_nUM4x6": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/unterseite_galerie_3_420x4204_6b28c05a-d4e2-4090-823e-34b965a02a02.jpg",
-            "caption": ""
-          }
-        },
-        "image_DaWhkb": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/unterseite_galerie_3_420x4203_2e0fb57c-9c0c-4187-9979-b7b2e61d64c0.jpg",
+            "image": "shopify://shop_images/unterseite_galerie_3_420x420_0f454b32-f366-4237-80b4-45640522c6b3.jpg",
+            "size": "normal",
             "caption": ""
           }
         },
@@ -173,29 +118,104 @@
           "type": "image",
           "settings": {
             "image": "shopify://shop_images/unterseite_galerie_3_420x4202_70a09d6b-0a32-4986-91ec-68a8d53bb213.jpg",
+            "size": "normal",
             "caption": ""
           }
         },
-        "image_HtCVMP": {
+        "image_DaWhkb": {
           "type": "image",
           "settings": {
-            "image": "shopify://shop_images/unterseite_galerie_3_420x420_0f454b32-f366-4237-80b4-45640522c6b3.jpg",
+            "image": "shopify://shop_images/unterseite_galerie_3_420x4203_2e0fb57c-9c0c-4187-9979-b7b2e61d64c0.jpg",
+            "size": "normal",
+            "caption": ""
+          }
+        },
+        "image_nUM4x6": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_3_420x4204_6b28c05a-d4e2-4090-823e-34b965a02a02.jpg",
+            "size": "normal",
+            "caption": ""
+          }
+        },
+        "image_LxVwcN": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_2_587x587_f6fb5079-2d3b-48a9-8f0b-c762e14b9787.jpg",
+            "size": "normal",
+            "caption": ""
+          }
+        },
+        "image_qWf4dX": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_2_587x5872_734d0fad-3642-4df2-bf0c-61d5b62d99fd.jpg",
+            "size": "normal",
+            "caption": ""
+          }
+        },
+        "image_khij8x": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_2_587x5873_219f3d95-306b-479e-bfb8-8dac5a533929.jpg",
+            "size": "normal",
+            "caption": ""
+          }
+        },
+        "image_yLfNaX": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_1_925x925_dfc02e14-2b9d-4fde-ad69-a8ea9a1a79bd.jpg",
+            "size": "normal",
+            "caption": ""
+          }
+        },
+        "image_VEBUFV": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_3_420x4207_a1b0b7e9-4fc6-46b7-ac4f-3e57c3f591bb.jpg",
+            "size": "normal",
+            "caption": ""
+          }
+        },
+        "image_JPaMqk": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_3_420x4206_441b1115-eb2d-4f49-b557-1a15774fcc1a.jpg",
+            "size": "normal",
+            "caption": ""
+          }
+        },
+        "image_3zaFAG": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_3_420x4208_86e8b495-a1a0-4697-b983-00bf52ed91cb.jpg",
+            "size": "normal",
+            "caption": ""
+          }
+        },
+        "image_PbfddH": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/unterseite_galerie_3_420x4205_aa518f8a-7177-462f-9d5e-8dd6883afea1.jpg",
+            "size": "normal",
             "caption": ""
           }
         }
       },
       "block_order": [
-        "image_3zaFAG",
+        "image_HtCVMP",
+        "image_ymJh4i",
+        "image_DaWhkb",
+        "image_nUM4x6",
+        "image_LxVwcN",
+        "image_qWf4dX",
+        "image_khij8x",
+        "image_yLfNaX",
         "image_VEBUFV",
         "image_JPaMqk",
-        "image_yLfNaX",
-        "image_khij8x",
-        "image_qWf4dX",
-        "image_LxVwcN",
-        "image_nUM4x6",
-        "image_DaWhkb",
-        "image_ymJh4i",
-        "image_HtCVMP"
+        "image_3zaFAG",
+        "image_PbfddH"
       ],
       "name": "About Gallery",
       "settings": {
