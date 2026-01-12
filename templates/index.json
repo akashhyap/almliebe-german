@@ -96,22 +96,6 @@
         "show_vendor": true
       }
     },
-    "image_banner_Kh6kLM": {
-      "type": "image-banner",
-      "name": "Image Banner",
-      "settings": {
-        "image": "shopify://shop_images/2024_Fall_02_Almlieb_1150_2x_c.webp",
-        "banner_height": "small",
-        "heading": "Private Sale 20% AUF ALLES!",
-        "text": "RABATTECODE: SECRETSALE2026",
-        "text_alignment": "right",
-        "button_label": "Shop Now",
-        "button_link": "",
-        "button_style": "primary",
-        "overlay_opacity": 0,
-        "text_color": "#FFFFFF"
-      }
-    },
     "new_arrivals_ftVbea": {
       "type": "new-arrivals",
       "blocks": {
@@ -325,7 +309,6 @@
   "order": [
     "hero",
     "new_arrivals_me89n4",
-    "image_banner_Kh6kLM",
     "new_arrivals_ftVbea",
     "events_kKz83C",
     "collection_grid_WHKRj8"
