@@ -322,6 +322,20 @@
         "show_vendor": true,
         "background_color": "#ffffff"
       }
+    },
+    "occasion_text_image_TkTHRN": {
+      "type": "occasion-text-image",
+      "name": "Occasion Text + Image",
+      "settings": {
+        "layout": "content-first",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "Oktoberfest-Outfits für Damen,die kein Dirndl suchen",
+        "content": "<p>Als Wiesn-Outfit für alle Damen, die zum Oktoberfest kein Dirndl anziehen wollen, eignen sich Oktoberfestkleider und Trachtenröcke. Die österreichische Dirndl-Designerin Lena Hoschek zum Beispiel macht wunderschöne, mit vielen Trachtenborten verzierte Oktoberfestkleider für Damen aus traditioneller Baumwolle oder aufwändige Bänderröcke, die man mit Trachtenmieder oder Trachtenjanker kombinieren kann. Wenn die Nächte kühler werden auf der Wiesn, gehört zum Oktoberfest-Outfit für Damen natürlich auch die warme Trachten-Strickjacke oder der Trachtenjanker aus Loden oder Samt dazu. Im Kommen ist auch wieder der sogenannte Dreiteiler, sprich eine Kombi aus Trachtenrock, Trachtenmieder und Dirndlschürze. Die Trachtenmarke Gottseidank kreiert neben den wunderschönen Gottseidank Dirndln immer mehr verschiedene Kombinationsmöglichkeiten, darunter wunderschöne Trachtenmieder mit Puffarm.<br/><br/></p>",
+        "button_label": "",
+        "button_link": "",
+        "image": "shopify://shop_images/ALMLEBE-HW22-0065-BW_2x_5193c0e4-8bf1-4b46-90de-f2bee3d01d02.png"
+      }
     }
   },
   "order": [
@@ -332,6 +346,7 @@
     "occasion_content_W7Rtwb",
     "occasion_products_Baieqk",
     "text-image",
-    "occasion_products_RQ4H9U"
+    "occasion_products_RQ4H9U",
+    "occasion_text_image_TkTHRN"
   ]
 }
