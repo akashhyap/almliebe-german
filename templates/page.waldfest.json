@@ -1,16 +1,28 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "occasion-hero": {
       "type": "occasion-hero",
       "settings": {
-        "title": "Waldfest",
-        "subtitle": "Feiern im Grünen",
-        "description": "Entdecken Sie unsere Trachtenkollektion für Waldfeste",
-        "banner_height": "large",
-        "content_horizontal": "center",
-        "content_vertical": "center",
+        "image": "shopify://shop_images/waldfest.jpg",
         "image_position": "center",
         "overlay_opacity": 40,
+        "banner_height": "large",
+        "subtitle": "Gelebte Tradition",
+        "title": "Die schönste Tracht für die Waldfest-Saison",
+        "description": "",
+        "button_label": "",
+        "button_link": "",
+        "content_horizontal": "center",
+        "content_vertical": "center",
         "text_color": "#ffffff"
       }
     },
@@ -19,47 +31,57 @@
       "settings": {
         "content_width": "medium",
         "text_alignment": "center",
-        "title": "",
+        "background_color": "#ffffff",
         "subtitle": "",
-        "content": "",
-        "background_color": "#ffffff"
+        "title": "",
+        "content": ""
       }
     },
     "products": {
       "type": "occasion-products",
       "settings": {
-        "title": "Passende Trachten",
         "subtitle": "Für Ihr Waldfest",
+        "title": "Passende Trachten",
         "show_view_all": true,
+        "view_all_link": "",
         "view_all_text": "Alle ansehen",
+        "use_collection": false,
+        "collection": "",
+        "products_limit": 8,
         "show_vendor": true,
         "background_color": "#f9fafb"
-      },
-      "blocks": {}
+      }
     },
     "text-image": {
       "type": "occasion-text-image",
       "settings": {
         "layout": "content-first",
+        "background_color": "#ffffff",
         "subtitle": "",
         "title": "",
         "content": "",
-        "background_color": "#ffffff"
+        "button_label": "",
+        "button_link": ""
       }
     },
     "banner": {
       "type": "occasion-banner",
       "settings": {
         "use_image": true,
-        "enable_parallax": true,
-        "banner_height": "medium",
-        "content_horizontal": "center",
-        "content_vertical": "center",
-        "content_width": "medium",
         "image_position": "center",
         "overlay_opacity": 40,
-        "text_color": "#ffffff",
         "background_color": "#111827",
+        "enable_parallax": true,
+        "banner_height": "medium",
+        "content_width": "medium",
+        "content_horizontal": "center",
+        "content_vertical": "center",
+        "subtitle": "",
+        "title": "",
+        "description": "",
+        "text_color": "#ffffff",
+        "button_label": "",
+        "button_link": "",
         "button_style": "solid"
       }
     }
