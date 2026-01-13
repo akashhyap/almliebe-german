@@ -105,10 +105,6 @@
                         {{ 'product-1' | placeholder_svg_tag }}
                       </div>
                     {%- endif -%}
-                    
-                    {%- if product.compare_at_price > product.price -%}
-                      <span class="product-card__badge">Sale</span>
-                    {%- endif -%}
                   </div>
                   
                   <div class="product-card__info">
@@ -158,10 +154,6 @@
                         <div class="product-card__placeholder">
                           {{ 'product-1' | placeholder_svg_tag }}
                         </div>
-                      {%- endif -%}
-                      
-                      {%- if product.compare_at_price > product.price -%}
-                        <span class="product-card__badge">Sale</span>
                       {%- endif -%}
                     </div>
                     
@@ -444,18 +436,6 @@
     opacity: 0.3;
   }
   
-  .product-card__badge {
-    position: absolute;
-    top: 0.75rem;
-    left: 0.75rem;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    background: #ef4444;
-    color: #ffffff;
-  }
-  
   .product-card__info {
     text-align: left;
   }
@@ -493,7 +473,7 @@
   }
   
   .product-card__price-sale {
-    color: #ef4444;
+    color: #111827;
   }
   
   .product-card__price-compare {
