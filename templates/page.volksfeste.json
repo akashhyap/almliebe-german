@@ -47,7 +47,7 @@
         "view_all_text": "Alle ansehen",
         "use_collection": true,
         "collection": "lederhosen",
-        "products_limit": 8,
+        "products_limit": 10,
         "show_vendor": true,
         "background_color": "#f9fafb"
       }
@@ -97,7 +97,7 @@
         "view_all_text": "Alle ansehen",
         "use_collection": true,
         "collection": "dirndl",
-        "products_limit": 8,
+        "products_limit": 10,
         "show_vendor": true,
         "background_color": "#ffffff"
       }
@@ -105,13 +105,60 @@
     "text-image": {
       "type": "occasion-text-image",
       "settings": {
+        "layout": "image-first",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "Die Dirndlbluse: Es darf wieder Puff sein",
+        "content": "<p>Vor allem bei der festlichen Tracht spielt die Dirndlbluse eine große Rolle. Sie wertet das festliche Dirndl auf und setzt neue Trends und Impulse. Jahrelang galt die Dirndlbluse mit schmalem Arm und mit viel Spitze als modisches Highlight festlicher Damen-Trachtenmode. Sie hat die Dirndlbluse mit Puffarm, die in den 80er Jahren in der Landhausmode eine große Rolle gespielt hat, abgelöst. Aber alles kommt wieder in der Mode und in der Tracht. Und so hat es die Dirndlbluse mit Puffarm wieder an die modische Spitze geschafft. Trachtenmarken wie Gottseidank, Heimatglück und Kinga Mathe haben es vorgemacht. Sie bringen schlichtere fließende Dirndlblusen mit mehr Volumen in ihren neuen Designer-Dirndl-Kollektionen. Mit Puffarm oder weiterem Arm oder einfach nur leicht angepuffter Schulter. Im Trend sind außerdem edle Dirndlblusen mit Flügelarm. Der kurze abstehende Ärmel, der an Engelsflügel erinnert, wurde zum Highlight auf dem letzen <strong>Münchner Oktoberfest</strong> und stolz von jungen modebewussten Wiesnbesucherinnen getragen.</p>",
+        "button_label": "",
+        "button_link": "",
+        "image": "shopify://shop_images/ALMLIEBE23HW1145K_2x_e253476f-95c6-44c2-b477-798f07d8fe32.jpg"
+      }
+    },
+    "occasion_products_tBQjCY": {
+      "type": "occasion-products",
+      "name": "Occasion Products",
+      "settings": {
+        "subtitle": "",
+        "title": "Die schönsten",
+        "show_view_all": true,
+        "view_all_link": "shopify://collections/dirndlblusen",
+        "view_all_text": "Alle ansehen",
+        "use_collection": true,
+        "collection": "dirndlblusen",
+        "products_limit": 10,
+        "show_vendor": true,
+        "background_color": "#ffffff"
+      }
+    },
+    "occasion_text_image_nQ6JU3": {
+      "type": "occasion-text-image",
+      "name": "Occasion Text + Image",
+      "settings": {
         "layout": "content-first",
         "background_color": "#ffffff",
         "subtitle": "",
-        "title": "",
-        "content": "",
+        "title": "Trachtenjanker: von Strick bis Loden",
+        "content": "<p>Gerade bei den Volksfesten im Herbst wird es abends oft schon empfindlich kühl. Übers festliche Dirndl passt dann ein warmer Strickjanker aus Merinowolle von Gottseidank, Astrifa oder Felicitas. Wer es lässiger mag, holt sich die Kapuzenjanker von Liebling, die kann man auch zur Jeans perfekt kombinieren. Die Janker zum festlichen Dirndlkleid sind meist kurz, aber nicht zu kurz, so dass sie auch zur Hose oder zum Trachtenrock getragen werden können. Neutrales Dunkelblau, Grün, Grau oder Schwarz passen fast zu jedem Festtagsdirndl. Wer es ein bisschen eleganter und schicker haben will zum Volksfest, der kann auch einen Trachtenjanker oder Blazer aus Loden, Leinen oder Samt tragen. Besonders schöne taillierte Trachtenjacken gibt es von Gottseidank, Kinga Mathe, Sportalm, Hammerschmid oder Anno Domini. Ein besonders Highlight sind die Janker oder Miederjacken aus Leinen von Lena Hoschek wie oben im Bild.</p>",
         "button_label": "",
-        "button_link": ""
+        "button_link": "",
+        "image": "shopify://shop_images/Almliebe_Motiv08_106_2x_ae98c363-9dd6-4214-a1ff-e40d6a97d5e8.jpg"
+      }
+    },
+    "occasion_products_QdchCF": {
+      "type": "occasion-products",
+      "name": "Occasion Products",
+      "settings": {
+        "subtitle": "Die schönsten",
+        "title": "Trachtenjanker",
+        "show_view_all": true,
+        "view_all_link": "shopify://collections/trachtenjanker",
+        "view_all_text": "Alle ansehen",
+        "use_collection": true,
+        "collection": "trachtenjanker",
+        "products_limit": 8,
+        "show_vendor": true,
+        "background_color": "#ffffff"
       }
     }
   },
@@ -122,6 +169,9 @@
     "banner",
     "occasion_content_tMUwP4",
     "occasion_products_BVppgp",
-    "text-image"
+    "text-image",
+    "occasion_products_tBQjCY",
+    "occasion_text_image_nQ6JU3",
+    "occasion_products_QdchCF"
   ]
 }
