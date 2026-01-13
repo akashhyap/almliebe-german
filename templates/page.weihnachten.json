@@ -34,55 +34,56 @@
         "background_color": "#ffffff",
         "subtitle": "",
         "title": "",
-        "content": ""
+        "content": "<p>Tracht ist nicht nur auf der Wiesn oder bei Volksfesten in Bayern beliebt. Auch bei festlichen Anlässen wie Hochzeiten, Taufen und Festivals sieht man immer häufiger Dirndl und Lederhosen. Warum also nicht in Tracht Weihnachten feiern? Entdecke unsere wunderschönen, winterlichen Weihnachtsdirndl mit Halbarm oder Dreiviertelärmel, kombiniert mit warmen Walkjacken und Trachtenjankern. Für die Herren bieten wir stilvolle Trachten-Sakkos und Walkjanker – perfekt für eine traditionelle Weihnachtsfeier.</p><h2>Trachtenzauber unterm Weihnachtsbaum</h2><p></p><p>Wenn es draußen kalt wird und die besinnliche Zeit beginnt, stellt sich die Frage, was man an Weihnachten tragen möchte. Viele feiern Weihnachten traditionell und festlich, da bietet sich ein schönes Weihnachtsdirndl an. Samtdirndl in dunklen Farben wie Oliv oder Schwarz wirken besonders edel. Ob mit Puffärmeln oder klassischem Ausschnitt – Samtdirndl sind genau das Richtige für Weihnachten. Für diejenigen, die schnell frieren, sind Halbarmdirndl oder Dirndl mit Dreiviertelarm von Marken wie almliebe oder Gottseidank ideal. Auch hochgeschlossene Dirndl sind bestens geeignet für die kühlen Temperaturen zur Weihnachtszeit. Wer es weniger klassisch mag, kann ein Trachtenkleid oder eine elegante Kombination aus Trachtenrock, Bluse und Janker wählen. Die österreichische Trachten-Designerin Lena Hoschek bietet wunderschöne Röcke und Kleider aus traditionellen Stoffen und Borten – für einen stilvollen Trachtenlook zur Weihnachtsfeier.<br/><br/>Kleiner Kauftipp: Ein Winterdirndl ist auch das perfekte Weihnachtsgeschenk für Trachtenliebhaberinnen!<br/><br/></p>"
       }
     },
     "products": {
       "type": "occasion-products",
       "settings": {
-        "subtitle": "Für die Weihnachtszeit",
-        "title": "Festliche Trachten",
+        "subtitle": "Die schönsten",
+        "title": "Dirndl zur Weihnachtszeit",
         "show_view_all": true,
-        "view_all_link": "",
+        "view_all_link": "shopify://collections/dirndl",
         "view_all_text": "Alle ansehen",
-        "use_collection": false,
-        "collection": "",
-        "products_limit": 8,
+        "use_collection": true,
+        "collection": "dirndl",
+        "products_limit": 14,
         "show_vendor": true,
         "background_color": "#f9fafb"
-      }
-    },
-    "text-image": {
-      "type": "occasion-text-image",
-      "settings": {
-        "layout": "content-first",
-        "background_color": "#ffffff",
-        "subtitle": "",
-        "title": "",
-        "content": "",
-        "button_label": "",
-        "button_link": ""
       }
     },
     "banner": {
       "type": "occasion-banner",
       "settings": {
         "use_image": true,
+        "image": "shopify://shop_images/2024_Fall_04_Almlieb_2110_2x_c_3b387725-eedb-4e22-87b8-d791c8cbe871.webp",
         "image_position": "center",
         "overlay_opacity": 40,
         "background_color": "#111827",
         "enable_parallax": true,
-        "banner_height": "medium",
-        "content_width": "medium",
+        "banner_height": "large",
+        "content_width": "full",
         "content_horizontal": "center",
         "content_vertical": "center",
         "subtitle": "",
-        "title": "",
+        "title": "Stillvolle Weihnachtstrachten für Herren",
         "description": "",
         "text_color": "#ffffff",
         "button_label": "",
         "button_link": "",
         "button_style": "solid"
+      }
+    },
+    "occasion_content_ppKiB8": {
+      "type": "occasion-content",
+      "name": "Occasion Content",
+      "settings": {
+        "content_width": "medium",
+        "text_alignment": "center",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "",
+        "content": "<p>Eine Lederhose sieht immer gut aus – auch an Weihnachten. Wenn es sehr kalt ist, sind Trachtenstrümpfe aus Merinowolle und ein warmer Walkjanker die perfekte Ergänzung zur Weihnachtstracht! Eine tolle Alternative zur Lederhosen-Janker-Kombi ist die traditionelle Stresemannhose, gestreift oder aus warmem Loden. Dazu passen eine klassische Trachtenweste oder festliche Varianten wie das Kutscher-Gilet oder die Miesbacher-Form mit Ausschnitt und Kette.<br/><br/>Ganz wichtig: Eine Weihnachtstracht wird erst mit einem warmen Janker aus Loden oder Walk komplett. Auch eine schöne Strickjacke, zum Beispiel von Gottseidank, rundet das Outfit elegant ab. Das ist doch ein stilvoller Look für eine Weihnachtsfeier in Tracht, liebe Männer!<br/><br/></p>"
       }
     }
   },
@@ -90,7 +91,7 @@
     "occasion-hero",
     "content",
     "products",
-    "text-image",
-    "banner"
+    "banner",
+    "occasion_content_ppKiB8"
   ]
 }
