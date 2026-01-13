@@ -52,6 +52,28 @@
         "background_color": "#f9fafb"
       }
     },
+    "banner": {
+      "type": "occasion-banner",
+      "settings": {
+        "use_image": true,
+        "image": "shopify://shop_images/ALMLIEBE23HW1409K_2x_e2c14a3c-a257-43be-9d5f-68fe4148c6b9.jpg",
+        "image_position": "top",
+        "overlay_opacity": 40,
+        "background_color": "#111827",
+        "enable_parallax": true,
+        "banner_height": "large",
+        "content_width": "full",
+        "content_horizontal": "center",
+        "content_vertical": "center",
+        "subtitle": "Die besten trachten-Outfits für Damen",
+        "title": "Ein Mix aus Tradition und Festival-Kultur",
+        "description": "",
+        "text_color": "#ffffff",
+        "button_label": "",
+        "button_link": "",
+        "button_style": "solid"
+      }
+    },
     "text-image": {
       "type": "occasion-text-image",
       "settings": {
@@ -63,34 +85,13 @@
         "button_label": "",
         "button_link": ""
       }
-    },
-    "banner": {
-      "type": "occasion-banner",
-      "settings": {
-        "use_image": true,
-        "image_position": "center",
-        "overlay_opacity": 40,
-        "background_color": "#111827",
-        "enable_parallax": true,
-        "banner_height": "medium",
-        "content_width": "medium",
-        "content_horizontal": "center",
-        "content_vertical": "center",
-        "subtitle": "",
-        "title": "",
-        "description": "",
-        "text_color": "#ffffff",
-        "button_label": "",
-        "button_link": "",
-        "button_style": "solid"
-      }
     }
   },
   "order": [
     "occasion-hero",
     "content",
     "products",
-    "text-image",
-    "banner"
+    "banner",
+    "text-image"
   ]
 }
