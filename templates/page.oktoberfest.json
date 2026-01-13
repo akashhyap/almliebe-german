@@ -132,7 +132,7 @@
         "overlay_opacity": 40,
         "background_color": "#111827",
         "enable_parallax": true,
-        "banner_height": "medium",
+        "banner_height": "xlarge",
         "content_width": "full",
         "content_horizontal": "center",
         "content_vertical": "center",
