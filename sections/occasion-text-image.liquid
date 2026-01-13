@@ -5,9 +5,8 @@
 {% endcomment %}
 
 {%- assign layout = section.settings.layout -%}
-{%- assign enable_parallax = section.settings.enable_parallax -%}
 
-<section class="occasion-text-image{% if enable_parallax %} occasion-text-image--parallax{% endif %}" style="background-color: {{ section.settings.background_color }};">
+<section class="occasion-text-image" style="background-color: {{ section.settings.background_color }};">
   <div class="occasion-text-image__container">
     <div class="occasion-text-image__grid occasion-text-image__grid--{{ layout }}">
       
@@ -36,22 +35,19 @@
       
       {%- comment -%} Image Column {%- endcomment -%}
       <div class="occasion-text-image__image">
-        <div class="occasion-text-image__image-wrapper">
-          {%- if section.settings.image != blank -%}
-            <img
-              src="{{ section.settings.image | image_url: width: 1000 }}"
-              alt="{{ section.settings.image.alt | escape }}"
-              width="800"
-              height="auto"
-              loading="lazy"
-              class="occasion-text-image__img"
-            >
-          {%- else -%}
-            <div class="occasion-text-image__placeholder">
-              {{ 'image' | placeholder_svg_tag }}
-            </div>
-          {%- endif -%}
-        </div>
+        {%- if section.settings.image != blank -%}
+          <img
+            src="{{ section.settings.image | image_url: width: 1000 }}"
+            alt="{{ section.settings.image.alt | escape }}"
+            width="800"
+            height="auto"
+            loading="lazy"
+          >
+        {%- else -%}
+          <div class="occasion-text-image__placeholder">
+            {{ 'image' | placeholder_svg_tag }}
+          </div>
+        {%- endif -%}
       </div>
       
     </div>
@@ -214,25 +210,10 @@
     overflow: hidden;
   }
   
-  .occasion-text-image__image-wrapper {
-    position: relative;
-    width: 100%;
-  }
-  
-  .occasion-text-image__img {
+  .occasion-text-image__image img {
     width: 100%;
     height: auto;
     display: block;
-  }
-  
-  /* Parallax Styles */
-  .occasion-text-image--parallax .occasion-text-image__image-wrapper {
-    overflow: hidden;
-  }
-  
-  .occasion-text-image--parallax .occasion-text-image__img {
-    transform: translate3d(0, 0, 0) scale(1.15);
-    will-change: transform;
   }
   
   .occasion-text-image__placeholder {
@@ -249,54 +230,6 @@
     opacity: 0.3;
   }
 </style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const parallaxSections = document.querySelectorAll('.occasion-text-image--parallax');
-  
-  if (!parallaxSections.length) return;
-  
-  function updateParallax() {
-    parallaxSections.forEach(section => {
-      const img = section.querySelector('.occasion-text-image__img');
-      if (!img) return;
-      
-      const rect = section.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      
-      // Check if element is in viewport
-      if (rect.bottom > 0 && rect.top < windowHeight) {
-        // Calculate how far through the viewport the element is (0 to 1)
-        const scrollPercent = (windowHeight - rect.top) / (windowHeight + rect.height);
-        
-        // Calculate parallax offset (-30px to +30px range)
-        const yOffset = (scrollPercent - 0.5) * 60;
-        
-        img.style.transform = `translate3d(0, ${yOffset}px, 0) scale(1.15)`;
-      }
-    });
-  }
-  
-  // Throttle scroll events
-  let ticking = false;
-  
-  function onScroll() {
-    if (!ticking) {
-      requestAnimationFrame(function() {
-        updateParallax();
-        ticking = false;
-      });
-      ticking = true;
-    }
-  }
-  
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', updateParallax);
-  
-  // Initial call
-  updateParallax();
-});
-</script>
 
 {% schema %}
 {
@@ -324,13 +257,6 @@ document.addEventListener('DOMContentLoaded', function() {
       "id": "background_color",
       "label": "Background Color",
       "default": "#ffffff"
-    },
-    {
-      "type": "checkbox",
-      "id": "enable_parallax",
-      "label": "Enable Image Parallax",
-      "default": false,
-      "info": "Creates subtle depth effect on scroll"
     },
     {
       "type": "header",
