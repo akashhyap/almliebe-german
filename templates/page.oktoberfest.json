@@ -3,9 +3,9 @@
     "occasion-hero": {
       "type": "occasion-hero",
       "settings": {
-        "title": "Anlass Titel",
-        "subtitle": "Ihr perfektes Outfit",
-        "description": "Entdecken Sie unsere Kollektion für besondere Anlässe",
+        "title": "Oktoberfest",
+        "subtitle": "O'zapft is!",
+        "description": "Entdecken Sie unsere Trachtenkollektion für die Wiesn",
         "banner_height": "large",
         "content_horizontal": "center",
         "content_vertical": "center",
@@ -28,8 +28,8 @@
     "products": {
       "type": "occasion-products",
       "settings": {
-        "title": "Passende Produkte",
-        "subtitle": "Unsere Empfehlungen",
+        "title": "Unsere Wiesn-Favoriten",
+        "subtitle": "Für Ihren perfekten Auftritt",
         "show_view_all": true,
         "view_all_text": "Alle ansehen",
         "show_vendor": true,
