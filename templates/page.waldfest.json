@@ -34,55 +34,72 @@
         "background_color": "#ffffff",
         "subtitle": "",
         "title": "",
-        "content": ""
+        "content": "<p>Wenn sich der Duft von frisch gezapftem Bier, wohlschmeckendem Brotzeitbrettl und Waldboden mischt, dann ist Waldfestzeit am Tegernsee. Zwischen urigen Bäumen, traditioneller Blasmusik und strahlenden Gesichtern wird hier gefeiert, wie nur Bayern feiern kann- herzlich, bodenständig und mit viel Gefühl. Und mittendrin: Du – in deiner Lieblingstracht. Die Waldfeste in Rottach-Egern, Kreuth oder Bad Wiessee gehören zum Sommer am Tegernsee wie der See selbst. Es wird getanzt, gelacht, angestoßen und natürlich Tracht getragen. Tracht ist hier ein Stück Identität. Ein Zeichen von Zugehörigkeit. Und ein Ausdruck von Heimatverbundenheit. Also hol Dir ein Waldfest Dirndl, das dich strahlen lässt. Eine Lederhose, die Geschichte erzählt. Ein Janker, der Heimat spürbar macht.</p>"
       }
     },
     "products": {
       "type": "occasion-products",
       "settings": {
-        "subtitle": "Für Ihr Waldfest",
-        "title": "Passende Trachten",
+        "subtitle": "Die schönsten",
+        "title": "Waldfest Dirndl",
         "show_view_all": true,
-        "view_all_link": "",
+        "view_all_link": "shopify://collections/dirndl-kleider",
         "view_all_text": "Alle ansehen",
-        "use_collection": false,
-        "collection": "",
+        "use_collection": true,
+        "collection": "dirndl-kleider",
         "products_limit": 8,
         "show_vendor": true,
         "background_color": "#f9fafb"
-      }
-    },
-    "text-image": {
-      "type": "occasion-text-image",
-      "settings": {
-        "layout": "content-first",
-        "background_color": "#ffffff",
-        "subtitle": "",
-        "title": "",
-        "content": "",
-        "button_label": "",
-        "button_link": ""
       }
     },
     "banner": {
       "type": "occasion-banner",
       "settings": {
         "use_image": true,
-        "image_position": "center",
+        "image": "shopify://shop_images/3waldfest-tegernsee-tracht_2x_c.webp",
+        "image_position": "top",
         "overlay_opacity": 40,
         "background_color": "#111827",
         "enable_parallax": true,
-        "banner_height": "medium",
-        "content_width": "medium",
+        "banner_height": "large",
+        "content_width": "full",
         "content_horizontal": "center",
         "content_vertical": "center",
-        "subtitle": "",
-        "title": "",
+        "subtitle": "Fürs Waldfest gemacht",
+        "title": "Tracht aus unserem Onlineshop",
         "description": "",
         "text_color": "#ffffff",
         "button_label": "",
         "button_link": "",
         "button_style": "solid"
+      }
+    },
+    "occasion_content_xPQCYM": {
+      "type": "occasion-content",
+      "name": "Occasion Content",
+      "settings": {
+        "content_width": "medium",
+        "text_alignment": "center",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "",
+        "content": "<p>Die schönsten Abende beginnen am Tegernsee unter freiem Himmel – mit Freunden, Blasmusik und einem kühlen Bier in der Hand. Die Waldfeste rund um den Tegernsee sind dafür der perfekte Rahmen.<br/><br/>In unserem Almliebe Onlineshop findest du nicht nur für s’Waldfest eine feine Auswahl an hochwertiger Trachtenmode, die Tradition und Moderne stilvoll verbindet. Ob ein traditionelles Dirndl, ein modernes Ärmeldirndl, ein edles Samtdirndl oder ein klassiches hochgeschlossenes Dirndl – jedes Modell ist ein Statement auf dem Tegernseer Waldfest. Kombiniert mit unseren liebevoll ausgewählten Dirndlblusen und Trachten Strickjacken wird Dein Look absolut festtagstauglich.<br/><br/>Für Herren bieten wir authentische Lederhosen aus Ziegen- und Hirschleder an. Darunter exklusive Modelle von Meindl und Ostarrichi, die mit handwerklicher Qualität und langer Lebensdauer überzeugen. Eine Gottseidank Trachtenweste kombiniert mit einem unserer klassischen Trachtenhemden und passenden Haferlschuhen, rundet jedes Waldfest-Outfit stilvoll ab. Bestelle jetzt Dein Waldfest Trachten-Outfit online- oder besuch uns vor Ort inmitten der Münchner Altstadt – und sei bereit für einen Sommer voller Heimatgefühl.<br/><br/></p>"
+      }
+    },
+    "occasion_products_UhH3Yp": {
+      "type": "occasion-products",
+      "name": "Occasion Products",
+      "settings": {
+        "subtitle": "Die schönsten",
+        "title": "Waldfest Westen",
+        "show_view_all": true,
+        "view_all_link": "shopify://collections/shirts-westen",
+        "view_all_text": "Alle ansehen",
+        "use_collection": true,
+        "collection": "shirts-westen",
+        "products_limit": 16,
+        "show_vendor": true,
+        "background_color": "#ffffff"
       }
     }
   },
@@ -90,7 +107,8 @@
     "occasion-hero",
     "content",
     "products",
-    "text-image",
-    "banner"
+    "banner",
+    "occasion_content_xPQCYM",
+    "occasion_products_UhH3Yp"
   ]
 }
