@@ -102,16 +102,43 @@
         "background_color": "#ffffff"
       }
     },
-    "text-image": {
-      "type": "occasion-text-image",
+    "occasion_banner_4ExWyK": {
+      "type": "occasion-banner",
+      "name": "Occasion Banner",
       "settings": {
-        "layout": "content-first",
-        "background_color": "#ffffff",
-        "subtitle": "",
-        "title": "",
-        "content": "",
+        "use_image": true,
+        "image": "shopify://shop_images/AL_HW1819_CORTELLESI_0130_2x_b27707ed-a95e-4a20-b4ad-c3d833393d7d.jpg",
+        "image_position": "top",
+        "overlay_opacity": 40,
+        "background_color": "#111827",
+        "enable_parallax": true,
+        "banner_height": "large",
+        "content_width": "full",
+        "content_horizontal": "center",
+        "content_vertical": "center",
+        "subtitle": "WENN DER VATER MIT DEM SOHN",
+        "title": "Stilvolle Kommunion in Tracht für Jungen und Herren",
+        "description": "",
+        "text_color": "#ffffff",
         "button_label": "",
-        "button_link": ""
+        "button_link": "",
+        "button_style": "solid"
+      }
+    },
+    "occasion_products_ffLXJY": {
+      "type": "occasion-products",
+      "name": "Occasion Products",
+      "settings": {
+        "subtitle": "Die schönste",
+        "title": "Tracht für Väter",
+        "show_view_all": true,
+        "view_all_link": "shopify://collections/trachtenjanker",
+        "view_all_text": "Alle ansehen",
+        "use_collection": true,
+        "collection": "trachtenjanker",
+        "products_limit": 8,
+        "show_vendor": true,
+        "background_color": "#ffffff"
       }
     }
   },
@@ -122,6 +149,7 @@
     "banner",
     "occasion_content_bnFBG4",
     "occasion_products_EJJFCy",
-    "text-image"
+    "occasion_banner_4ExWyK",
+    "occasion_products_ffLXJY"
   ]
 }
