@@ -74,18 +74,6 @@
         "button_style": "solid"
       }
     },
-    "text-image": {
-      "type": "occasion-text-image",
-      "settings": {
-        "layout": "content-first",
-        "background_color": "#ffffff",
-        "subtitle": "",
-        "title": "",
-        "content": "",
-        "button_label": "",
-        "button_link": ""
-      }
-    },
     "occasion_products_TAeHdV": {
       "type": "occasion-products",
       "name": "Occasion Products",
@@ -96,7 +84,7 @@
         "view_all_link": "",
         "view_all_text": "Alle ansehen",
         "use_collection": true,
-        "collection": "sale-damen",
+        "collection": "rocke-hosen",
         "products_limit": 12,
         "show_vendor": true,
         "background_color": "#ffffff"
@@ -108,7 +96,6 @@
     "content",
     "products",
     "banner",
-    "text-image",
     "occasion_products_TAeHdV"
   ]
 }
