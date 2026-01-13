@@ -236,93 +236,6 @@
         "image": "shopify://shop_images/ALMLIEBE23HW2463K_2x_b81d14d0-a658-4e89-9adf-289113cc8d24.png"
       }
     },
-    "occasion_products_RQ4H9U": {
-      "type": "occasion-products",
-      "blocks": {
-        "product_WUDBe9": {
-          "type": "product",
-          "settings": {
-            "product": "dirndlbluse-stella-blau"
-          }
-        },
-        "product_xP8wNr": {
-          "type": "product",
-          "settings": {
-            "product": "dirndlbluse-ava-a005306-weiss"
-          }
-        },
-        "product_yfNxkk": {
-          "type": "product",
-          "settings": {
-            "product": "dirndlbluse-irma-a005054-eierschale"
-          }
-        },
-        "product_7fbAA7": {
-          "type": "product",
-          "settings": {
-            "product": "dirndlbluse-mariella-a005309-weiss"
-          }
-        },
-        "product_c9FJVV": {
-          "type": "product",
-          "settings": {
-            "product": "dirndlbluse-mit-flugelarm-hanny-schwarz"
-          }
-        },
-        "product_i8bFRG": {
-          "type": "product",
-          "settings": {
-            "product": "langarm-dirndlbluse-alina-2940-weiss"
-          }
-        },
-        "product_Ka8THB": {
-          "type": "product",
-          "settings": {
-            "product": "dirndlbluse-hanny-2914-80-schwarz"
-          }
-        },
-        "product_QhnFmC": {
-          "type": "product",
-          "settings": {
-            "product": "dirndlbluse-lee-weiss"
-          }
-        },
-        "product_EBM64L": {
-          "type": "product",
-          "settings": {
-            "product": "dirndlbluse-eveline-mit-flugelarm-2940-51-hellgrun"
-          }
-        },
-        "product_qEJaYC": {
-          "type": "product",
-          "settings": {
-            "product": "dirndlbluse-mit-flugelarm-christina-haselnuss"
-          }
-        }
-      },
-      "block_order": [
-        "product_WUDBe9",
-        "product_xP8wNr",
-        "product_yfNxkk",
-        "product_7fbAA7",
-        "product_c9FJVV",
-        "product_i8bFRG",
-        "product_Ka8THB",
-        "product_QhnFmC",
-        "product_EBM64L",
-        "product_qEJaYC"
-      ],
-      "name": "Occasion Products",
-      "settings": {
-        "subtitle": "Die schönsten",
-        "title": "Dirndlblusen",
-        "show_view_all": false,
-        "view_all_link": "shopify://collections/dirndlblusen",
-        "view_all_text": "Alle ansehen",
-        "show_vendor": true,
-        "background_color": "#ffffff"
-      }
-    },
     "occasion_text_image_TkTHRN": {
       "type": "occasion-text-image",
       "name": "Occasion Text + Image",
@@ -336,6 +249,115 @@
         "button_link": "",
         "image": "shopify://shop_images/ALMLEBE-HW22-0065-BW_2x_5193c0e4-8bf1-4b46-90de-f2bee3d01d02.png"
       }
+    },
+    "occasion_banner_kFD7VN": {
+      "type": "occasion-banner",
+      "settings": {
+        "use_image": true,
+        "image": "shopify://shop_images/ALMLEBE-HW22-9652_2x_da88883e-0151-4078-8a18-37ac378b3d2b.png",
+        "image_position": "center",
+        "overlay_opacity": 40,
+        "background_color": "#111827",
+        "enable_parallax": true,
+        "banner_height": "xlarge",
+        "content_width": "full",
+        "content_horizontal": "center",
+        "content_vertical": "center",
+        "subtitle": "DIE BESTEN TRACHTEN-OUTFITS FÜR DAMEN AUF DEM OKTOBERFEST",
+        "title": "Die Tradition kehrt zurück",
+        "description": "",
+        "text_color": "#ffffff",
+        "button_label": "",
+        "button_link": "",
+        "button_style": "solid"
+      }
+    },
+    "occasion_products_RQ4H9U": {
+      "type": "occasion-products",
+      "blocks": {
+        "product_c9FJVV": {
+          "type": "product",
+          "settings": {
+            "product": "banderrock-ribbon-hunter"
+          }
+        },
+        "product_7fbAA7": {
+          "type": "product",
+          "settings": {
+            "product": "trachtenrock-flamboyant-frosty-floral"
+          }
+        },
+        "product_WUDBe9": {
+          "type": "product",
+          "settings": {
+            "product": "trachtenkleid-swing-ribbon-skirt-fern"
+          }
+        },
+        "product_yfNxkk": {
+          "type": "product",
+          "settings": {
+            "product": "geblumter-trachtenrock-asana-oliv"
+          }
+        },
+        "product_xP8wNr": {
+          "type": "product",
+          "settings": {
+            "product": "trachtenrock-original-ribbon-skirt-coral-reef"
+          }
+        },
+        "product_qEJaYC": {
+          "type": "product",
+          "settings": {
+            "product": "trachtenrock-sarah-garlands"
+          }
+        },
+        "product_i8bFRG": {
+          "type": "product",
+          "settings": {
+            "product": "trachtenrock-44250-7-oliv"
+          }
+        },
+        "product_Ka8THB": {
+          "type": "product",
+          "settings": {
+            "product": "trachtenrock-sonja-apfelgrun"
+          }
+        },
+        "product_QhnFmC": {
+          "type": "product",
+          "settings": {
+            "product": "trachtenrock-942015-5-schwarz-gemustert"
+          }
+        },
+        "product_EBM64L": {
+          "type": "product",
+          "settings": {
+            "product": "trachtenrock-minna-a004783-999-schwarz"
+          }
+        }
+      },
+      "block_order": [
+        "product_c9FJVV",
+        "product_7fbAA7",
+        "product_WUDBe9",
+        "product_yfNxkk",
+        "product_xP8wNr",
+        "product_qEJaYC",
+        "product_i8bFRG",
+        "product_Ka8THB",
+        "product_QhnFmC",
+        "product_EBM64L"
+      ],
+      "name": "Occasion Products",
+      "settings": {
+        "subtitle": "Trachten Stylesfür das",
+        "title": "Oktoberfest",
+        "show_view_all": false,
+        "view_all_link": "",
+        "view_all_text": "Alle ansehen",
+        "show_vendor": true,
+        "background_color": "#ffffff"
+      }
     }
   },
   "order": [
@@ -346,7 +368,8 @@
     "occasion_content_W7Rtwb",
     "occasion_products_Baieqk",
     "text-image",
-    "occasion_products_RQ4H9U",
-    "occasion_text_image_TkTHRN"
+    "occasion_text_image_TkTHRN",
+    "occasion_banner_kFD7VN",
+    "occasion_products_RQ4H9U"
   ]
 }
