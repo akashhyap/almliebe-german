@@ -57,9 +57,31 @@
       {%- assign subcollections_list = collection.metafields.custom.subcollections.value -%}
       
       {%- if subcollections_list != blank and subcollections_list.size > 0 -%}
-        <div class="subcollection-cards">
-          <div class="subcollection-cards__grid">
-            {%- for subcollection in subcollections_list limit: 6 -%}
+        {%- assign subcollections_count = subcollections_list.size -%}
+        {%- assign enable_subcollection_carousel = false -%}
+        {%- if subcollections_count > 5 -%}
+          {%- assign enable_subcollection_carousel = true -%}
+        {%- endif -%}
+        
+        <div class="subcollection-cards{% if enable_subcollection_carousel %} has-carousel{% endif %}" data-subcollection-slider>
+          {%- comment -%} Navigation Arrows (only for carousel) {%- endcomment -%}
+          {%- if enable_subcollection_carousel -%}
+            <div class="subcollection-cards__nav">
+              <button type="button" class="subcollection-cards__nav-btn subcollection-cards__nav-btn--prev" data-subcollection-prev aria-label="Previous" disabled>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="15 18 9 12 15 6"/>
+                </svg>
+              </button>
+              <button type="button" class="subcollection-cards__nav-btn subcollection-cards__nav-btn--next" data-subcollection-next aria-label="Next">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </button>
+            </div>
+          {%- endif -%}
+          
+          <div class="subcollection-cards__track{% unless enable_subcollection_carousel %} subcollection-cards__track--grid{% endunless %}" data-subcollection-track>
+            {%- for subcollection in subcollections_list -%}
               <a href="{{ subcollection.url }}" class="subcollection-card">
                 <div class="subcollection-card__image">
                   {%- if subcollection.image != blank -%}
@@ -1197,42 +1219,144 @@
   /* ========== SUB-COLLECTION CARDS ========== */
   .subcollection-cards {
     margin-top: 1.5rem;
+    position: relative;
   }
   
-  .subcollection-cards__grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+  /* Navigation Arrows */
+  .subcollection-cards__nav {
+    display: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    gap: 0.5rem;
+    z-index: 2;
+  }
+  
+  @media (min-width: 768px) {
+    .subcollection-cards.has-carousel .subcollection-cards__nav {
+      display: flex;
+    }
+  }
+  
+  .subcollection-cards__nav-btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .subcollection-cards__nav-btn:hover:not(:disabled) {
+    background: #111827;
+    border-color: #111827;
+    color: #ffffff;
+  }
+  
+  .subcollection-cards__nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  
+  .subcollection-cards__nav-btn svg {
+    stroke: currentColor;
+  }
+  
+  /* Track - Carousel Mode */
+  .subcollection-cards__track {
+    display: flex;
     gap: 1rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-snap-type: x mandatory;
+    padding-top: 50px;
+  }
+  
+  @media (min-width: 768px) {
+    .subcollection-cards__track {
+      gap: 1.25rem;
+    }
+  }
+  
+  .subcollection-cards__track::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Track - Grid Mode (5 or fewer items) */
+  .subcollection-cards__track--grid {
+    overflow-x: visible;
+    scroll-snap-type: none;
+    padding-top: 0;
   }
   
   @media (min-width: 640px) {
-    .subcollection-cards__grid {
+    .subcollection-cards__track--grid {
+      display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 1.25rem;
     }
   }
   
   @media (min-width: 900px) {
-    .subcollection-cards__grid {
+    .subcollection-cards__track--grid {
       grid-template-columns: repeat(4, 1fr);
       gap: 1.5rem;
     }
   }
   
   @media (min-width: 1200px) {
-    .subcollection-cards__grid {
+    .subcollection-cards__track--grid {
       grid-template-columns: repeat(5, 1fr);
       gap: 1.5rem;
     }
   }
   
+  /* Subcollection Card */
   .subcollection-card {
+    flex: 0 0 calc(50% - 0.5rem);
+    scroll-snap-align: start;
+    min-width: 0;
     display: block;
     text-decoration: none;
     color: inherit;
     transition: transform 0.2s ease;
   }
   
+  @media (min-width: 640px) {
+    .subcollection-card {
+      flex: 0 0 calc(33.333% - 0.833rem);
+    }
+  }
+  
+  @media (min-width: 900px) {
+    .subcollection-card {
+      flex: 0 0 calc(25% - 0.9375rem);
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    .subcollection-card {
+      flex: 0 0 calc(20% - 1rem);
+    }
+  }
+  
+  /* Grid mode - items fill evenly */
+  .subcollection-cards__track--grid .subcollection-card {
+    flex: 1;
+  }
+  
+  @media (min-width: 640px) {
+    .subcollection-cards__track--grid .subcollection-card {
+      flex: none;
+    }
+  }
+
   .subcollection-card:hover {
     transform: translateY(-4px);
   }
@@ -1492,6 +1616,46 @@ document.addEventListener('DOMContentLoaded', function() {
   const filterForm = document.querySelector('[data-filter-form]');
   const grid = document.querySelector('[data-collection-grid]');
   const loadMoreContainer = document.querySelector('[data-load-more-container]');
+  
+  // ========== SUBCOLLECTION CAROUSEL ==========
+  const subcollectionSlider = document.querySelector('[data-subcollection-slider]');
+  if (subcollectionSlider && subcollectionSlider.classList.contains('has-carousel')) {
+    const track = subcollectionSlider.querySelector('[data-subcollection-track]');
+    const prevBtn = subcollectionSlider.querySelector('[data-subcollection-prev]');
+    const nextBtn = subcollectionSlider.querySelector('[data-subcollection-next]');
+    
+    if (track && prevBtn && nextBtn) {
+      const updateButtons = () => {
+        const scrollLeft = track.scrollLeft;
+        const maxScroll = track.scrollWidth - track.clientWidth;
+        
+        prevBtn.disabled = scrollLeft <= 10;
+        nextBtn.disabled = scrollLeft >= maxScroll - 10;
+      };
+      
+      const getSlideWidth = () => {
+        const slide = track.querySelector('.subcollection-card');
+        if (!slide) return 200;
+        const style = getComputedStyle(track);
+        const gap = parseFloat(style.gap) || 16;
+        return slide.offsetWidth + gap;
+      };
+      
+      prevBtn.addEventListener('click', () => {
+        track.scrollBy({ left: -getSlideWidth() * 2, behavior: 'smooth' });
+      });
+      
+      nextBtn.addEventListener('click', () => {
+        track.scrollBy({ left: getSlideWidth() * 2, behavior: 'smooth' });
+      });
+      
+      track.addEventListener('scroll', updateButtons);
+      window.addEventListener('resize', updateButtons);
+      
+      // Initial state
+      setTimeout(updateButtons, 100);
+    }
+  }
   
   // ========== FILTER DRAWER ==========
   function openFilters() {
