@@ -1,16 +1,28 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "occasion-hero": {
       "type": "occasion-hero",
       "settings": {
-        "title": "Kommunion",
-        "subtitle": "Ein besonderer Tag",
-        "description": "Entdecken Sie unsere festliche Trachtenkollektion für die Erstkommunion",
-        "banner_height": "large",
-        "content_horizontal": "center",
-        "content_vertical": "center",
+        "image": "shopify://shop_images/trachtenhochzeit-almliebe-2_2x_b530793d-d411-4f6d-a0ae-694240ba6ca0.jpg",
         "image_position": "center",
         "overlay_opacity": 40,
+        "banner_height": "large",
+        "subtitle": "FESTE IN TRACHT",
+        "title": "Dirndl zur Kommunion, Taufe und Firmung",
+        "description": "",
+        "button_label": "",
+        "button_link": "",
+        "content_horizontal": "center",
+        "content_vertical": "center",
         "text_color": "#ffffff"
       }
     },
@@ -19,48 +31,87 @@
       "settings": {
         "content_width": "medium",
         "text_alignment": "center",
-        "title": "",
+        "background_color": "#ffffff",
         "subtitle": "",
-        "content": "",
-        "background_color": "#ffffff"
+        "title": "",
+        "content": "<p>Tracht liegt im Trend. Nicht nur auf Volksfesten und zur Wiesn werden Dirndl und Lederhosen gern getragen, sondern auch bei wichtigen kirchlichen Festen wie Taufe, Kommunion oder Firmung. Dabei kleiden sich die Kinder in Kommuniondirndl oder Taufkleider, aber auch Eltern und Gäste erscheinen gerne in traditioneller Trachtenkleidung. Denn: Traditionelle Trachtenkleidung und insbesondere das Kommuniondirndl sind für solche Anlässe genau das Richtige. Sie sind tief in der Kultur verankert und vermitteln Werte wie Tradition und Heimatverbundenheit. Tauche ein in die Almliebe-Welt und entdecke Trachtenkleidung und Kommunionkleider in verschiedenen Stilen, Farben, Materialien und Designs für die ganze Familie – von verspielten Kinderdirndln für die Erstkommunion und edlen Dirndln für stolze Mütter bis hin zu schicken Lederhosen und Trachtenjankern für die Buam und ihre Väter.<br/><br/></p>"
       }
     },
     "products": {
       "type": "occasion-products",
       "settings": {
-        "title": "Festliche Trachten",
-        "subtitle": "Für den großen Tag",
+        "subtitle": "Die schönste",
+        "title": "Kinder Tracht",
         "show_view_all": true,
+        "view_all_link": "shopify://collections/kinder",
         "view_all_text": "Alle ansehen",
+        "use_collection": true,
+        "collection": "kinder",
+        "products_limit": 8,
         "show_vendor": true,
         "background_color": "#f9fafb"
-      },
-      "blocks": {}
-    },
-    "text-image": {
-      "type": "occasion-text-image",
-      "settings": {
-        "layout": "content-first",
-        "subtitle": "",
-        "title": "",
-        "content": "",
-        "background_color": "#ffffff"
       }
     },
     "banner": {
       "type": "occasion-banner",
       "settings": {
         "use_image": true,
-        "enable_parallax": true,
-        "banner_height": "medium",
-        "content_horizontal": "center",
-        "content_vertical": "center",
-        "content_width": "medium",
+        "image": "shopify://shop_images/IMG_2404_2x_185f2662-a843-4ba4-8105-3b38b0c37d1b.jpg",
         "image_position": "center",
         "overlay_opacity": 40,
-        "text_color": "#ffffff",
         "background_color": "#111827",
+        "enable_parallax": true,
+        "banner_height": "large",
+        "content_width": "full",
+        "content_horizontal": "center",
+        "content_vertical": "center",
+        "subtitle": "My mini me",
+        "title": "Festliche Kommuniondirndl für Mütter und Töchter",
+        "description": "",
+        "text_color": "#ffffff",
+        "button_label": "",
+        "button_link": "",
         "button_style": "solid"
+      }
+    },
+    "occasion_content_bnFBG4": {
+      "type": "occasion-content",
+      "name": "Occasion Content",
+      "settings": {
+        "content_width": "medium",
+        "text_alignment": "center",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "",
+        "content": "<p>Bei uns trifft Tradition auf moderne Eleganz. Marken wie Hammerschmid, Berwin&Wolff, Felicitas und Wenger bieten für Kinder und Damen eine breite Auswahl an wunderschönen Kommuniondirndln, von klassisch bis modern. Ob du auf der Suche nach Tauf- oder Kommunionkleidern aus natürlichen Materialien oder nach festlichen Dirndln für die Firmung bist – bei Almliebe wirst du fündig. Von hochgeschlossenen Kommunionkleidern mit Stehkragen bis hin zu Designs mit klassischem Ausschnitt oder Halbarm – unsere Kommuniondirndl begeistern mit einer Vielfalt an Schnitten. Auch die breite Palette an Farben in unserem Online-Shop ermöglicht dir unzählige Kombinationsmöglichkeiten und macht jedes Dirndl zu einem ganz besonderen Stück für feierliche Anlässe. Die Mädels lieben Kommunionkleider oder Dirndl für die Firmung in Rosé- oder Pinktönen oder auch hellen Blau- und Grüntönen. Die Mütter oder weiblichen Gäste können aber auch klassische Farben als Dirndl für Kommunion oder Firmung tragen. Dunkle Blau- oder Grüntöne machen die Tracht festlich und elegant. Passend dazu findest du bei uns exklusive Dirndlblusen, die das Trachtenoutfit abrunden und für das besondere Etwas sorgen. Unsere Dirndlschürzen mit ihren eleganten Schließen oder Schleifen ergänzen das traditionelle Kommunion-Outfit perfekt.<br/><br/></p>"
+      }
+    },
+    "occasion_products_EJJFCy": {
+      "type": "occasion-products",
+      "name": "Occasion Products",
+      "settings": {
+        "subtitle": "Die schönste",
+        "title": "Tracht für Mütter",
+        "show_view_all": true,
+        "view_all_link": "shopify://collections/trachtenhosen",
+        "view_all_text": "Alle ansehen",
+        "use_collection": true,
+        "collection": "sale-damen",
+        "products_limit": 8,
+        "show_vendor": true,
+        "background_color": "#ffffff"
+      }
+    },
+    "text-image": {
+      "type": "occasion-text-image",
+      "settings": {
+        "layout": "content-first",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "",
+        "content": "",
+        "button_label": "",
+        "button_link": ""
       }
     }
   },
@@ -68,7 +119,9 @@
     "occasion-hero",
     "content",
     "products",
-    "text-image",
-    "banner"
+    "banner",
+    "occasion_content_bnFBG4",
+    "occasion_products_EJJFCy",
+    "text-image"
   ]
 }
