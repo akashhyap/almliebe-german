@@ -52,6 +52,56 @@
         "background_color": "#f9fafb"
       }
     },
+    "banner": {
+      "type": "occasion-banner",
+      "settings": {
+        "use_image": true,
+        "image": "shopify://shop_images/ALMLIEBE23HW1409K_2x-volk.jpg",
+        "image_position": "center",
+        "overlay_opacity": 40,
+        "background_color": "#111827",
+        "enable_parallax": true,
+        "banner_height": "xlarge",
+        "content_width": "full",
+        "content_horizontal": "center",
+        "content_vertical": "center",
+        "subtitle": "Volksfest-Trends Damen",
+        "title": "Vom Wasch- zum Samtdirndl",
+        "description": "",
+        "text_color": "#ffffff",
+        "button_label": "",
+        "button_link": "",
+        "button_style": "solid"
+      }
+    },
+    "occasion_content_tMUwP4": {
+      "type": "occasion-content",
+      "name": "Occasion Content",
+      "settings": {
+        "content_width": "medium",
+        "text_alignment": "center",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "",
+        "content": "<p>Vor nicht allzu langer Zeit war das einfache Waschdirndl aus Baumwolle ein beliebtes Festdirndl. Traditionell, aus gemusterter Baumwolle, und praktisch, weil man es eben waschen konnte nach einem exzessiven Abend im Bierzelt. Heute ist ein Volksfest ein festlicher Anlass, zu dem man sich mit einem exklusiven Dirndl herausputzt und das schönste Gewand anzieht, so wie es auch früher war. Vielleicht im Hochsommer oder zu einem Waldfest tagsüber kann man leichte luftige Dirndl tragen. Sonst gilt für das festliche Dirndlkleid: lieber edel und elegant. Die Materialien beim langen festlichen Dirndl sind eher Samt, gewebte Jaquardstoffe oder auch Cord. Samtdirndl in Grün, Blau oder Schwarz sind zum neuen It-Teil nicht nur auf der Münchner Wiesn geworden. Die Designer-Dirndl kommen meist Ton-in-Ton mit der Schürze und werden mit festlichen Spitzen-Dirndlblusen aufgepeppt. Neu bei den Volksfest-Trachten-Trends sind auch festliche Halbarmdirndl – zum Beispiel von Gottseidank oder Almliebe -, die man mit oder ohne Dirndlbluse tragen kann. Modisch ganz vorne dabei sind Dirndl mit Puffarm, egal ob nur leicht angepufft an der Schulter oder mit mehr Volumen im Ärmel. Das Halbarmdirndl kann dabei hochgeschlossen sein oder mit klassischem Ausschnitt. Wichtig beim exklusiven Dirndl für festliche Anlässe sind also edle Materialien, hochwertige Knöpfe und hochwertige Stoffe, statt zu viel Glitzer und Seide. Übrigens: als modern gelten lange festliche Dirndlkleider mit einer Rocklänge von mindestens 75 Zentimeter.<br/><br/></p>"
+      }
+    },
+    "occasion_products_BVppgp": {
+      "type": "occasion-products",
+      "name": "Occasion Products",
+      "settings": {
+        "subtitle": "Die schönsten festlichen",
+        "title": "Dirndl",
+        "show_view_all": true,
+        "view_all_link": "shopify://collections/dirndl",
+        "view_all_text": "Alle ansehen",
+        "use_collection": true,
+        "collection": "dirndl",
+        "products_limit": 8,
+        "show_vendor": true,
+        "background_color": "#ffffff"
+      }
+    },
     "text-image": {
       "type": "occasion-text-image",
       "settings": {
@@ -63,34 +113,15 @@
         "button_label": "",
         "button_link": ""
       }
-    },
-    "banner": {
-      "type": "occasion-banner",
-      "settings": {
-        "use_image": true,
-        "image_position": "center",
-        "overlay_opacity": 40,
-        "background_color": "#111827",
-        "enable_parallax": true,
-        "banner_height": "medium",
-        "content_width": "medium",
-        "content_horizontal": "center",
-        "content_vertical": "center",
-        "subtitle": "",
-        "title": "",
-        "description": "",
-        "text_color": "#ffffff",
-        "button_label": "",
-        "button_link": "",
-        "button_style": "solid"
-      }
     }
   },
   "order": [
     "occasion-hero",
     "content",
     "products",
-    "text-image",
-    "banner"
+    "banner",
+    "occasion_content_tMUwP4",
+    "occasion_products_BVppgp",
+    "text-image"
   ]
 }
