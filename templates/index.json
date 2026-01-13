@@ -270,7 +270,7 @@
         "image_position": "center",
         "overlay_opacity": 30,
         "background_color": "rgba(0,0,0,0)",
-        "banner_height": "medium",
+        "banner_height": "large",
         "subtitle": "Almliebe Community",
         "title": "Erhalte unseren Newsletter",
         "button_label": "Subscribe",
