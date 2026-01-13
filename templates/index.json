@@ -186,6 +186,81 @@
         "show_vendor": true
       }
     },
+    "collection_grid_WHKRj8": {
+      "type": "collection-grid",
+      "blocks": {
+        "collection_rPpwFL": {
+          "type": "collection",
+          "settings": {
+            "collection": "sale-damen",
+            "title": "",
+            "description": "In unserer Sale Kategorie finden sie günstige Trachtenmode und reduzierte Angebote für Ihren Wiesenlook.",
+            "link": ""
+          }
+        },
+        "collection_TwaHkB": {
+          "type": "collection",
+          "settings": {
+            "collection": "trachtenblusen",
+            "title": "",
+            "description": "Trachtenblusen verleihen jedem Dirndl feminine Leichtigkeit und zeitlosen Charme.",
+            "link": ""
+          }
+        },
+        "collection_Ynmkt9": {
+          "type": "collection",
+          "settings": {
+            "collection": "braut-drindl",
+            "title": "",
+            "description": "Nichts verkörpert Heimat, Tradition und Brauchtum mehr als ein Dirndl. ",
+            "link": ""
+          }
+        },
+        "collection_HQjWm8": {
+          "type": "collection",
+          "settings": {
+            "collection": "dirndl-kleider",
+            "title": "",
+            "description": "Dirndl und Kleider vereinen traditionelle Eleganz mit modernem Design.",
+            "link": ""
+          }
+        },
+        "collection_NWwXjM": {
+          "type": "collection",
+          "settings": {
+            "collection": "damenjanker",
+            "title": "",
+            "description": "Stilvolle Damenjanker verbinden traditionelle Handwerkskunst mit zeitloser Eleganz.",
+            "link": ""
+          }
+        },
+        "collection_Geck7W": {
+          "type": "collection",
+          "settings": {
+            "collection": "blusen-meider",
+            "title": "",
+            "description": "Feine Blusen und stilvolle Mieder verleihen jedem Dirndl den perfekten Auftritt.",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_rPpwFL",
+        "collection_TwaHkB",
+        "collection_Ynmkt9",
+        "collection_HQjWm8",
+        "collection_NWwXjM",
+        "collection_Geck7W"
+      ],
+      "name": "Collection Grid",
+      "settings": {
+        "subtitle": "",
+        "title": "POPULAR COLLECTIONS",
+        "show_view_all": false,
+        "view_all_link": "shopify://collections",
+        "view_all_text": "Alle ansehen"
+      }
+    },
     "newsletter_HNhrDd": {
       "type": "newsletter",
       "name": "Newsletter",
@@ -195,7 +270,7 @@
         "image_position": "center",
         "overlay_opacity": 30,
         "background_color": "rgba(0,0,0,0)",
-        "banner_height": "small",
+        "banner_height": "medium",
         "subtitle": "Almliebe Community",
         "title": "Erhalte unseren Newsletter",
         "button_label": "Subscribe",
@@ -284,81 +359,6 @@
         "title": "Tracht für alle Anlässe",
         "show_view_all": false,
         "view_all_link": "",
-        "view_all_text": "Alle ansehen"
-      }
-    },
-    "collection_grid_WHKRj8": {
-      "type": "collection-grid",
-      "blocks": {
-        "collection_rPpwFL": {
-          "type": "collection",
-          "settings": {
-            "collection": "sale-damen",
-            "title": "",
-            "description": "In unserer Sale Kategorie finden sie günstige Trachtenmode und reduzierte Angebote für Ihren Wiesenlook.",
-            "link": ""
-          }
-        },
-        "collection_TwaHkB": {
-          "type": "collection",
-          "settings": {
-            "collection": "trachtenblusen",
-            "title": "",
-            "description": "Trachtenblusen verleihen jedem Dirndl feminine Leichtigkeit und zeitlosen Charme.",
-            "link": ""
-          }
-        },
-        "collection_Ynmkt9": {
-          "type": "collection",
-          "settings": {
-            "collection": "braut-drindl",
-            "title": "",
-            "description": "Nichts verkörpert Heimat, Tradition und Brauchtum mehr als ein Dirndl. ",
-            "link": ""
-          }
-        },
-        "collection_HQjWm8": {
-          "type": "collection",
-          "settings": {
-            "collection": "dirndl-kleider",
-            "title": "",
-            "description": "Dirndl und Kleider vereinen traditionelle Eleganz mit modernem Design.",
-            "link": ""
-          }
-        },
-        "collection_NWwXjM": {
-          "type": "collection",
-          "settings": {
-            "collection": "damenjanker",
-            "title": "",
-            "description": "Stilvolle Damenjanker verbinden traditionelle Handwerkskunst mit zeitloser Eleganz.",
-            "link": ""
-          }
-        },
-        "collection_Geck7W": {
-          "type": "collection",
-          "settings": {
-            "collection": "blusen-meider",
-            "title": "",
-            "description": "Feine Blusen und stilvolle Mieder verleihen jedem Dirndl den perfekten Auftritt.",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "collection_rPpwFL",
-        "collection_TwaHkB",
-        "collection_Ynmkt9",
-        "collection_HQjWm8",
-        "collection_NWwXjM",
-        "collection_Geck7W"
-      ],
-      "name": "Collection Grid",
-      "settings": {
-        "subtitle": "",
-        "title": "POPULAR COLLECTIONS",
-        "show_view_all": false,
-        "view_all_link": "shopify://collections",
         "view_all_text": "Alle ansehen"
       }
     }
