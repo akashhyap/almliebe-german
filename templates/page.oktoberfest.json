@@ -228,7 +228,6 @@
       "settings": {
         "layout": "image-first",
         "background_color": "#ffffff",
-        "enable_parallax": true,
         "subtitle": "",
         "title": "Die schönsten Blusenzum Wiesn-Dirndl",
         "content": "<p>Die Dirndlbluse ist beim Wiesn-Outfit nach wie vor das wichtigste Statement neben dem Dirndl. Zum perfekten Wiesn-Outfit gehören festliche Dirndlblusen. Dirndl-Spitzenblusen in Weiß oder Schwarz, kurzarm oder langarm, werten jedes Wiesn-Dirndl auf. Dabei sind vor allem hochgeschlossene Dirndlblusen oder Dirndlblusen mit V-Ausschnitt beliebt. Wobei der Trend auch wieder hin zu schlichten Dirndlblusen fürs Oktoberfest geht. Auch bei den Wiesn-Blusen gelten voluminöse Ärmel und Dirndlblusen mit Puffarm allmählich wieder als modern. Und weil die Wiesn im Herbst stattfindet, dürfen Blusen fürs Oktoberfest gerne auch einen Dreiviertel- oder Langarm haben. Gerne auch mal mit weit geschnittenen Ballonärmel. Besonders gefragt sind zum Oktoberfest auch Dirndlblusen mit Flügelarm von Dirndl-Designern wie Kinga Mathé, Gottseidank oder Wenger, die besonders neckisch unterm Dirndl hervorblitzen.<br/><br/></p>",
@@ -243,7 +242,6 @@
       "settings": {
         "layout": "content-first",
         "background_color": "#ffffff",
-        "enable_parallax": false,
         "subtitle": "",
         "title": "Oktoberfest-Outfits für Damen,die kein Dirndl suchen",
         "content": "<p>Als Wiesn-Outfit für alle Damen, die zum Oktoberfest kein Dirndl anziehen wollen, eignen sich Oktoberfestkleider und Trachtenröcke. Die österreichische Dirndl-Designerin Lena Hoschek zum Beispiel macht wunderschöne, mit vielen Trachtenborten verzierte Oktoberfestkleider für Damen aus traditioneller Baumwolle oder aufwändige Bänderröcke, die man mit Trachtenmieder oder Trachtenjanker kombinieren kann. Wenn die Nächte kühler werden auf der Wiesn, gehört zum Oktoberfest-Outfit für Damen natürlich auch die warme Trachten-Strickjacke oder der Trachtenjanker aus Loden oder Samt dazu. Im Kommen ist auch wieder der sogenannte Dreiteiler, sprich eine Kombi aus Trachtenrock, Trachtenmieder und Dirndlschürze. Die Trachtenmarke Gottseidank kreiert neben den wunderschönen Gottseidank Dirndln immer mehr verschiedene Kombinationsmöglichkeiten, darunter wunderschöne Trachtenmieder mit Puffarm.<br/><br/></p>",
@@ -383,6 +381,93 @@
         "button_link": "",
         "button_style": "solid"
       }
+    },
+    "occasion_products_D9fUEV": {
+      "type": "occasion-products",
+      "blocks": {
+        "product_HPCamz": {
+          "type": "product",
+          "settings": {
+            "product": "hirschlederhose-luis-flanell-beige-anthra"
+          }
+        },
+        "product_YCwbAb": {
+          "type": "product",
+          "settings": {
+            "product": "hirschlederhose-gamskogel-old-grey"
+          }
+        },
+        "product_djJNFK": {
+          "type": "product",
+          "settings": {
+            "product": "lederhose-leo-antikbraun-tanne"
+          }
+        },
+        "product_GrWWBq": {
+          "type": "product",
+          "settings": {
+            "product": "lederhose-lustenau-baileys-grau"
+          }
+        },
+        "product_YWR8aK": {
+          "type": "product",
+          "settings": {
+            "product": "lederhose-loisachtal-inka"
+          }
+        },
+        "product_wzDRtb": {
+          "type": "product",
+          "settings": {
+            "product": "lederhose-moses-tabacco-grun"
+          }
+        },
+        "product_Hf6WxA": {
+          "type": "product",
+          "settings": {
+            "product": "hirschlederhose-bayrischzell-antik-hell"
+          }
+        },
+        "product_CWP9j3": {
+          "type": "product",
+          "settings": {
+            "product": "ziegenlederhose-weissenberg-safari-schwarz"
+          }
+        },
+        "product_GH7LX6": {
+          "type": "product",
+          "settings": {
+            "product": "hirschlederhose-maximus-nussbaum"
+          }
+        },
+        "product_aA3b79": {
+          "type": "product",
+          "settings": {
+            "product": "lederhose-gerner-gerste-gruen"
+          }
+        }
+      },
+      "block_order": [
+        "product_HPCamz",
+        "product_YCwbAb",
+        "product_djJNFK",
+        "product_GrWWBq",
+        "product_YWR8aK",
+        "product_wzDRtb",
+        "product_Hf6WxA",
+        "product_CWP9j3",
+        "product_GH7LX6",
+        "product_aA3b79"
+      ],
+      "name": "Occasion Products",
+      "settings": {
+        "subtitle": "Die schönsten",
+        "title": "Oktoberfest Lederhosen",
+        "show_view_all": true,
+        "view_all_link": "shopify://collections/lederhosen",
+        "view_all_text": "Alle ansehen",
+        "show_vendor": true,
+        "background_color": "#ffffff"
+      }
     }
   },
   "order": [
@@ -396,6 +481,7 @@
     "occasion_text_image_TkTHRN",
     "occasion_banner_kFD7VN",
     "occasion_products_RQ4H9U",
-    "occasion_banner_Mcybxp"
+    "occasion_banner_Mcybxp",
+    "occasion_products_D9fUEV"
   ]
 }
