@@ -101,6 +101,29 @@
         "show_vendor": true,
         "background_color": "#ffffff"
       }
+    },
+    "occasion_banner_raxQcb": {
+      "type": "occasion-banner",
+      "name": "Occasion Banner",
+      "settings": {
+        "use_image": true,
+        "image": "shopify://shop_images/1727_8272_9853_93_98_Milieu_2x_c.webp",
+        "image_position": "top",
+        "overlay_opacity": 40,
+        "background_color": "#111827",
+        "enable_parallax": true,
+        "banner_height": "large",
+        "content_width": "full",
+        "content_horizontal": "center",
+        "content_vertical": "center",
+        "subtitle": "",
+        "title": "Traditionelle Berggeschenke zu Weihnachten",
+        "description": "",
+        "text_color": "#ffffff",
+        "button_label": "",
+        "button_link": "",
+        "button_style": "solid"
+      }
     }
   },
   "order": [
@@ -109,6 +132,7 @@
     "products",
     "banner",
     "occasion_content_ppKiB8",
-    "occasion_products_KMmBxq"
+    "occasion_products_KMmBxq",
+    "occasion_banner_raxQcb"
   ]
 }
