@@ -145,6 +145,22 @@
         "button_link": "",
         "image": "shopify://shop_images/trachtenhochzeit-weste-1_2x_1cd7531c-cd53-4e35-be71-6c124232f7c0.jpg"
       }
+    },
+    "occasion_products_kWgmMM": {
+      "type": "occasion-products",
+      "name": "Occasion Products",
+      "settings": {
+        "subtitle": "Die schönsten",
+        "title": "Trachtenwesten",
+        "show_view_all": true,
+        "view_all_link": "shopify://collections/trachtenwesten",
+        "view_all_text": "Alle ansehen",
+        "use_collection": true,
+        "collection": "trachtenwesten",
+        "products_limit": 12,
+        "show_vendor": true,
+        "background_color": "#ffffff"
+      }
     }
   },
   "order": [
@@ -156,6 +172,7 @@
     "occasion_products_tAR9Tp",
     "occasion_text_image_NNweRL",
     "occasion_products_dnLp6J",
-    "occasion_text_image_GrEPx7"
+    "occasion_text_image_GrEPx7",
+    "occasion_products_kWgmMM"
   ]
 }
