@@ -40,11 +40,14 @@
     "products": {
       "type": "occasion-products",
       "settings": {
-        "subtitle": "Für Ihren perfekten Auftritt",
-        "title": "Unsere Empfehlungen",
+        "subtitle": "Die schönsten",
+        "title": "Lederhosen",
         "show_view_all": true,
-        "view_all_link": "",
+        "view_all_link": "shopify://collections/lederhosen",
         "view_all_text": "Alle ansehen",
+        "use_collection": true,
+        "collection": "lederhosen",
+        "products_limit": 8,
         "show_vendor": true,
         "background_color": "#f9fafb"
       }
