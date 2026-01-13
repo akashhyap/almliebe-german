@@ -140,6 +140,18 @@
         "show_vendor": true,
         "background_color": "#ffffff"
       }
+    },
+    "occasion_content_nKmWcH": {
+      "type": "occasion-content",
+      "name": "Occasion Content",
+      "settings": {
+        "content_width": "medium",
+        "text_alignment": "center",
+        "background_color": "#ffffff",
+        "subtitle": "TIPPS FÜR KIRCHLICHE",
+        "title": "FESTETrachtenoutfits für die Kommunion: So liegst du richtig!",
+        "content": "<p>Für die Auswahl des perfekten Trachtenanzugs oder Dirndls zur Kommunion geben wir dir folgende Tipps mit auf den Weg: Setze auf schlichte Eleganz: Für Kommunionkleider ist ein dezentes, elegantes Design empfehlenswert. Klassische Farben, Pastelltöne oder zarte Blumenmuster stehen für zeitlose Eleganz. Verbinde Stil mit Tragekomfort: Das Kommuniondirndl und der Trachtenanzug sollten zur Feierlichkeit nicht nur schön, sondern auch bequem sein. Setze auf Tradition: Gebe dem klassischen Kommunionanzug einen modernen, bayerischen Flair. Denn: Sich für eine Tracht zur Kommunion zu entscheiden, bedeutet, auf Eleganz, Heimatkultur und Einzigartigkeit zu setzen. Auf ein Outfit, das nicht nur perfekt zum Anlass passt, sondern auch die Herzen von Freunden und Familie höher schlagen lässt.</p>"
+      }
     }
   },
   "order": [
@@ -150,6 +162,7 @@
     "occasion_content_bnFBG4",
     "occasion_products_EJJFCy",
     "occasion_banner_4ExWyK",
-    "occasion_products_ffLXJY"
+    "occasion_products_ffLXJY",
+    "occasion_content_nKmWcH"
   ]
 }
