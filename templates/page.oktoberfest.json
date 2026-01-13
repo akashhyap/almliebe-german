@@ -468,6 +468,107 @@
         "show_vendor": true,
         "background_color": "#ffffff"
       }
+    },
+    "occasion_text_image_HgR8Jz": {
+      "type": "occasion-text-image",
+      "name": "Occasion Text + Image",
+      "settings": {
+        "layout": "image-first",
+        "background_color": "#ffffff",
+        "subtitle": "KINDER TRACHTEN",
+        "title": "Früh übt sich:Kinder-Tracht für die Wiesn",
+        "content": "<p>Übrigens, auch für den Nachwuchs gibt es wertige, traditionelle Kinder-Tracht fürs Oktoberfest. Die Mädels tragen Kinder-Dirndl aus Baumwolle mit passender Dirndlbluse und Kinder-Strickjanker oft in Pink oder Rosé. Aber auch ein helles Blau oder Grün sind beliebte Farben für Kinder Wiesn-Outfits. Die Jungs schauen in kurzen Kinder-Lederhosen für die Wiesn, Kinder Trachtenhemden und Trachtenwesten schneidig und bayerisch aus. Kinder-Janker oder sogar Haferlschuhe runden die Kinder-Tracht für das Oktoberfest ab. Almliebe hat also für Klein und Groß das perfekte Wiesn Outfit!</p>",
+        "button_label": "",
+        "button_link": "",
+        "image": "shopify://shop_images/IMG_7918_2x_a65dad58-5896-4f65-9c37-fdc9c9adf3b0.png"
+      }
+    },
+    "occasion_products_ikm9YY": {
+      "type": "occasion-products",
+      "blocks": {
+        "product_ijPPPC": {
+          "type": "product",
+          "settings": {
+            "product": "kinderdirndl-inkl-bluse-551201-42304-blau"
+          }
+        },
+        "product_QnKC6J": {
+          "type": "product",
+          "settings": {
+            "product": "kinderdirndl-inkl-bluse-bergsee-6008-beere"
+          }
+        },
+        "product_GmcNmx": {
+          "type": "product",
+          "settings": {
+            "product": "kinderdirndl-inkl-bluse-bergsee-6003-blau"
+          }
+        },
+        "product_ChJdPi": {
+          "type": "product",
+          "settings": {
+            "product": "kinderdirndl-mit-bluse-551631-38-altrosa"
+          }
+        },
+        "product_GFW3YH": {
+          "type": "product",
+          "settings": {
+            "product": "kinderdirndl-inkl-bluse-bergsee-hellblau-rosa"
+          }
+        },
+        "product_RxhhjQ": {
+          "type": "product",
+          "settings": {
+            "product": "kinder-pfoadhemd-1920-49-blau"
+          }
+        },
+        "product_UJTNqR": {
+          "type": "product",
+          "settings": {
+            "product": "kinder-strickjanker-wals-grau"
+          }
+        },
+        "product_zkLhbp": {
+          "type": "product",
+          "settings": {
+            "product": "kinder-trachtenhemd-1902-00-weiss"
+          }
+        },
+        "product_R6UN6z": {
+          "type": "product",
+          "settings": {
+            "product": "kinderdirndl-inkl-bluse-53581-rosa"
+          }
+        },
+        "product_fxNW9B": {
+          "type": "product",
+          "settings": {
+            "product": "kinder-lederhose-gamsspitz-b-rauchbraun-st-1190-grun"
+          }
+        }
+      },
+      "block_order": [
+        "product_ijPPPC",
+        "product_QnKC6J",
+        "product_GmcNmx",
+        "product_ChJdPi",
+        "product_GFW3YH",
+        "product_RxhhjQ",
+        "product_UJTNqR",
+        "product_zkLhbp",
+        "product_R6UN6z",
+        "product_fxNW9B"
+      ],
+      "name": "Occasion Products",
+      "settings": {
+        "subtitle": "Die schönsten",
+        "title": "Kinder Trachten Styles",
+        "show_view_all": true,
+        "view_all_link": "shopify://collections/kinder",
+        "view_all_text": "Alle ansehen",
+        "show_vendor": true,
+        "background_color": "#ffffff"
+      }
     }
   },
   "order": [
@@ -482,6 +583,8 @@
     "occasion_banner_kFD7VN",
     "occasion_products_RQ4H9U",
     "occasion_banner_Mcybxp",
-    "occasion_products_D9fUEV"
+    "occasion_products_D9fUEV",
+    "occasion_text_image_HgR8Jz",
+    "occasion_products_ikm9YY"
   ]
 }
