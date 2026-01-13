@@ -34,19 +34,19 @@
         "background_color": "#ffffff",
         "subtitle": "",
         "title": "",
-        "content": ""
+        "content": "<p>Barfuß auf der sattgrünen Almwiese laufen. Im wunderschönen, romantischen Brautdirndl. Der Bräutigam in kurzer Lederhose und traditionellem Janker. Vor einer Bergkulisse, die einem den Atem raubt. Wer träumt nicht davon, im Postkarten-Idyll der Alpen eine Trachtenhochzeit mit Hochzeitsdirndl und Hirschlederhose zu feiern? Das bayerische Brauchtum hat viele schöne Hochzeitstraditionen und fesches Gwand parat. Also feiere Deine Trachtenhochzeit mit viel Alm-LIEBE im Herzen. Wir haben die schönsten Brautdirndl verschiedener Trachten-Labels wie Gottseidank, Heimatglück, Sportalm, Kinga Mathe, Wenger und viele mehr für Euch mit Liebe zusammengestellt. Aber auch ganz besondere, eigene Almliebe Hochzeitsdirndl designt. Romantische Spitzen-Dirndlblusen ausgesucht. Und schöne Accessoires wie z.B. Trachtenschuhe passend zu den Dirndln für Euch gefunden. Die Mannsbilder wiederum tragen kurze Lederhosen für die Hochzeit, festliche Janker und Trachtenwesten. Auch hier findet Ihr bei uns eine große Auswahl an Herrentracht für die standesamtliche Hochzeit von Labels wie Meindl, Gottseidank, Ostarrichi, Grasegger und vielen mehr. Online in unserem Shop und in unseren Läden in Pocking und München findest Du Dein perfektes Hochzeitsoutfit für Deine Traumhochzeit in Tracht. Gerade München ist bekannt für seine große Auswahl an Dirndlbrautkleidern. Gerne beraten wir Dich persönlich und helfen Dir, Dein Brautdirndl oder die passende Lederhose zu finden. Vereinbare jetzt Deinen individuellen Beratungs-Termin unter info@almliebe.com<br/><br/></p>"
       }
     },
     "products": {
       "type": "occasion-products",
       "settings": {
-        "subtitle": "Für Braut & Bräutigam",
-        "title": "Festliche Trachten",
+        "subtitle": "Die schönsten",
+        "title": "Braut Dirndl",
         "show_view_all": true,
-        "view_all_link": "",
+        "view_all_link": "shopify://collections/braut-drindl",
         "view_all_text": "Alle ansehen",
-        "use_collection": false,
-        "collection": "",
+        "use_collection": true,
+        "collection": "braut-drindl",
         "products_limit": 8,
         "show_vendor": true,
         "background_color": "#f9fafb"
