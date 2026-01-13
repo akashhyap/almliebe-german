@@ -1,0 +1,514 @@
+{% comment %}
+  OCCASION BANNER SECTION
+  Full-width banner with text overlay
+  Features: Image or BG color, parallax effect, position control
+{% endcomment %}
+
+{%- liquid
+  assign use_image = section.settings.use_image
+  assign enable_parallax = section.settings.enable_parallax
+-%}
+
+<section class="occasion-banner occasion-banner--{{ section.settings.banner_height }}{% if enable_parallax and use_image %} occasion-banner--parallax{% endif %}"
+         style="--text-color: {{ section.settings.text_color }}; {% unless use_image %}background-color: {{ section.settings.background_color }};{% endunless %}">
+  
+  {%- if use_image and section.settings.image != blank -%}
+    <div class="occasion-banner__media{% if enable_parallax %} occasion-banner__media--parallax{% endif %}">
+      <img
+        src="{{ section.settings.image | image_url: width: 1920 }}"
+        srcset="{{ section.settings.image | image_url: width: 1200 }} 1200w,
+                {{ section.settings.image | image_url: width: 1920 }} 1920w"
+        sizes="100vw"
+        alt="{{ section.settings.image.alt | escape }}"
+        width="1920"
+        height="auto"
+        loading="lazy"
+        class="occasion-banner__img"
+        style="object-position: {{ section.settings.image_position }};"
+      >
+      <div class="occasion-banner__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+    </div>
+  {%- endif -%}
+  
+  <div class="occasion-banner__wrapper occasion-banner__wrapper--h-{{ section.settings.content_horizontal }} occasion-banner__wrapper--v-{{ section.settings.content_vertical }}">
+    <div class="occasion-banner__content occasion-banner__content--{{ section.settings.content_width }}">
+      {%- if section.settings.subtitle != blank -%}
+        <p class="occasion-banner__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+      
+      {%- if section.settings.title != blank -%}
+        <h2 class="occasion-banner__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+      
+      {%- if section.settings.description != blank -%}
+        <div class="occasion-banner__description">{{ section.settings.description }}</div>
+      {%- endif -%}
+      
+      {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+        <a href="{{ section.settings.button_link }}" class="occasion-banner__btn occasion-banner__btn--{{ section.settings.button_style }}">
+          {{ section.settings.button_label }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .occasion-banner {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+  }
+  
+  /* Height Options */
+  .occasion-banner--small {
+    min-height: 250px;
+  }
+  
+  .occasion-banner--medium {
+    min-height: 350px;
+  }
+  
+  .occasion-banner--large {
+    min-height: 450px;
+  }
+  
+  .occasion-banner--xlarge {
+    min-height: 550px;
+  }
+  
+  .occasion-banner--full {
+    min-height: 100vh;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-banner--small {
+      min-height: 300px;
+    }
+    
+    .occasion-banner--medium {
+      min-height: 400px;
+    }
+    
+    .occasion-banner--large {
+      min-height: 500px;
+    }
+    
+    .occasion-banner--xlarge {
+      min-height: 650px;
+    }
+  }
+  
+  /* Media */
+  .occasion-banner__media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  
+  .occasion-banner__media--parallax {
+    position: absolute;
+    top: -20%;
+    left: 0;
+    right: 0;
+    bottom: -20%;
+    height: 140%;
+  }
+  
+  .occasion-banner__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .occasion-banner__media--parallax .occasion-banner__img {
+    will-change: transform;
+  }
+  
+  .occasion-banner__overlay {
+    position: absolute;
+    inset: 0;
+    background: #000000;
+  }
+  
+  /* Wrapper */
+  .occasion-banner__wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 3rem 1rem;
+    display: flex;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-banner__wrapper {
+      padding: 4rem 2rem;
+    }
+  }
+  
+  /* Horizontal Position */
+  .occasion-banner__wrapper--h-left {
+    justify-content: flex-start;
+  }
+  
+  .occasion-banner__wrapper--h-center {
+    justify-content: center;
+  }
+  
+  .occasion-banner__wrapper--h-right {
+    justify-content: flex-end;
+  }
+  
+  /* Vertical Position */
+  .occasion-banner__wrapper--v-top {
+    align-items: flex-start;
+  }
+  
+  .occasion-banner__wrapper--v-center {
+    align-items: center;
+  }
+  
+  .occasion-banner__wrapper--v-bottom {
+    align-items: flex-end;
+  }
+  
+  /* Content Width */
+  .occasion-banner__content--narrow {
+    max-width: 500px;
+  }
+  
+  .occasion-banner__content--medium {
+    max-width: 700px;
+  }
+  
+  .occasion-banner__content--wide {
+    max-width: 900px;
+  }
+  
+  .occasion-banner__content--full {
+    max-width: 100%;
+  }
+  
+  /* Content Alignment */
+  .occasion-banner__wrapper--h-center .occasion-banner__content {
+    text-align: center;
+  }
+  
+  .occasion-banner__wrapper--h-right .occasion-banner__content {
+    text-align: right;
+  }
+  
+  .occasion-banner__subtitle {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0 0 0.75rem;
+    color: var(--text-color);
+    opacity: 0.9;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-banner__subtitle {
+      font-size: 1rem;
+    }
+  }
+  
+  .occasion-banner__title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    line-height: 1.15;
+    margin: 0 0 1rem;
+    color: var(--text-color);
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-banner__title {
+      font-size: 2.5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .occasion-banner__title {
+      font-size: 3rem;
+    }
+  }
+  
+  .occasion-banner__description {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0 0 1.5rem;
+    color: var(--text-color);
+    opacity: 0.9;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-banner__description {
+      font-size: 1.125rem;
+    }
+  }
+  
+  /* Button Styles */
+  .occasion-banner__btn {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+  
+  .occasion-banner__btn--solid {
+    background: var(--text-color);
+    color: #111827;
+    border: 2px solid var(--text-color);
+  }
+  
+  .occasion-banner__btn--solid:hover {
+    background: transparent;
+    color: var(--text-color);
+  }
+  
+  .occasion-banner__btn--outline {
+    background: transparent;
+    color: var(--text-color);
+    border: 2px solid var(--text-color);
+  }
+  
+  .occasion-banner__btn--outline:hover {
+    background: var(--text-color);
+    color: #111827;
+  }
+  
+  .occasion-banner__btn--dark {
+    background: #111827;
+    color: #ffffff;
+    border: 2px solid #111827;
+  }
+  
+  .occasion-banner__btn--dark:hover {
+    background: #000000;
+    border-color: #000000;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Parallax Effect
+  const parallaxBanners = document.querySelectorAll('.occasion-banner--parallax');
+  
+  if (!parallaxBanners.length) return;
+  
+  let ticking = false;
+  
+  function updateParallax() {
+    parallaxBanners.forEach(banner => {
+      const media = banner.querySelector('.occasion-banner__media--parallax');
+      if (!media) return;
+      
+      const rect = banner.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      
+      // Only apply parallax when element is in viewport
+      if (rect.top < windowHeight && rect.bottom > 0) {
+        // Calculate parallax offset
+        const scrollPercent = (windowHeight - rect.top) / (windowHeight + rect.height);
+        const parallaxOffset = (scrollPercent - 0.5) * 100; // -50 to +50
+        
+        media.style.transform = `translateY(${parallaxOffset * 0.3}px)`;
+      }
+    });
+    
+    ticking = false;
+  }
+  
+  function onScroll() {
+    if (!ticking) {
+      requestAnimationFrame(updateParallax);
+      ticking = true;
+    }
+  }
+  
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', updateParallax);
+  
+  // Initial call
+  updateParallax();
+});
+</script>
+
+{% schema %}
+{
+  "name": "Occasion Banner",
+  "tag": "section",
+  "class": "section-occasion-banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_image",
+      "label": "Use Background Image",
+      "default": true,
+      "info": "When disabled, uses background color instead"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background Image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image Position",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay Opacity",
+      "default": 40
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#111827",
+      "info": "Used when image is disabled"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_parallax",
+      "label": "Enable Parallax Effect",
+      "default": false,
+      "info": "Creates depth effect on scroll (only works with image)"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "banner_height",
+      "label": "Banner Height",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "xlarge", "label": "Extra Large" },
+        { "value": "full", "label": "Full Screen" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "label": "Content Width",
+      "options": [
+        { "value": "narrow", "label": "Narrow (500px)" },
+        { "value": "medium", "label": "Medium (700px)" },
+        { "value": "wide", "label": "Wide (900px)" },
+        { "value": "full", "label": "Full Width" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "header",
+      "content": "Content Position"
+    },
+    {
+      "type": "select",
+      "id": "content_horizontal",
+      "label": "Horizontal Position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "content_vertical",
+      "label": "Vertical Position",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button Style",
+      "options": [
+        { "value": "solid", "label": "Solid (Text Color)" },
+        { "value": "outline", "label": "Outline" },
+        { "value": "dark", "label": "Dark" }
+      ],
+      "default": "solid"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Occasion Banner"
+    }
+  ]
+}
+{% endschema %}

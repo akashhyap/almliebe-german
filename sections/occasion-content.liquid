@@ -1,0 +1,287 @@
+{% comment %}
+  OCCASION CONTENT SECTION
+  Full-width rich text content section
+  Admin can control all content elements from the editor
+{% endcomment %}
+
+<section class="occasion-content" style="background-color: {{ section.settings.background_color }};">
+  <div class="occasion-content__container occasion-content__container--{{ section.settings.content_width }}">
+    
+    {%- if section.settings.subtitle != blank or section.settings.title != blank -%}
+      <div class="occasion-content__header occasion-content__header--{{ section.settings.text_alignment }}">
+        {%- if section.settings.subtitle != blank -%}
+          <p class="occasion-content__subtitle">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
+        
+        {%- if section.settings.title != blank -%}
+          <h2 class="occasion-content__title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    
+    {%- if section.settings.content != blank -%}
+      <div class="occasion-content__body occasion-content__body--{{ section.settings.text_alignment }} rte">
+        {{ section.settings.content }}
+      </div>
+    {%- endif -%}
+    
+  </div>
+</section>
+
+<style>
+  .occasion-content {
+    padding: 3rem 0;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-content {
+      padding: 4rem 0;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .occasion-content {
+      padding: 5rem 0;
+    }
+  }
+  
+  .occasion-content__container {
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-content__container {
+      padding: 0 2rem;
+    }
+  }
+  
+  /* Content Width Options */
+  .occasion-content__container--narrow {
+    max-width: 800px;
+  }
+  
+  .occasion-content__container--medium {
+    max-width: 1000px;
+  }
+  
+  .occasion-content__container--wide {
+    max-width: 1200px;
+  }
+  
+  .occasion-content__container--full {
+    max-width: 1600px;
+  }
+  
+  /* Header */
+  .occasion-content__header {
+    margin-bottom: 2rem;
+  }
+  
+  .occasion-content__header--left {
+    text-align: left;
+  }
+  
+  .occasion-content__header--center {
+    text-align: center;
+  }
+  
+  .occasion-content__header--right {
+    text-align: right;
+  }
+  
+  .occasion-content__subtitle {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #6b7280;
+    margin: 0 0 0.75rem;
+  }
+  
+  .occasion-content__title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #111827;
+    margin: 0;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-content__title {
+      font-size: 2rem;
+    }
+  }
+  
+  /* Body Content */
+  .occasion-content__body--left {
+    text-align: left;
+  }
+  
+  .occasion-content__body--center {
+    text-align: center;
+  }
+  
+  .occasion-content__body--right {
+    text-align: right;
+  }
+  
+  .occasion-content__body {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #374151;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-content__body {
+      font-size: 1.0625rem;
+    }
+  }
+  
+  .occasion-content__body h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 2rem 0 1rem;
+  }
+  
+  .occasion-content__body h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 1.5rem 0 0.75rem;
+  }
+  
+  .occasion-content__body h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 1.25rem 0 0.5rem;
+  }
+  
+  .occasion-content__body p {
+    margin: 0 0 1.25rem;
+  }
+  
+  .occasion-content__body p:last-child {
+    margin-bottom: 0;
+  }
+  
+  .occasion-content__body ul,
+  .occasion-content__body ol {
+    margin: 1rem 0 1.5rem;
+    padding-left: 1.5rem;
+  }
+  
+  .occasion-content__body li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .occasion-content__body blockquote {
+    margin: 2rem 0;
+    padding: 1.5rem 2rem;
+    background: #f9fafb;
+    border-left: 4px solid #111827;
+    font-style: italic;
+    color: #4b5563;
+  }
+  
+  .occasion-content__body a {
+    color: #111827;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  
+  .occasion-content__body a:hover {
+    color: #000;
+  }
+  
+  .occasion-content__body strong {
+    font-weight: 600;
+    color: #111827;
+  }
+  
+  .occasion-content__body img {
+    max-width: 100%;
+    height: auto;
+    margin: 1.5rem 0;
+  }
+  
+  .occasion-content__body hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 2rem 0;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Occasion Content",
+  "tag": "section",
+  "class": "section-occasion-content",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "label": "Content Width",
+      "options": [
+        { "value": "narrow", "label": "Narrow (800px)" },
+        { "value": "medium", "label": "Medium (1000px)" },
+        { "value": "wide", "label": "Wide (1200px)" },
+        { "value": "full", "label": "Full (1600px)" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Text Alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Header (Optional)"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content",
+      "info": "Use headings, paragraphs, lists, bold, links, etc."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Occasion Content"
+    }
+  ]
+}
+{% endschema %}

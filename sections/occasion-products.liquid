@@ -1,0 +1,553 @@
+{% comment %}
+  OCCASION PRODUCTS SECTION
+  Display products in grid (4 or fewer) or carousel (more than 4)
+  Manual product selection via blocks
+{% endcomment %}
+
+{%- liquid
+  assign subtitle = section.settings.subtitle
+  assign section_title = section.settings.title
+  assign show_view_all = section.settings.show_view_all
+  assign view_all_link = section.settings.view_all_link
+  assign view_all_text = section.settings.view_all_text | default: 'Alle ansehen'
+  assign show_vendor = section.settings.show_vendor
+  assign products_count = section.blocks.size
+  assign enable_carousel = false
+  if products_count > 4
+    assign enable_carousel = true
+  endif
+-%}
+
+{%- if products_count > 0 -%}
+  <section class="occasion-products{% if enable_carousel %} has-carousel{% endif %}" data-occasion-products style="background-color: {{ section.settings.background_color }};">
+    <div class="occasion-products__container">
+      
+      {%- comment -%} Header {%- endcomment -%}
+      <div class="occasion-products__header">
+        <div class="occasion-products__titles">
+          {%- if subtitle != blank -%}
+            <p class="occasion-products__subtitle">{{ subtitle }}</p>
+          {%- endif -%}
+          {%- if section_title != blank -%}
+            <h2 class="occasion-products__title">{{ section_title }}</h2>
+          {%- endif -%}
+          {%- if show_view_all and view_all_link != blank -%}
+            <a href="{{ view_all_link }}" class="occasion-products__view-all">
+              {{ view_all_text }}
+            </a>
+          {%- endif -%}
+        </div>
+        
+        {%- comment -%} Navigation Arrows (only for carousel) {%- endcomment -%}
+        {%- if enable_carousel -%}
+          <div class="occasion-products__nav">
+            <button type="button" class="occasion-products__nav-btn occasion-products__nav-btn--prev" data-slider-prev aria-label="Previous" disabled>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"/>
+              </svg>
+            </button>
+            <button type="button" class="occasion-products__nav-btn occasion-products__nav-btn--next" data-slider-next aria-label="Next">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </button>
+          </div>
+        {%- endif -%}
+      </div>
+      
+      {%- comment -%} Products Grid / Slider {%- endcomment -%}
+      <div class="occasion-products__slider" data-slider>
+        <div class="occasion-products__track{% unless enable_carousel %} occasion-products__track--grid{% endunless %}" data-slider-track>
+          {%- for block in section.blocks -%}
+            {%- assign product = block.settings.product -%}
+            {%- if product != blank -%}
+              <div class="occasion-products__item" {{ block.shopify_attributes }}>
+                <a href="{{ product.url }}" class="product-card">
+                  <div class="product-card__image">
+                    {%- if product.featured_image != blank -%}
+                      <img 
+                        src="{{ product.featured_image | image_url: width: 600 }}"
+                        alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                        width="300"
+                        height="400"
+                        loading="lazy"
+                      >
+                      {%- if product.images.size > 1 -%}
+                        <img 
+                          src="{{ product.images[1] | image_url: width: 600 }}"
+                          alt="{{ product.title | escape }}"
+                          width="300"
+                          height="400"
+                          loading="lazy"
+                          class="product-card__image-hover"
+                        >
+                      {%- endif -%}
+                    {%- else -%}
+                      <div class="product-card__placeholder">
+                        {{ 'product-1' | placeholder_svg_tag }}
+                      </div>
+                    {%- endif -%}
+                    
+                    {%- if product.compare_at_price > product.price -%}
+                      <span class="product-card__badge">Sale</span>
+                    {%- endif -%}
+                  </div>
+                  
+                  <div class="product-card__info">
+                    {%- if show_vendor and product.vendor != blank -%}
+                      <p class="product-card__vendor">{{ product.vendor }}</p>
+                    {%- endif -%}
+                    <h3 class="product-card__title">{{ product.title }}</h3>
+                    <div class="product-card__price">
+                      {%- if product.compare_at_price > product.price -%}
+                        <span class="product-card__price-sale">{{ product.price | money }}</span>
+                        <span class="product-card__price-compare">{{ product.compare_at_price | money }}</span>
+                      {%- else -%}
+                        <span>{{ product.price | money }}</span>
+                      {%- endif -%}
+                    </div>
+                  </div>
+                </a>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+      
+    </div>
+  </section>
+{%- endif -%}
+
+<style>
+  .occasion-products {
+    padding: 3rem 0;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-products {
+      padding: 4rem 0;
+    }
+  }
+  
+  .occasion-products__container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-products__container {
+      padding: 0 2rem;
+    }
+  }
+  
+  /* Header */
+  .occasion-products__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    gap: 1rem;
+  }
+  
+  .occasion-products__titles {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 1.5rem;
+  }
+  
+  .occasion-products__subtitle {
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #4b5563;
+    margin: 0;
+  }
+  
+  .occasion-products__title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: -0.5px;
+    color: #111827;
+    margin: 0;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-products__title {
+      font-size: 1.8rem;
+    }
+  }
+  
+  .occasion-products__view-all {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: #111827;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  
+  .occasion-products__view-all:hover {
+    color: #000;
+  }
+  
+  /* Navigation */
+  .occasion-products__nav {
+    display: none;
+    gap: 0.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-products__nav {
+      display: flex;
+    }
+  }
+  
+  .occasion-products__nav-btn {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .occasion-products__nav-btn:hover:not(:disabled) {
+    background: #111827;
+    border-color: #111827;
+    color: #ffffff;
+  }
+  
+  .occasion-products__nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+  
+  .occasion-products__nav-btn svg {
+    stroke: currentColor;
+  }
+  
+  /* Slider Container */
+  .occasion-products__slider {
+    overflow: hidden;
+    margin: 0 -1rem;
+    padding: 0 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-products__slider {
+      margin: 0;
+      padding: 0;
+    }
+  }
+  
+  /* Track - Carousel Mode */
+  .occasion-products__track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-snap-type: x mandatory;
+  }
+  
+  .occasion-products__track::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Track - Grid Mode (4 or fewer items) */
+  .occasion-products__track--grid {
+    overflow-x: visible;
+    scroll-snap-type: none;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-products__track--grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .occasion-products__track--grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  
+  /* Grid Item */
+  .occasion-products__item {
+    flex: 0 0 calc(50% - 0.5rem);
+    scroll-snap-align: start;
+    min-width: 0;
+  }
+  
+  @media (min-width: 640px) {
+    .occasion-products__item {
+      flex: 0 0 calc(33.333% - 0.667rem);
+    }
+  }
+  
+  @media (min-width: 900px) {
+    .occasion-products__item {
+      flex: 0 0 calc(25% - 0.75rem);
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    .occasion-products__item {
+      flex: 0 0 calc(20% - 0.8rem);
+    }
+  }
+  
+  /* Grid mode - items fill evenly */
+  .occasion-products__track--grid .occasion-products__item {
+    flex: 1;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-products__track--grid .occasion-products__item {
+      flex: none;
+    }
+  }
+  
+  /* Product Card */
+  .product-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .product-card__image {
+    position: relative;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: #f3f4f6;
+    margin-bottom: 0.75rem;
+  }
+  
+  .product-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity 0.3s ease;
+  }
+  
+  .product-card__image-hover {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
+  
+  .product-card:hover .product-card__image-hover {
+    opacity: 1;
+  }
+  
+  .product-card:hover .product-card__image img:first-child {
+    opacity: 0;
+  }
+  
+  .product-card__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3f4f6;
+  }
+  
+  .product-card__placeholder svg {
+    width: 60%;
+    height: 60%;
+    opacity: 0.3;
+  }
+  
+  .product-card__badge {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    background: #ef4444;
+    color: #ffffff;
+  }
+  
+  .product-card__info {
+    text-align: left;
+  }
+  
+  .product-card__vendor {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin: 0 0 0.25rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .product-card__title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #111827;
+    margin: 0 0 0.375rem;
+    line-height: 1.3;
+  }
+  
+  @media (min-width: 768px) {
+    .product-card__title {
+      font-size: 0.9375rem;
+    }
+  }
+  
+  .product-card:hover .product-card__title {
+    text-decoration: underline;
+  }
+  
+  .product-card__price {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #111827;
+  }
+  
+  .product-card__price-sale {
+    color: #ef4444;
+  }
+  
+  .product-card__price-compare {
+    color: #9ca3af;
+    text-decoration: line-through;
+    font-weight: 400;
+    margin-left: 0.5rem;
+  }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const sections = document.querySelectorAll('[data-occasion-products]');
+  
+  sections.forEach(section => {
+    const track = section.querySelector('[data-slider-track]');
+    const prevBtn = section.querySelector('[data-slider-prev]');
+    const nextBtn = section.querySelector('[data-slider-next]');
+    
+    // Only initialize slider if carousel is enabled
+    if (!track || !prevBtn || !nextBtn) return;
+    
+    const updateButtons = () => {
+      const scrollLeft = track.scrollLeft;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      
+      prevBtn.disabled = scrollLeft <= 10;
+      nextBtn.disabled = scrollLeft >= maxScroll - 10;
+    };
+    
+    const getSlideWidth = () => {
+      const slide = track.querySelector('.occasion-products__item');
+      if (!slide) return 300;
+      const style = getComputedStyle(track);
+      const gap = parseFloat(style.gap) || 16;
+      return slide.offsetWidth + gap;
+    };
+    
+    prevBtn.addEventListener('click', () => {
+      track.scrollBy({ left: -getSlideWidth() * 2, behavior: 'smooth' });
+    });
+    
+    nextBtn.addEventListener('click', () => {
+      track.scrollBy({ left: getSlideWidth() * 2, behavior: 'smooth' });
+    });
+    
+    track.addEventListener('scroll', updateButtons);
+    window.addEventListener('resize', updateButtons);
+    
+    // Initial state
+    setTimeout(updateButtons, 100);
+  });
+});
+</script>
+
+{% schema %}
+{
+  "name": "Occasion Products",
+  "tag": "section",
+  "class": "section-occasion-products",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Passende Produkte"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show 'View All' link",
+      "default": false
+    },
+    {
+      "type": "url",
+      "id": "view_all_link",
+      "label": "'View All' link URL"
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "label": "'View All' text",
+      "default": "Alle ansehen"
+    },
+    {
+      "type": "header",
+      "content": "Product Display"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Occasion Products",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}

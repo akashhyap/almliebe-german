@@ -1,0 +1,365 @@
+{% comment %}
+  OCCASION HERO SECTION
+  Full-width banner with content overlay for Occasion pages
+{% endcomment %}
+
+<section class="occasion-hero occasion-hero--{{ section.settings.banner_height }}"
+         style="--text-color: {{ section.settings.text_color }};">
+  
+  {%- if section.settings.image != blank -%}
+    <div class="occasion-hero__media">
+      <img
+        src="{{ section.settings.image | image_url: width: 1920 }}"
+        srcset="{{ section.settings.image | image_url: width: 1200 }} 1200w,
+                {{ section.settings.image | image_url: width: 1920 }} 1920w"
+        sizes="100vw"
+        alt="{{ section.settings.image.alt | escape }}"
+        width="1920"
+        height="auto"
+        loading="eager"
+        class="occasion-hero__img"
+        style="object-position: {{ section.settings.image_position }};"
+      >
+      <div class="occasion-hero__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+    </div>
+  {%- endif -%}
+  
+  <div class="occasion-hero__wrapper occasion-hero__wrapper--h-{{ section.settings.content_horizontal }} occasion-hero__wrapper--v-{{ section.settings.content_vertical }}">
+    <div class="occasion-hero__content">
+      {%- if section.settings.subtitle != blank -%}
+        <p class="occasion-hero__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+      
+      {%- if section.settings.title != blank -%}
+        <h1 class="occasion-hero__title">{{ section.settings.title }}</h1>
+      {%- endif -%}
+      
+      {%- if section.settings.description != blank -%}
+        <p class="occasion-hero__description">{{ section.settings.description }}</p>
+      {%- endif -%}
+      
+      {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+        <a href="{{ section.settings.button_link }}" class="occasion-hero__btn">
+          {{ section.settings.button_label }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+<style>
+  .occasion-hero {
+    position: relative;
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+    background: #111827;
+  }
+  
+  /* Height Options */
+  .occasion-hero--small {
+    min-height: 300px;
+  }
+  
+  .occasion-hero--medium {
+    min-height: 400px;
+  }
+  
+  .occasion-hero--large {
+    min-height: 500px;
+  }
+  
+  .occasion-hero--xlarge {
+    min-height: 600px;
+  }
+  
+  .occasion-hero--full {
+    min-height: 100vh;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-hero--small {
+      min-height: 350px;
+    }
+    
+    .occasion-hero--medium {
+      min-height: 450px;
+    }
+    
+    .occasion-hero--large {
+      min-height: 550px;
+    }
+    
+    .occasion-hero--xlarge {
+      min-height: 700px;
+    }
+  }
+  
+  /* Media */
+  .occasion-hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  
+  .occasion-hero__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .occasion-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: #000000;
+  }
+  
+  /* Wrapper */
+  .occasion-hero__wrapper {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 3rem 1rem;
+    display: flex;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-hero__wrapper {
+      padding: 4rem 2rem;
+    }
+  }
+  
+  /* Horizontal Position */
+  .occasion-hero__wrapper--h-left {
+    justify-content: flex-start;
+  }
+  
+  .occasion-hero__wrapper--h-center {
+    justify-content: center;
+  }
+  
+  .occasion-hero__wrapper--h-right {
+    justify-content: flex-end;
+  }
+  
+  /* Vertical Position */
+  .occasion-hero__wrapper--v-top {
+    align-items: flex-start;
+  }
+  
+  .occasion-hero__wrapper--v-center {
+    align-items: center;
+  }
+  
+  .occasion-hero__wrapper--v-bottom {
+    align-items: flex-end;
+  }
+  
+  /* Content */
+  .occasion-hero__content {
+    max-width: 700px;
+  }
+  
+  .occasion-hero__wrapper--h-center .occasion-hero__content {
+    text-align: center;
+  }
+  
+  .occasion-hero__wrapper--h-right .occasion-hero__content {
+    text-align: right;
+  }
+  
+  .occasion-hero__subtitle {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0 0 0.75rem;
+    color: var(--text-color);
+    opacity: 0.9;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-hero__subtitle {
+      font-size: 1rem;
+    }
+  }
+  
+  .occasion-hero__title {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0 0 1rem;
+    color: var(--text-color);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-hero__title {
+      font-size: 3rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .occasion-hero__title {
+      font-size: 3.5rem;
+    }
+  }
+  
+  .occasion-hero__description {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0 0 1.5rem;
+    color: var(--text-color);
+    opacity: 0.9;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-hero__description {
+      font-size: 1.125rem;
+    }
+  }
+  
+  .occasion-hero__btn {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-decoration: none;
+    background: var(--text-color);
+    color: #111827;
+    border: 2px solid var(--text-color);
+    transition: all 0.3s ease;
+  }
+  
+  .occasion-hero__btn:hover {
+    background: transparent;
+    color: var(--text-color);
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Occasion Hero",
+  "tag": "section",
+  "class": "section-occasion-hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background Image"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image Position",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay Opacity",
+      "default": 40
+    },
+    {
+      "type": "select",
+      "id": "banner_height",
+      "label": "Banner Height",
+      "options": [
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" },
+        { "value": "xlarge", "label": "Extra Large" },
+        { "value": "full", "label": "Full Screen" }
+      ],
+      "default": "large"
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Content Position"
+    },
+    {
+      "type": "select",
+      "id": "content_horizontal",
+      "label": "Horizontal Position",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "content_vertical",
+      "label": "Vertical Position",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text Color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Occasion Hero"
+    }
+  ]
+}
+{% endschema %}

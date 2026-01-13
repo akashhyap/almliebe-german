@@ -1,0 +1,310 @@
+{% comment %}
+  OCCASION TEXT + IMAGE SECTION
+  Two column layout with text and image
+  Admin can control which side the image appears
+{% endcomment %}
+
+{%- assign layout = section.settings.layout -%}
+
+<section class="occasion-text-image" style="background-color: {{ section.settings.background_color }};">
+  <div class="occasion-text-image__container">
+    <div class="occasion-text-image__grid occasion-text-image__grid--{{ layout }}">
+      
+      {%- comment -%} Text Column {%- endcomment -%}
+      <div class="occasion-text-image__text">
+        {%- if section.settings.subtitle != blank -%}
+          <p class="occasion-text-image__subtitle">{{ section.settings.subtitle }}</p>
+        {%- endif -%}
+        
+        {%- if section.settings.title != blank -%}
+          <h2 class="occasion-text-image__title">{{ section.settings.title }}</h2>
+        {%- endif -%}
+        
+        {%- if section.settings.content != blank -%}
+          <div class="occasion-text-image__content rte">
+            {{ section.settings.content }}
+          </div>
+        {%- endif -%}
+        
+        {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+          <a href="{{ section.settings.button_link }}" class="occasion-text-image__btn">
+            {{ section.settings.button_label }}
+          </a>
+        {%- endif -%}
+      </div>
+      
+      {%- comment -%} Image Column {%- endcomment -%}
+      <div class="occasion-text-image__image">
+        {%- if section.settings.image != blank -%}
+          <img
+            src="{{ section.settings.image | image_url: width: 1000 }}"
+            alt="{{ section.settings.image.alt | escape }}"
+            width="800"
+            height="auto"
+            loading="lazy"
+          >
+        {%- else -%}
+          <div class="occasion-text-image__placeholder">
+            {{ 'image' | placeholder_svg_tag }}
+          </div>
+        {%- endif -%}
+      </div>
+      
+    </div>
+  </div>
+</section>
+
+<style>
+  .occasion-text-image {
+    padding: 3rem 0;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-text-image {
+      padding: 4rem 0;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .occasion-text-image {
+      padding: 5rem 0;
+    }
+  }
+  
+  .occasion-text-image__container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-text-image__container {
+      padding: 0 2rem;
+    }
+  }
+  
+  /* Grid Layout */
+  .occasion-text-image__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-text-image__grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .occasion-text-image__grid {
+      gap: 4rem;
+    }
+  }
+  
+  /* Layout: Image First (image on left) */
+  .occasion-text-image__grid--image-first .occasion-text-image__image {
+    order: -1;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-text-image__grid--image-first .occasion-text-image__image {
+      order: 0;
+    }
+    
+    .occasion-text-image__grid--image-first {
+      direction: rtl;
+    }
+    
+    .occasion-text-image__grid--image-first > * {
+      direction: ltr;
+    }
+  }
+  
+  /* Text Column */
+  .occasion-text-image__text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .occasion-text-image__subtitle {
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #6b7280;
+    margin: 0 0 0.75rem;
+  }
+  
+  .occasion-text-image__title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #111827;
+    margin: 0 0 1.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .occasion-text-image__title {
+      font-size: 2rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .occasion-text-image__title {
+      font-size: 2.25rem;
+    }
+  }
+  
+  .occasion-text-image__content {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #374151;
+  }
+  
+  .occasion-text-image__content p {
+    margin: 0 0 1rem;
+  }
+  
+  .occasion-text-image__content p:last-child {
+    margin-bottom: 0;
+  }
+  
+  .occasion-text-image__content ul,
+  .occasion-text-image__content ol {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+  }
+  
+  .occasion-text-image__content li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .occasion-text-image__btn {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0.875rem 2rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    background: #111827;
+    color: #ffffff;
+    border: 2px solid #111827;
+    transition: all 0.3s ease;
+  }
+  
+  .occasion-text-image__btn:hover {
+    background: transparent;
+    color: #111827;
+  }
+  
+  /* Image Column */
+  .occasion-text-image__image {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .occasion-text-image__image img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  .occasion-text-image__placeholder {
+    aspect-ratio: 4 / 3;
+    background: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .occasion-text-image__placeholder svg {
+    width: 40%;
+    height: 40%;
+    opacity: 0.3;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Occasion Text + Image",
+  "tag": "section",
+  "class": "section-occasion-text-image",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        { "value": "content-first", "label": "Content First, then Image" },
+        { "value": "image-first", "label": "Image First, then Content" }
+      ],
+      "default": "content-first",
+      "info": "On mobile, image always appears below content"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Text Content"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "content",
+      "label": "Content"
+    },
+    {
+      "type": "header",
+      "content": "Button (Optional)"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Occasion Text + Image"
+    }
+  ]
+}
+{% endschema %}

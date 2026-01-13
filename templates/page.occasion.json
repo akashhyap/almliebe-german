@@ -1,0 +1,74 @@
+{
+  "sections": {
+    "occasion-hero": {
+      "type": "occasion-hero",
+      "settings": {
+        "title": "Anlass Titel",
+        "subtitle": "Ihr perfektes Outfit",
+        "description": "Entdecken Sie unsere Kollektion für besondere Anlässe",
+        "banner_height": "large",
+        "content_horizontal": "center",
+        "content_vertical": "center",
+        "image_position": "center",
+        "overlay_opacity": 40,
+        "text_color": "#ffffff"
+      }
+    },
+    "content": {
+      "type": "occasion-content",
+      "settings": {
+        "content_width": "medium",
+        "text_alignment": "center",
+        "title": "",
+        "subtitle": "",
+        "content": "",
+        "background_color": "#ffffff"
+      }
+    },
+    "products": {
+      "type": "occasion-products",
+      "settings": {
+        "title": "Passende Produkte",
+        "subtitle": "Unsere Empfehlungen",
+        "show_view_all": true,
+        "view_all_text": "Alle ansehen",
+        "show_vendor": true,
+        "background_color": "#f9fafb"
+      },
+      "blocks": {}
+    },
+    "text-image": {
+      "type": "occasion-text-image",
+      "settings": {
+        "layout": "content-first",
+        "subtitle": "",
+        "title": "",
+        "content": "",
+        "background_color": "#ffffff"
+      }
+    },
+    "banner": {
+      "type": "occasion-banner",
+      "settings": {
+        "use_image": true,
+        "enable_parallax": true,
+        "banner_height": "medium",
+        "content_horizontal": "center",
+        "content_vertical": "center",
+        "content_width": "medium",
+        "image_position": "center",
+        "overlay_opacity": 40,
+        "text_color": "#ffffff",
+        "background_color": "#111827",
+        "button_style": "solid"
+      }
+    }
+  },
+  "order": [
+    "occasion-hero",
+    "content",
+    "products",
+    "text-image",
+    "banner"
+  ]
+}
