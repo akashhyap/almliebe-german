@@ -112,6 +112,34 @@
         "button_link": "",
         "button_style": "solid"
       }
+    },
+    "occasion_content_mqXAUB": {
+      "type": "occasion-content",
+      "name": "Occasion Content",
+      "settings": {
+        "content_width": "medium",
+        "text_alignment": "center",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "",
+        "content": "<p>Die Männer tragen kurze Lederhosen schon immer auch außerhalb von Volksfesten und der Wiesn. Im Biergarten. Auf dem Berg. Und eben auch auf Musik-Festivals. Cool sind zum Beispiel cleane Hirschlederhosen ohne Stickerei. Oder alte, eingetragene Lederhosen mit Patina. Oder aber kurze Canvas-Hosen im Lederhosen-Style. Die Jungs kombinieren die Lederhosen mit Sneaker und T-Shirts. Oder Strickjanker mit Kapuze von Liebling. Aber auch klassische traditionelle Stresemann Hosen sieht man immer öfter bei jungen Konzert-Besuchern. Das sind lange Trachtenhosen mit Streifen oder aus Loden, die man früher zu festlichen Anlässen getragen hat. Lässig sehen sie vor allem mit Hemd und Hosenträgern aus. Oder auch mit Trachtengilet oder Strickjanker. Dabei sind die Stresemann-Hosen heute schön schmal geschnitten und schauen somit neu und modern aus. So sieht er aus der Look für das bayerische Musik-Festival: <strong>Streetwear mit Tradition - wild gemixt!</strong><br/><br/></p>"
+      }
+    },
+    "occasion_products_YjfKKk": {
+      "type": "occasion-products",
+      "name": "Occasion Products",
+      "settings": {
+        "subtitle": "Die schönsten",
+        "title": "Trachtenoutfits für’s Festival",
+        "show_view_all": true,
+        "view_all_link": "",
+        "view_all_text": "Alle ansehen",
+        "use_collection": true,
+        "collection": "strickjanker",
+        "products_limit": 12,
+        "show_vendor": true,
+        "background_color": "#ffffff"
+      }
     }
   },
   "order": [
@@ -120,6 +148,8 @@
     "products",
     "banner",
     "occasion_products_TAeHdV",
-    "occasion_banner_MBijFV"
+    "occasion_banner_MBijFV",
+    "occasion_content_mqXAUB",
+    "occasion_products_YjfKKk"
   ]
 }
