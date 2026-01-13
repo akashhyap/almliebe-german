@@ -47,42 +47,103 @@
         "view_all_text": "Alle ansehen",
         "use_collection": true,
         "collection": "braut-drindl",
-        "products_limit": 8,
+        "products_limit": 12,
         "show_vendor": true,
         "background_color": "#f9fafb"
-      }
-    },
-    "text-image": {
-      "type": "occasion-text-image",
-      "settings": {
-        "layout": "content-first",
-        "background_color": "#ffffff",
-        "subtitle": "",
-        "title": "",
-        "content": "",
-        "button_label": "",
-        "button_link": ""
       }
     },
     "banner": {
       "type": "occasion-banner",
       "settings": {
         "use_image": true,
+        "image": "shopify://shop_images/brautdirndl-gottseidank-2_2x_ca45d449-f05d-4f42-abc9-0fb9bdea52b3.jpg",
         "image_position": "center",
         "overlay_opacity": 40,
         "background_color": "#111827",
         "enable_parallax": true,
-        "banner_height": "medium",
-        "content_width": "medium",
+        "banner_height": "large",
+        "content_width": "full",
         "content_horizontal": "center",
         "content_vertical": "center",
-        "subtitle": "",
-        "title": "",
+        "subtitle": "HOCHZEITS TRENDS",
+        "title": "Heiraten in Tracht",
         "description": "",
         "text_color": "#ffffff",
         "button_label": "",
         "button_link": "",
         "button_style": "solid"
+      }
+    },
+    "occasion_content_TwRwQJ": {
+      "type": "occasion-content",
+      "name": "Occasion Content",
+      "settings": {
+        "content_width": "medium",
+        "text_alignment": "center",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "",
+        "content": "<p>Während die modernen Bräute bei der kirchlichen Trauung meist im klassischen weißen Brautkleid heiraten, treten sie im wunderschönen langen Hochzeitsdirndl vors Standesamt. Bei der Tracht für die Hochzeit ist das Brautdirndl nur selten weiß, sondern cremefarben oder in pastelligen Farben gehalten. Die festlichen Brautdirndl in Rosé, Hellblau oder Grün haben dabei meist einen klassischen Ausschnitt oder einen Herzausschnitt und werden mit zarten Spitzen-Dirndlblusen kombiniert. Die Stoffe der Dirndlbrautkleider sind edle Jacquard- oder Leinenqualitäten, dürfen aber auch nicht zu schimmernd und überladen sein. Auch bei der Hochzeit gilt: Der Trend geht zur Tradition. Trachtenhochzeiten werden auch wieder im klassischen Dirndl-Dreiteiler gefeiert oder im Halbarm-Dirndl. Der Trend zur Tradition gilt auch für den Bräutigam.<br/><br/>Zur Herren Tracht für die Hochzeit gehören edle kurze Hirschlederhosen oder helle kurze Lederhosen aus Ziegenleder. Die Lederhosen für eine Hochzeit sind dabei eher dezent bestickt in hellen Tönen, Silber oder einem hellen Blau. Dazu passt ein weißes schmal geschnittenes Trachtenhemd mit Stehkragen. Ebenso wie eine edle Trachtenweste von Marken wie Gottseidank oder Grasegger und dazu ein traditioneller Trachtenjanker aus Leinen oder Loden. Klassische Haferlschuhe sowie lange Trachtensocken und perfekt ist die Männertracht für die Hochzeit! Und während man ein Brautkleid nur einmal trägt, wird Euch das Brautdirndl in Pastelltönen oder die traditionelle Lederhose noch lange begleiten und an unvergessliche Augenblicke erinnern!<br/><br/></p>"
+      }
+    },
+    "occasion_products_tAR9Tp": {
+      "type": "occasion-products",
+      "name": "Occasion Products",
+      "settings": {
+        "subtitle": "Die schönsten",
+        "title": "Lederhosen",
+        "show_view_all": true,
+        "view_all_link": "shopify://collections/lederhosen",
+        "view_all_text": "Alle ansehen",
+        "use_collection": true,
+        "collection": "lederhosen",
+        "products_limit": 12,
+        "show_vendor": true,
+        "background_color": "#ffffff"
+      }
+    },
+    "occasion_text_image_NNweRL": {
+      "type": "occasion-text-image",
+      "name": "Occasion Text + Image",
+      "settings": {
+        "layout": "image-first",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "Dirndlbluse Spitze trifft Bluse",
+        "content": "<p>Die Dirndlbluse ist mindestens so wichtig wie das Dirndl selbst, denn sie verleiht dem Brautdirndl den gewünschten Trachten-Stil. Ob traditionell oder verführerisch – kommt auch immer ganz auf die Dirndlbluse an. Die Auswahl und Variationen an Dirndlblusen für die Hochzeit sind heute enorm. Ob eine Bluse mit Balconette-Ausschnitt, V-Ausschnitt oder aber eine hochgeschlossenen Dirndlbluse: sie stellen alle ein passendes Accessoire zum Dirndl dar. Modern sind Dirndlblusen aus Spitze, die definitiv ein Highlight beim Dirndloutfit sind. Aber auch Dirndlblusen mit Puffarm und viel Volumen sind wieder en vogue. Die Farbtöne kann man ans Brautdirndl anpassen. Nach wie vor dominieren weiße Dirndlblusen, bei Trachtenhochzeiten sind aber auch Spitzen-Dirndlblusen in Creme -und Offwhite-Farbtönen passend. Wir haben die schönsten und edelsten Dirndlblusen fürs Brautdirndl für Euch ausgesucht, wie zum Beispiel von Kinga Mathe, Gottseidank, Sportalm, Heimatglück, Wenger, Anno Domini und vielen anderen.<br/><br/></p>",
+        "button_label": "",
+        "button_link": "",
+        "image": "shopify://shop_images/brautdirndl-almliebe-2_2x_6aca8ea9-21f0-4214-800f-8151fdd829c0.jpg"
+      }
+    },
+    "occasion_products_dnLp6J": {
+      "type": "occasion-products",
+      "name": "Occasion Products",
+      "settings": {
+        "subtitle": "Die schönsten",
+        "title": "Dirndlblusen",
+        "show_view_all": true,
+        "view_all_link": "shopify://collections/dirndlblusen",
+        "view_all_text": "Alle ansehen",
+        "use_collection": true,
+        "collection": "dirndlblusen",
+        "products_limit": 12,
+        "show_vendor": true,
+        "background_color": "#ffffff"
+      }
+    },
+    "occasion_text_image_GrEPx7": {
+      "type": "occasion-text-image",
+      "name": "Occasion Text + Image",
+      "settings": {
+        "layout": "content-first",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "TrachtengiletWeste trifft Tradition",
+        "content": "<p>Die Schau sollte er seiner Braut vielleicht nicht stehlen, aber bei der Trachtenhochzeit kann auch der Bräutigam Stil beweisen. Am besten mit einem traditionellen Hochzeitsoutfit bestehend aus kurzer traditioneller Lederhose, schmalem Hemd, hochgeschlossener Trachtenweste und klassischem Trachtenjanker. Vor allem bei der Trachtenweste können die Männer Stil beweisen und mit Farben spielen: Je nachdem, welche Farbe die Braut beim Brautdirndl trägt. Der Trend bei den Trachtenwesten geht zu Dunkelblau, klassischen Grüntönen, aber auch mal zu einem starken Himbeerton – Hauptsache die Weste ist traditionell. Aufwind haben jetzt auch Trachtengilets wie das Miesbacher Gilet mit Kette am Ausschnitt oder die Kutscher Weste mit großen, schmückenden Münzknöpfen, die aus der Dachauer Region kommen. Bei den Lederhosen greift Mann farblich eher zu helleren und gräulichen Tönen. Hauptsache die Lederhose für die Hochzeit ist qualitativ hochwertig - bevorzugt aus Hirschleder. Bei den Hemden steht bei der Trachtenhochzeit das weiße Stehkragenhemd im Vordergrund. Wir haben eine schöne Auswahl an Lederhosen, Jankern und Trachtenwesten für Euch von Labels wie Gottseidank, Ostarrichi, Grasegger oder Meindl.</p>",
+        "button_label": "",
+        "button_link": "",
+        "image": "shopify://shop_images/trachtenhochzeit-weste-1_2x_1cd7531c-cd53-4e35-be71-6c124232f7c0.jpg"
       }
     }
   },
@@ -90,7 +151,11 @@
     "occasion-hero",
     "content",
     "products",
-    "text-image",
-    "banner"
+    "banner",
+    "occasion_content_TwRwQJ",
+    "occasion_products_tAR9Tp",
+    "occasion_text_image_NNweRL",
+    "occasion_products_dnLp6J",
+    "occasion_text_image_GrEPx7"
   ]
 }
