@@ -184,6 +184,18 @@
         "button_link": "",
         "button_style": "solid"
       }
+    },
+    "occasion_content_nkUKtB": {
+      "type": "occasion-content",
+      "name": "Occasion Content",
+      "settings": {
+        "content_width": "medium",
+        "text_alignment": "center",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "",
+        "content": "<p>Bei der Trachtenhochzeit wollen natürlich auch die Trauzeuginnen, Brautmütter und andere Hochzeitsgäste im Dirndl eine gute Figur machen. Dabei sind sie nicht an pastellige Dirndl gebunden, sondern können farblich und vom Material her frei wählen. Als Hochzeitsgast trägt man Dirndl nicht unbedingt hell und mit schimmernder Seidenschürze. Dirndl-Designer wie Gottseidank oder Kinga Mathé verbinden edle, festliche Stoffe wie Leinen oder gewebte Jacquardstoffe mit klassischen Dirndl-Schnitten. Hochzeitsgast-Dirndl können durchaus auch dunkel gehalten sein in einem Dunkelgrün oder Marineblau. Rot wird dagegen bei Dirndl für Hochzeitsgäste nicht so gern gesehen, weil die auffällige Farbe der Braut die Show stehlen könnte. Auch schwarz trägt man als Gast eigentlich nicht bei einer Hochzeit in Tracht.<br/>Merke: Eher Understatement und Tradition sind angesagt bei den festlichen Dirndln für die Hochzeit. Als Alternative zum Dirndl für Hochzeitsgäste bietet sich ein Trachtenrock an. Meist sind Trachtenröcke für Hochzeiten festlich und lang, in einer Midi-Länge weit übers Knie. Auch Trachtenkleider für Hochzeiten wirken edel und schlicht und sind perfekt für Hochzeitsgäste, die nicht so gerne Dirndl tragen.<br/><br/>Bei den Männern, die als Gast zu einer Hochzeit kommen, geht es hin zu traditionellen Trachtenoutfits mit kurzer Lederhose, schmalem Hemd, Gilet und Trachtenjanker. Wie die Damen im Dirndl sind auch die Männer bei der Trachtenhochzeit nicht an Farben gebunden. Wichtig ist es, die Trachtenweste auf den Janker darüber abzustimmen. Möglich ist hier ein farblicher Kontrast, aber auch Gilet und Janker Ton in Ton wirken sehr festlich. Lange Trachten Kniestrümpfe, farblich abgestimmt, und klassische Haferlschuhe runden das Outfit von Brautvater und Best Man ab.<br/><br/></p>"
+      }
     }
   },
   "order": [
@@ -197,6 +209,7 @@
     "occasion_products_dnLp6J",
     "occasion_text_image_GrEPx7",
     "occasion_products_kWgmMM",
-    "occasion_banner_wEMxDw"
+    "occasion_banner_wEMxDw",
+    "occasion_content_nkUKtB"
   ]
 }
