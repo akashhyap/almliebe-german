@@ -1,16 +1,28 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "occasion-hero": {
       "type": "occasion-hero",
       "settings": {
-        "title": "Oktoberfest",
-        "subtitle": "O'zapft is!",
-        "description": "Entdecken Sie unsere Trachtenkollektion für die Wiesn",
-        "banner_height": "large",
-        "content_horizontal": "center",
-        "content_vertical": "center",
+        "image": "shopify://shop_images/dirndl-and-lederhosen.webp",
         "image_position": "center",
         "overlay_opacity": 40,
+        "banner_height": "large",
+        "subtitle": "O'zapft is!",
+        "title": "Tracht für das Oktoberfest",
+        "description": "Almliebe Wiesn Outfits",
+        "button_label": "",
+        "button_link": "",
+        "content_horizontal": "center",
+        "content_vertical": "center",
         "text_color": "#ffffff"
       }
     },
@@ -19,48 +31,208 @@
       "settings": {
         "content_width": "medium",
         "text_alignment": "center",
-        "title": "",
+        "background_color": "#ffffff",
         "subtitle": "",
-        "content": "",
-        "background_color": "#ffffff"
+        "title": "",
+        "content": "<p>Wir lieben die Wiesn! Wilde Achterbahnfahrten. Vibrierende Zelte. Festliche Tracht. Lebensfreude pur. Almliebe hat die passenden Wiesn-Outfits und Trachtentrends für Euch in den Almliebe Stores und online: festliche Wiesn-Dirndl, traditionelle Lederhosen, klassische Trachtenjanker. Oktoberfest-Trachten sind kein vorübergehender Hype, sondern ein Langzeittrend. Oktoberfest-Tracht steht dabei für die Sehnsucht der Menschen nach Tradition, Heimat und Zugehörigkeit. Seit Jahren sieht man auf dem Oktoberfest immer mehr Damen in Oktoberfest-Dirndln und Männer in kurzen Lederhosen. Hat man vor 20 Jahren noch Jeans und Sweatshirt getragen, ist Tracht heutzutage Pflicht auf dem Oktoberfest: Die Mädels schmeißen sich in die neuesten Oktoberfest-Kleider und die Buam in authentische Wiesn-Outfits für Herren, bestehend aus kurzer Lederhose, Trachtenhemd, Trachtenjanker und Haferlschuhen. Und dann geht’s endlich los zum Anstich und der Freude auf die erste Maß Festbier, a knuspriges Hendl oder gebrannte Mandeln.</p>"
       }
     },
     "products": {
       "type": "occasion-products",
+      "blocks": {
+        "product_qDVKek": {
+          "type": "product",
+          "settings": {
+            "product": "armeldirndl-lorle-k1009-999-schwarz"
+          }
+        },
+        "product_B8tzJX": {
+          "type": "product",
+          "settings": {
+            "product": "dirndl-thalina-traube-80cm"
+          }
+        },
+        "product_bQ4R8g": {
+          "type": "product",
+          "settings": {
+            "product": "armeldirndl-therese-blau-geblumt"
+          }
+        },
+        "product_wTV7ej": {
+          "type": "product",
+          "settings": {
+            "product": "samtdirndl-christl-grun-80cm"
+          }
+        },
+        "product_KNDQD4": {
+          "type": "product",
+          "settings": {
+            "product": "hochgeschlossenes-dirndl-alpsee-2061-59-grun"
+          }
+        },
+        "product_MGJ9tf": {
+          "type": "product",
+          "settings": {
+            "product": "blaues-dirndl-danz-bodn"
+          }
+        },
+        "product_m9Gczd": {
+          "type": "product",
+          "settings": {
+            "product": "samtdirndl-rothsee-2006-40-blau"
+          }
+        },
+        "product_Utfp7V": {
+          "type": "product",
+          "settings": {
+            "product": "dirndl-rothsee-2100-50-grun-gemustert"
+          }
+        },
+        "product_hXDN9f": {
+          "type": "product",
+          "settings": {
+            "product": "samtdirndl-alina-pink"
+          }
+        },
+        "product_6KyJwb": {
+          "type": "product",
+          "settings": {
+            "product": "samtdirndl-alina-blau"
+          }
+        }
+      },
+      "block_order": [
+        "product_qDVKek",
+        "product_B8tzJX",
+        "product_bQ4R8g",
+        "product_wTV7ej",
+        "product_KNDQD4",
+        "product_MGJ9tf",
+        "product_m9Gczd",
+        "product_Utfp7V",
+        "product_hXDN9f",
+        "product_6KyJwb"
+      ],
       "settings": {
-        "title": "Unsere Wiesn-Favoriten",
-        "subtitle": "Für Ihren perfekten Auftritt",
+        "subtitle": "Die schönsten",
+        "title": "Oktoberfest Dirndl",
         "show_view_all": true,
+        "view_all_link": "shopify://collections/dirndl",
         "view_all_text": "Alle ansehen",
         "show_vendor": true,
         "background_color": "#f9fafb"
-      },
-      "blocks": {}
-    },
-    "text-image": {
-      "type": "occasion-text-image",
-      "settings": {
-        "layout": "content-first",
-        "subtitle": "",
-        "title": "",
-        "content": "",
-        "background_color": "#ffffff"
       }
     },
     "banner": {
       "type": "occasion-banner",
       "settings": {
         "use_image": true,
-        "enable_parallax": true,
-        "banner_height": "medium",
-        "content_horizontal": "center",
-        "content_vertical": "center",
-        "content_width": "medium",
+        "image": "shopify://shop_images/ALMLEBE-HW22-9652_2x_da88883e-0151-4078-8a18-37ac378b3d2b.png",
         "image_position": "center",
         "overlay_opacity": 40,
-        "text_color": "#ffffff",
         "background_color": "#111827",
+        "enable_parallax": true,
+        "banner_height": "medium",
+        "content_width": "full",
+        "content_horizontal": "center",
+        "content_vertical": "center",
+        "subtitle": "",
+        "title": "",
+        "description": "",
+        "text_color": "#ffffff",
+        "button_label": "",
+        "button_link": "",
         "button_style": "solid"
+      }
+    },
+    "occasion_content_W7Rtwb": {
+      "type": "occasion-content",
+      "name": "Occasion Content",
+      "settings": {
+        "content_width": "medium",
+        "text_alignment": "center",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "",
+        "content": "<p>Damentracht fürs Oktoberfest muss festlich sein. Die Wiesn-Dirndl sind in den letzten Jahren traditioneller und auch länger geworden. Die Trends bei Oktoberfest-Outfits für Damen geben oft bayerische Dirndl-Hersteller vor, allen voran die Münchner Dirndl-Marke Gottseidank, die beim Wiesn-Outfit schon vor Jahren das Retro-Dirndl wieder fest etabliert hat. Auch die Wiesn-Outfits von Almliebe stehen mit klassischen Jacquard-Stoffen und schlichten Dirndlschürzen samt Trachtenborten oder Charivari für Tradition. Die Zeiten von Glitzer und Pailletten bei den Oktoberfest-Outfits für Damen sind vorbei. Heute setzen viele wieder beim Wiesn-Outfit auf Dirndl mit klassischem Ausschnitt, auf hochgeschlossene Dirndl, auf Halbarmdirndl oder sogar Dirndl mit Puffarm – wie man sie schon in den 80er- und 90er-Jahren hatte und die Gottseidank ganz neu interpretiert hat. Der Saum der modernen Wiesn-Dirndl liegt dabei wieder deutlich unterhalb des Knies – viele Dirndl-Designer haben auf eine Dirndl-Rocklänge von 80cm umgestellt. Die Farben und Stoffe für die Oktoberfest-Dirndl sind dabei eher gedeckt und traditionell. Auch edle Samt-Dirndl in allen Farben sind wieder ein großes Thema. Wie auch bei unserer eigenen Almliebe-Dirndl Oktoberfest Kollektion bestehend aus vielen verschiedenen Wiesndirndln für die Mädels sowie Trachtenwesten für die Buam.</p>"
+      }
+    },
+    "occasion_products_Baieqk": {
+      "type": "occasion-products",
+      "blocks": {
+        "product_6rMB76": {
+          "type": "product",
+          "settings": {
+            "product": "miesbacher-trachtenweste-xare-blau"
+          }
+        },
+        "product_hz7VF9": {
+          "type": "product",
+          "settings": {
+            "product": "trachtenweste-hampdi-dampdi-blau-gemustert"
+          }
+        },
+        "product_nbHJ7T": {
+          "type": "product",
+          "settings": {
+            "product": "miesbacher-trachtenweste-xare-schwarz"
+          }
+        },
+        "product_4Rqrkw": {
+          "type": "product",
+          "settings": {
+            "product": "blaues-dirndl-danz-bodn"
+          }
+        },
+        "product_BNFnbD": {
+          "type": "product",
+          "settings": {
+            "product": "trachtenjanker-tschamsdara-mittelgrau"
+          }
+        },
+        "product_eBAgMj": {
+          "type": "product",
+          "settings": {
+            "product": "trachtenjanker-tschamsdara-anthra"
+          }
+        },
+        "product_YT4M8B": {
+          "type": "product",
+          "settings": {
+            "product": "cashmere-mutze-low-grau-unisex"
+          }
+        }
+      },
+      "block_order": [
+        "product_6rMB76",
+        "product_hz7VF9",
+        "product_nbHJ7T",
+        "product_4Rqrkw",
+        "product_BNFnbD",
+        "product_eBAgMj",
+        "product_YT4M8B"
+      ],
+      "name": "Occasion Products",
+      "settings": {
+        "subtitle": "Die Almliebe",
+        "title": "Wiesn Kollektion",
+        "show_view_all": false,
+        "view_all_link": "",
+        "view_all_text": "Alle ansehen",
+        "show_vendor": true,
+        "background_color": "#ffffff"
+      }
+    },
+    "text-image": {
+      "type": "occasion-text-image",
+      "settings": {
+        "layout": "content-first",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "",
+        "content": "",
+        "button_label": "",
+        "button_link": ""
       }
     }
   },
@@ -68,7 +240,9 @@
     "occasion-hero",
     "content",
     "products",
-    "text-image",
-    "banner"
+    "banner",
+    "occasion_content_W7Rtwb",
+    "occasion_products_Baieqk",
+    "text-image"
   ]
 }
