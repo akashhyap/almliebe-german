@@ -226,13 +226,14 @@
     "text-image": {
       "type": "occasion-text-image",
       "settings": {
-        "layout": "content-first",
+        "layout": "image-first",
         "background_color": "#ffffff",
         "subtitle": "",
-        "title": "",
-        "content": "",
+        "title": "Die schönsten Blusenzum Wiesn-Dirndl",
+        "content": "<p>Die Dirndlbluse ist beim Wiesn-Outfit nach wie vor das wichtigste Statement neben dem Dirndl. Zum perfekten Wiesn-Outfit gehören festliche Dirndlblusen. Dirndl-Spitzenblusen in Weiß oder Schwarz, kurzarm oder langarm, werten jedes Wiesn-Dirndl auf. Dabei sind vor allem hochgeschlossene Dirndlblusen oder Dirndlblusen mit V-Ausschnitt beliebt. Wobei der Trend auch wieder hin zu schlichten Dirndlblusen fürs Oktoberfest geht. Auch bei den Wiesn-Blusen gelten voluminöse Ärmel und Dirndlblusen mit Puffarm allmählich wieder als modern. Und weil die Wiesn im Herbst stattfindet, dürfen Blusen fürs Oktoberfest gerne auch einen Dreiviertel- oder Langarm haben. Gerne auch mal mit weit geschnittenen Ballonärmel. Besonders gefragt sind zum Oktoberfest auch Dirndlblusen mit Flügelarm von Dirndl-Designern wie Kinga Mathé, Gottseidank oder Wenger, die besonders neckisch unterm Dirndl hervorblitzen.<br/><br/></p>",
         "button_label": "",
-        "button_link": ""
+        "button_link": "",
+        "image": "shopify://shop_images/ALMLIEBE23HW2463K_2x_b81d14d0-a658-4e89-9adf-289113cc8d24.png"
       }
     }
   },
