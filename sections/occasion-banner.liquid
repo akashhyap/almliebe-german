@@ -13,7 +13,7 @@
          style="--text-color: {{ section.settings.text_color }}; {% unless use_image %}background-color: {{ section.settings.background_color }};{% endunless %}">
   
   {%- if use_image and section.settings.image != blank -%}
-    <div class="occasion-banner__media{% if enable_parallax %} occasion-banner__media--parallax{% endif %}">
+    <div class="occasion-banner__media">
       <img
         src="{{ section.settings.image | image_url: width: 1920 }}"
         srcset="{{ section.settings.image | image_url: width: 1200 }} 1200w,
@@ -105,15 +105,7 @@
     position: absolute;
     inset: 0;
     z-index: 0;
-  }
-  
-  .occasion-banner__media--parallax {
-    position: absolute;
-    top: -20%;
-    left: 0;
-    right: 0;
-    bottom: -20%;
-    height: 140%;
+    overflow: hidden;
   }
   
   .occasion-banner__img {
@@ -122,7 +114,11 @@
     object-fit: cover;
   }
   
-  .occasion-banner__media--parallax .occasion-banner__img {
+  /* Parallax image needs to be larger to allow movement */
+  .occasion-banner--parallax .occasion-banner__img {
+    height: 120%;
+    min-height: calc(100% + 60px);
+    transform: translate3d(0, 0, 0) scale(1.1);
     will-change: transform;
   }
   
@@ -130,12 +126,13 @@
     position: absolute;
     inset: 0;
     background: #000000;
+    z-index: 1;
   }
   
   /* Wrapper */
   .occasion-banner__wrapper {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     width: 100%;
     max-width: 1600px;
     margin: 0 auto;
@@ -304,32 +301,36 @@ document.addEventListener('DOMContentLoaded', function() {
   
   if (!parallaxBanners.length) return;
   
-  let ticking = false;
-  
   function updateParallax() {
     parallaxBanners.forEach(banner => {
-      const media = banner.querySelector('.occasion-banner__media--parallax');
-      if (!media) return;
+      const img = banner.querySelector('.occasion-banner__img');
+      if (!img) return;
       
       const rect = banner.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       
-      // Only apply parallax when element is in viewport
-      if (rect.top < windowHeight && rect.bottom > 0) {
-        // Calculate parallax offset
+      // Check if element is in viewport
+      if (rect.bottom > 0 && rect.top < windowHeight) {
+        // Calculate how far through the viewport the element is (0 to 1)
         const scrollPercent = (windowHeight - rect.top) / (windowHeight + rect.height);
-        const parallaxOffset = (scrollPercent - 0.5) * 100; // -50 to +50
         
-        media.style.transform = `translateY(${parallaxOffset * 0.3}px)`;
+        // Calculate parallax offset (-30px to +30px range)
+        const yOffset = (scrollPercent - 0.5) * 60;
+        
+        img.style.transform = `translate3d(0, ${yOffset}px, 0) scale(1.1)`;
       }
     });
-    
-    ticking = false;
   }
+  
+  // Throttle scroll events
+  let ticking = false;
   
   function onScroll() {
     if (!ticking) {
-      requestAnimationFrame(updateParallax);
+      requestAnimationFrame(function() {
+        updateParallax();
+        ticking = false;
+      });
       ticking = true;
     }
   }
