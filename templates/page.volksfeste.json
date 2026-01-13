@@ -61,7 +61,7 @@
         "overlay_opacity": 40,
         "background_color": "#111827",
         "enable_parallax": true,
-        "banner_height": "xlarge",
+        "banner_height": "large",
         "content_width": "full",
         "content_horizontal": "center",
         "content_vertical": "center",
@@ -171,8 +171,8 @@
         "overlay_opacity": 40,
         "background_color": "#111827",
         "enable_parallax": true,
-        "banner_height": "medium",
-        "content_width": "medium",
+        "banner_height": "large",
+        "content_width": "full",
         "content_horizontal": "center",
         "content_vertical": "center",
         "subtitle": "Volksfest-Trends Männer",
@@ -182,6 +182,34 @@
         "button_label": "",
         "button_link": "",
         "button_style": "solid"
+      }
+    },
+    "occasion_content_ix8nNL": {
+      "type": "occasion-content",
+      "name": "Occasion Content",
+      "settings": {
+        "content_width": "medium",
+        "text_alignment": "center",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "",
+        "content": "<p>In der festlichen Trachtenmode für Männer ging es früher fast ausschließlich um die Lederhose. Hirschlederhose oder Ziegenlederhose? Welche Stickerei? Kniebund oder kurz? Bänder oder Knöpfe? Das sind immer noch entscheidende Fragen für den Mann beim Volksfestbesuch. Die Lederhosen sind jetzt fast ausschließlich kurz, sind vom Farbton eher heller oder gehen in die Grautöne. Die Stickereien bei den Hirschlederhosen und Ziegenlederhosen sind dezent in Grau, Ton-in-Ton oder in kräftigen Grüntönen, für alle, die es auffälliger wollen.<br/><br/>Aber was sich bei der festlichen Tracht geändert hat, ist die schickere Kombination der Lederhose mit einer Trachtenweste bzw. Trachtengilet. Jörg Hittenkofer von der Trachtenfirma Gottseidank hat das festliche Trachtenoutfit revolutioniert, in dem er die Trachtenweste schmal geschnitten hat. Das moderne Trachtengilet ist fast überwiegend hochgeschlossen und eher clean. Die Westen sind aus Leinen, Loden oder hochwertigen gewebten Jacquard-Stoffen. Was sich vermehrt auch durchsetzt sind traditionelle Trachtenwesten wie das Miesbacher Gilet mit Ausschnitt vorne und Kette sowie das Kutschergilet, das aus der Region Dachau kommt, und mit vielen großen Münzknöpfen geschmückt ist. Diese Trachtenwesten zeigen, dass der Mann sich auch gerne festlich kleidet zum Volksfest und sich abheben will von der Alltagskleidung. Auch Almliebe hat Miesbacher Gilets und Kutscher Gilets in der neuen Männer Trachten Kollektion.<br/><br/>Zum Trachtengilet werden schmal geschnittene Trachtenhemden mit Stehkragen kombiniert, entweder Uni in Weiß oder Hellblau oder mit dezenten Streifen. Das Karohemd in seiner klassischen Variante hat ausgedient. Wer sich besonders festlich in Tracht kleiden will, trägt über dem Trachtenhemd und Gilet einen schicken Trachtenjanker. Auch hier war Gottseidank der Vorreiter und hat den Janker schmal geschnitten und an die moderne Männermode angepasst hat. Trachten-Kniestrümpfe – farblich auf Gilet und Janker abgestimmt – und klassische schwarze Haferlschuhe runden das perfekte festliche Trachtenoutfit ab. Individuell und auffällig wird das Trachtenoutfit übrigens mit einem passenden, traditionellen Trachtenhut.</p>"
+      }
+    },
+    "occasion_products_czWqNa": {
+      "type": "occasion-products",
+      "name": "Occasion Products",
+      "settings": {
+        "subtitle": "Die schönsten",
+        "title": "Trachtenwesten",
+        "show_view_all": true,
+        "view_all_link": "shopify://collections/trachtenwesten",
+        "view_all_text": "Alle ansehen",
+        "use_collection": true,
+        "collection": "trachtenwesten",
+        "products_limit": 8,
+        "show_vendor": true,
+        "background_color": "#ffffff"
       }
     }
   },
@@ -196,6 +224,8 @@
     "occasion_products_tBQjCY",
     "occasion_text_image_nQ6JU3",
     "occasion_products_QdchCF",
-    "occasion_banner_Yebnex"
+    "occasion_banner_Yebnex",
+    "occasion_content_ix8nNL",
+    "occasion_products_czWqNa"
   ]
 }
