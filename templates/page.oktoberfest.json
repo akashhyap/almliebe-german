@@ -235,6 +235,93 @@
         "button_link": "",
         "image": "shopify://shop_images/ALMLIEBE23HW2463K_2x_b81d14d0-a658-4e89-9adf-289113cc8d24.png"
       }
+    },
+    "occasion_products_RQ4H9U": {
+      "type": "occasion-products",
+      "blocks": {
+        "product_WUDBe9": {
+          "type": "product",
+          "settings": {
+            "product": "dirndlbluse-stella-blau"
+          }
+        },
+        "product_xP8wNr": {
+          "type": "product",
+          "settings": {
+            "product": "dirndlbluse-ava-a005306-weiss"
+          }
+        },
+        "product_yfNxkk": {
+          "type": "product",
+          "settings": {
+            "product": "dirndlbluse-irma-a005054-eierschale"
+          }
+        },
+        "product_7fbAA7": {
+          "type": "product",
+          "settings": {
+            "product": "dirndlbluse-mariella-a005309-weiss"
+          }
+        },
+        "product_c9FJVV": {
+          "type": "product",
+          "settings": {
+            "product": "dirndlbluse-mit-flugelarm-hanny-schwarz"
+          }
+        },
+        "product_i8bFRG": {
+          "type": "product",
+          "settings": {
+            "product": "langarm-dirndlbluse-alina-2940-weiss"
+          }
+        },
+        "product_Ka8THB": {
+          "type": "product",
+          "settings": {
+            "product": "dirndlbluse-hanny-2914-80-schwarz"
+          }
+        },
+        "product_QhnFmC": {
+          "type": "product",
+          "settings": {
+            "product": "dirndlbluse-lee-weiss"
+          }
+        },
+        "product_EBM64L": {
+          "type": "product",
+          "settings": {
+            "product": "dirndlbluse-eveline-mit-flugelarm-2940-51-hellgrun"
+          }
+        },
+        "product_qEJaYC": {
+          "type": "product",
+          "settings": {
+            "product": "dirndlbluse-mit-flugelarm-christina-haselnuss"
+          }
+        }
+      },
+      "block_order": [
+        "product_WUDBe9",
+        "product_xP8wNr",
+        "product_yfNxkk",
+        "product_7fbAA7",
+        "product_c9FJVV",
+        "product_i8bFRG",
+        "product_Ka8THB",
+        "product_QhnFmC",
+        "product_EBM64L",
+        "product_qEJaYC"
+      ],
+      "name": "Occasion Products",
+      "settings": {
+        "subtitle": "Die schönsten",
+        "title": "Dirndlblusen",
+        "show_view_all": false,
+        "view_all_link": "shopify://collections/dirndlblusen",
+        "view_all_text": "Alle ansehen",
+        "show_vendor": true,
+        "background_color": "#ffffff"
+      }
     }
   },
   "order": [
@@ -244,6 +331,7 @@
     "banner",
     "occasion_content_W7Rtwb",
     "occasion_products_Baieqk",
-    "text-image"
+    "text-image",
+    "occasion_products_RQ4H9U"
   ]
 }
