@@ -161,6 +161,29 @@
         "show_vendor": true,
         "background_color": "#ffffff"
       }
+    },
+    "occasion_banner_wEMxDw": {
+      "type": "occasion-banner",
+      "name": "Occasion Banner",
+      "settings": {
+        "use_image": true,
+        "image": "shopify://shop_images/trachtenhochzeit-almliebe-2_2x_b530793d-d411-4f6d-a0ae-694240ba6ca0.jpg",
+        "image_position": "center",
+        "overlay_opacity": 40,
+        "background_color": "#111827",
+        "enable_parallax": true,
+        "banner_height": "medium",
+        "content_width": "full",
+        "content_horizontal": "center",
+        "content_vertical": "center",
+        "subtitle": "HOCHZEITSGÄSTE",
+        "title": "Tracht für Trauzeugen & Hochzeitsgäste",
+        "description": "",
+        "text_color": "#ffffff",
+        "button_label": "",
+        "button_link": "",
+        "button_style": "solid"
+      }
     }
   },
   "order": [
@@ -173,6 +196,7 @@
     "occasion_text_image_NNweRL",
     "occasion_products_dnLp6J",
     "occasion_text_image_GrEPx7",
-    "occasion_products_kWgmMM"
+    "occasion_products_kWgmMM",
+    "occasion_banner_wEMxDw"
   ]
 }
