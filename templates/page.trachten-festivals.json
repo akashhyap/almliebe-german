@@ -89,6 +89,29 @@
         "show_vendor": true,
         "background_color": "#ffffff"
       }
+    },
+    "occasion_banner_MBijFV": {
+      "type": "occasion-banner",
+      "name": "Occasion Banner",
+      "settings": {
+        "use_image": true,
+        "image": "shopify://shop_images/ALMLIEBE23HW1409K-1_2x_7f9aa552-e6b4-4085-902c-32f8ab1ba9c8.jpg",
+        "image_position": "center",
+        "overlay_opacity": 40,
+        "background_color": "#111827",
+        "enable_parallax": true,
+        "banner_height": "large",
+        "content_width": "full",
+        "content_horizontal": "center",
+        "content_vertical": "center",
+        "subtitle": "Die besten trachten-Outfits für Männer",
+        "title": "Lederhose und Sneaker: Legere Outfits fürs Festival",
+        "description": "",
+        "text_color": "#ffffff",
+        "button_label": "",
+        "button_link": "",
+        "button_style": "solid"
+      }
     }
   },
   "order": [
@@ -96,6 +119,7 @@
     "content",
     "products",
     "banner",
-    "occasion_products_TAeHdV"
+    "occasion_products_TAeHdV",
+    "occasion_banner_MBijFV"
   ]
 }
