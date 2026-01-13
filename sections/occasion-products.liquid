@@ -1,7 +1,7 @@
 {% comment %}
   OCCASION PRODUCTS SECTION
   Display products in grid (4 or fewer) or carousel (more than 4)
-  Manual product selection via blocks
+  Option to manually select products OR choose a collection
 {% endcomment %}
 
 {%- liquid
@@ -11,7 +11,24 @@
   assign view_all_link = section.settings.view_all_link
   assign view_all_text = section.settings.view_all_text | default: 'Alle ansehen'
   assign show_vendor = section.settings.show_vendor
-  assign products_count = section.blocks.size
+  assign use_collection = section.settings.use_collection
+  assign selected_collection = section.settings.collection
+  assign products_limit = section.settings.products_limit | default: 8
+  
+  assign products_count = 0
+  
+  if use_collection and selected_collection != blank
+    assign products_count = selected_collection.products_count
+    if products_count > products_limit
+      assign products_count = products_limit
+    endif
+    if show_view_all and view_all_link == blank
+      assign view_all_link = selected_collection.url
+    endif
+  else
+    assign products_count = section.blocks.size
+  endif
+  
   assign enable_carousel = false
   if products_count > 4
     assign enable_carousel = true
@@ -58,10 +75,11 @@
       {%- comment -%} Products Grid / Slider {%- endcomment -%}
       <div class="occasion-products__slider" data-slider>
         <div class="occasion-products__track{% unless enable_carousel %} occasion-products__track--grid{% endunless %}" data-slider-track>
-          {%- for block in section.blocks -%}
-            {%- assign product = block.settings.product -%}
-            {%- if product != blank -%}
-              <div class="occasion-products__item" {{ block.shopify_attributes }}>
+          
+          {%- if use_collection and selected_collection != blank -%}
+            {%- comment -%} Collection Products {%- endcomment -%}
+            {%- for product in selected_collection.products limit: products_limit -%}
+              <div class="occasion-products__item">
                 <a href="{{ product.url }}" class="product-card">
                   <div class="product-card__image">
                     {%- if product.featured_image != blank -%}
@@ -109,8 +127,64 @@
                   </div>
                 </a>
               </div>
-            {%- endif -%}
-          {%- endfor -%}
+            {%- endfor -%}
+          {%- else -%}
+            {%- comment -%} Manual Products via Blocks {%- endcomment -%}
+            {%- for block in section.blocks -%}
+              {%- assign product = block.settings.product -%}
+              {%- if product != blank -%}
+                <div class="occasion-products__item" {{ block.shopify_attributes }}>
+                  <a href="{{ product.url }}" class="product-card">
+                    <div class="product-card__image">
+                      {%- if product.featured_image != blank -%}
+                        <img 
+                          src="{{ product.featured_image | image_url: width: 600 }}"
+                          alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                          width="300"
+                          height="400"
+                          loading="lazy"
+                        >
+                        {%- if product.images.size > 1 -%}
+                          <img 
+                            src="{{ product.images[1] | image_url: width: 600 }}"
+                            alt="{{ product.title | escape }}"
+                            width="300"
+                            height="400"
+                            loading="lazy"
+                            class="product-card__image-hover"
+                          >
+                        {%- endif -%}
+                      {%- else -%}
+                        <div class="product-card__placeholder">
+                          {{ 'product-1' | placeholder_svg_tag }}
+                        </div>
+                      {%- endif -%}
+                      
+                      {%- if product.compare_at_price > product.price -%}
+                        <span class="product-card__badge">Sale</span>
+                      {%- endif -%}
+                    </div>
+                    
+                    <div class="product-card__info">
+                      {%- if show_vendor and product.vendor != blank -%}
+                        <p class="product-card__vendor">{{ product.vendor }}</p>
+                      {%- endif -%}
+                      <h3 class="product-card__title">{{ product.title }}</h3>
+                      <div class="product-card__price">
+                        {%- if product.compare_at_price > product.price -%}
+                          <span class="product-card__price-sale">{{ product.price | money }}</span>
+                          <span class="product-card__price-compare">{{ product.compare_at_price | money }}</span>
+                        {%- else -%}
+                          <span>{{ product.price | money }}</span>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          {%- endif -%}
+          
         </div>
       </div>
       
@@ -505,13 +579,41 @@ document.addEventListener('DOMContentLoaded', function() {
     {
       "type": "url",
       "id": "view_all_link",
-      "label": "'View All' link URL"
+      "label": "'View All' link URL",
+      "info": "Leave empty to auto-link to collection when using collection mode"
     },
     {
       "type": "text",
       "id": "view_all_text",
       "label": "'View All' text",
       "default": "Alle ansehen"
+    },
+    {
+      "type": "header",
+      "content": "Product Source"
+    },
+    {
+      "type": "checkbox",
+      "id": "use_collection",
+      "label": "Use Collection",
+      "default": false,
+      "info": "ON = Show products from collection. OFF = Manually add products below."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Only used when 'Use Collection' is enabled"
+    },
+    {
+      "type": "range",
+      "id": "products_limit",
+      "min": 4,
+      "max": 24,
+      "step": 1,
+      "label": "Products Limit",
+      "default": 8,
+      "info": "Max products to show from collection"
     },
     {
       "type": "header",
