@@ -358,6 +358,29 @@
         "show_vendor": true,
         "background_color": "#ffffff"
       }
+    },
+    "occasion_banner_Mcybxp": {
+      "type": "occasion-banner",
+      "name": "Occasion Banner",
+      "settings": {
+        "use_image": true,
+        "image": "shopify://shop_images/ALMLEBE-HW22-9629_1_2x_d88fab76-41b2-4234-8c4e-542a6f683b0a.png",
+        "image_position": "center",
+        "overlay_opacity": 40,
+        "background_color": "#111827",
+        "enable_parallax": false,
+        "banner_height": "xlarge",
+        "content_width": "full",
+        "content_horizontal": "center",
+        "content_vertical": "center",
+        "subtitle": "OKTOBERFEST-JANKER & WESTEN FÜR HERREN",
+        "title": "Wiesn-Outfits für die Männer",
+        "description": "",
+        "text_color": "#ffffff",
+        "button_label": "",
+        "button_link": "",
+        "button_style": "solid"
+      }
     }
   },
   "order": [
@@ -370,6 +393,7 @@
     "text-image",
     "occasion_text_image_TkTHRN",
     "occasion_banner_kFD7VN",
-    "occasion_products_RQ4H9U"
+    "occasion_products_RQ4H9U",
+    "occasion_banner_Mcybxp"
   ]
 }
