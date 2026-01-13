@@ -160,6 +160,29 @@
         "show_vendor": true,
         "background_color": "#ffffff"
       }
+    },
+    "occasion_banner_Yebnex": {
+      "type": "occasion-banner",
+      "name": "Occasion Banner",
+      "settings": {
+        "use_image": true,
+        "image": "shopify://shop_images/ALMLIEBE23HW1070K_2x_464ccd01-0241-4fa7-adea-893b7768414e.jpg",
+        "image_position": "center",
+        "overlay_opacity": 40,
+        "background_color": "#111827",
+        "enable_parallax": true,
+        "banner_height": "medium",
+        "content_width": "medium",
+        "content_horizontal": "center",
+        "content_vertical": "center",
+        "subtitle": "Volksfest-Trends Männer",
+        "title": "Von Kopf bis Fuß in Tracht",
+        "description": "",
+        "text_color": "#ffffff",
+        "button_label": "",
+        "button_link": "",
+        "button_style": "solid"
+      }
     }
   },
   "order": [
@@ -172,6 +195,7 @@
     "text-image",
     "occasion_products_tBQjCY",
     "occasion_text_image_nQ6JU3",
-    "occasion_products_QdchCF"
+    "occasion_products_QdchCF",
+    "occasion_banner_Yebnex"
   ]
 }
