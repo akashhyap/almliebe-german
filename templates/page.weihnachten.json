@@ -124,6 +124,18 @@
         "button_link": "",
         "button_style": "solid"
       }
+    },
+    "occasion_content_LVzfLf": {
+      "type": "occasion-content",
+      "name": "Occasion Content",
+      "settings": {
+        "content_width": "medium",
+        "text_alignment": "center",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "",
+        "content": "<p>Eure Liebsten lieben Tracht und Tradition? Dann schenkt ihnen doch ein schönes Weihnachts- oder Winterdirndlaus schweren Stoffen oder mit Ärmeln! Ein Strickjanker von Liebling oder Gottseidank – warm und angenehm aus feiner Merinowolle, mit oder ohne Kapuze – ist ebenfalls ein wunderbares Geschenk. Auch für Männer ist der Strickjanker ideal. Lederhosen sollten die Männer am besten selbst anprobieren. Möchtest du also eine Lederhose verschenken, haben wir etwas ganz Besonderes für dich: den almliebe Gutschein, kombiniert mit einem Shopping-Termin und Glühwein an unserer almliebe Bar.<br/><br/>Wer keine Weihnachtstracht verschenken möchte, findet in unserem Sortiment liebevoll zusammengestellte Geschenke und alpine Accessoires – von Flachmännern aus Filz über Wärmflaschen mit Edelweiß-Motiv bis hin zu edlen Decken von Loden Steiner.<br/><br/>Übrigens: In unserer neuen Abteilung im Münchner almliebe Store gibt es Heimat-Gin aus dem Allgäu, Holzschneidebretter von Heimat im Herz, Seifen aus Schafmilch, Hüttenschuhe von Living Kitzbühel, natürliche Duftkerzen von Looops „Bergluft“, Mützen von Handgmacht mit Liebe und vieles mehr.<br/><br/>Holt euch jetzt die perfekten Weihnachtsgeschenke für Trachten- und Bergliebhaber sowie Fans von heimischen, handgemachten, alpinen Produkten. Macht es euch daheim mit almliebe gemütlich!<br/><br/></p>"
+      }
     }
   },
   "order": [
@@ -133,6 +145,7 @@
     "banner",
     "occasion_content_ppKiB8",
     "occasion_products_KMmBxq",
-    "occasion_banner_raxQcb"
+    "occasion_banner_raxQcb",
+    "occasion_content_LVzfLf"
   ]
 }
