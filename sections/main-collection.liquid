@@ -413,6 +413,11 @@
           
           <div class="collection-grid" data-collection-grid>
             {%- for product in collection.products -%}
+              {%- comment -%} Skip out-of-stock products {%- endcomment -%}
+              {%- unless product.available -%}
+                {%- continue -%}
+              {%- endunless -%}
+              
               {%- comment -%} Check if product is a gift card (native or by handle) {%- endcomment -%}
               {%- assign is_gift_card_product = false -%}
               {%- if product.gift_card or product.handle contains 'gutschein' -%}
