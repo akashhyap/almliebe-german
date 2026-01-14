@@ -683,7 +683,7 @@
     right: 1rem;
     width: 40px;
     height: 40px;
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
     background: white;
@@ -691,19 +691,28 @@
     border-radius: 50%;
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    opacity: 0;
-    transition: opacity 0.2s;
+    opacity: 0.7;
+    transition: opacity 0.2s, background 0.2s, color 0.2s;
+    z-index: 3;
+  }
+  
+  .product__zoom-btn:hover {
+    opacity: 1;
+  }
+  
+  .product__zoom-btn.is-active {
+    background: #111827;
+    color: white;
+    opacity: 1;
+  }
+  
+  .product__zoom-btn.is-active svg {
+    stroke: white;
   }
 
-  /* Show zoom button only on mobile/tablet */
-  @media (max-width: 1023px) {
-    .product__zoom-btn {
-      display: flex;
-    }
-    
-    .product__media-main:hover .product__zoom-btn {
-      opacity: 1;
-    }
+  /* Show zoom button on all devices */
+  .product__media-main:hover .product__zoom-btn {
+    opacity: 1;
   }
 
   .product__gallery-nav {
@@ -1712,9 +1721,10 @@ document.addEventListener('DOMContentLoaded', function() {
     if (e.key === 'ArrowRight') lightboxNextImage();
   });
   
-  // === INNER ZOOM FOR DESKTOP ===
+  // === INNER ZOOM FOR DESKTOP (Click to Activate) ===
   zoomWrappers.forEach((wrapper, index) => {
     const img = wrapper.querySelector('.product__image');
+    const zoomBtn = wrapper.querySelector('[data-zoom-trigger]');
     if (!img) return;
     
     // Create inner zoom overlay for this wrapper
@@ -1722,7 +1732,8 @@ document.addEventListener('DOMContentLoaded', function() {
     zoomInner.className = 'product__zoom-inner';
     wrapper.appendChild(zoomInner);
     
-    // Zoom ratio
+    // Zoom state
+    let zoomActive = false;
     const zoomLevel = 2.5;
     
     function showZoom() {
@@ -1731,14 +1742,18 @@ document.addEventListener('DOMContentLoaded', function() {
       const zoomSrc = img.dataset.zoomImage || img.src;
       zoomInner.style.backgroundImage = 'url("' + zoomSrc + '")';
       zoomInner.classList.add('is-visible');
+      zoomBtn?.classList.add('is-active');
+      zoomActive = true;
     }
     
     function hideZoom() {
       zoomInner.classList.remove('is-visible');
+      zoomBtn?.classList.remove('is-active');
+      zoomActive = false;
     }
     
     function moveZoom(e) {
-      if (window.innerWidth < 1024) return;
+      if (window.innerWidth < 1024 || !zoomActive) return;
       
       const rect = wrapper.getBoundingClientRect();
       
@@ -1761,22 +1776,38 @@ document.addEventListener('DOMContentLoaded', function() {
       zoomInner.style.backgroundPosition = bgX + 'px ' + bgY + 'px';
     }
     
-    // Mouse events - Desktop zoom
-    wrapper.addEventListener('mouseenter', function(e) {
+    // Click zoom button to toggle zoom mode
+    zoomBtn?.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
       if (window.innerWidth >= 1024) {
-        showZoom();
-        moveZoom(e);
+        if (zoomActive) {
+          hideZoom();
+        } else {
+          showZoom();
+        }
+      } else {
+        // Mobile - open lightbox
+        openLightbox(currentIndex);
       }
     });
     
+    // Mouse move - only works when zoom is active
     wrapper.addEventListener('mousemove', moveZoom);
     
+    // Mouse leave - deactivate zoom
     wrapper.addEventListener('mouseleave', function() {
-      hideZoom();
+      if (zoomActive) {
+        hideZoom();
+      }
     });
     
-    // Click event - Mobile lightbox
+    // Click on image (not button) - Mobile lightbox only
     wrapper.addEventListener('click', function(e) {
+      // Ignore if click was on the zoom button
+      if (e.target.closest('[data-zoom-trigger]')) return;
+      
       if (window.innerWidth < 1024) {
         e.preventDefault();
         openLightbox(currentIndex);
