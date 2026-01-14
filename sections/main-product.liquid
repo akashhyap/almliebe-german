@@ -714,6 +714,21 @@
   .product__media-main:hover .product__zoom-btn {
     opacity: 1;
   }
+  
+  /* Cursor styles for zoom */
+  .product__image-wrapper {
+    cursor: zoom-in;
+  }
+  
+  .product__image-wrapper.zoom-active {
+    cursor: zoom-out;
+  }
+  
+  @media (max-width: 1023px) {
+    .product__image-wrapper {
+      cursor: pointer;
+    }
+  }
 
   .product__gallery-nav {
     position: absolute;
@@ -1736,20 +1751,33 @@ document.addEventListener('DOMContentLoaded', function() {
     let zoomActive = false;
     const zoomLevel = 2.5;
     
-    function showZoom() {
+    function showZoom(e) {
       if (window.innerWidth < 1024) return;
       
       const zoomSrc = img.dataset.zoomImage || img.src;
       zoomInner.style.backgroundImage = 'url("' + zoomSrc + '")';
       zoomInner.classList.add('is-visible');
       zoomBtn?.classList.add('is-active');
+      wrapper.classList.add('zoom-active');
       zoomActive = true;
+      
+      // Immediately position zoom if event provided
+      if (e) moveZoom(e);
     }
     
     function hideZoom() {
       zoomInner.classList.remove('is-visible');
       zoomBtn?.classList.remove('is-active');
+      wrapper.classList.remove('zoom-active');
       zoomActive = false;
+    }
+    
+    function toggleZoom(e) {
+      if (zoomActive) {
+        hideZoom();
+      } else {
+        showZoom(e);
+      }
     }
     
     function moveZoom(e) {
@@ -1776,17 +1804,13 @@ document.addEventListener('DOMContentLoaded', function() {
       zoomInner.style.backgroundPosition = bgX + 'px ' + bgY + 'px';
     }
     
-    // Click zoom button to toggle zoom mode
-    zoomBtn?.addEventListener('click', function(e) {
+    // Click on image or zoom button to toggle zoom
+    wrapper.addEventListener('click', function(e) {
       e.preventDefault();
-      e.stopPropagation();
       
       if (window.innerWidth >= 1024) {
-        if (zoomActive) {
-          hideZoom();
-        } else {
-          showZoom();
-        }
+        // Desktop - toggle zoom
+        toggleZoom(e);
       } else {
         // Mobile - open lightbox
         openLightbox(currentIndex);
@@ -1800,17 +1824,6 @@ document.addEventListener('DOMContentLoaded', function() {
     wrapper.addEventListener('mouseleave', function() {
       if (zoomActive) {
         hideZoom();
-      }
-    });
-    
-    // Click on image (not button) - Mobile lightbox only
-    wrapper.addEventListener('click', function(e) {
-      // Ignore if click was on the zoom button
-      if (e.target.closest('[data-zoom-trigger]')) return;
-      
-      if (window.innerWidth < 1024) {
-        e.preventDefault();
-        openLightbox(currentIndex);
       }
     });
   });
