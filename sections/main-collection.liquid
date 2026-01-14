@@ -885,6 +885,13 @@
     overflow-y: auto;
   }
   
+  @media (min-width: 1024px) {
+    .kategorie-list {
+      max-height: none;
+      overflow-y: visible;
+    }
+  }
+  
   .kategorie-link {
     display: flex;
     align-items: center;
@@ -925,6 +932,13 @@
     padding: 0;
     max-height: 240px;
     overflow-y: auto;
+  }
+  
+  @media (min-width: 1024px) {
+    .filter-list {
+      max-height: none;
+      overflow-y: visible;
+    }
   }
   
   .filter-list li {
