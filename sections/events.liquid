@@ -45,8 +45,7 @@
           {%- endif -%}
         </div>
         
-        {%- comment -%} Navigation Arrows (only for carousel) {%- endcomment -%}
-        {%- if enable_carousel -%}
+        {%- comment -%} Navigation Arrows - Always rendered for mobile {%- endcomment -%}
           <div class="events-section__nav">
             <button type="button" class="events-section__nav-btn events-section__nav-btn--prev" data-slider-prev aria-label="Previous" disabled>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -59,12 +58,11 @@
               </svg>
             </button>
           </div>
-        {%- endif -%}
       </div>
       
       {%- comment -%} Events Grid / Slider {%- endcomment -%}
       <div class="events-section__slider" data-slider>
-        <div class="events-section__track{% unless enable_carousel %} events-section__track--grid{% endunless %}" data-slider-track>
+        <div class="events-section__track{% unless enable_carousel %} events-section__track--desktop-grid{% endunless %}" data-slider-track>
           {%- for block in section.blocks -%}
             <div class="events-section__item" {{ block.shopify_attributes }}>
               <a href="{{ block.settings.link | default: '#' }}" class="event-card">
@@ -180,29 +178,73 @@
     color: #000;
   }
   
-  /* Navigation */
+  /* Navigation - Centered on sides like shadcn */
   .events-section__nav {
-    display: none;
-    gap: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-100%);
+    pointer-events: none;
+    z-index: 10;
+    padding: 0 0.5rem;
+  }
+  
+  @media (min-width: 640px) {
+    .events-section__nav {
+      padding: 0 1rem;
+    }
   }
   
   @media (min-width: 768px) {
     .events-section__nav {
+      position: static;
+      transform: none;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      padding: 0;
+      display: none;
+    }
+    
+    .events-section.has-carousel .events-section__nav {
       display: flex;
     }
   }
   
   .events-section__nav-btn {
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.2s;
+    pointer-events: auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(4px);
+  }
+  
+  @media (min-width: 640px) {
+    .events-section__nav-btn {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .events-section__nav-btn {
+      width: 44px;
+      height: 44px;
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      box-shadow: none;
+      backdrop-filter: none;
+    }
   }
   
   .events-section__nav-btn:hover:not(:disabled) {
@@ -212,12 +254,21 @@
   }
   
   .events-section__nav-btn:disabled {
-    opacity: 0.3;
+    opacity: 0.4;
     cursor: not-allowed;
   }
   
   .events-section__nav-btn svg {
     stroke: currentColor;
+    width: 16px;
+    height: 16px;
+  }
+  
+  @media (min-width: 640px) {
+    .events-section__nav-btn svg {
+      width: 20px;
+      height: 20px;
+    }
   }
   
   /* Slider Container */
@@ -225,6 +276,7 @@
     overflow: hidden;
     margin: 0 -1rem;
     padding: 0 1rem;
+    position: relative;
   }
   
   @media (min-width: 768px) {
@@ -234,7 +286,7 @@
     }
   }
   
-  /* Track - Carousel Mode */
+  /* Track - Mobile: Always carousel with center snap */
   .events-section__track {
     display: flex;
     gap: 1rem;
@@ -243,46 +295,77 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
     scroll-snap-type: x mandatory;
+    padding: 0.5rem calc(50% - 150px);
+  }
+  
+  @media (min-width: 480px) {
+    .events-section__track {
+      padding: 0.5rem calc(50% - 180px);
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .events-section__track {
+      padding: 0.5rem 0;
+    }
   }
   
   .events-section__track::-webkit-scrollbar {
     display: none;
   }
   
-  /* Track - Grid Mode (2 or fewer items) */
-  .events-section__track--grid {
-    overflow-x: visible;
-    scroll-snap-type: none;
+  /* Track - Desktop Grid Mode (2 or fewer items) */
+  .events-section__track--desktop-grid {
+    /* Mobile: still carousel */
   }
   
   @media (min-width: 768px) {
-    .events-section__track--grid {
+    .events-section__track--desktop-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 1.5rem;
+      overflow-x: visible;
+      scroll-snap-type: none;
+      padding: 0;
     }
   }
   
   /* Grid Item */
   .events-section__item {
-    flex: 0 0 85%;
-    scroll-snap-align: start;
+    flex: 0 0 300px;
+    scroll-snap-align: center;
     min-width: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0.5;
+    transform: scale(0.9);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  
+  .events-section__item.is-centered {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  @media (max-width: 479px) {
+    .events-section__item {
+      flex: 0 0 280px;
+    }
   }
   
   @media (min-width: 640px) {
     .events-section__item {
       flex: 0 0 calc(50% - 0.5rem);
+      scroll-snap-align: start;
+      opacity: 1;
+      transform: scale(1);
+      border-radius: 0;
     }
   }
   
   /* Grid mode - items fill evenly */
-  .events-section__track--grid .events-section__item {
-    flex: 1;
-  }
-  
   @media (min-width: 768px) {
-    .events-section__track--grid .events-section__item {
+    .events-section__track--desktop-grid .events-section__item {
       flex: none;
     }
   }
@@ -413,7 +496,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const prevBtn = section.querySelector('[data-slider-prev]');
     const nextBtn = section.querySelector('[data-slider-next]');
     
-    // Only initialize slider if carousel is enabled (has nav buttons)
     if (!track || !prevBtn || !nextBtn) return;
     
     const updateButtons = () => {
@@ -445,6 +527,41 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initial state
     setTimeout(updateButtons, 100);
+    
+    // Center card highlighting for mobile
+    if (window.innerWidth < 640) {
+      const cards = track.querySelectorAll('.events-section__item');
+      const observerOptions = {
+        root: track,
+        rootMargin: '-40% 0px -40% 0px',
+        threshold: 0
+      };
+      
+      const centerObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-centered');
+          } else {
+            entry.target.classList.remove('is-centered');
+          }
+        });
+      }, observerOptions);
+      
+      cards.forEach(card => centerObserver.observe(card));
+      
+      // Set initial centered state
+      setTimeout(() => {
+        const trackRect = track.getBoundingClientRect();
+        const trackCenter = trackRect.left + trackRect.width / 2;
+        cards.forEach(card => {
+          const cardRect = card.getBoundingClientRect();
+          const cardCenter = cardRect.left + cardRect.width / 2;
+          if (Math.abs(cardCenter - trackCenter) < cardRect.width / 2) {
+            card.classList.add('is-centered');
+          }
+        });
+      }, 150);
+    }
   });
 });
 </script>

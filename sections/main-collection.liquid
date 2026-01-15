@@ -1401,7 +1401,15 @@
     display: block;
     text-decoration: none;
     color: inherit;
-    transition: transform 0.2s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+  
+  /* Active/centered card highlight - uses IntersectionObserver */
+  .subcollection-card.is-centered {
+    opacity: 1;
+    transform: scale(1);
   }
   
   @media (max-width: 479px) {
@@ -1414,6 +1422,8 @@
     .subcollection-card {
       flex: 0 0 200px;
       scroll-snap-align: start;
+      opacity: 1;
+      transform: scale(1);
     }
   }
   
@@ -1439,6 +1449,16 @@
 
   .subcollection-card:hover {
     transform: translateY(-4px);
+  }
+  
+  @media (max-width: 639px) {
+    .subcollection-card:hover {
+      transform: scale(1);
+    }
+    
+    .subcollection-card.is-centered:hover {
+      transform: scale(1.02);
+    }
   }
   
   .subcollection-card__image {
@@ -1737,6 +1757,41 @@ document.addEventListener('DOMContentLoaded', function() {
       
       // Initial state
       setTimeout(updateButtons, 100);
+      
+      // Center card highlighting for mobile
+      if (window.innerWidth < 640) {
+        const cards = track.querySelectorAll('.subcollection-card');
+        const observerOptions = {
+          root: track,
+          rootMargin: '-40% 0px -40% 0px',
+          threshold: 0
+        };
+        
+        const centerObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-centered');
+            } else {
+              entry.target.classList.remove('is-centered');
+            }
+          });
+        }, observerOptions);
+        
+        cards.forEach(card => centerObserver.observe(card));
+        
+        // Set initial centered state
+        setTimeout(() => {
+          const trackRect = track.getBoundingClientRect();
+          const trackCenter = trackRect.left + trackRect.width / 2;
+          cards.forEach(card => {
+            const cardRect = card.getBoundingClientRect();
+            const cardCenter = cardRect.left + cardRect.width / 2;
+            if (Math.abs(cardCenter - trackCenter) < cardRect.width / 2) {
+              card.classList.add('is-centered');
+            }
+          });
+        }, 150);
+      }
     }
   }
   
