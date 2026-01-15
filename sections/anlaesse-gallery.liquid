@@ -78,7 +78,25 @@
   @media (min-width: 1024px) {
     .anlaesse-gallery__grid {
       grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: {{ section.settings.row_height | times: 0.85 | round }}px;
+    }
+  }
+  
+  @media (min-width: 1280px) {
+    .anlaesse-gallery__grid {
       grid-auto-rows: {{ section.settings.row_height }}px;
+    }
+  }
+  
+  @media (min-width: 1536px) {
+    .anlaesse-gallery__grid {
+      grid-auto-rows: {{ section.settings.row_height | times: 1.1 | round }}px;
+    }
+  }
+  
+  @media (min-width: 1800px) {
+    .anlaesse-gallery__grid {
+      grid-auto-rows: {{ section.settings.row_height | times: 1.25 | round }}px;
     }
   }
   
@@ -213,12 +231,13 @@
     {
       "type": "range",
       "id": "row_height",
-      "min": 200,
-      "max": 400,
-      "step": 10,
+      "min": 280,
+      "max": 500,
+      "step": 20,
       "unit": "px",
-      "label": "Row height (desktop)",
-      "default": 300
+      "label": "Base row height",
+      "default": 380,
+      "info": "Height scales automatically on larger screens"
     },
     {
       "type": "range",
