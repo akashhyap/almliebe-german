@@ -631,9 +631,15 @@ document.addEventListener('touchstart', function(e) {
       
       if (!mobileMenu) mobileMenu = document.querySelector('[data-mobile-menu]');
       
+      console.log('mobileMenu element:', mobileMenu);
+      console.log('mobileMenu classList:', mobileMenu ? mobileMenu.classList.toString() : 'null');
+      console.log('contains is-active:', mobileMenu ? mobileMenu.classList.contains('is-active') : 'null');
+      
       if (mobileMenu && mobileMenu.classList.contains('is-active')) {
+        console.log('>>> CLOSING menu');
         closeMobileMenu();
       } else {
+        console.log('>>> OPENING menu');
         openMobileMenu();
       }
       return;
