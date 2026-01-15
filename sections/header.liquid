@@ -19,7 +19,6 @@
       data-mobile-menu-toggle
       aria-label="Open menu"
       aria-expanded="false"
-      onclick="console.log('ONCLICK ATTRIBUTE FIRED'); if(typeof window.openMobileMenu==='function'){window.openMobileMenu();}else{alert('openMobileMenu not defined');}"
     >
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -1083,6 +1082,12 @@
     opacity: 1;
     visibility: visible;
   }
+  
+  /* Hide header badges when mobile menu is open */
+  body:has(.mobile-menu.is-active) .header__count-badge,
+  body.mobile-menu-open .header__count-badge {
+    display: none !important;
+  }
 
   /* Responsive adjustments */
   @media (max-width: 1400px) {
@@ -1137,20 +1142,7 @@
 </style>
 
 <script>
-console.log('=== HEADER SCRIPT LOADED ===');
-
-// GLOBAL DEBUG - catches ALL clicks
-document.addEventListener('click', function(e) {
-  console.log('GLOBAL CLICK:', e.target.tagName, e.target.className);
-}, true);
-
-// GLOBAL DEBUG - catches ALL touches
-document.addEventListener('touchstart', function(e) {
-  console.log('GLOBAL TOUCHSTART:', e.target.tagName, e.target.className);
-}, true);
-
 document.addEventListener('DOMContentLoaded', function() {
-  console.log('=== DOMContentLoaded FIRED ===');
   const header = document.querySelector('[data-header]');
   const notificationBar = document.querySelector('.notification-bar, [data-notification-bar], .announcement-bar');
   
@@ -1295,49 +1287,29 @@ document.addEventListener('DOMContentLoaded', function() {
   // MOBILE MENU
   // ==========================================
   
-  console.log('=== MOBILE MENU DEBUG START ===');
-  
   const mobileMenu = document.querySelector('[data-mobile-menu]');
   const mobileMenuOverlay = document.querySelector('[data-mobile-menu-overlay]');
   const hamburgerBtn = document.querySelector('.header__menu-toggle');
   
-  console.log('Mobile Menu Element:', mobileMenu);
-  console.log('Mobile Menu Overlay:', mobileMenuOverlay);
-  console.log('Hamburger Button:', hamburgerBtn);
-  console.log('Hamburger has data attr:', hamburgerBtn?.hasAttribute('data-mobile-menu-toggle'));
-  
-  // Check if hamburger is visible
-  if (hamburgerBtn) {
-    const styles = window.getComputedStyle(hamburgerBtn);
-    console.log('Hamburger display:', styles.display);
-    console.log('Hamburger visibility:', styles.visibility);
-    console.log('Hamburger opacity:', styles.opacity);
-    console.log('Hamburger pointer-events:', styles.pointerEvents);
-    console.log('Hamburger position:', styles.position);
-    console.log('Hamburger z-index:', styles.zIndex);
-  }
-  
   function openMobileMenu() {
-    console.log('>>> openMobileMenu() called');
     if (mobileMenu) {
       mobileMenu.classList.add('is-active');
-      console.log('Added is-active to mobile menu');
     }
     if (mobileMenuOverlay) {
       mobileMenuOverlay.classList.add('is-active');
-      console.log('Added is-active to overlay');
     }
+    document.body.classList.add('mobile-menu-open');
     document.body.style.overflow = 'hidden';
   }
   
   function closeMobileMenu() {
-    console.log('>>> closeMobileMenu() called');
     if (mobileMenu) {
       mobileMenu.classList.remove('is-active');
     }
     if (mobileMenuOverlay) {
       mobileMenuOverlay.classList.remove('is-active');
     }
+    document.body.classList.remove('mobile-menu-open');
     document.body.style.overflow = '';
     
     // Close all submenus
@@ -1353,9 +1325,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // Direct click handler on hamburger button
   if (hamburgerBtn) {
     hamburgerBtn.addEventListener('click', function(e) {
-      console.log('!!! HAMBURGER DIRECT CLICK !!!');
-      console.log('Event target:', e.target);
-      console.log('Event currentTarget:', e.currentTarget);
       e.preventDefault();
       e.stopPropagation();
       
@@ -1365,18 +1334,12 @@ document.addEventListener('DOMContentLoaded', function() {
         openMobileMenu();
       }
     });
-    console.log('Direct click handler attached to hamburger');
-  } else {
-    console.error('!!! HAMBURGER BUTTON NOT FOUND !!!');
   }
   
   // Also use event delegation as backup
   document.addEventListener('click', function(e) {
     const toggleBtn = e.target.closest('[data-mobile-menu-toggle]');
     if (toggleBtn) {
-      console.log('!!! DELEGATION CLICK on mobile-menu-toggle !!!');
-      console.log('Clicked element:', e.target);
-      console.log('Toggle button found:', toggleBtn);
       e.preventDefault();
       e.stopPropagation();
       
@@ -1390,22 +1353,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Close on overlay click
     if (e.target.closest('[data-mobile-menu-overlay]')) {
-      console.log('Overlay clicked - closing menu');
       closeMobileMenu();
     }
   });
-  
-  // Log all clicks on header for debugging
-  const headerEl = document.querySelector('.header');
-  if (headerEl) {
-    headerEl.addEventListener('click', function(e) {
-      console.log('Header click - target:', e.target);
-      console.log('Target classes:', e.target.className);
-      console.log('Target tagName:', e.target.tagName);
-    }, true); // capture phase
-  }
-  
-  console.log('=== MOBILE MENU DEBUG END ===');
 
   // Mobile submenu toggles
   document.querySelectorAll('[data-mobile-submenu-toggle]').forEach(toggle => {
