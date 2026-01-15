@@ -561,6 +561,13 @@
   .mobile-submenu .mobile-nav-list { flex: 1; }
   .mobile-menu__overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1050; opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   .mobile-menu__overlay.is-active { opacity: 1; visibility: visible; }
+  
+  /* Hide header action badges when mobile menu is open */
+  body:has(.mobile-menu.is-active) .header__count-badge,
+  body.mobile-menu-open .header__count-badge {
+    opacity: 0 !important;
+    visibility: hidden !important;
+  }
 
   @media (max-width: 1400px) { .mega-menu__columns { grid-template-columns: repeat(4, 1fr); gap: 1rem 2rem; } .mega-menu__featured { width: 280px; padding-left: 2rem; } }
   @media (max-width: 1200px) { .mega-menu__inner { padding: 2rem; } .mega-menu__columns { grid-template-columns: repeat(3, 1fr); gap: 1rem 1.5rem; } .mega-menu__featured { width: 260px; } .mega-menu__content { gap: 2rem; } .mega-menu__featured-card { aspect-ratio: 16/10; } }
@@ -568,84 +575,30 @@
 </style>
 
 <script>
-console.log('=== HEADER SCRIPT START ===');
-
-// Check initial state immediately
-var initialCheck = document.querySelectorAll('[data-mobile-menu]');
-console.log('INITIAL CHECK - mobile-menu elements found:', initialCheck.length);
-initialCheck.forEach(function(el, i) {
-  console.log('Element ' + i + ' classList BEFORE:', el.classList.toString());
-  
-  // FORCE REMOVE is-active on page load
-  if (el.classList.contains('is-active')) {
-    console.log('!!! REMOVING is-active that was already on element !!!');
-    el.classList.remove('is-active');
-  }
-  
-  console.log('Element ' + i + ' classList AFTER:', el.classList.toString());
-  
-  // Watch for class changes
-  var observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(mutation) {
-      if (mutation.attributeName === 'class') {
-        console.log('CLASS CHANGED on mobile-menu:', el.classList.toString());
-        console.trace('Stack trace:');
-      }
-    });
-  });
-  observer.observe(el, { attributes: true });
-});
-
-// Also remove from overlay
-var overlayCheck = document.querySelectorAll('[data-mobile-menu-overlay]');
-overlayCheck.forEach(function(el) {
-  if (el.classList.contains('is-active')) {
-    el.classList.remove('is-active');
-  }
-});
-
-// Global click listener in capture phase - THIS WAS KEY TO MAKING IT WORK
-document.addEventListener('click', function(e) {
-  console.log('GLOBAL CLICK:', e.target.tagName, e.target.className);
-}, true);
-
-document.addEventListener('touchstart', function(e) {
-  console.log('GLOBAL TOUCHSTART:', e.target.tagName, e.target.className);
-}, true);
-
 (function() {
-  console.log('IIFE executing');
+  'use strict';
   
   var mobileMenu = null;
   var mobileMenuOverlay = null;
 
   function openMobileMenu() {
-    console.log('>>> openMobileMenu called');
     if (!mobileMenu) mobileMenu = document.querySelector('[data-mobile-menu]');
     if (!mobileMenuOverlay) mobileMenuOverlay = document.querySelector('[data-mobile-menu-overlay]');
     
-    console.log('mobileMenu:', mobileMenu);
-    console.log('mobileMenuOverlay:', mobileMenuOverlay);
-    
-    if (mobileMenu) {
-      mobileMenu.classList.add('is-active');
-      console.log('Added is-active to menu');
-    }
-    if (mobileMenuOverlay) {
-      mobileMenuOverlay.classList.add('is-active');
-      console.log('Added is-active to overlay');
-    }
+    if (mobileMenu) mobileMenu.classList.add('is-active');
+    if (mobileMenuOverlay) mobileMenuOverlay.classList.add('is-active');
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('mobile-menu-open');
   }
 
   function closeMobileMenu() {
-    console.log('>>> closeMobileMenu called');
     if (!mobileMenu) mobileMenu = document.querySelector('[data-mobile-menu]');
     if (!mobileMenuOverlay) mobileMenuOverlay = document.querySelector('[data-mobile-menu-overlay]');
     
     if (mobileMenu) mobileMenu.classList.remove('is-active');
     if (mobileMenuOverlay) mobileMenuOverlay.classList.remove('is-active');
     document.body.style.overflow = '';
+    document.body.classList.remove('mobile-menu-open');
     
     document.querySelectorAll('.mobile-submenu.is-active').forEach(function(submenu) {
       submenu.classList.remove('is-active');
@@ -655,75 +608,36 @@ document.addEventListener('touchstart', function(e) {
   window.openMobileMenu = openMobileMenu;
   window.closeMobileMenu = closeMobileMenu;
 
-  // Click handler using event delegation
+  // Click handler - CAPTURE PHASE to run before any other scripts
   document.addEventListener('click', function(e) {
     var toggleBtn = e.target.closest('[data-mobile-menu-toggle]');
     if (toggleBtn) {
-      console.log('!!! MOBILE TOGGLE CLICKED !!!');
       e.preventDefault();
       e.stopPropagation();
+      e.stopImmediatePropagation();
       
       if (!mobileMenu) mobileMenu = document.querySelector('[data-mobile-menu]');
       
-      console.log('mobileMenu element:', mobileMenu);
-      console.log('mobileMenu classList:', mobileMenu ? mobileMenu.classList.toString() : 'null');
-      console.log('contains is-active:', mobileMenu ? mobileMenu.classList.contains('is-active') : 'null');
-      
       if (mobileMenu && mobileMenu.classList.contains('is-active')) {
-        console.log('>>> CLOSING menu');
         closeMobileMenu();
       } else {
-        console.log('>>> OPENING menu');
         openMobileMenu();
       }
       return;
     }
     
     if (e.target.closest('[data-mobile-menu-overlay]')) {
-      console.log('Overlay clicked');
       e.preventDefault();
       closeMobileMenu();
     }
-  });
+  }, true);
 
   document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOMContentLoaded fired');
-    
     var header = document.querySelector('[data-header]');
     var notificationBar = document.querySelector('.notification-bar, [data-notification-bar], .announcement-bar');
     
     mobileMenu = document.querySelector('[data-mobile-menu]');
     mobileMenuOverlay = document.querySelector('[data-mobile-menu-overlay]');
-    
-    // FORCE CLEAN STATE - remove is-active if it exists
-    if (mobileMenu && mobileMenu.classList.contains('is-active')) {
-      console.log('!!! DOMContentLoaded: REMOVING is-active from mobile-menu !!!');
-      mobileMenu.classList.remove('is-active');
-    }
-    if (mobileMenuOverlay && mobileMenuOverlay.classList.contains('is-active')) {
-      console.log('!!! DOMContentLoaded: REMOVING is-active from overlay !!!');
-      mobileMenuOverlay.classList.remove('is-active');
-    }
-    
-    // Monitor for external scripts adding is-active
-    if (mobileMenu) {
-      var observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-          if (mutation.attributeName === 'class') {
-            console.log('!!! EXTERNAL CLASS CHANGE on mobile-menu:', mobileMenu.classList.toString());
-            console.trace();
-          }
-        });
-      });
-      observer.observe(mobileMenu, { attributes: true });
-    }
-    
-    console.log('Elements cached:', {
-      header: !!header,
-      mobileMenu: !!mobileMenu,
-      mobileMenuOverlay: !!mobileMenuOverlay,
-      mobileMenuClasses: mobileMenu ? mobileMenu.classList.toString() : 'null'
-    });
     
     function updateNotificationBarHeight() {
       var height = notificationBar ? notificationBar.offsetHeight : 0;
@@ -874,23 +788,6 @@ document.addEventListener('touchstart', function(e) {
         });
       }
     });
-    
-    console.log('=== HEADER SCRIPT END ===');
-    
-    // Check state after a delay to catch late script changes
-    setTimeout(function() {
-      console.log('=== DELAYED CHECK (500ms) ===');
-      console.log('mobile-menu classList:', mobileMenu ? mobileMenu.classList.toString() : 'null');
-      
-      // Force clean again if something added it
-      if (mobileMenu && mobileMenu.classList.contains('is-active')) {
-        console.log('!!! DELAYED: Something added is-active, removing it !!!');
-        mobileMenu.classList.remove('is-active');
-      }
-      if (mobileMenuOverlay && mobileMenuOverlay.classList.contains('is-active')) {
-        mobileMenuOverlay.classList.remove('is-active');
-      }
-    }, 500);
   });
 })();
 </script>

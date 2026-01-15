@@ -2,6 +2,9 @@
  * ALMLIEBE THEME - CORE JAVASCRIPT
  * Performance-first, vanilla JS (no jQuery)
  * Budget: <50KB total
+ * 
+ * NOTE: Mobile menu functionality is handled in sections/header.liquid
+ * to keep the header section self-contained.
  */
 
 (function() {
@@ -93,57 +96,11 @@
   };
 
   // ============================================
-  // MOBILE MENU
+  // MOBILE MENU - REMOVED
+  // Mobile menu functionality is now handled
+  // directly in sections/header.liquid to keep
+  // the header section self-contained.
   // ============================================
-
-  class MobileMenu {
-    constructor() {
-      this.menuButton = document.querySelector('[data-mobile-menu-toggle]');
-      this.menu = document.querySelector('[data-mobile-menu]');
-      this.overlay = document.querySelector('[data-mobile-menu-overlay]');
-      this.body = document.body;
-
-      if (this.menuButton && this.menu) {
-        this.init();
-      }
-    }
-
-    init() {
-      this.menuButton.addEventListener('click', () => this.toggle());
-      if (this.overlay) {
-        this.overlay.addEventListener('click', () => this.close());
-      }
-
-      // Close on ESC key
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && this.menu.classList.contains('is-active')) {
-          this.close();
-        }
-      });
-    }
-
-    toggle() {
-      if (this.menu.classList.contains('is-active')) {
-        this.close();
-      } else {
-        this.open();
-      }
-    }
-
-    open() {
-      this.menu.classList.add('is-active');
-      if (this.overlay) this.overlay.classList.add('is-active');
-      this.body.style.overflow = 'hidden';
-      this.menuButton.setAttribute('aria-expanded', 'true');
-    }
-
-    close() {
-      this.menu.classList.remove('is-active');
-      if (this.overlay) this.overlay.classList.remove('is-active');
-      this.body.style.overflow = '';
-      this.menuButton.setAttribute('aria-expanded', 'false');
-    }
-  }
 
   // ============================================
   // CART FUNCTIONALITY
@@ -402,7 +359,7 @@
 
   document.addEventListener('DOMContentLoaded', () => {
     // Initialize all components
-    new MobileMenu();
+    // MobileMenu removed - handled by sections/header.liquid
     new Cart();
     new Modal();
     new StickyHeader();
