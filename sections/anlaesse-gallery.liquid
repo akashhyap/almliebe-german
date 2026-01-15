@@ -185,34 +185,75 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
     text-align: center;
-    background: linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 50%);
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.7) 0%,
+      rgba(0, 0, 0, 0.4) 30%,
+      rgba(0, 0, 0, 0) 60%
+    );
+    transition: background 0.4s ease;
+  }
+  
+  .anlaesse-card:hover .anlaesse-card__content {
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.8) 0%,
+      rgba(0, 0, 0, 0.5) 40%,
+      rgba(0, 0, 0, 0.1) 70%
+    );
   }
   
   .anlaesse-card__label {
     display: inline-block;
-    padding: 0.5rem 1rem;
-    font-size: 0.6875rem;
+    font-size: 0.8125rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: #111827;
+    letter-spacing: 0.2em;
+    color: #ffffff;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    margin-bottom: 0;
+    padding: 0;
+    background: none;
+    position: relative;
+    transition: transform 0.3s ease, margin 0.3s ease;
+  }
+  
+  .anlaesse-card__label::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 2px;
     background: #ffffff;
-    margin-bottom: 0.5rem;
+    margin: 0.75rem auto 0;
+    opacity: 0.6;
+    transition: width 0.3s ease, opacity 0.3s ease;
+  }
+  
+  .anlaesse-card:hover .anlaesse-card__label {
+    transform: translateY(-4px);
+    margin-bottom: 0.25rem;
+  }
+  
+  .anlaesse-card:hover .anlaesse-card__label::after {
+    width: 60px;
+    opacity: 1;
   }
   
   .anlaesse-card__description {
     font-size: 0.875rem;
-    line-height: 1.5;
+    font-weight: 400;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.95);
     margin: 0;
-    padding: 0.5rem 1rem;
-    background: rgba(255,255,255,0.95);
-    color: #111827;
-    max-width: 90%;
+    padding: 0;
+    background: none;
+    max-width: 85%;
     opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.3s ease;
+    transform: translateY(15px);
+    transition: all 0.4s ease;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
   }
   
   .anlaesse-card:hover .anlaesse-card__description {
@@ -220,11 +261,39 @@
     transform: translateY(0);
   }
   
-  /* Always show on touch devices */
+  /* Touch devices - always show description */
   @media (hover: none) {
+    .anlaesse-card__label {
+      margin-bottom: 0.5rem;
+    }
+    
+    .anlaesse-card__label::after {
+      width: 50px;
+    }
+    
     .anlaesse-card__description {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+  
+  /* Larger cards get bigger typography */
+  @media (min-width: 1024px) {
+    .anlaesse-card--large .anlaesse-card__label,
+    .anlaesse-card--featured .anlaesse-card__label {
+      font-size: 0.9375rem;
+      letter-spacing: 0.25em;
+    }
+    
+    .anlaesse-card--large .anlaesse-card__description,
+    .anlaesse-card--featured .anlaesse-card__description {
+      font-size: 0.9375rem;
+      max-width: 70%;
+    }
+    
+    .anlaesse-card--wide .anlaesse-card__description,
+    .anlaesse-card--featured .anlaesse-card__description {
+      max-width: 50%;
     }
   }
 </style>
