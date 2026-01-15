@@ -44,15 +44,15 @@
           {%- endif -%}
         </div>
         
-        {%- comment -%} Navigation Arrows (only for carousel) {%- endcomment -%}
+        {%- comment -%} Desktop Navigation {%- endcomment -%}
         {%- if enable_carousel -%}
-          <div class="collection-grid-section__nav">
-            <button type="button" class="collection-grid-section__nav-btn collection-grid-section__nav-btn--prev" data-slider-prev aria-label="Previous" disabled>
+          <div class="collection-grid-section__nav collection-grid-section__nav--desktop">
+            <button type="button" class="collection-grid-section__nav-btn" data-slider-prev aria-label="Previous" disabled>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="15 18 9 12 15 6"/>
               </svg>
             </button>
-            <button type="button" class="collection-grid-section__nav-btn collection-grid-section__nav-btn--next" data-slider-next aria-label="Next">
+            <button type="button" class="collection-grid-section__nav-btn" data-slider-next aria-label="Next">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="9 18 15 12 9 6"/>
               </svg>
@@ -63,7 +63,21 @@
       
       {%- comment -%} Collection Grid / Slider {%- endcomment -%}
       <div class="collection-grid-section__slider" data-slider>
-        <div class="collection-grid-section__track{% unless enable_carousel %} collection-grid-section__track--grid{% endunless %}" data-slider-track>
+        {%- comment -%} Mobile Navigation - Inside slider for proper positioning {%- endcomment -%}
+        <div class="collection-grid-section__nav collection-grid-section__nav--mobile">
+          <button type="button" class="collection-grid-section__nav-btn" data-slider-prev-mobile aria-label="Previous" disabled>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15 18 9 12 15 6"/>
+            </svg>
+          </button>
+          <button type="button" class="collection-grid-section__nav-btn" data-slider-next-mobile aria-label="Next">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9 18 15 12 9 6"/>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="collection-grid-section__track{% unless enable_carousel %} collection-grid-section__track--desktop-grid{% endunless %}" data-slider-track>
           {%- for block in section.blocks -%}
             {%- assign block_collection = collections[block.settings.collection] -%}
             {%- assign custom_image = block.settings.image -%}
@@ -198,29 +212,75 @@
     color: #000;
   }
   
-  /* Navigation */
-  .collection-grid-section__nav {
+  /* Desktop Navigation - in header */
+  .collection-grid-section__nav--desktop {
     display: none;
     gap: 0.5rem;
   }
   
   @media (min-width: 768px) {
-    .collection-grid-section__nav {
+    .collection-grid-section__nav--desktop {
       display: flex;
     }
   }
   
+  /* Mobile Navigation - inside slider */
+  .collection-grid-section__nav--mobile {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-100%);
+    pointer-events: none;
+    z-index: 10;
+    padding: 0 0.5rem;
+  }
+  
+  @media (min-width: 640px) {
+    .collection-grid-section__nav--mobile {
+      padding: 0 1rem;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .collection-grid-section__nav--mobile {
+      display: none;
+    }
+  }
+  
   .collection-grid-section__nav-btn {
-    width: 44px;
-    height: 44px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.2s;
+    pointer-events: auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(4px);
+  }
+  
+  @media (min-width: 640px) {
+    .collection-grid-section__nav-btn {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  
+  /* Desktop nav button style */
+  .collection-grid-section__nav--desktop .collection-grid-section__nav-btn {
+    width: 44px;
+    height: 44px;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    box-shadow: none;
+    backdrop-filter: none;
   }
   
   .collection-grid-section__nav-btn:hover:not(:disabled) {
@@ -230,12 +290,21 @@
   }
   
   .collection-grid-section__nav-btn:disabled {
-    opacity: 0.3;
+    opacity: 0.4;
     cursor: not-allowed;
   }
   
   .collection-grid-section__nav-btn svg {
     stroke: currentColor;
+    width: 16px;
+    height: 16px;
+  }
+  
+  @media (min-width: 640px) {
+    .collection-grid-section__nav-btn svg {
+      width: 20px;
+      height: 20px;
+    }
   }
   
   /* Slider Container */
@@ -243,6 +312,7 @@
     overflow: hidden;
     margin: 0 -1rem;
     padding: 0 1rem;
+    position: relative;
   }
   
   @media (min-width: 768px) {
@@ -252,7 +322,7 @@
     }
   }
   
-  /* Track - Carousel Mode */
+  /* Track - Mobile: Always carousel with center snap */
   .collection-grid-section__track {
     display: flex;
     gap: 1rem;
@@ -261,42 +331,74 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
     scroll-snap-type: x mandatory;
+    padding: 0.5rem calc(50% - 130px);
+  }
+  
+  @media (min-width: 480px) {
+    .collection-grid-section__track {
+      padding: 0.5rem calc(50% - 160px);
+    }
+  }
+  
+  @media (min-width: 640px) {
+    .collection-grid-section__track {
+      padding: 0.5rem 0;
+    }
   }
   
   .collection-grid-section__track::-webkit-scrollbar {
     display: none;
   }
   
-  /* Track - Grid Mode (4 or fewer items) */
-  .collection-grid-section__track--grid {
-    overflow-x: visible;
-    scroll-snap-type: none;
+  /* Track - Desktop Grid Mode (4 or fewer items) */
+  .collection-grid-section__track--desktop-grid {
+    /* Mobile: still carousel */
   }
   
   @media (min-width: 768px) {
-    .collection-grid-section__track--grid {
+    .collection-grid-section__track--desktop-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 1rem;
+      overflow-x: visible;
+      scroll-snap-type: none;
+      padding: 0;
     }
   }
   
   @media (min-width: 1024px) {
-    .collection-grid-section__track--grid {
+    .collection-grid-section__track--desktop-grid {
       grid-template-columns: repeat(4, 1fr);
     }
   }
   
   /* Grid Item */
   .collection-grid-section__item {
-    flex: 0 0 calc(50% - 0.5rem);
-    scroll-snap-align: start;
+    flex: 0 0 260px;
+    scroll-snap-align: center;
     min-width: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+  
+  .collection-grid-section__item.is-centered {
+    opacity: 1;
+    transform: scale(1);
+  }
+  
+  @media (max-width: 479px) {
+    .collection-grid-section__item {
+      flex: 0 0 220px;
+    }
   }
   
   @media (min-width: 640px) {
     .collection-grid-section__item {
       flex: 0 0 calc(33.333% - 0.667rem);
+      scroll-snap-align: start;
+      opacity: 1;
+      transform: scale(1);
     }
   }
   
@@ -307,12 +409,8 @@
   }
   
   /* Grid mode - items fill evenly */
-  .collection-grid-section__track--grid .collection-grid-section__item {
-    flex: 1;
-  }
-  
   @media (min-width: 768px) {
-    .collection-grid-section__track--grid .collection-grid-section__item {
+    .collection-grid-section__track--desktop-grid .collection-grid-section__item {
       flex: none;
     }
   }
@@ -396,18 +494,19 @@ document.addEventListener('DOMContentLoaded', function() {
   
   sections.forEach(section => {
     const track = section.querySelector('[data-slider-track]');
-    const prevBtn = section.querySelector('[data-slider-prev]');
-    const nextBtn = section.querySelector('[data-slider-next]');
     
-    // Only initialize slider if carousel is enabled
-    if (!track || !prevBtn || !nextBtn) return;
+    // Get all nav buttons (desktop and mobile)
+    const prevBtns = section.querySelectorAll('[data-slider-prev], [data-slider-prev-mobile]');
+    const nextBtns = section.querySelectorAll('[data-slider-next], [data-slider-next-mobile]');
+    
+    if (!track) return;
     
     const updateButtons = () => {
       const scrollLeft = track.scrollLeft;
       const maxScroll = track.scrollWidth - track.clientWidth;
       
-      prevBtn.disabled = scrollLeft <= 10;
-      nextBtn.disabled = scrollLeft >= maxScroll - 10;
+      prevBtns.forEach(btn => btn.disabled = scrollLeft <= 10);
+      nextBtns.forEach(btn => btn.disabled = scrollLeft >= maxScroll - 10);
     };
     
     const getSlideWidth = () => {
@@ -418,12 +517,16 @@ document.addEventListener('DOMContentLoaded', function() {
       return slide.offsetWidth + gap;
     };
     
-    prevBtn.addEventListener('click', () => {
-      track.scrollBy({ left: -getSlideWidth() * 2, behavior: 'smooth' });
+    prevBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        track.scrollBy({ left: -getSlideWidth(), behavior: 'smooth' });
+      });
     });
     
-    nextBtn.addEventListener('click', () => {
-      track.scrollBy({ left: getSlideWidth() * 2, behavior: 'smooth' });
+    nextBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        track.scrollBy({ left: getSlideWidth(), behavior: 'smooth' });
+      });
     });
     
     track.addEventListener('scroll', updateButtons);
@@ -431,6 +534,41 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initial state
     setTimeout(updateButtons, 100);
+    
+    // Center card highlighting for mobile
+    if (window.innerWidth < 640) {
+      const cards = track.querySelectorAll('.collection-grid-section__item');
+      const observerOptions = {
+        root: track,
+        rootMargin: '-40% 0px -40% 0px',
+        threshold: 0
+      };
+      
+      const centerObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-centered');
+          } else {
+            entry.target.classList.remove('is-centered');
+          }
+        });
+      }, observerOptions);
+      
+      cards.forEach(card => centerObserver.observe(card));
+      
+      // Set initial centered state
+      setTimeout(() => {
+        const trackRect = track.getBoundingClientRect();
+        const trackCenter = trackRect.left + trackRect.width / 2;
+        cards.forEach(card => {
+          const cardRect = card.getBoundingClientRect();
+          const cardCenter = cardRect.left + cardRect.width / 2;
+          if (Math.abs(cardCenter - trackCenter) < cardRect.width / 2) {
+            card.classList.add('is-centered');
+          }
+        });
+      }, 150);
+    }
   });
 });
 </script>

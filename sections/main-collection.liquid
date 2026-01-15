@@ -65,49 +65,51 @@
         {%- endif -%}
         
         <div class="subcollection-cards{% if enable_desktop_carousel %} has-desktop-carousel{% endif %}" data-subcollection-slider>
-          {%- comment -%} Navigation Arrows - Always rendered, shown based on CSS {%- endcomment -%}
-          <div class="subcollection-cards__nav">
-            <button type="button" class="subcollection-cards__nav-btn subcollection-cards__nav-btn--prev" data-subcollection-prev aria-label="Previous" disabled>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="15 18 9 12 15 6"/>
-              </svg>
-            </button>
-            <button type="button" class="subcollection-cards__nav-btn subcollection-cards__nav-btn--next" data-subcollection-next aria-label="Next">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="9 18 15 12 9 6"/>
-              </svg>
-            </button>
-          </div>
-          
-          <div class="subcollection-cards__track{% unless enable_desktop_carousel %} subcollection-cards__track--desktop-grid{% endunless %}" data-subcollection-track>
-            {%- for subcollection in subcollections_list -%}
-              <a href="{{ subcollection.url }}" class="subcollection-card">
-                <div class="subcollection-card__image">
-                  {%- if subcollection.image != blank -%}
-                    <img 
-                      src="{{ subcollection.image | image_url: width: 600 }}"
-                      alt="{{ subcollection.title | escape }}"
-                      width="300"
-                      height="400"
-                      loading="lazy"
-                    >
-                  {%- elsif subcollection.products.first.featured_image != blank -%}
-                    <img 
-                      src="{{ subcollection.products.first.featured_image | image_url: width: 600 }}"
-                      alt="{{ subcollection.title | escape }}"
-                      width="300"
-                      height="400"
-                      loading="lazy"
-                    >
-                  {%- else -%}
-                    <div class="subcollection-card__placeholder">
-                      {{ 'collection-1' | placeholder_svg_tag }}
-                    </div>
-                  {%- endif -%}
-                </div>
-                <h3 class="subcollection-card__title">{{ subcollection.title }}</h3>
-              </a>
-            {%- endfor -%}
+          <div class="subcollection-cards__wrapper">
+            {%- comment -%} Navigation Arrows - Inside wrapper for proper positioning {%- endcomment -%}
+            <div class="subcollection-cards__nav">
+              <button type="button" class="subcollection-cards__nav-btn" data-subcollection-prev aria-label="Previous" disabled>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="15 18 9 12 15 6"/>
+                </svg>
+              </button>
+              <button type="button" class="subcollection-cards__nav-btn" data-subcollection-next aria-label="Next">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </button>
+            </div>
+            
+            <div class="subcollection-cards__track{% unless enable_desktop_carousel %} subcollection-cards__track--desktop-grid{% endunless %}" data-subcollection-track>
+              {%- for subcollection in subcollections_list -%}
+                <a href="{{ subcollection.url }}" class="subcollection-card">
+                  <div class="subcollection-card__image">
+                    {%- if subcollection.image != blank -%}
+                      <img 
+                        src="{{ subcollection.image | image_url: width: 600 }}"
+                        alt="{{ subcollection.title | escape }}"
+                        width="300"
+                        height="400"
+                        loading="lazy"
+                      >
+                    {%- elsif subcollection.products.first.featured_image != blank -%}
+                      <img 
+                        src="{{ subcollection.products.first.featured_image | image_url: width: 600 }}"
+                        alt="{{ subcollection.title | escape }}"
+                        width="300"
+                        height="400"
+                        loading="lazy"
+                      >
+                    {%- else -%}
+                      <div class="subcollection-card__placeholder">
+                        {{ 'collection-1' | placeholder_svg_tag }}
+                      </div>
+                    {%- endif -%}
+                  </div>
+                  <h3 class="subcollection-card__title">{{ subcollection.title }}</h3>
+                </a>
+              {%- endfor -%}
+            </div>
           </div>
         </div>
       {%- endif -%}
@@ -1245,6 +1247,9 @@
   /* ========== SUB-COLLECTION CARDS ========== */
   .subcollection-cards {
     margin-top: 1.5rem;
+  }
+  
+  .subcollection-cards__wrapper {
     position: relative;
   }
   
@@ -1255,8 +1260,8 @@
     position: absolute;
     left: 0;
     right: 0;
-    top: calc(50% - 20px);
-    transform: translateY(-50%);
+    top: 50%;
+    transform: translateY(-100%);
     pointer-events: none;
     z-index: 10;
     padding: 0 0.5rem;
