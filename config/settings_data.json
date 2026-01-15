@@ -123,12 +123,11 @@
       "footer": {
         "type": "footer",
         "blocks": {
-          "menu_GxmhzF": {
-            "type": "menu",
+          "text_DGWntd": {
+            "type": "text",
             "settings": {
-              "title": "Marken",
-              "menu": "marken",
-              "split_columns": true
+              "title": "Service",
+              "text": "<p>Kundenservice:</p><p>T 08531 - 916323<br/>Mo - Fr 10 - 14 Uhr</p><p>kundenservice@example.com</p>"
             }
           },
           "menu_YDmeFf": {
@@ -139,18 +138,19 @@
               "split_columns": false
             }
           },
-          "text_DGWntd": {
-            "type": "text",
+          "menu_GxmhzF": {
+            "type": "menu",
             "settings": {
-              "title": "Service",
-              "text": "<p>Kundenservice:</p><p>T 08531 - 916323<br/>Mo - Fr 10 - 14 Uhr</p><p>kundenservice@example.com</p>"
+              "title": "Marken",
+              "menu": "marken",
+              "split_columns": true
             }
           }
         },
         "block_order": [
-          "menu_GxmhzF",
+          "text_DGWntd",
           "menu_YDmeFf",
-          "text_DGWntd"
+          "menu_GxmhzF"
         ],
         "settings": {
           "logo_width": 150,
