@@ -67,6 +67,26 @@
       "header": {
         "type": "header",
         "blocks": {
+          "featured_collection_D7PHWM": {
+            "type": "featured_collection",
+            "settings": {
+              "menu_item": "marken",
+              "image": "shopify://shop_images/gottseidank-weste-konstantin-a005113-schwarzblau-4.jpg",
+              "image_position": "center top",
+              "title": "Gottseidank",
+              "link": "shopify://collections/gottseidank"
+            }
+          },
+          "featured_collection_h4HgGW": {
+            "type": "featured_collection",
+            "settings": {
+              "menu_item": "marken",
+              "image": "shopify://shop_images/berwin-wolff-strickjanker-15140-11-2.jpg",
+              "image_position": "center top",
+              "title": "Berwin + Wolff",
+              "link": "shopify://collections/berwin-wolff"
+            }
+          },
           "featured_collection_df7fWJ": {
             "type": "featured_collection",
             "settings": {
@@ -129,6 +149,8 @@
           }
         },
         "block_order": [
+          "featured_collection_D7PHWM",
+          "featured_collection_h4HgGW",
           "featured_collection_df7fWJ",
           "featured_collection_dxTnGX",
           "featured_collection_r8NQWc",
