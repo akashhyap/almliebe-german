@@ -27,7 +27,7 @@
         "occasion_1": {
           "type": "occasion",
           "settings": {
-            "image": "shopify://shop_images/waldfest.jpg",
+            "image": "shopify://shop_images/ALMLIEBE23HW1070K_2x_464ccd01-0241-4fa7-adea-893b7768414e.jpg",
             "title": "OKTOBERFEST",
             "description": "Finde Dein perfektes Wiesn-Outfit!",
             "link": "shopify://pages/oktoberfest",
@@ -90,7 +90,7 @@
             "image": "shopify://shop_images/ALMLIEBE23HW1409K_2x-volk.jpg",
             "title": "WEIHNACHTEN",
             "description": "Festliche Dirndl für die staade Zeit!",
-            "link": "",
+            "link": "shopify://pages/weihnachten",
             "size": "medium"
           }
         },
@@ -100,6 +100,16 @@
             "image": "shopify://shop_images/Almliebe_Motiv07_108_2x_623999b9-fe4c-4e72-b27f-4b1c6f2f200f.jpg",
             "title": "ALLTAG",
             "description": "Vom Biergarten bis zur Geburtstagsparty. Trag Tracht!",
+            "link": "",
+            "size": "medium"
+          }
+        },
+        "occasion_gpRqjy": {
+          "type": "occasion",
+          "settings": {
+            "image": "shopify://shop_images/waldfest.jpg",
+            "title": "Waldfest",
+            "description": "Die schönste Tracht für die Waldfest-Saison",
             "link": "",
             "size": "medium"
           }
@@ -113,7 +123,8 @@
         "occasion_5",
         "occasion_6",
         "occasion_7",
-        "occasion_8"
+        "occasion_8",
+        "occasion_gpRqjy"
       ],
       "settings": {
         "row_height": 300,
