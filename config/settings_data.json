@@ -122,9 +122,28 @@
       },
       "footer": {
         "type": "footer",
-        "settings": {
-          "footer_menu": "footer"
-        }
+        "blocks": {
+          "menu_YDmeFf": {
+            "type": "menu",
+            "settings": {
+              "title": "",
+              "menu": ""
+            }
+          },
+          "text_DGWntd": {
+            "type": "text",
+            "settings": {
+              "title": "Service",
+              "text": "<p>Kundenservice:</p><p>T 08531 - 916323<br/>Mo - Fr 10 - 14 Uhr</p><p>kundenservice@example.com</p>",
+              "menu": ""
+            }
+          }
+        },
+        "block_order": [
+          "menu_YDmeFf",
+          "text_DGWntd"
+        ],
+        "settings": {}
       },
       "announcement-bar": {
         "type": "announcement-bar",
