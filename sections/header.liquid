@@ -1,12 +1,7 @@
 {%- comment -%}
   HEADER WITH MEGA MENU - Gymshark Style
-  - Full-width mega menu panel
-  - Multiple columns with category headings
-  - Featured collection images
-  - Dynamic via Shopify menu system + section settings
 {%- endcomment -%}
 
-{%- comment -%} Header Spacer - Prevents content jump when header is fixed {%- endcomment -%}
 <div class="header-spacer"></div>
 
 <header class="header" data-header>
@@ -19,7 +14,6 @@
       data-mobile-menu-toggle
       aria-label="Open menu"
       aria-expanded="false"
-      onclick="var m=document.querySelector('[data-mobile-menu]');var o=document.querySelector('[data-mobile-menu-overlay]');if(m){m.classList.toggle('is-active');}if(o){o.classList.toggle('is-active');}document.body.style.overflow=m.classList.contains('is-active')?'hidden':'';"
     >
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -73,16 +67,13 @@
               {% endif %}
             </a>
             
-            {%- comment -%} Mega Menu Panel {%- endcomment -%}
             {% if has_mega_menu %}
               <div class="mega-menu" data-mega-menu="{{ link.title | handleize }}">
                 <div class="mega-menu__inner">
                   <div class="mega-menu__content">
-                    {%- comment -%} Menu Columns {%- endcomment -%}
                     <div class="mega-menu__columns">
                       {% for child_link in link.links %}
                         <div class="mega-menu__column">
-                          {%- comment -%} Column Header - Links to collection/page {%- endcomment -%}
                           {% if child_link.links.size > 0 %}
                             <h3 class="mega-menu__column-title">{{ child_link.title }}</h3>
                           {% else %}
@@ -91,7 +82,6 @@
                             </a>
                           {% endif %}
                           
-                          {%- comment -%} Column Links (Level 3) {%- endcomment -%}
                           {% if child_link.links.size > 0 %}
                             <ul class="mega-menu__links">
                               {% for grandchild_link in child_link.links %}
@@ -101,7 +91,6 @@
                                   </a>
                                 </li>
                               {% endfor %}
-                              {%- comment -%} View All link {%- endcomment -%}
                               {% if child_link.url != '#' and child_link.url != '' %}
                                 <li>
                                   <a href="{{ child_link.url }}" class="mega-menu__link mega-menu__link--view-all">
@@ -115,7 +104,6 @@
                       {% endfor %}
                     </div>
                     
-                    {%- comment -%} Featured Collections - from section settings {%- endcomment -%}
                     {% assign menu_handle = link.title | handleize %}
                     {% assign has_featured = false %}
                     {% for block in section.blocks %}
@@ -168,8 +156,6 @@
 
     {%- comment -%} Header Actions - Right Side {%- endcomment -%}
     <div class="header__actions">
-      
-      {%- comment -%} Search - Opens Predictive Search {%- endcomment -%}
       <button type="button" class="header__action" aria-label="Suchen" data-search-toggle>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/>
@@ -177,7 +163,6 @@
         </svg>
       </button>
 
-      {%- comment -%} Wishlist {%- endcomment -%}
       <a href="/pages/wunschliste" class="header__action header__wishlist" aria-label="Wunschliste">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
@@ -185,12 +170,10 @@
         <span class="header__count-badge is-hidden" data-wishlist-count>0</span>
       </a>
 
-      {%- comment -%} Account {%- endcomment -%}
       <a href="{{ routes.account_url }}" class="header__action hidden-mobile" aria-label="Account">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
       </a>
 
-      {%- comment -%} Cart - Opens Cart Drawer {%- endcomment -%}
       <button type="button" id="almliebe-cart-btn" class="header__action" aria-label="Warenkorb" onclick="event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation(); if(typeof window.openCartDrawer==='function'){window.openCartDrawer();} return false;">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="9" cy="21" r="1"/>
@@ -204,15 +187,13 @@
   </div>
 </header>
 
-{%- comment -%} Mega Menu Overlay {%- endcomment -%}
 <div class="mega-menu__overlay" data-mega-menu-overlay></div>
 
-{%- comment -%} Mobile Menu {%- endcomment -%}
 <div class="mobile-menu" data-mobile-menu>
   <div class="mobile-menu__inner">
     <div class="mobile-menu__header">
       <h2 class="mobile-menu__title">Menu</h2>
-      <button type="button" class="mobile-menu__close" data-mobile-menu-toggle aria-label="Close menu" onclick="var m=document.querySelector('[data-mobile-menu]');var o=document.querySelector('[data-mobile-menu-overlay]');if(m){m.classList.remove('is-active');}if(o){o.classList.remove('is-active');}document.body.style.overflow='';">
+      <button type="button" class="mobile-menu__close" data-mobile-menu-toggle aria-label="Close menu">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -222,7 +203,6 @@
 
     <nav class="mobile-menu__nav" role="navigation">
       <ul class="mobile-nav-list" data-mobile-nav-level="1">
-        {%- comment -%} Search in mobile menu {%- endcomment -%}
         <li class="mobile-nav-item mobile-nav-item--search">
           <button type="button" class="mobile-nav-link mobile-nav-link--search" data-search-toggle>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -250,7 +230,6 @@
           </li>
         {% endfor %}
         
-        {%- comment -%} Wishlist link in mobile {%- endcomment -%}
         <li class="mobile-nav-item mobile-nav-item--wishlist">
           <a href="/pages/wunschliste" class="mobile-nav-link">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -261,7 +240,6 @@
           </a>
         </li>
         
-        {%- comment -%} Account link in mobile {%- endcomment -%}
         <li class="mobile-nav-item mobile-nav-item--account">
           <a href="{{ routes.account_url }}" class="mobile-nav-link">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
@@ -270,7 +248,6 @@
         </li>
       </ul>
 
-      {%- comment -%} Mobile Submenus (Level 2) {%- endcomment -%}
       {% for link in linklists[section.settings.main_menu].links %}
         {% if link.links.size > 0 %}
           <div class="mobile-submenu" data-mobile-submenu="{{ forloop.index }}">
@@ -301,7 +278,6 @@
               {% endfor %}
             </ul>
 
-            {%- comment -%} Mobile Submenus (Level 3) {%- endcomment -%}
             {% for child_link in link.links %}
               {% if child_link.links.size > 0 %}
                 <div class="mobile-submenu mobile-submenu--level-3" data-mobile-submenu="{{ forloop.parentloop.index }}-{{ forloop.index }}">
@@ -337,8 +313,7 @@
   </div>
 </div>
 
-{%- comment -%} Mobile Menu Overlay {%- endcomment -%}
-<div class="mobile-menu__overlay" data-mobile-menu-overlay onclick="var m=document.querySelector('[data-mobile-menu]');var o=document.querySelector('[data-mobile-menu-overlay]');if(m){m.classList.remove('is-active');}if(o){o.classList.remove('is-active');}document.body.style.overflow='';"></div>
+<div class="mobile-menu__overlay" data-mobile-menu-overlay></div>
 
 <style>
   :root {
@@ -352,32 +327,16 @@
     }
   }
   
-  /* Utility Classes - Responsive visibility */
-  .hidden-mobile {
-    display: flex !important;
-  }
-  
-  .hidden-desktop {
-    display: none !important;
-  }
+  .hidden-mobile { display: flex !important; }
+  .hidden-desktop { display: none !important; }
   
   @media (max-width: 1023px) {
-    .hidden-mobile {
-      display: none !important;
-    }
-    
-    .hidden-desktop {
-      display: flex !important;
-    }
+    .hidden-mobile { display: none !important; }
+    .hidden-desktop { display: flex !important; }
   }
 
-  /* Header Spacer - Only accounts for fixed header height */
-  /* Notification bar is in normal flow, so we don't add it here */
-  .header-spacer {
-    height: var(--header-height, 70px);
-  }
+  .header-spacer { height: var(--header-height, 70px); }
 
-  /* Header */
   .header {
     position: fixed;
     top: var(--notification-bar-height, 0px);
@@ -410,12 +369,9 @@
   }
 
   @media (max-width: 1023px) {
-    .header__inner {
-      padding: 0 1rem;
-    }
+    .header__inner { padding: 0 1rem; }
   }
 
-  /* Logo */
   .header__logo {
     display: flex;
     align-items: center;
@@ -430,29 +386,14 @@
     }
   }
 
-  .logo {
-    display: inline-flex;
-    align-items: center;
-  }
-
-  .logo__image {
-    display: block;
-    height: 40px;
-    width: auto;
-  }
+  .logo { display: inline-flex; align-items: center; }
+  .logo__image { display: block; height: 40px; width: auto; }
 
   @media (max-width: 1023px) {
-    .logo__image {
-      height: 32px;
-    }
+    .logo__image { height: 32px; }
   }
 
-  /* Navigation */
-  .header__nav {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-  }
+  .header__nav { flex: 1; display: flex; justify-content: center; }
 
   .nav-list {
     display: flex;
@@ -463,15 +404,9 @@
     padding: 0;
   }
 
-  @media (min-width: 1200px) {
-    .nav-list {
-      gap: 2.5rem;
-    }
-  }
+  @media (min-width: 1200px) { .nav-list { gap: 2.5rem; } }
 
-  .nav-item {
-    position: static;
-  }
+  .nav-item { position: static; }
 
   .nav-link {
     display: flex;
@@ -488,22 +423,10 @@
     white-space: nowrap;
   }
 
-  .nav-link__icon {
-    transition: transform 0.2s ease;
-  }
-
-  .nav-item--has-megamenu.is-open .nav-link__icon {
-    transform: rotate(180deg);
-  }
-
-  .nav-link:hover {
-    opacity: 0.6;
-  }
-
-  .nav-item--active .nav-link {
-    position: relative;
-  }
-
+  .nav-link__icon { transition: transform 0.2s ease; }
+  .nav-item--has-megamenu.is-open .nav-link__icon { transform: rotate(180deg); }
+  .nav-link:hover { opacity: 0.6; }
+  .nav-item--active .nav-link { position: relative; }
   .nav-item--active .nav-link::after {
     content: '';
     position: absolute;
@@ -514,10 +437,6 @@
     background: #000000;
   }
 
-  /* ==========================================
-     MEGA MENU - Gymshark Style
-     ========================================== */
-  
   .mega-menu {
     position: fixed;
     top: calc(var(--notification-bar-height, 0px) + var(--header-height, 70px));
@@ -533,325 +452,55 @@
     z-index: 999;
   }
 
-  .header.is-scrolled .mega-menu {
-    top: var(--header-height, 70px);
-  }
+  .header.is-scrolled .mega-menu { top: var(--header-height, 70px); }
 
-  /* JS-controlled open state (with delays) */
   .nav-item--has-megamenu.is-open .mega-menu {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
   }
 
-  .mega-menu__inner {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 2.5rem 3rem;
-  }
+  .mega-menu__inner { max-width: 1400px; margin: 0 auto; padding: 2.5rem 3rem; }
+  .mega-menu__content { display: flex; gap: 3rem; }
+  .mega-menu__columns { flex: 1; display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem 2.5rem; align-content: start; }
+  .mega-menu__column { min-width: 0; }
+  .mega-menu__column-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #9ca3af; margin: 0 0 0.875rem; line-height: 1.3; }
+  .mega-menu__column-title--link { font-size: 0.875rem; font-weight: 500; color: #1f2937; text-decoration: none; display: inline-block; transition: color 0.2s ease; margin: 0; padding: 0.5rem 0; letter-spacing: 0; text-transform: none; line-height: 1.4; position: relative; }
+  .mega-menu__column-title--link::after { content: ''; position: absolute; bottom: 0.35rem; left: 0; width: 0; height: 1px; background: #000000; transition: width 0.25s ease; }
+  .mega-menu__column-title--link:hover { color: #000000; }
+  .mega-menu__column-title--link:hover::after { width: 100%; }
+  .mega-menu__links { list-style: none; margin: 0; padding: 0; }
+  .mega-menu__links li { margin-bottom: 0.5rem; }
+  .mega-menu__link { font-size: 0.8125rem; font-weight: 400; color: #6b7280; text-decoration: none; transition: color 0.2s ease, padding-left 0.2s ease; display: inline-block; position: relative; }
+  .mega-menu__link:hover { color: #000000; padding-left: 4px; }
+  .mega-menu__link--view-all { font-weight: 500; color: #9ca3af; margin-top: 0.375rem; font-size: 0.75rem; }
+  .mega-menu__link--view-all:hover { color: #6b7280; }
+  .mega-menu__featured { flex-shrink: 0; width: 320px; padding-left: 2.5rem; border-left: 1px solid #f3f4f6; }
+  .mega-menu__featured-title { font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #9ca3af; margin: 0 0 1rem; }
+  .mega-menu__featured-grid { display: flex; flex-direction: column; gap: 1rem; }
+  .mega-menu__featured-card { display: block; position: relative; text-decoration: none; border-radius: 10px; overflow: hidden; aspect-ratio: 3/2; background: #1a1a1a; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); transition: box-shadow 0.3s ease, transform 0.3s ease; }
+  .mega-menu__featured-card:hover { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); transform: translateY(-2px); }
+  .mega-menu__featured-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%); transition: background 0.3s ease; pointer-events: none; }
+  .mega-menu__featured-card:hover::after { background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.05) 100%); }
+  .mega-menu__featured-card:hover .mega-menu__featured-image img { transform: scale(1.08); }
+  .mega-menu__featured-image { position: absolute; inset: 0; overflow: hidden; }
+  .mega-menu__featured-image img { width: 100%; height: 100%; object-fit: cover; object-position: center center; transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+  .mega-menu__featured-image--placeholder { display: flex; align-items: center; justify-content: center; background: #2a2a2a; }
+  .mega-menu__featured-image--placeholder svg { width: 50%; height: 50%; opacity: 0.3; }
+  .mega-menu__featured-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.25rem; font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: #ffffff; z-index: 1; line-height: 1.2; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); }
+  .mega-menu__overlay { position: fixed; inset: 0; top: calc(var(--notification-bar-height, 0px) + var(--header-height, 70px)); background: rgba(0, 0, 0, 0.3); opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; z-index: 998; pointer-events: none; }
+  .header.is-scrolled ~ .mega-menu__overlay { top: var(--header-height, 70px); }
+  .mega-menu__overlay.is-visible { opacity: 1; visibility: visible; pointer-events: auto; }
 
-  .mega-menu__content {
-    display: flex;
-    gap: 3rem;
-  }
-
-  .mega-menu__columns {
-    flex: 1;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 1rem 2.5rem;
-    align-content: start;
-  }
-
-  .mega-menu__column {
-    min-width: 0;
-  }
-
-  /* Category header - has children underneath */
-  .mega-menu__column-title {
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: #9ca3af;
-    margin: 0 0 0.875rem;
-    line-height: 1.3;
-  }
-
-  /* Standalone link - clean, minimal styling */
-  .mega-menu__column-title--link {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #1f2937;
-    text-decoration: none;
-    display: inline-block;
-    transition: color 0.2s ease, transform 0.2s ease;
-    margin: 0;
-    padding: 0.5rem 0;
-    letter-spacing: 0;
-    text-transform: none;
-    line-height: 1.4;
-    position: relative;
-  }
-
-  .mega-menu__column-title--link::after {
-    content: '';
-    position: absolute;
-    bottom: 0.35rem;
-    left: 0;
-    width: 0;
-    height: 1px;
-    background: #000000;
-    transition: width 0.25s ease;
-  }
-
-  .mega-menu__column-title--link:hover {
-    color: #000000;
-  }
-
-  .mega-menu__column-title--link:hover::after {
-    width: 100%;
-  }
-
-  .mega-menu__links {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  .mega-menu__links li {
-    margin-bottom: 0.5rem;
-  }
-
-  .mega-menu__link {
-    font-size: 0.8125rem;
-    font-weight: 400;
-    color: #6b7280;
-    text-decoration: none;
-    transition: color 0.2s ease, padding-left 0.2s ease;
-    display: inline-block;
-    position: relative;
-  }
-
-  .mega-menu__link:hover {
-    color: #000000;
-    padding-left: 4px;
-  }
-
-  .mega-menu__link--view-all {
-    font-weight: 500;
-    color: #9ca3af;
-    margin-top: 0.375rem;
-    font-size: 0.75rem;
-  }
-  
-  .mega-menu__link--view-all:hover {
-    color: #6b7280;
-  }
-
-  /* Featured Collections */
-  .mega-menu__featured {
-    flex-shrink: 0;
-    width: 320px;
-    padding-left: 2.5rem;
-    border-left: 1px solid #f3f4f6;
-  }
-
-  .mega-menu__featured-title {
-    font-size: 0.6875rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #9ca3af;
-    margin: 0 0 1rem;
-  }
-
-  .mega-menu__featured-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .mega-menu__featured-card {
-    display: block;
-    position: relative;
-    text-decoration: none;
-    border-radius: 10px;
-    overflow: hidden;
-    aspect-ratio: 3/2;
-    background: #1a1a1a;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-    transition: box-shadow 0.3s ease, transform 0.3s ease;
-  }
-
-  .mega-menu__featured-card:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    transform: translateY(-2px);
-  }
-
-  .mega-menu__featured-card::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.65) 0%,
-      rgba(0, 0, 0, 0.2) 50%,
-      rgba(0, 0, 0, 0) 100%
-    );
-    transition: background 0.3s ease;
-    pointer-events: none;
-  }
-
-  .mega-menu__featured-card:hover::after {
-    background: linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.75) 0%,
-      rgba(0, 0, 0, 0.3) 50%,
-      rgba(0, 0, 0, 0.05) 100%
-    );
-  }
-
-  .mega-menu__featured-card:hover .mega-menu__featured-image img {
-    transform: scale(1.08);
-  }
-
-  .mega-menu__featured-image {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-  }
-
-  .mega-menu__featured-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center center;
-    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  }
-
-  .mega-menu__featured-image--placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #2a2a2a;
-  }
-
-  .mega-menu__featured-image--placeholder svg {
-    width: 50%;
-    height: 50%;
-    opacity: 0.3;
-  }
-
-  .mega-menu__featured-label {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 1.25rem 1.25rem;
-    font-size: 0.875rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    color: #ffffff;
-    z-index: 1;
-    line-height: 1.2;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  }
-
-  /* Mega Menu Overlay */
-  .mega-menu__overlay {
-    position: fixed;
-    inset: 0;
-    top: calc(var(--notification-bar-height, 0px) + var(--header-height, 70px));
-    background: rgba(0, 0, 0, 0.3);
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    z-index: 998;
-    pointer-events: none;
-  }
-
-  .header.is-scrolled ~ .mega-menu__overlay {
-    top: var(--header-height, 70px);
-  }
-
-  /* JS-controlled overlay visibility */
-  .mega-menu__overlay.is-visible {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-  }
-
-  /* Header Actions */
-  .header__actions {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-  }
-
-  @media (max-width: 1023px) {
-    .header__actions {
-      order: 3;
-      gap: 0.125rem;
-    }
-  }
-
-  .header__action {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #000000;
-    text-decoration: none;
-    transition: opacity 0.2s ease;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    position: relative;
-  }
-
-  .header__action:hover {
-    opacity: 0.6;
-  }
-
-  .header__action svg {
-    width: 22px;
-    height: 22px;
-    stroke-width: 1.5;
-  }
-
-  /* Count badge */
-  .header__count-badge {
-    position: absolute;
-    top: 2px;
-    right: 0;
-    min-width: 18px;
-    height: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 0.25rem;
-    font-size: 0.6875rem;
-    font-weight: 700;
-    background: #000000;
-    color: #FFFFFF;
-    border-radius: 9px;
-  }
-
-  .header__count-badge.is-hidden {
-    display: none;
-  }
-
-  .header__wishlist {
-    position: relative;
-  }
-
-  #almliebe-cart-btn {
-    position: relative;
-  }
+  .header__actions { display: flex; align-items: center; gap: 0.25rem; }
+  @media (max-width: 1023px) { .header__actions { order: 3; gap: 0.125rem; } }
+  .header__action { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #000000; text-decoration: none; transition: opacity 0.2s ease; background: transparent; border: none; cursor: pointer; padding: 0; position: relative; }
+  .header__action:hover { opacity: 0.6; }
+  .header__action svg { width: 22px; height: 22px; stroke-width: 1.5; }
+  .header__count-badge { position: absolute; top: 2px; right: 0; min-width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; padding: 0 0.25rem; font-size: 0.6875rem; font-weight: 700; background: #000000; color: #FFFFFF; border-radius: 9px; }
+  .header__count-badge.is-hidden { display: none; }
+  .header__wishlist { position: relative; }
+  #almliebe-cart-btn { position: relative; }
 
   .header__menu-toggle {
     width: 44px;
@@ -873,26 +522,10 @@
     position: relative;
     z-index: 10;
   }
-  
-  .header__menu-toggle:focus {
-    outline: none;
-  }
-  
-  .header__menu-toggle:focus-visible {
-    outline: 2px solid #000;
-    outline-offset: 2px;
-  }
+  .header__menu-toggle:focus { outline: none; }
+  .header__menu-toggle:focus-visible { outline: 2px solid #000; outline-offset: 2px; }
+  .header__menu-toggle svg { width: 24px; height: 24px; pointer-events: none; }
 
-  .header__menu-toggle svg {
-    width: 24px;
-    height: 24px;
-    pointer-events: none;
-  }
-
-  /* ==========================================
-     MOBILE MENU - Slide-in panels
-     ========================================== */
-  
   .mobile-menu {
     position: fixed;
     top: 0;
@@ -907,251 +540,72 @@
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
   }
+  .mobile-menu.is-active { transform: translateX(0); }
+  .mobile-menu__inner { height: 100%; display: flex; flex-direction: column; }
+  .mobile-menu__header { display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.5rem; border-bottom: 1px solid #E8E8E8; flex-shrink: 0; }
+  .mobile-menu__title { font-size: 1rem; font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: 0.5px; }
+  .mobile-menu__close { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; cursor: pointer; margin-right: -0.5rem; }
+  .mobile-menu__nav { flex: 1; position: relative; overflow: hidden; }
+  .mobile-nav-list { list-style: none; margin: 0; padding: 0; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .mobile-nav-item { border-bottom: 1px solid #f3f4f6; }
+  .mobile-nav-link { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 1rem 1.5rem; font-size: 0.9375rem; font-weight: 500; color: #000000; text-decoration: none; background: none; border: none; cursor: pointer; text-align: left; }
+  .mobile-nav-link svg { flex-shrink: 0; opacity: 0.4; }
+  .mobile-nav-item--search .mobile-nav-link, .mobile-nav-item--account .mobile-nav-link, .mobile-nav-item--wishlist .mobile-nav-link { gap: 0.75rem; justify-content: flex-start; }
+  .mobile-nav-link--view-all { color: #6b7280; font-weight: 400; }
+  .mobile-nav-wishlist-count { margin-left: auto; min-width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; padding: 0 0.375rem; font-size: 0.75rem; font-weight: 700; background: #000000; color: #FFFFFF; border-radius: 10px; }
+  .mobile-nav-wishlist-count.is-hidden { display: none; }
+  .mobile-submenu { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #FFFFFF; transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; overflow: hidden; }
+  .mobile-submenu.is-active { transform: translateX(0); }
+  .mobile-submenu__back { display: flex; align-items: center; gap: 0.5rem; width: 100%; padding: 1rem 1.5rem; font-size: 0.875rem; font-weight: 500; color: #6b7280; background: #f9fafb; border: none; border-bottom: 1px solid #e5e7eb; cursor: pointer; text-align: left; }
+  .mobile-submenu__title { display: block; padding: 1rem 1.5rem; font-size: 1rem; font-weight: 700; color: #000000; text-decoration: none; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #e5e7eb; }
+  .mobile-submenu .mobile-nav-list { flex: 1; }
+  .mobile-menu__overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1050; opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+  .mobile-menu__overlay.is-active { opacity: 1; visibility: visible; }
 
-  .mobile-menu.is-active {
-    transform: translateX(0);
-  }
-
-  .mobile-menu__inner {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-
-  .mobile-menu__header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid #E8E8E8;
-    flex-shrink: 0;
-  }
-
-  .mobile-menu__title {
-    font-size: 1rem;
-    font-weight: 700;
-    margin: 0;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .mobile-menu__close {
-    width: 44px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    margin-right: -0.5rem;
-  }
-
-  .mobile-menu__nav {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .mobile-nav-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .mobile-nav-item {
-    border-bottom: 1px solid #f3f4f6;
-  }
-
-  .mobile-nav-link {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 1rem 1.5rem;
-    font-size: 0.9375rem;
-    font-weight: 500;
-    color: #000000;
-    text-decoration: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    text-align: left;
-  }
-
-  .mobile-nav-link svg {
-    flex-shrink: 0;
-    opacity: 0.4;
-  }
-
-  .mobile-nav-item--search .mobile-nav-link,
-  .mobile-nav-item--account .mobile-nav-link,
-  .mobile-nav-item--wishlist .mobile-nav-link {
-    gap: 0.75rem;
-    justify-content: flex-start;
-  }
-
-  .mobile-nav-link--view-all {
-    color: #6b7280;
-    font-weight: 400;
-  }
-
-  .mobile-nav-wishlist-count {
-    margin-left: auto;
-    min-width: 20px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 0.375rem;
-    font-size: 0.75rem;
-    font-weight: 700;
-    background: #000000;
-    color: #FFFFFF;
-    border-radius: 10px;
-  }
-
-  .mobile-nav-wishlist-count.is-hidden {
-    display: none;
-  }
-
-  /* Mobile Submenus - Slide-in panels */
-  .mobile-submenu {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #FFFFFF;
-    transform: translateX(100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  .mobile-submenu.is-active {
-    transform: translateX(0);
-  }
-
-  .mobile-submenu__back {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    width: 100%;
-    padding: 1rem 1.5rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: #6b7280;
-    background: #f9fafb;
-    border: none;
-    border-bottom: 1px solid #e5e7eb;
-    cursor: pointer;
-    text-align: left;
-  }
-
-  .mobile-submenu__title {
-    display: block;
-    padding: 1rem 1.5rem;
-    font-size: 1rem;
-    font-weight: 700;
-    color: #000000;
-    text-decoration: none;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border-bottom: 1px solid #e5e7eb;
-  }
-
-  .mobile-submenu .mobile-nav-list {
-    flex: 1;
-  }
-
-  .mobile-menu__overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1050;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .mobile-menu__overlay.is-active {
-    opacity: 1;
-    visibility: visible;
-  }
-
-  /* Responsive adjustments */
-  @media (max-width: 1400px) {
-    .mega-menu__columns {
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem 2rem;
-    }
-    
-    .mega-menu__featured {
-      width: 280px;
-      padding-left: 2rem;
-    }
-  }
-
-  @media (max-width: 1200px) {
-    .mega-menu__inner {
-      padding: 2rem;
-    }
-    
-    .mega-menu__columns {
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem 1.5rem;
-    }
-    
-    .mega-menu__featured {
-      width: 260px;
-    }
-    
-    .mega-menu__content {
-      gap: 2rem;
-    }
-    
-    .mega-menu__featured-card {
-      aspect-ratio: 16/10;
-    }
-  }
-
-  @media (max-width: 1100px) {
-    .mega-menu__featured {
-      width: 240px;
-    }
-    
-    .mega-menu__featured-label {
-      font-size: 0.75rem;
-      padding: 0.75rem 0.875rem;
-    }
-    
-    .mega-menu__featured-card {
-      aspect-ratio: 16/9;
-    }
-  }
+  @media (max-width: 1400px) { .mega-menu__columns { grid-template-columns: repeat(4, 1fr); gap: 1rem 2rem; } .mega-menu__featured { width: 280px; padding-left: 2rem; } }
+  @media (max-width: 1200px) { .mega-menu__inner { padding: 2rem; } .mega-menu__columns { grid-template-columns: repeat(3, 1fr); gap: 1rem 1.5rem; } .mega-menu__featured { width: 260px; } .mega-menu__content { gap: 2rem; } .mega-menu__featured-card { aspect-ratio: 16/10; } }
+  @media (max-width: 1100px) { .mega-menu__featured { width: 240px; } .mega-menu__featured-label { font-size: 0.75rem; padding: 0.75rem 0.875rem; } .mega-menu__featured-card { aspect-ratio: 16/9; } }
 </style>
 
 <script>
+console.log('=== HEADER SCRIPT START ===');
+
+// Global click listener in capture phase - THIS WAS KEY TO MAKING IT WORK
+document.addEventListener('click', function(e) {
+  console.log('GLOBAL CLICK:', e.target.tagName, e.target.className);
+}, true);
+
+document.addEventListener('touchstart', function(e) {
+  console.log('GLOBAL TOUCHSTART:', e.target.tagName, e.target.className);
+}, true);
+
 (function() {
-  // Mobile Menu Functions - defined immediately
+  console.log('IIFE executing');
+  
   var mobileMenu = null;
   var mobileMenuOverlay = null;
 
   function openMobileMenu() {
+    console.log('>>> openMobileMenu called');
     if (!mobileMenu) mobileMenu = document.querySelector('[data-mobile-menu]');
     if (!mobileMenuOverlay) mobileMenuOverlay = document.querySelector('[data-mobile-menu-overlay]');
     
-    if (mobileMenu) mobileMenu.classList.add('is-active');
-    if (mobileMenuOverlay) mobileMenuOverlay.classList.add('is-active');
+    console.log('mobileMenu:', mobileMenu);
+    console.log('mobileMenuOverlay:', mobileMenuOverlay);
+    
+    if (mobileMenu) {
+      mobileMenu.classList.add('is-active');
+      console.log('Added is-active to menu');
+    }
+    if (mobileMenuOverlay) {
+      mobileMenuOverlay.classList.add('is-active');
+      console.log('Added is-active to overlay');
+    }
     document.body.style.overflow = 'hidden';
   }
 
   function closeMobileMenu() {
+    console.log('>>> closeMobileMenu called');
     if (!mobileMenu) mobileMenu = document.querySelector('[data-mobile-menu]');
     if (!mobileMenuOverlay) mobileMenuOverlay = document.querySelector('[data-mobile-menu-overlay]');
     
@@ -1164,14 +618,14 @@
     });
   }
 
-  // Make globally available immediately
   window.openMobileMenu = openMobileMenu;
   window.closeMobileMenu = closeMobileMenu;
 
-  // Event delegation for mobile menu toggle - works even before DOMContentLoaded
+  // Click handler using event delegation
   document.addEventListener('click', function(e) {
     var toggleBtn = e.target.closest('[data-mobile-menu-toggle]');
     if (toggleBtn) {
+      console.log('!!! MOBILE TOGGLE CLICKED !!!');
       e.preventDefault();
       e.stopPropagation();
       
@@ -1185,23 +639,28 @@
       return;
     }
     
-    // Close on overlay click
     if (e.target.closest('[data-mobile-menu-overlay]')) {
+      console.log('Overlay clicked');
       e.preventDefault();
       closeMobileMenu();
     }
   });
 
-  // Rest of initialization on DOMContentLoaded
   document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOMContentLoaded fired');
+    
     var header = document.querySelector('[data-header]');
     var notificationBar = document.querySelector('.notification-bar, [data-notification-bar], .announcement-bar');
     
-    // Cache elements
     mobileMenu = document.querySelector('[data-mobile-menu]');
     mobileMenuOverlay = document.querySelector('[data-mobile-menu-overlay]');
     
-    // Set notification bar height as CSS variable
+    console.log('Elements cached:', {
+      header: !!header,
+      mobileMenu: !!mobileMenu,
+      mobileMenuOverlay: !!mobileMenuOverlay
+    });
+    
     function updateNotificationBarHeight() {
       var height = notificationBar ? notificationBar.offsetHeight : 0;
       document.documentElement.style.setProperty('--notification-bar-height', height + 'px');
@@ -1214,19 +673,16 @@
       document.fonts.ready.then(updateNotificationBarHeight);
     }
     
-    // Header scroll effect
     if (header) {
       var ticking = false;
       
       function handleScroll() {
         var notificationHeight = notificationBar ? notificationBar.offsetHeight : 0;
-        
         if (window.scrollY > notificationHeight) {
           header.classList.add('is-scrolled');
         } else {
           header.classList.remove('is-scrolled');
         }
-        
         ticking = false;
       }
       
@@ -1240,16 +696,11 @@
       handleScroll();
     }
 
-    // ==========================================
-    // MEGA MENU - Hover with delays
-    // ==========================================
-    
+    // Mega menu
     var megaMenuItems = document.querySelectorAll('.nav-item--has-megamenu');
     var megaMenuOverlay = document.querySelector('[data-mega-menu-overlay]');
-    
     var OPEN_DELAY = 80;
     var CLOSE_DELAY = 150;
-    
     var openTimeout = null;
     var closeTimeout = null;
     var currentOpenMenu = null;
@@ -1257,11 +708,9 @@
     function openMegaMenu(item) {
       clearTimeout(closeTimeout);
       clearTimeout(openTimeout);
-      
       if (currentOpenMenu && currentOpenMenu !== item) {
         currentOpenMenu.classList.remove('is-open');
       }
-      
       openTimeout = setTimeout(function() {
         item.classList.add('is-open');
         if (megaMenuOverlay) megaMenuOverlay.classList.add('is-visible');
@@ -1272,60 +721,41 @@
     function closeMegaMenu(item) {
       clearTimeout(openTimeout);
       clearTimeout(closeTimeout);
-      
       closeTimeout = setTimeout(function() {
         item.classList.remove('is-open');
         if (megaMenuOverlay) megaMenuOverlay.classList.remove('is-visible');
-        if (currentOpenMenu === item) {
-          currentOpenMenu = null;
-        }
+        if (currentOpenMenu === item) currentOpenMenu = null;
       }, CLOSE_DELAY);
     }
     
     function closeAllMegaMenus() {
       clearTimeout(openTimeout);
       clearTimeout(closeTimeout);
-      
-      megaMenuItems.forEach(function(item) {
-        item.classList.remove('is-open');
-      });
+      megaMenuItems.forEach(function(item) { item.classList.remove('is-open'); });
       if (megaMenuOverlay) megaMenuOverlay.classList.remove('is-visible');
       currentOpenMenu = null;
     }
     
     megaMenuItems.forEach(function(item) {
       var megaMenu = item.querySelector('.mega-menu');
-      
       item.addEventListener('mouseenter', function() { openMegaMenu(item); });
-      
       item.addEventListener('mouseleave', function(e) {
         var toElement = e.relatedTarget;
-        if (megaMenu && megaMenu.contains(toElement)) {
-          return;
-        }
+        if (megaMenu && megaMenu.contains(toElement)) return;
         closeMegaMenu(item);
       });
-      
       if (megaMenu) {
-        megaMenu.addEventListener('mouseenter', function() {
-          clearTimeout(closeTimeout);
-        });
-        
+        megaMenu.addEventListener('mouseenter', function() { clearTimeout(closeTimeout); });
         megaMenu.addEventListener('mouseleave', function(e) {
           var toElement = e.relatedTarget;
-          if (item.contains(toElement)) {
-            return;
-          }
+          if (item.contains(toElement)) return;
           closeMegaMenu(item);
         });
       }
     });
     
-    if (megaMenuOverlay) {
-      megaMenuOverlay.addEventListener('click', closeAllMegaMenus);
-    }
+    if (megaMenuOverlay) megaMenuOverlay.addEventListener('click', closeAllMegaMenus);
     
-    // Close on escape
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         closeAllMegaMenus();
@@ -1342,7 +772,6 @@
       });
     });
 
-    // Mobile submenu back buttons
     document.querySelectorAll('[data-mobile-submenu-back]').forEach(function(back) {
       back.addEventListener('click', function() {
         var submenu = this.closest('.mobile-submenu');
@@ -1350,13 +779,11 @@
       });
     });
 
-    // Search toggle
     var searchToggles = document.querySelectorAll('[data-search-toggle]');
     searchToggles.forEach(function(toggle) {
       toggle.addEventListener('click', function(e) {
         e.preventDefault();
         closeMobileMenu();
-        
         if (typeof window.openPredictiveSearch === 'function') {
           window.openPredictiveSearch();
         } else if (window.PredictiveSearch && typeof window.PredictiveSearch.open === 'function') {
@@ -1365,10 +792,8 @@
       });
     });
 
-    // Keyboard navigation for mega menu
     document.querySelectorAll('.nav-item--has-megamenu').forEach(function(item) {
       var link = item.querySelector('.nav-link');
-      
       if (link) {
         link.addEventListener('keydown', function(e) {
           if (e.key === 'Enter' || e.key === ' ') {
@@ -1385,6 +810,8 @@
         });
       }
     });
+    
+    console.log('=== HEADER SCRIPT END ===');
   });
 })();
 </script>
