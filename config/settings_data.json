@@ -127,22 +127,23 @@
             "type": "menu",
             "settings": {
               "title": "Marken",
-              "menu": "marken"
+              "menu": "marken",
+              "split_columns": true
             }
           },
           "menu_YDmeFf": {
             "type": "menu",
             "settings": {
               "title": "Informationen",
-              "menu": "informationen"
+              "menu": "informationen",
+              "split_columns": false
             }
           },
           "text_DGWntd": {
             "type": "text",
             "settings": {
               "title": "Service",
-              "text": "<p>Kundenservice:</p><p>T 08531 - 916323<br/>Mo - Fr 10 - 14 Uhr</p><p>kundenservice@example.com</p>",
-              "menu": ""
+              "text": "<p>Kundenservice:</p><p>T 08531 - 916323<br/>Mo - Fr 10 - 14 Uhr</p><p>kundenservice@example.com</p>"
             }
           }
         },
@@ -152,12 +153,10 @@
           "text_DGWntd"
         ],
         "settings": {
-          "show_brand_column": true,
           "logo_width": 150,
-          "description": "",
           "show_social": true,
-          "social_facebook": "",
-          "social_instagram": "",
+          "social_facebook": "https://www.facebook.com/Almliebe",
+          "social_instagram": "https://www.instagram.com/almliebealmliebe",
           "social_pinterest": "",
           "social_youtube": "",
           "social_tiktok": "",
