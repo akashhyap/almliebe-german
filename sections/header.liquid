@@ -20,7 +20,11 @@
       aria-label="Open menu"
       aria-expanded="false"
     >
-      {% render 'icon-menu' %}
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
     </button>
 
     {%- comment -%} Logo - Left {%- endcomment -%}
@@ -182,7 +186,7 @@
 
       {%- comment -%} Account {%- endcomment -%}
       <a href="{{ routes.account_url }}" class="header__action hidden-mobile" aria-label="Account">
-        {% render 'icon-account' %}
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
       </a>
 
       {%- comment -%} Cart - Opens Cart Drawer {%- endcomment -%}
@@ -208,7 +212,10 @@
     <div class="mobile-menu__header">
       <h2 class="mobile-menu__title">Menu</h2>
       <button type="button" class="mobile-menu__close" data-mobile-menu-toggle aria-label="Close menu">
-        {% render 'icon-close' %}
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
       </button>
     </div>
 
@@ -256,7 +263,7 @@
         {%- comment -%} Account link in mobile {%- endcomment -%}
         <li class="mobile-nav-item mobile-nav-item--account">
           <a href="{{ routes.account_url }}" class="mobile-nav-link">
-            {% render 'icon-account' %}
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             <span>Account</span>
           </a>
         </li>
@@ -341,6 +348,25 @@
   @media (max-width: 1023px) {
     :root {
       --header-height: 60px;
+    }
+  }
+  
+  /* Utility Classes - Responsive visibility */
+  .hidden-mobile {
+    display: flex !important;
+  }
+  
+  .hidden-desktop {
+    display: none !important;
+  }
+  
+  @media (max-width: 1023px) {
+    .hidden-mobile {
+      display: none !important;
+    }
+    
+    .hidden-desktop {
+      display: flex !important;
     }
   }
 
@@ -827,22 +853,36 @@
   }
 
   .header__menu-toggle {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: transparent;
     border: none;
+    outline: none;
     color: #000000;
     cursor: pointer;
     padding: 0;
     order: 1;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  
+  .header__menu-toggle:focus {
+    outline: none;
+  }
+  
+  .header__menu-toggle:focus-visible {
+    outline: 2px solid #000;
+    outline-offset: 2px;
   }
 
   .header__menu-toggle svg {
-    width: 22px;
-    height: 22px;
+    width: 24px;
+    height: 24px;
+    pointer-events: none;
   }
 
   /* ==========================================
@@ -1243,15 +1283,37 @@ document.addEventListener('DOMContentLoaded', function() {
   const mobileMenuToggles = document.querySelectorAll('[data-mobile-menu-toggle]');
   
   function openMobileMenu() {
-    mobileMenu?.classList.add('is-active');
-    mobileMenuOverlay?.classList.add('is-active');
+    if (mobileMenu) {
+      mobileMenu.classList.add('is-active');
+      mobileMenu.setAttribute('aria-hidden', 'false');
+    }
+    if (mobileMenuOverlay) {
+      mobileMenuOverlay.classList.add('is-active');
+    }
     document.body.style.overflow = 'hidden';
+    
+    // Update toggle button
+    const toggleBtn = document.querySelector('.header__menu-toggle');
+    if (toggleBtn) {
+      toggleBtn.setAttribute('aria-expanded', 'true');
+    }
   }
   
   function closeMobileMenu() {
-    mobileMenu?.classList.remove('is-active');
-    mobileMenuOverlay?.classList.remove('is-active');
+    if (mobileMenu) {
+      mobileMenu.classList.remove('is-active');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+    }
+    if (mobileMenuOverlay) {
+      mobileMenuOverlay.classList.remove('is-active');
+    }
     document.body.style.overflow = '';
+    
+    // Update toggle button
+    const toggleBtn = document.querySelector('.header__menu-toggle');
+    if (toggleBtn) {
+      toggleBtn.setAttribute('aria-expanded', 'false');
+    }
     
     // Close all submenus
     document.querySelectorAll('.mobile-submenu.is-active').forEach(submenu => {
@@ -1259,9 +1321,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
   
+  // Attach click handlers to all toggles
   mobileMenuToggles.forEach(toggle => {
-    toggle.addEventListener('click', function() {
-      if (mobileMenu?.classList.contains('is-active')) {
+    toggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      if (mobileMenu && mobileMenu.classList.contains('is-active')) {
         closeMobileMenu();
       } else {
         openMobileMenu();
