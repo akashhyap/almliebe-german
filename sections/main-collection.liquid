@@ -58,29 +58,28 @@
       
       {%- if subcollections_list != blank and subcollections_list.size > 0 -%}
         {%- assign subcollections_count = subcollections_list.size -%}
-        {%- assign enable_subcollection_carousel = false -%}
+        {%- comment -%} Desktop: carousel only for >5 items. Mobile: always carousel {%- endcomment -%}
+        {%- assign enable_desktop_carousel = false -%}
         {%- if subcollections_count > 5 -%}
-          {%- assign enable_subcollection_carousel = true -%}
+          {%- assign enable_desktop_carousel = true -%}
         {%- endif -%}
         
-        <div class="subcollection-cards{% if enable_subcollection_carousel %} has-carousel{% endif %}" data-subcollection-slider>
-          {%- comment -%} Navigation Arrows (only for carousel) {%- endcomment -%}
-          {%- if enable_subcollection_carousel -%}
-            <div class="subcollection-cards__nav">
-              <button type="button" class="subcollection-cards__nav-btn subcollection-cards__nav-btn--prev" data-subcollection-prev aria-label="Previous" disabled>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="15 18 9 12 15 6"/>
-                </svg>
-              </button>
-              <button type="button" class="subcollection-cards__nav-btn subcollection-cards__nav-btn--next" data-subcollection-next aria-label="Next">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="9 18 15 12 9 6"/>
-                </svg>
-              </button>
-            </div>
-          {%- endif -%}
+        <div class="subcollection-cards{% if enable_desktop_carousel %} has-desktop-carousel{% endif %}" data-subcollection-slider>
+          {%- comment -%} Navigation Arrows - Always rendered, shown based on CSS {%- endcomment -%}
+          <div class="subcollection-cards__nav">
+            <button type="button" class="subcollection-cards__nav-btn subcollection-cards__nav-btn--prev" data-subcollection-prev aria-label="Previous" disabled>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"/>
+              </svg>
+            </button>
+            <button type="button" class="subcollection-cards__nav-btn subcollection-cards__nav-btn--next" data-subcollection-next aria-label="Next">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </button>
+          </div>
           
-          <div class="subcollection-cards__track{% unless enable_subcollection_carousel %} subcollection-cards__track--grid{% endunless %}" data-subcollection-track>
+          <div class="subcollection-cards__track{% unless enable_desktop_carousel %} subcollection-cards__track--desktop-grid{% endunless %}" data-subcollection-track>
             {%- for subcollection in subcollections_list -%}
               <a href="{{ subcollection.url }}" class="subcollection-card">
                 <div class="subcollection-card__image">
@@ -1249,51 +1248,87 @@
     position: relative;
   }
   
-  /* Navigation Arrows */
+  /* Navigation Arrows - Centered vertically on track */
   .subcollection-cards__nav {
-    display: none;
+    display: flex;
+    justify-content: space-between;
     position: absolute;
-    top: 0;
+    left: 0;
     right: 0;
-    gap: 0.5rem;
-    z-index: 2;
+    top: calc(50% - 20px);
+    transform: translateY(-50%);
+    pointer-events: none;
+    z-index: 10;
+    padding: 0 0.5rem;
   }
   
-  @media (min-width: 768px) {
-    .subcollection-cards.has-carousel .subcollection-cards__nav {
+  @media (min-width: 640px) {
+    .subcollection-cards__nav {
+      padding: 0 1rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .subcollection-cards__nav {
+      display: none;
+    }
+    
+    .subcollection-cards.has-desktop-carousel .subcollection-cards__nav {
       display: flex;
+      padding: 0 0.5rem;
     }
   }
   
   .subcollection-cards__nav-btn {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.2s;
+    pointer-events: auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    backdrop-filter: blur(4px);
+  }
+  
+  @media (min-width: 640px) {
+    .subcollection-cards__nav-btn {
+      width: 40px;
+      height: 40px;
+    }
   }
   
   .subcollection-cards__nav-btn:hover:not(:disabled) {
     background: #111827;
     border-color: #111827;
     color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   }
   
   .subcollection-cards__nav-btn:disabled {
-    opacity: 0.3;
+    opacity: 0.4;
     cursor: not-allowed;
+    box-shadow: none;
   }
   
   .subcollection-cards__nav-btn svg {
     stroke: currentColor;
+    width: 16px;
+    height: 16px;
   }
   
-  /* Track - Carousel Mode */
+  @media (min-width: 640px) {
+    .subcollection-cards__nav-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+  
+  /* Track - Mobile: Always carousel (shadcn style) */
   .subcollection-cards__track {
     display: flex;
     gap: 1rem;
@@ -1302,12 +1337,32 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
     scroll-snap-type: x mandatory;
-    padding-top: 50px;
+    padding: 0.5rem calc(50% - 140px);
+    margin: 0 -1.5rem;
+    padding-left: calc(50% - 140px + 1.5rem);
+    padding-right: calc(50% - 140px + 1.5rem);
   }
   
-  @media (min-width: 768px) {
+  @media (min-width: 480px) {
+    .subcollection-cards__track {
+      padding: 0.5rem calc(50% - 180px);
+      padding-left: calc(50% - 180px + 1.5rem);
+      padding-right: calc(50% - 180px + 1.5rem);
+    }
+  }
+  
+  @media (min-width: 640px) {
     .subcollection-cards__track {
       gap: 1.25rem;
+      padding: 0.5rem 2rem;
+      margin: 0 -2rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .subcollection-cards__track {
+      padding: 0.5rem 0;
+      margin: 0;
     }
   }
   
@@ -1315,39 +1370,33 @@
     display: none;
   }
   
-  /* Track - Grid Mode (5 or fewer items) */
-  .subcollection-cards__track--grid {
-    overflow-x: visible;
-    scroll-snap-type: none;
-    padding-top: 0;
+  /* Track - Desktop Grid Mode (5 or fewer items) */
+  .subcollection-cards__track--desktop-grid {
+    /* Mobile: still carousel */
   }
   
-  @media (min-width: 640px) {
-    .subcollection-cards__track--grid {
+  @media (min-width: 1024px) {
+    .subcollection-cards__track--desktop-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.25rem;
-    }
-  }
-  
-  @media (min-width: 900px) {
-    .subcollection-cards__track--grid {
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 1.5rem;
+      overflow-x: visible;
+      scroll-snap-type: none;
+      padding: 0;
+      margin: 0;
     }
   }
   
   @media (min-width: 1200px) {
-    .subcollection-cards__track--grid {
+    .subcollection-cards__track--desktop-grid {
       grid-template-columns: repeat(5, 1fr);
-      gap: 1.5rem;
     }
   }
   
   /* Subcollection Card */
   .subcollection-card {
-    flex: 0 0 calc(50% - 0.5rem);
-    scroll-snap-align: start;
+    flex: 0 0 280px;
+    scroll-snap-align: center;
     min-width: 0;
     display: block;
     text-decoration: none;
@@ -1355,32 +1404,36 @@
     transition: transform 0.2s ease;
   }
   
+  @media (max-width: 479px) {
+    .subcollection-card {
+      flex: 0 0 240px;
+    }
+  }
+  
   @media (min-width: 640px) {
     .subcollection-card {
-      flex: 0 0 calc(33.333% - 0.833rem);
+      flex: 0 0 200px;
+      scroll-snap-align: start;
     }
   }
   
   @media (min-width: 900px) {
     .subcollection-card {
-      flex: 0 0 calc(25% - 0.9375rem);
+      flex: 0 0 180px;
     }
   }
   
   @media (min-width: 1200px) {
     .subcollection-card {
-      flex: 0 0 calc(20% - 1rem);
+      flex: 0 0 160px;
     }
   }
   
-  /* Grid mode - items fill evenly */
-  .subcollection-cards__track--grid .subcollection-card {
-    flex: 1;
-  }
-  
-  @media (min-width: 640px) {
-    .subcollection-cards__track--grid .subcollection-card {
+  /* Desktop grid mode - items fill evenly */
+  @media (min-width: 1024px) {
+    .subcollection-cards__track--desktop-grid .subcollection-card {
       flex: none;
+      width: 100%;
     }
   }
 
@@ -1394,6 +1447,7 @@
     overflow: hidden;
     background: #f3f4f6;
     margin-bottom: 0.75rem;
+    border-radius: 12px;
   }
   
   .subcollection-card__image img {
@@ -1401,6 +1455,7 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.4s ease;
+    border-radius: 12px;
   }
   
   .subcollection-card:hover .subcollection-card__image img {
@@ -1414,6 +1469,7 @@
     align-items: center;
     justify-content: center;
     background: #f3f4f6;
+    border-radius: 12px;
   }
   
   .subcollection-card__placeholder svg {
@@ -1646,7 +1702,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // ========== SUBCOLLECTION CAROUSEL ==========
   const subcollectionSlider = document.querySelector('[data-subcollection-slider]');
-  if (subcollectionSlider && subcollectionSlider.classList.contains('has-carousel')) {
+  if (subcollectionSlider) {
     const track = subcollectionSlider.querySelector('[data-subcollection-track]');
     const prevBtn = subcollectionSlider.querySelector('[data-subcollection-prev]');
     const nextBtn = subcollectionSlider.querySelector('[data-subcollection-next]');
@@ -1669,11 +1725,11 @@ document.addEventListener('DOMContentLoaded', function() {
       };
       
       prevBtn.addEventListener('click', () => {
-        track.scrollBy({ left: -getSlideWidth() * 2, behavior: 'smooth' });
+        track.scrollBy({ left: -getSlideWidth(), behavior: 'smooth' });
       });
       
       nextBtn.addEventListener('click', () => {
-        track.scrollBy({ left: getSlideWidth() * 2, behavior: 'smooth' });
+        track.scrollBy({ left: getSlideWidth(), behavior: 'smooth' });
       });
       
       track.addEventListener('scroll', updateButtons);
