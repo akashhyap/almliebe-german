@@ -37,34 +37,6 @@
           {%- if section.settings.description != blank -%}
             <p class="footer__description">{{ section.settings.description }}</p>
           {%- endif -%}
-          
-          {%- comment -%} Newsletter in brand column {%- endcomment -%}
-          {%- if section.settings.show_newsletter -%}
-            <div class="footer__newsletter">
-              {%- if section.settings.newsletter_title != blank -%}
-                <h4 class="footer__newsletter-title">{{ section.settings.newsletter_title }}</h4>
-              {%- endif -%}
-              {%- form 'customer', class: 'footer__newsletter-form', id: 'footer-newsletter' -%}
-                <input type="hidden" name="contact[tags]" value="newsletter">
-                <div class="footer__newsletter-field">
-                  <input 
-                    type="email" 
-                    name="contact[email]" 
-                    placeholder="{{ section.settings.newsletter_placeholder | default: 'E-Mail Adresse' }}"
-                    required
-                    autocomplete="email"
-                    class="footer__newsletter-input"
-                  >
-                  <button type="submit" class="footer__newsletter-btn">
-                    {{ section.settings.newsletter_button | default: 'Anmelden' }}
-                  </button>
-                </div>
-                {%- if form.posted_successfully? -%}
-                  <p class="footer__newsletter-success">{{ section.settings.newsletter_success | default: 'Vielen Dank!' }}</p>
-                {%- endif -%}
-              {%- endform -%}
-            </div>
-          {%- endif -%}
         </div>
       {%- endif -%}
       
@@ -312,68 +284,6 @@
     color: {{ section.settings.text_color | default: '#374151' }};
     margin: 0 0 1.5rem;
     max-width: 280px;
-  }
-  
-  /* ========== NEWSLETTER ========== */
-  .footer__newsletter {
-    margin-top: 1rem;
-  }
-  
-  .footer__newsletter-title {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    color: {{ section.settings.heading_color | default: '#111827' }};
-    margin: 0 0 0.75rem;
-  }
-  
-  .footer__newsletter-form {
-    margin: 0;
-  }
-  
-  .footer__newsletter-field {
-    display: flex;
-    max-width: 320px;
-  }
-  
-  .footer__newsletter-input {
-    flex: 1;
-    padding: 0.625rem 0.875rem;
-    font-size: 0.875rem;
-    border: 1px solid {{ section.settings.border_color | default: '#e5e7eb' }};
-    border-right: none;
-    border-radius: 4px 0 0 4px;
-    background: #ffffff;
-    color: #111827;
-    outline: none;
-  }
-  
-  .footer__newsletter-input:focus {
-    border-color: {{ section.settings.heading_color | default: '#111827' }};
-  }
-  
-  .footer__newsletter-btn {
-    padding: 0.625rem 1rem;
-    font-size: 0.8125rem;
-    font-weight: 500;
-    background: {{ section.settings.heading_color | default: '#111827' }};
-    color: #ffffff;
-    border: none;
-    border-radius: 0 4px 4px 0;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: opacity 0.2s;
-  }
-  
-  .footer__newsletter-btn:hover {
-    opacity: 0.85;
-  }
-  
-  .footer__newsletter-success {
-    font-size: 0.8125rem;
-    color: #059669;
-    margin: 0.5rem 0 0;
   }
   
   /* ========== COLUMNS ========== */
@@ -682,40 +592,6 @@ document.addEventListener('DOMContentLoaded', function() {
     },
     {
       "type": "header",
-      "content": "Newsletter"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_newsletter",
-      "label": "Show newsletter signup",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "newsletter_title",
-      "label": "Newsletter title",
-      "default": "Newsletter"
-    },
-    {
-      "type": "text",
-      "id": "newsletter_placeholder",
-      "label": "Email placeholder",
-      "default": "E-Mail Adresse"
-    },
-    {
-      "type": "text",
-      "id": "newsletter_button",
-      "label": "Button text",
-      "default": "Anmelden"
-    },
-    {
-      "type": "text",
-      "id": "newsletter_success",
-      "label": "Success message",
-      "default": "Vielen Dank für Ihre Anmeldung!"
-    },
-    {
-      "type": "header",
       "content": "Social Media"
     },
     {
@@ -894,7 +770,6 @@ document.addEventListener('DOMContentLoaded', function() {
   "default": {
     "settings": {
       "show_brand_column": true,
-      "show_newsletter": true,
       "show_social": true,
       "show_payment_icons": true,
       "show_scroll_top": true
