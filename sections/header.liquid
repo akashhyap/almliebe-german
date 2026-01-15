@@ -570,6 +570,40 @@
 <script>
 console.log('=== HEADER SCRIPT START ===');
 
+// Check initial state immediately
+var initialCheck = document.querySelectorAll('[data-mobile-menu]');
+console.log('INITIAL CHECK - mobile-menu elements found:', initialCheck.length);
+initialCheck.forEach(function(el, i) {
+  console.log('Element ' + i + ' classList BEFORE:', el.classList.toString());
+  
+  // FORCE REMOVE is-active on page load
+  if (el.classList.contains('is-active')) {
+    console.log('!!! REMOVING is-active that was already on element !!!');
+    el.classList.remove('is-active');
+  }
+  
+  console.log('Element ' + i + ' classList AFTER:', el.classList.toString());
+  
+  // Watch for class changes
+  var observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.attributeName === 'class') {
+        console.log('CLASS CHANGED on mobile-menu:', el.classList.toString());
+        console.trace('Stack trace:');
+      }
+    });
+  });
+  observer.observe(el, { attributes: true });
+});
+
+// Also remove from overlay
+var overlayCheck = document.querySelectorAll('[data-mobile-menu-overlay]');
+overlayCheck.forEach(function(el) {
+  if (el.classList.contains('is-active')) {
+    el.classList.remove('is-active');
+  }
+});
+
 // Global click listener in capture phase - THIS WAS KEY TO MAKING IT WORK
 document.addEventListener('click', function(e) {
   console.log('GLOBAL CLICK:', e.target.tagName, e.target.className);
