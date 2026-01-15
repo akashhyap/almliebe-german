@@ -1,10 +1,24 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "main": {
       "type": "anlaesse-header",
       "settings": {
         "subtitle": "TRACHTEN TRENDS UND STYLING TIPPS",
-        "title": "Tracht für alle Anlässe"
+        "title": "Tracht für alle Anlässe",
+        "background_color": "#ffffff",
+        "title_color": "#111827",
+        "subtitle_color": "#6b7280",
+        "padding_top": 50,
+        "padding_bottom": 30
       }
     },
     "gallery": {
@@ -13,64 +27,80 @@
         "occasion_1": {
           "type": "occasion",
           "settings": {
+            "image": "shopify://shop_images/waldfest.jpg",
             "title": "OKTOBERFEST",
             "description": "Finde Dein perfektes Wiesn-Outfit!",
+            "link": "shopify://pages/oktoberfest",
             "size": "medium"
           }
         },
         "occasion_2": {
           "type": "occasion",
           "settings": {
+            "image": "shopify://shop_images/2024_Fall_01_Almlieb_0408.jpg",
             "title": "VOLKSFEST",
             "description": "Unsere Tipps für festliche Tracht!",
+            "link": "shopify://pages/volksfeste",
             "size": "medium"
           }
         },
         "occasion_3": {
           "type": "occasion",
           "settings": {
+            "image": "shopify://shop_images/Almliebe_Motiv05_167_2x_94a81755-163b-4bf1-aa42-4640016e8a55.jpg",
             "title": "HOCHZEIT IN TRACHT",
             "description": "Tracht für das Brautpaar und die Gäste!",
-            "size": "medium"
+            "link": "",
+            "size": "large"
           }
         },
         "occasion_4": {
           "type": "occasion",
           "settings": {
+            "image": "shopify://shop_images/2024-02-2111.55.24_2x_6c33e4c6-ce49-4682-9b0b-403cdf558ee1.jpg",
             "title": "KOMMUNION",
             "description": "Die passende Tracht für Groß und Klein!",
+            "link": "shopify://pages/kommunion",
             "size": "wide"
           }
         },
         "occasion_5": {
           "type": "occasion",
           "settings": {
+            "image": "shopify://shop_images/170709_Tracht_Motiv_7_213_2x_e885a1fe-5cd8-4db8-a3dd-c30b88e4f965.jpg",
             "title": "FESTIVALS",
             "description": "Coole Trachtenstyles für Festivals und Konzerte!",
+            "link": "shopify://pages/trachten-festivals",
             "size": "large"
           }
         },
         "occasion_6": {
           "type": "occasion",
           "settings": {
+            "image": "shopify://shop_images/ALMLIEBE23HW3238K_2x_1dda976e-ae66-46fa-b4f7-afc63edccb26.jpg",
             "title": "BERGSTYLE",
             "description": "Tradition für den Berg. Styles für die nächsten Wanderferien!",
+            "link": "",
             "size": "medium"
           }
         },
         "occasion_7": {
           "type": "occasion",
           "settings": {
+            "image": "shopify://shop_images/ALMLIEBE23HW1409K_2x-volk.jpg",
             "title": "WEIHNACHTEN",
             "description": "Festliche Dirndl für die staade Zeit!",
+            "link": "",
             "size": "medium"
           }
         },
         "occasion_8": {
           "type": "occasion",
           "settings": {
+            "image": "shopify://shop_images/Almliebe_Motiv07_108_2x_623999b9-fe4c-4e72-b27f-4b1c6f2f200f.jpg",
             "title": "ALLTAG",
             "description": "Vom Biergarten bis zur Geburtstagsparty. Trag Tracht!",
+            "link": "",
             "size": "medium"
           }
         }
@@ -85,12 +115,23 @@
         "occasion_7",
         "occasion_8"
       ],
-      "settings": {}
+      "settings": {
+        "row_height": 300,
+        "gap": 12
+      }
     },
     "bottom_text": {
       "type": "anlaesse-text",
       "settings": {
-        "text": "<p>Während man vor ein paar Jahren Tracht nur zu Volksfesten oder auf der Wiesn getragen hat, sind Trachten-Outfits heute nicht nur in Bayern bei allen Festen und Anlässen gern gesehen. Ob bei Taufe, Kommunion, Firmung, Hochzeit oder einfach Familienfest – Dirndl und Lederhosen sind überall salonfähig.</p>"
+        "text": "<p>Während man vor ein paar Jahren Tracht nur zu Volksfesten oder auf der Wiesn getragen hat, sind Trachten-Outfits heute nicht nur in Bayern bei allen Festen und Anlässen gern gesehen. Ob bei Taufe, Kommunion, Firmung, Hochzeit oder einfach Familienfest – Dirndl und Lederhosen sind überall salonfähig.</p>",
+        "text_align": "center",
+        "max_width": 1000,
+        "font_size": 15,
+        "background_color": "#ffffff",
+        "text_color": "#374151",
+        "link_color": "#111827",
+        "padding_top": 50,
+        "padding_bottom": 60
       }
     }
   },
