@@ -1,0 +1,126 @@
+{% comment %}
+  ANLÄSSE HEADER SECTION
+{% endcomment %}
+
+<header class="anlaesse-header">
+  <div class="anlaesse-header__container">
+    {%- if section.settings.subtitle != blank -%}
+      <p class="anlaesse-header__subtitle">{{ section.settings.subtitle }}</p>
+    {%- endif -%}
+    {%- if section.settings.title != blank -%}
+      <h1 class="anlaesse-header__title">{{ section.settings.title }}</h1>
+    {%- endif -%}
+  </div>
+</header>
+
+<style>
+  .anlaesse-header {
+    padding: {{ section.settings.padding_top }}px 1rem {{ section.settings.padding_bottom }}px;
+    background: {{ section.settings.background_color }};
+  }
+  
+  .anlaesse-header__container {
+    max-width: 1400px;
+    margin: 0 auto;
+    text-align: center;
+  }
+  
+  .anlaesse-header__subtitle {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: {{ section.settings.subtitle_color }};
+    margin: 0 0 0.75rem;
+  }
+  
+  .anlaesse-header__title {
+    font-size: 2rem;
+    font-weight: 400;
+    color: {{ section.settings.title_color }};
+    margin: 0;
+    font-family: var(--font-heading, Georgia, serif);
+  }
+  
+  @media (min-width: 768px) {
+    .anlaesse-header {
+      padding: {{ section.settings.padding_top | times: 1.3 }}px 2rem {{ section.settings.padding_bottom | times: 1.3 }}px;
+    }
+    
+    .anlaesse-header__title {
+      font-size: 2.75rem;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Anlässe Header",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "TRACHTEN TRENDS UND STYLING TIPPS"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Tracht für alle Anlässe"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#111827"
+    },
+    {
+      "type": "color",
+      "id": "subtitle_color",
+      "label": "Subtitle color",
+      "default": "#6b7280"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 30
+    }
+  ],
+  "presets": [
+    {
+      "name": "Anlässe Header"
+    }
+  ]
+}
+{% endschema %}

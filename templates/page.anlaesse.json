@@ -1,0 +1,102 @@
+{
+  "sections": {
+    "main": {
+      "type": "anlaesse-header",
+      "settings": {
+        "subtitle": "TRACHTEN TRENDS UND STYLING TIPPS",
+        "title": "Tracht für alle Anlässe"
+      }
+    },
+    "gallery": {
+      "type": "anlaesse-gallery",
+      "blocks": {
+        "occasion_1": {
+          "type": "occasion",
+          "settings": {
+            "title": "OKTOBERFEST",
+            "description": "Finde Dein perfektes Wiesn-Outfit!",
+            "size": "medium"
+          }
+        },
+        "occasion_2": {
+          "type": "occasion",
+          "settings": {
+            "title": "VOLKSFEST",
+            "description": "Unsere Tipps für festliche Tracht!",
+            "size": "medium"
+          }
+        },
+        "occasion_3": {
+          "type": "occasion",
+          "settings": {
+            "title": "HOCHZEIT IN TRACHT",
+            "description": "Tracht für das Brautpaar und die Gäste!",
+            "size": "medium"
+          }
+        },
+        "occasion_4": {
+          "type": "occasion",
+          "settings": {
+            "title": "KOMMUNION",
+            "description": "Die passende Tracht für Groß und Klein!",
+            "size": "wide"
+          }
+        },
+        "occasion_5": {
+          "type": "occasion",
+          "settings": {
+            "title": "FESTIVALS",
+            "description": "Coole Trachtenstyles für Festivals und Konzerte!",
+            "size": "large"
+          }
+        },
+        "occasion_6": {
+          "type": "occasion",
+          "settings": {
+            "title": "BERGSTYLE",
+            "description": "Tradition für den Berg. Styles für die nächsten Wanderferien!",
+            "size": "medium"
+          }
+        },
+        "occasion_7": {
+          "type": "occasion",
+          "settings": {
+            "title": "WEIHNACHTEN",
+            "description": "Festliche Dirndl für die staade Zeit!",
+            "size": "medium"
+          }
+        },
+        "occasion_8": {
+          "type": "occasion",
+          "settings": {
+            "title": "ALLTAG",
+            "description": "Vom Biergarten bis zur Geburtstagsparty. Trag Tracht!",
+            "size": "medium"
+          }
+        }
+      },
+      "block_order": [
+        "occasion_1",
+        "occasion_2",
+        "occasion_3",
+        "occasion_4",
+        "occasion_5",
+        "occasion_6",
+        "occasion_7",
+        "occasion_8"
+      ],
+      "settings": {}
+    },
+    "bottom_text": {
+      "type": "anlaesse-text",
+      "settings": {
+        "text": "<p>Während man vor ein paar Jahren Tracht nur zu Volksfesten oder auf der Wiesn getragen hat, sind Trachten-Outfits heute nicht nur in Bayern bei allen Festen und Anlässen gern gesehen. Ob bei Taufe, Kommunion, Firmung, Hochzeit oder einfach Familienfest – Dirndl und Lederhosen sind überall salonfähig.</p>"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "gallery",
+    "bottom_text"
+  ]
+}

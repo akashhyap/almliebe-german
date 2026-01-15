@@ -1,0 +1,154 @@
+{% comment %}
+  ANLÄSSE TEXT SECTION
+  Bottom text content
+{% endcomment %}
+
+{%- if section.settings.text != blank -%}
+<section class="anlaesse-text">
+  <div class="anlaesse-text__container">
+    <div class="anlaesse-text__content">
+      {{ section.settings.text }}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+<style>
+  .anlaesse-text {
+    padding: {{ section.settings.padding_top }}px 1rem {{ section.settings.padding_bottom }}px;
+    background: {{ section.settings.background_color }};
+  }
+  
+  .anlaesse-text__container {
+    max-width: {{ section.settings.max_width }}px;
+    margin: 0 auto;
+  }
+  
+  .anlaesse-text__content {
+    font-size: {{ section.settings.font_size }}px;
+    line-height: 1.8;
+    color: {{ section.settings.text_color }};
+    text-align: {{ section.settings.text_align }};
+  }
+  
+  .anlaesse-text__content p {
+    margin: 0 0 1rem;
+  }
+  
+  .anlaesse-text__content p:last-child {
+    margin-bottom: 0;
+  }
+  
+  .anlaesse-text__content a {
+    color: {{ section.settings.link_color }};
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  
+  .anlaesse-text__content a:hover {
+    text-decoration: none;
+  }
+  
+  @media (min-width: 768px) {
+    .anlaesse-text {
+      padding: {{ section.settings.padding_top | times: 1.3 }}px 2rem {{ section.settings.padding_bottom | times: 1.3 }}px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Anlässe Text",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text content",
+      "default": "<p>Während man vor ein paar Jahren Tracht nur zu Volksfesten oder auf der Wiesn getragen hat, sind Trachten-Outfits heute nicht nur in Bayern bei allen Festen und Anlässen gern gesehen.</p>"
+    },
+    {
+      "type": "select",
+      "id": "text_align",
+      "label": "Text alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 600,
+      "max": 1200,
+      "step": 50,
+      "unit": "px",
+      "label": "Max width",
+      "default": 1000
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "min": 14,
+      "max": 20,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 15
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#374151"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link color",
+      "default": "#111827"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 50
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 60
+    }
+  ],
+  "presets": [
+    {
+      "name": "Anlässe Text"
+    }
+  ]
+}
+{% endschema %}
