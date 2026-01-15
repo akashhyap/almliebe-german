@@ -123,11 +123,18 @@
       "footer": {
         "type": "footer",
         "blocks": {
+          "menu_GxmhzF": {
+            "type": "menu",
+            "settings": {
+              "title": "Marken",
+              "menu": "marken"
+            }
+          },
           "menu_YDmeFf": {
             "type": "menu",
             "settings": {
-              "title": "",
-              "menu": ""
+              "title": "Informationen",
+              "menu": "informationen"
             }
           },
           "text_DGWntd": {
@@ -140,10 +147,31 @@
           }
         },
         "block_order": [
+          "menu_GxmhzF",
           "menu_YDmeFf",
           "text_DGWntd"
         ],
-        "settings": {}
+        "settings": {
+          "show_brand_column": true,
+          "logo_width": 150,
+          "description": "",
+          "show_social": true,
+          "social_facebook": "",
+          "social_instagram": "",
+          "social_pinterest": "",
+          "social_youtube": "",
+          "social_tiktok": "",
+          "social_x": "",
+          "show_payment_icons": true,
+          "company_name": "",
+          "copyright_text": "",
+          "legal_menu": "",
+          "show_scroll_top": true,
+          "background_color": "#f9fafb",
+          "heading_color": "#111827",
+          "text_color": "#374151",
+          "border_color": "#e5e7eb"
+        }
       },
       "announcement-bar": {
         "type": "announcement-bar",
