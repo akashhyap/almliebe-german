@@ -1,0 +1,447 @@
+{% comment %}
+  ANLÄSSE PAGE TEMPLATE
+  Masonry gallery for occasions/events
+  
+  Features:
+  - Header with title
+  - Masonry grid layout
+  - Hover description reveal
+  - Multiple layout sizes
+  - Bottom text content
+{% endcomment %}
+
+<div class="anlaesse-page">
+  
+  {%- comment -%} ========== HEADER ========== {%- endcomment -%}
+  {%- if section.settings.show_header -%}
+    <header class="anlaesse__header">
+      {%- if section.settings.subtitle != blank -%}
+        <p class="anlaesse__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+      {%- if section.settings.title != blank -%}
+        <h1 class="anlaesse__title">{{ section.settings.title }}</h1>
+      {%- endif -%}
+    </header>
+  {%- endif -%}
+  
+  {%- comment -%} ========== MASONRY GRID ========== {%- endcomment -%}
+  <div class="anlaesse__grid">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'occasion' -%}
+        <a 
+          href="{{ block.settings.link | default: '#' }}" 
+          class="anlaesse__card anlaesse__card--{{ block.settings.size | default: 'medium' }}"
+          {{ block.shopify_attributes }}
+        >
+          <div class="anlaesse__card-image">
+            {%- if block.settings.image != blank -%}
+              <img
+                src="{{ block.settings.image | image_url: width: 1200 }}"
+                srcset="{{ block.settings.image | image_url: width: 600 }} 600w,
+                        {{ block.settings.image | image_url: width: 900 }} 900w,
+                        {{ block.settings.image | image_url: width: 1200 }} 1200w"
+                alt="{{ block.settings.title | escape }}"
+                loading="lazy"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
+              >
+            {%- else -%}
+              <div class="anlaesse__card-placeholder"></div>
+            {%- endif -%}
+          </div>
+          
+          <div class="anlaesse__card-content">
+            {%- if block.settings.title != blank -%}
+              <span class="anlaesse__card-label">{{ block.settings.title }}</span>
+            {%- endif -%}
+            
+            {%- if block.settings.description != blank -%}
+              <p class="anlaesse__card-description">{{ block.settings.description }}</p>
+            {%- endif -%}
+          </div>
+        </a>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+  
+  {%- comment -%} ========== BOTTOM TEXT ========== {%- endcomment -%}
+  {%- if section.settings.bottom_text != blank -%}
+    <div class="anlaesse__bottom-text">
+      {{ section.settings.bottom_text }}
+    </div>
+  {%- endif -%}
+  
+</div>
+
+<style>
+  .anlaesse-page {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 1rem 4rem;
+  }
+  
+  @media (min-width: 768px) {
+    .anlaesse-page {
+      padding: 0 2rem 5rem;
+    }
+  }
+  
+  /* ========== HEADER ========== */
+  .anlaesse__header {
+    text-align: center;
+    padding: 3rem 1rem;
+  }
+  
+  @media (min-width: 768px) {
+    .anlaesse__header {
+      padding: 4rem 2rem;
+    }
+  }
+  
+  .anlaesse__subtitle {
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #6b7280;
+    margin: 0 0 0.75rem;
+  }
+  
+  .anlaesse__title {
+    font-size: 2rem;
+    font-weight: 400;
+    color: #111827;
+    margin: 0;
+    font-family: var(--font-heading, Georgia, serif);
+  }
+  
+  @media (min-width: 768px) {
+    .anlaesse__title {
+      font-size: 2.75rem;
+    }
+  }
+  
+  /* ========== MASONRY GRID ========== */
+  .anlaesse__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  @media (min-width: 640px) {
+    .anlaesse__grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .anlaesse__grid {
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: 280px;
+      gap: 1.25rem;
+    }
+  }
+  
+  @media (min-width: 1400px) {
+    .anlaesse__grid {
+      grid-auto-rows: 320px;
+    }
+  }
+  
+  /* ========== CARD ========== */
+  .anlaesse__card {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    text-decoration: none;
+    background: #f3f4f6;
+  }
+  
+  /* Card Sizes */
+  @media (min-width: 1024px) {
+    .anlaesse__card--small {
+      grid-row: span 1;
+      grid-column: span 1;
+    }
+    
+    .anlaesse__card--medium {
+      grid-row: span 1;
+      grid-column: span 1;
+    }
+    
+    .anlaesse__card--large {
+      grid-row: span 2;
+      grid-column: span 1;
+    }
+    
+    .anlaesse__card--wide {
+      grid-row: span 1;
+      grid-column: span 2;
+    }
+    
+    .anlaesse__card--featured {
+      grid-row: span 2;
+      grid-column: span 2;
+    }
+  }
+  
+  .anlaesse__card-image {
+    position: absolute;
+    inset: 0;
+  }
+  
+  .anlaesse__card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  
+  .anlaesse__card:hover .anlaesse__card-image img {
+    transform: scale(1.05);
+  }
+  
+  .anlaesse__card-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  }
+  
+  /* Mobile: Fixed aspect ratio */
+  @media (max-width: 1023px) {
+    .anlaesse__card {
+      aspect-ratio: 4/5;
+    }
+    
+    .anlaesse__card--wide,
+    .anlaesse__card--featured {
+      aspect-ratio: 16/9;
+    }
+  }
+  
+  /* ========== CARD CONTENT ========== */
+  .anlaesse__card-content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 1.5rem;
+    text-align: center;
+    background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 50%);
+  }
+  
+  .anlaesse__card-label {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: #111827;
+    background: #ffffff;
+    margin-bottom: 0.5rem;
+  }
+  
+  .anlaesse__card-description {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #ffffff;
+    margin: 0;
+    padding: 0.5rem 1rem;
+    background: rgba(255,255,255,0.95);
+    color: #111827;
+    max-width: 90%;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+  }
+  
+  .anlaesse__card:hover .anlaesse__card-description {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Always show description on touch devices */
+  @media (hover: none) {
+    .anlaesse__card-description {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* ========== BOTTOM TEXT ========== */
+  .anlaesse__bottom-text {
+    max-width: 1000px;
+    margin: 4rem auto 0;
+    padding: 0 1rem;
+    font-size: 0.9375rem;
+    line-height: 1.8;
+    color: #374151;
+    text-align: center;
+  }
+  
+  .anlaesse__bottom-text p {
+    margin: 0 0 1rem;
+  }
+  
+  .anlaesse__bottom-text p:last-child {
+    margin-bottom: 0;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Anlässe Page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_header",
+      "label": "Show header",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "TRACHTEN TRENDS UND STYLING TIPPS"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Tracht für alle Anlässe"
+    },
+    {
+      "type": "header",
+      "content": "Bottom Content"
+    },
+    {
+      "type": "richtext",
+      "id": "bottom_text",
+      "label": "Bottom text",
+      "default": "<p>Während man vor ein paar Jahren Tracht nur zu Volksfesten oder auf der Wiesn getragen hat, sind Trachten-Outfits heute nicht nur in Bayern bei allen Festen und Anlässen gern gesehen.</p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "occasion",
+      "name": "Occasion Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "OKTOBERFEST"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description (hover)",
+          "default": "Finde Dein perfektes Wiesn-Outfit!"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "select",
+          "id": "size",
+          "label": "Card size",
+          "options": [
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large (tall)" },
+            { "value": "wide", "label": "Wide" },
+            { "value": "featured", "label": "Featured (large)" }
+          ],
+          "default": "medium"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Anlässe Page",
+      "blocks": [
+        {
+          "type": "occasion",
+          "settings": {
+            "title": "OKTOBERFEST",
+            "description": "Finde Dein perfektes Wiesn-Outfit!",
+            "size": "medium"
+          }
+        },
+        {
+          "type": "occasion",
+          "settings": {
+            "title": "VOLKSFEST",
+            "description": "Unsere Tipps für festliche Tracht!",
+            "size": "medium"
+          }
+        },
+        {
+          "type": "occasion",
+          "settings": {
+            "title": "HOCHZEIT IN TRACHT",
+            "description": "Tracht für das Brautpaar und die Gäste!",
+            "size": "medium"
+          }
+        },
+        {
+          "type": "occasion",
+          "settings": {
+            "title": "KOMMUNION",
+            "description": "Die passende Tracht für Groß und Klein!",
+            "size": "wide"
+          }
+        },
+        {
+          "type": "occasion",
+          "settings": {
+            "title": "FESTIVALS",
+            "description": "Coole Trachtenstyles für Festivals und Konzerte!",
+            "size": "large"
+          }
+        },
+        {
+          "type": "occasion",
+          "settings": {
+            "title": "BERGSTYLE",
+            "description": "Tradition für den Berg. Styles für die nächsten Wanderferien!",
+            "size": "medium"
+          }
+        },
+        {
+          "type": "occasion",
+          "settings": {
+            "title": "WEIHNACHTEN",
+            "description": "Festliche Dirndl für die staade Zeit!",
+            "size": "medium"
+          }
+        },
+        {
+          "type": "occasion",
+          "settings": {
+            "title": "ALLTAG",
+            "description": "Vom Biergarten bis zur Geburtstagsparty. Trag Tracht!",
+            "size": "medium"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
