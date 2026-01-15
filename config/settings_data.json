@@ -70,9 +70,9 @@
           "featured_collection_df7fWJ": {
             "type": "featured_collection",
             "settings": {
-              "menu_item": "herren",
+              "menu_item": "anlasse",
               "image": "shopify://shop_images/gottseidank-herrenjanker-helmut-a003971-950-2.jpg",
-              "image_position": "center center",
+              "image_position": "center top",
               "title": "Herren",
               "link": "shopify://collections/herren"
             }
@@ -80,9 +80,9 @@
           "featured_collection_dxTnGX": {
             "type": "featured_collection",
             "settings": {
-              "menu_item": "damen",
+              "menu_item": "anlasse",
               "image": "shopify://shop_images/steiner-damenblazer-greifenberg-3.jpg",
-              "image_position": "center center",
+              "image_position": "center top",
               "title": "Damen",
               "link": "shopify://collections/damen"
             }
