@@ -901,7 +901,7 @@
     height: 100vh;
     height: 100dvh;
     background: #FFFFFF;
-    z-index: 1010;
+    z-index: 1100;
     transform: translateX(-100%);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
@@ -1072,7 +1072,7 @@
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 1005;
+    z-index: 1050;
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1081,12 +1081,6 @@
   .mobile-menu__overlay.is-active {
     opacity: 1;
     visibility: visible;
-  }
-  
-  /* Hide header badges when mobile menu is open */
-  body:has(.mobile-menu.is-active) .header__count-badge,
-  body.mobile-menu-open .header__count-badge {
-    display: none !important;
   }
 
   /* Responsive adjustments */
@@ -1143,6 +1137,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  console.log('Header script loaded');
   const header = document.querySelector('[data-header]');
   const notificationBar = document.querySelector('.notification-bar, [data-notification-bar], .announcement-bar');
   
@@ -1298,7 +1293,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (mobileMenuOverlay) {
       mobileMenuOverlay.classList.add('is-active');
     }
-    document.body.classList.add('mobile-menu-open');
     document.body.style.overflow = 'hidden';
   }
   
@@ -1309,7 +1303,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (mobileMenuOverlay) {
       mobileMenuOverlay.classList.remove('is-active');
     }
-    document.body.classList.remove('mobile-menu-open');
     document.body.style.overflow = '';
     
     // Close all submenus
