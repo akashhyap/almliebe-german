@@ -164,7 +164,7 @@
           "show_payment_icons": true,
           "company_name": "",
           "copyright_text": "",
-          "legal_menu": "",
+          "legal_menu": "legal",
           "show_scroll_top": true,
           "background_color": "#f9fafb",
           "heading_color": "#111827",
