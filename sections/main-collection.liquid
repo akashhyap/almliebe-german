@@ -77,7 +77,19 @@
     endif
   endif
   
-  # Determine what title and description to display
+  # DEBUG - remove after testing
+  assign debug_cards_count = 0
+  if collection.metafields.custom.subcollection_cards.value != blank
+    assign debug_cards_count = collection.metafields.custom.subcollection_cards.value.size
+  endif
+-%}
+
+<!-- DEBUG: filter_path="{{ filter_path }}" | subcollection_active={{ subcollection_active }} | cards_count={{ debug_cards_count }} -->
+{% for debug_card in collection.metafields.custom.subcollection_cards.value %}
+<!-- DEBUG CARD: title="{{ debug_card.title }}" | filter="{{ debug_card.filter }}" | match={{ debug_card.filter | strip }} == {{ filter_path | strip }} -->
+{% endfor %}
+
+{%- liquid
   if subcollection_active and subcollection_title != blank
     assign display_title = subcollection_title
   else
