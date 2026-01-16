@@ -99,12 +99,18 @@
             <div class="subcollection-cards__track{% unless enable_desktop_carousel %} subcollection-cards__track--desktop-grid{% endunless %}" data-subcollection-track>
               
               {%- if use_metaobject -%}
-                {%- comment -%} ===== METAOBJECT VERSION (with custom title/URL/image support) ===== {%- endcomment -%}
+                {%- comment -%} ===== METAOBJECT VERSION (with custom title/filter/image support) ===== {%- endcomment -%}
                 {%- for card in subcollection_cards -%}
                   {%- assign linked_collection = card.collection.value -%}
-                  {%- assign card_title = card.custom_title | default: linked_collection.title -%}
-                  {%- assign card_url = card.custom_url | default: linked_collection.url -%}
-                  {%- assign card_image = card.custom_image | default: linked_collection.image -%}
+                  {%- assign card_title = card.title | default: linked_collection.title -%}
+                  {%- assign card_image = card.image | default: linked_collection.image -%}
+                  
+                  {%- comment -%} Build URL: append filter params if provided {%- endcomment -%}
+                  {%- if card.filter != blank -%}
+                    {%- assign card_url = linked_collection.url | append: '?' | append: card.filter -%}
+                  {%- else -%}
+                    {%- assign card_url = linked_collection.url -%}
+                  {%- endif -%}
                   
                   <a href="{{ card_url }}" class="subcollection-card">
                     <div class="subcollection-card__image">
