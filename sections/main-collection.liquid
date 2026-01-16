@@ -54,13 +54,29 @@
       {%- endif -%}
       
       {%- comment -%} Sub-collection Cards (from Collection Metafields) {%- endcomment -%}
+      {%- comment -%} 
+        Priority: 
+        1. New metaobject list (subcollection_cards) - allows custom titles/URLs
+        2. Fallback to collection reference list (subcollections)
+      {%- endcomment -%}
+      {%- assign subcollection_cards = collection.metafields.custom.subcollection_cards.value -%}
       {%- assign subcollections_list = collection.metafields.custom.subcollections.value -%}
       
-      {%- if subcollections_list != blank and subcollections_list.size > 0 -%}
-        {%- assign subcollections_count = subcollections_list.size -%}
+      {%- comment -%} Determine which data source to use {%- endcomment -%}
+      {%- assign use_metaobject = false -%}
+      {%- assign cards_count = 0 -%}
+      
+      {%- if subcollection_cards != blank and subcollection_cards.size > 0 -%}
+        {%- assign use_metaobject = true -%}
+        {%- assign cards_count = subcollection_cards.size -%}
+      {%- elsif subcollections_list != blank and subcollections_list.size > 0 -%}
+        {%- assign cards_count = subcollections_list.size -%}
+      {%- endif -%}
+      
+      {%- if cards_count > 0 -%}
         {%- comment -%} Desktop: carousel only for >5 items. Mobile: always carousel {%- endcomment -%}
         {%- assign enable_desktop_carousel = false -%}
-        {%- if subcollections_count > 5 -%}
+        {%- if cards_count > 5 -%}
           {%- assign enable_desktop_carousel = true -%}
         {%- endif -%}
         
@@ -81,34 +97,75 @@
             </div>
             
             <div class="subcollection-cards__track{% unless enable_desktop_carousel %} subcollection-cards__track--desktop-grid{% endunless %}" data-subcollection-track>
-              {%- for subcollection in subcollections_list -%}
-                <a href="{{ subcollection.url }}" class="subcollection-card">
-                  <div class="subcollection-card__image">
-                    {%- if subcollection.image != blank -%}
-                      <img 
-                        src="{{ subcollection.image | image_url: width: 600 }}"
-                        alt="{{ subcollection.title | escape }}"
-                        width="300"
-                        height="400"
-                        loading="lazy"
-                      >
-                    {%- elsif subcollection.products.first.featured_image != blank -%}
-                      <img 
-                        src="{{ subcollection.products.first.featured_image | image_url: width: 600 }}"
-                        alt="{{ subcollection.title | escape }}"
-                        width="300"
-                        height="400"
-                        loading="lazy"
-                      >
-                    {%- else -%}
-                      <div class="subcollection-card__placeholder">
-                        {{ 'collection-1' | placeholder_svg_tag }}
-                      </div>
-                    {%- endif -%}
-                  </div>
-                  <h3 class="subcollection-card__title">{{ subcollection.metafields.custom.custom_title | default: subcollection.title }}</h3>
-                </a>
-              {%- endfor -%}
+              
+              {%- if use_metaobject -%}
+                {%- comment -%} ===== METAOBJECT VERSION (with custom title/URL/image support) ===== {%- endcomment -%}
+                {%- for card in subcollection_cards -%}
+                  {%- assign linked_collection = card.collection.value -%}
+                  {%- assign card_title = card.custom_title | default: linked_collection.title -%}
+                  {%- assign card_url = card.custom_url | default: linked_collection.url -%}
+                  {%- assign card_image = card.custom_image | default: linked_collection.image -%}
+                  
+                  <a href="{{ card_url }}" class="subcollection-card">
+                    <div class="subcollection-card__image">
+                      {%- if card_image != blank -%}
+                        <img 
+                          src="{{ card_image | image_url: width: 600 }}"
+                          alt="{{ card_title | escape }}"
+                          width="300"
+                          height="400"
+                          loading="lazy"
+                        >
+                      {%- elsif linked_collection.products.first.featured_image != blank -%}
+                        <img 
+                          src="{{ linked_collection.products.first.featured_image | image_url: width: 600 }}"
+                          alt="{{ card_title | escape }}"
+                          width="300"
+                          height="400"
+                          loading="lazy"
+                        >
+                      {%- else -%}
+                        <div class="subcollection-card__placeholder">
+                          {{ 'collection-1' | placeholder_svg_tag }}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                    <h3 class="subcollection-card__title">{{ card_title }}</h3>
+                  </a>
+                {%- endfor -%}
+                
+              {%- else -%}
+                {%- comment -%} ===== FALLBACK: Simple collection reference list ===== {%- endcomment -%}
+                {%- for subcollection in subcollections_list -%}
+                  <a href="{{ subcollection.url }}" class="subcollection-card">
+                    <div class="subcollection-card__image">
+                      {%- if subcollection.image != blank -%}
+                        <img 
+                          src="{{ subcollection.image | image_url: width: 600 }}"
+                          alt="{{ subcollection.title | escape }}"
+                          width="300"
+                          height="400"
+                          loading="lazy"
+                        >
+                      {%- elsif subcollection.products.first.featured_image != blank -%}
+                        <img 
+                          src="{{ subcollection.products.first.featured_image | image_url: width: 600 }}"
+                          alt="{{ subcollection.title | escape }}"
+                          width="300"
+                          height="400"
+                          loading="lazy"
+                        >
+                      {%- else -%}
+                        <div class="subcollection-card__placeholder">
+                          {{ 'collection-1' | placeholder_svg_tag }}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                    <h3 class="subcollection-card__title">{{ subcollection.title }}</h3>
+                  </a>
+                {%- endfor -%}
+              {%- endif -%}
+              
             </div>
           </div>
         </div>
