@@ -105,9 +105,9 @@
                   {%- assign card_title = card.title | default: linked_collection.title -%}
                   {%- assign card_image = card.image | default: linked_collection.image -%}
                   
-                  {%- comment -%} Build URL: append filter params if provided {%- endcomment -%}
+                  {%- comment -%} Build URL: append filter path (e.g., /damen or /damen/dirndl) {%- endcomment -%}
                   {%- if card.filter != blank -%}
-                    {%- assign card_url = linked_collection.url | append: '?' | append: card.filter -%}
+                    {%- assign card_url = linked_collection.url | append: '/' | append: card.filter -%}
                   {%- else -%}
                     {%- assign card_url = linked_collection.url -%}
                   {%- endif -%}
