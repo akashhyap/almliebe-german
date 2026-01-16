@@ -33,6 +33,65 @@
   # Check for category navigation menu based on collection handle
   assign sidebar_menu_handle = collection.handle | append: '-sidebar'
   assign sidebar_menu = linklists[sidebar_menu_handle]
+  
+  # ========== SUBCOLLECTION FILTER DETECTION ==========
+  # Detect filter path from URL (e.g., /collections/gottseidank/damen/dirndl → damen/dirndl)
+  assign current_path = request.path
+  assign collection_base_path = '/collections/' | append: collection.handle
+  assign filter_path = current_path | remove_first: collection_base_path | remove_first: '/'
+  
+  # Remove trailing slash if present
+  assign filter_path_length = filter_path | size
+  assign last_char = filter_path | slice: -1, 1
+  if last_char == '/'
+    assign filter_path_length_minus_one = filter_path_length | minus: 1
+    assign filter_path = filter_path | slice: 0, filter_path_length_minus_one
+  endif
+  
+  # Initialize subcollection content variables
+  assign subcollection_active = false
+  assign subcollection_title = nil
+  assign subcollection_top_content = nil
+  assign subcollection_bottom_content = nil
+  assign subcollection_image = nil
+  
+  # If we have a filter path, look for matching subcollection card
+  if filter_path != blank and filter_path != ''
+    assign subcollection_cards_list = collection.metafields.custom.subcollection_cards.value
+    if subcollection_cards_list != blank
+      for card in subcollection_cards_list
+        assign card_filter = card.filter
+        if card_filter == filter_path
+          assign subcollection_active = true
+          assign subcollection_title = card.title
+          assign subcollection_image = card.image
+          capture subcollection_top_content
+            {{ card.top_content | metafield_tag }}
+          endcapture
+          capture subcollection_bottom_content
+            {{ card.bottom_content | metafield_tag }}
+          endcapture
+          break
+        endif
+      endfor
+    endif
+  endif
+  
+  # Determine what title and description to display
+  if subcollection_active and subcollection_title != blank
+    assign display_title = subcollection_title
+  else
+    assign display_title = collection.title
+  endif
+  
+  assign trimmed_top_content = subcollection_top_content | strip
+  if subcollection_active and trimmed_top_content != blank
+    assign display_description = subcollection_top_content
+    assign has_custom_description = true
+  else
+    assign display_description = collection.description
+    assign has_custom_description = false
+  endif
 -%}
 
 <section class="collection-page" data-collection-page data-collection-url="{{ collection.url }}">
@@ -43,13 +102,17 @@
       {%- comment -%} Product Count {%- endcomment -%}
       <p class="collection-count">{{ collection.products_count }} {{ 'collections.general.products' | t | default: 'Produkte' }}</p>
       
-      {%- comment -%} Collection Title {%- endcomment -%}
-      <h1 class="collection-title">{{ collection.title }}</h1>
+      {%- comment -%} Collection Title (or Subcollection Title if filtered) {%- endcomment -%}
+      <h1 class="collection-title">{{ display_title }}</h1>
       
-      {%- comment -%} Collection Description {%- endcomment -%}
-      {%- if collection.description != blank and section.settings.show_description -%}
+      {%- comment -%} Collection Description (or Subcollection Top Content if filtered) {%- endcomment -%}
+      {%- if display_description != blank and section.settings.show_description -%}
         <div class="collection-description rte">
-          {{ collection.description }}
+          {%- if has_custom_description -%}
+            {{ display_description }}
+          {%- else -%}
+            {{ display_description }}
+          {%- endif -%}
         </div>
       {%- endif -%}
       
@@ -58,7 +121,10 @@
         Priority: 
         1. New metaobject list (subcollection_cards) - allows custom titles/URLs
         2. Fallback to collection reference list (subcollections)
+        NOTE: Hide subcollection cards when viewing a filtered URL (subcollection_active = true)
       {%- endcomment -%}
+      
+      {%- unless subcollection_active -%}
       {%- assign subcollection_cards = collection.metafields.custom.subcollection_cards.value -%}
       {%- assign subcollections_list = collection.metafields.custom.subcollections.value -%}
       
@@ -103,7 +169,13 @@
                 {%- for card in subcollection_cards -%}
                   {%- assign linked_collection = card.collection.value -%}
                   {%- assign card_title = card.title | default: linked_collection.title -%}
-                  {%- assign card_image = card.image | default: linked_collection.image -%}
+                  
+                  {%- comment -%} Handle image - can be file reference or fallback to collection {%- endcomment -%}
+                  {%- if card.image.value != blank -%}
+                    {%- assign card_image = card.image.value -%}
+                  {%- else -%}
+                    {%- assign card_image = linked_collection.image -%}
+                  {%- endif -%}
                   
                   {%- comment -%} Build URL: append filter path (e.g., /damen or /damen/dirndl) {%- endcomment -%}
                   {%- if card.filter != blank -%}
@@ -176,6 +248,7 @@
           </div>
         </div>
       {%- endif -%}
+      {%- endunless -%}
     </div>
   </div>
   
@@ -541,16 +614,29 @@
   </div>
 </section>
 
-{%- comment -%} ========== BOTTOM CONTENT (from Metafield) ========== {%- endcomment -%}
-{%- assign bottom_content_metafield = collection.metafields.custom.bottom_content -%}
-{%- if bottom_content_metafield != blank -%}
+{%- comment -%} ========== BOTTOM CONTENT (Subcollection or Collection Metafield) ========== {%- endcomment -%}
+{%- assign trimmed_bottom_content = subcollection_bottom_content | strip -%}
+{%- if subcollection_active and trimmed_bottom_content != blank -%}
+  {%- comment -%} Use subcollection card's bottom content {%- endcomment -%}
   <section class="collection-bottom-content">
     <div class="collection-bottom-content__inner">
       <div class="collection-bottom-content__text rte">
-        {{ bottom_content_metafield | metafield_tag }}
+        {{ subcollection_bottom_content }}
       </div>
     </div>
   </section>
+{%- else -%}
+  {%- comment -%} Fallback to collection's bottom content metafield {%- endcomment -%}
+  {%- assign bottom_content_metafield = collection.metafields.custom.bottom_content -%}
+  {%- if bottom_content_metafield != blank -%}
+    <section class="collection-bottom-content">
+      <div class="collection-bottom-content__inner">
+        <div class="collection-bottom-content__text rte">
+          {{ bottom_content_metafield | metafield_tag }}
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
 {%- endif -%}
 
 <style>
