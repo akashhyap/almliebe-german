@@ -65,12 +65,8 @@
           assign subcollection_active = true
           assign subcollection_title = card.title
           assign subcollection_image = card.image
-          capture subcollection_top_content
-            {{ card.top_content | metafield_tag }}
-          endcapture
-          capture subcollection_bottom_content
-            {{ card.bottom_content | metafield_tag }}
-          endcapture
+          assign subcollection_top_content_raw = card.top_content
+          assign subcollection_bottom_content_raw = card.bottom_content
           break
         endif
       endfor
@@ -86,8 +82,20 @@
 
 <!-- DEBUG: filter_path="{{ filter_path }}" | subcollection_active={{ subcollection_active }} | cards_count={{ debug_cards_count }} -->
 {% for debug_card in collection.metafields.custom.subcollection_cards.value %}
-<!-- DEBUG CARD: title="{{ debug_card.title }}" | filter="{{ debug_card.filter }}" | match={{ debug_card.filter | strip }} == {{ filter_path | strip }} -->
+<!-- DEBUG CARD: title="{{ debug_card.title }}" | filter="{{ debug_card.filter }}" -->
 {% endfor %}
+
+{%- capture subcollection_top_content -%}
+  {%- if subcollection_top_content_raw != blank -%}
+    {{ subcollection_top_content_raw | metafield_tag }}
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- capture subcollection_bottom_content -%}
+  {%- if subcollection_bottom_content_raw != blank -%}
+    {{ subcollection_bottom_content_raw | metafield_tag }}
+  {%- endif -%}
+{%- endcapture -%}
 
 {%- liquid
   if subcollection_active and subcollection_title != blank
@@ -158,7 +166,7 @@
           {%- assign enable_desktop_carousel = true -%}
         {%- endif -%}
         
-        <div class="0001 subcollection-cards{% if enable_desktop_carousel %} has-desktop-carousel{% endif %}" data-subcollection-slider>
+        <div class="subcollection-cards{% if enable_desktop_carousel %} has-desktop-carousel{% endif %}" data-subcollection-slider>
           <div class="subcollection-cards__wrapper">
             {%- comment -%} Navigation Arrows - Inside wrapper for proper positioning {%- endcomment -%}
             <div class="subcollection-cards__nav">
