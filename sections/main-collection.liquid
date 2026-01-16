@@ -106,7 +106,7 @@
                       </div>
                     {%- endif -%}
                   </div>
-                  <h3 class="subcollection-card__title">{{ subcollection.title }}</h3>
+                  <h3 class="subcollection-card__title">{{ subcollection.metafields.custom.custom_title | default: subcollection.title }}</h3>
                 </a>
               {%- endfor -%}
             </div>
