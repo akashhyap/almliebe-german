@@ -814,7 +814,7 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    max-width: 450px;
+    max-width: 460px;
   }
 
   @media (min-width: 1024px) {
@@ -1001,7 +1001,7 @@
   .product__size-box {
     border: 1px solid #e5e7eb;
     border-radius: 8px;
-    padding: 1.25rem 1rem;
+    padding: 1.25rem 0.45rem;
   }
   
   .product__size-options {
@@ -1019,7 +1019,7 @@
     justify-content: center;
     min-width: 56px;
     height: 48px;
-    padding: 0 0.75rem;
+    padding: 0 0.65rem;
     cursor: pointer;
     transition: all 0.15s ease;
   }
@@ -1056,7 +1056,7 @@
   }
   
   .product__size-text {
-    font-size: 0.9375rem;
+    font-size: 0.85rem;
     font-weight: 400;
     color: #111827;
     transition: all 0.15s ease;
@@ -1937,9 +1937,14 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         }
 
-        // Get all selected options
+        // Get all selected options - SORTED BY POSITION to ensure correct order
+        const optionGroups = Array.from(page.querySelectorAll('[data-option-position]'));
+        optionGroups.sort((a, b) => {
+          return parseInt(a.dataset.optionPosition) - parseInt(b.dataset.optionPosition);
+        });
+        
         const selectedOptions = [];
-        page.querySelectorAll('[data-option-position]').forEach(optionGroup => {
+        optionGroups.forEach(optionGroup => {
           const checked = optionGroup.querySelector('input:checked');
           if (checked) selectedOptions.push(checked.value);
         });
@@ -2057,8 +2062,36 @@ document.addEventListener('DOMContentLoaded', function() {
       if (submitLoading) submitLoading.hidden = false;
       if (submitBtn) submitBtn.disabled = true;
       
-      // Get form data
-      const variantId = form.querySelector('[data-variant-id]')?.value;
+      // Get variant ID - re-calculate from selected options to ensure correctness
+      let variantId = form.querySelector('[data-variant-id]')?.value;
+      
+      // Double-check by re-fetching variant based on currently selected options
+      try {
+        const optionGroups = Array.from(page.querySelectorAll('[data-option-position]'));
+        optionGroups.sort((a, b) => parseInt(a.dataset.optionPosition) - parseInt(b.dataset.optionPosition));
+        
+        const selectedOptions = [];
+        optionGroups.forEach(optionGroup => {
+          const checked = optionGroup.querySelector('input:checked');
+          if (checked) selectedOptions.push(checked.value);
+        });
+        
+        if (selectedOptions.length > 0 && productId) {
+          const productResponse = await fetch(`/products/${productId}.js`);
+          const productData = await productResponse.json();
+          
+          const matchedVariant = productData.variants.find(v => {
+            return selectedOptions.every((opt, i) => v.options[i] === opt);
+          });
+          
+          if (matchedVariant) {
+            variantId = matchedVariant.id;
+          }
+        }
+      } catch (err) {
+        console.warn('Could not verify variant, using stored value:', err);
+      }
+      
       const quantity = form.querySelector('[name="quantity"]')?.value || 1;
       
       if (!variantId) {
