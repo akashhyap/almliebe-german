@@ -63,7 +63,7 @@
         assign card_filter = card.filter
         if card_filter == filter_path
           assign subcollection_active = true
-          assign subcollection_title = card.title
+          assign subcollection_title = card.display_title | default: card.title
           assign subcollection_image = card.image
           assign subcollection_top_content_raw = card.top_content
           assign subcollection_bottom_content_raw = card.bottom_content
