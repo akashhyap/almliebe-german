@@ -67,6 +67,8 @@
           assign subcollection_image = card.image
           assign subcollection_top_content_raw = card.top_content
           assign subcollection_bottom_content_raw = card.bottom_content
+          assign subcollection_top_alignment = card.top_content_alignment | default: 'left'
+          assign subcollection_bottom_alignment = card.bottom_content_alignment | default: 'left'
           break
         endif
       endfor
@@ -127,12 +129,8 @@
       
       {%- comment -%} Collection Description (or Subcollection Top Content if filtered) {%- endcomment -%}
       {%- if display_description != blank and section.settings.show_description -%}
-        <div class="collection-description rte">
-          {%- if has_custom_description -%}
-            {{ display_description }}
-          {%- else -%}
-            {{ display_description }}
-          {%- endif -%}
+        <div class="collection-description rte"{% if has_custom_description and subcollection_top_alignment != 'left' %} style="text-align: {{ subcollection_top_alignment }};"{% endif %}>
+          {{ display_description }}
         </div>
       {%- endif -%}
       
@@ -640,7 +638,7 @@
   {%- comment -%} Use subcollection card's bottom content {%- endcomment -%}
   <section class="collection-bottom-content">
     <div class="collection-bottom-content__inner">
-      <div class="collection-bottom-content__text rte">
+      <div class="collection-bottom-content__text rte"{% if subcollection_bottom_alignment != 'left' %} style="text-align: {{ subcollection_bottom_alignment }};"{% endif %}>
         {{ subcollection_bottom_content }}
       </div>
     </div>
