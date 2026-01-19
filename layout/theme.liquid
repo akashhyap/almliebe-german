@@ -219,9 +219,10 @@
     }
   </style>
 
-  {%- comment -%} Main stylesheet (non-critical, loaded async) {%- endcomment -%}
-  <link rel="stylesheet" href="{{ 'base.css' | asset_url }}" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="{{ 'base.css' | asset_url }}"></noscript>
+  {%- comment -%} Main stylesheet with preload for faster paint {%- endcomment -%}
+<link rel="preload" href="{{ 'base.css' | asset_url }}" as="style">
+<link rel="stylesheet" href="{{ 'base.css' | asset_url }}" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="{{ 'base.css' | asset_url }}"></noscript>
 
   {%- comment -%} Theme JS configuration {%- endcomment -%}
   <script>
