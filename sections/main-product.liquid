@@ -259,7 +259,7 @@
           id="ProductForm-{{ section.id }}"
           class="product__form"
           data-pform
-          data-product-id="{{ product.id }}"
+          data-product-handle="{{ product.handle }}"
           onsubmit="return false;"
         >
           <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id>
@@ -1906,7 +1906,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Variant selector
   const form = page.querySelector('[data-pform]');
-  const productId = form?.dataset.productId;
+  const productHandle = form?.dataset.productHandle;
   const variantIdInput = form?.querySelector('[data-variant-id]');
   const optionInputs = form?.querySelectorAll('[data-single-option-selector]');
   const priceContainer = page.querySelector('[data-product-price]');
@@ -1914,7 +1914,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const addToCartText = page.querySelector('[data-atc-text]');
   const skuElement = page.querySelector('[data-product-sku]');
 
-  if (optionInputs && productId) {
+  if (optionInputs && productHandle) {
     optionInputs.forEach(input => {
       // Use both click and change events for better compatibility
       const handleOptionChange = async function() {
@@ -1951,7 +1951,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Fetch product data and find matching variant
         try {
-          const response = await fetch(`/products/${productId}.js`);
+          const response = await fetch(`/products/${productHandle}.js`);
           const product = await response.json();
           
           const variant = product.variants.find(v => {
@@ -2076,8 +2076,8 @@ document.addEventListener('DOMContentLoaded', function() {
           if (checked) selectedOptions.push(checked.value);
         });
         
-        if (selectedOptions.length > 0 && productId) {
-          const productResponse = await fetch(`/products/${productId}.js`);
+        if (selectedOptions.length > 0 && productHandle) {
+          const productResponse = await fetch(`/products/${productHandle}.js`);
           const productData = await productResponse.json();
           
           const matchedVariant = productData.variants.find(v => {
