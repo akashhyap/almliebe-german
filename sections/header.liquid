@@ -618,10 +618,10 @@
   .mega-menu__link:hover { color: #000000; padding-left: 4px; }
   .mega-menu__link--view-all { font-weight: 500; color: #9ca3af; margin-top: 0.375rem; font-size: 0.75rem; }
   .mega-menu__link--view-all:hover { color: #6b7280; }
-  .mega-menu__featured { flex-shrink: 0; width: 320px; padding-left: 2.5rem; border-left: 1px solid #f3f4f6; }
+  .mega-menu__featured { flex-shrink: 0; width: 420px; padding-left: 2.5rem; border-left: 1px solid #f3f4f6; }
   .mega-menu__featured-title { font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #9ca3af; margin: 0 0 1rem; }
-  .mega-menu__featured-grid { display: flex; flex-direction: column; gap: 1rem; }
-  .mega-menu__featured-card { display: block; position: relative; text-decoration: none; border-radius: 10px; overflow: hidden; aspect-ratio: 3/2; background: #1a1a1a; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); transition: box-shadow 0.3s ease, transform 0.3s ease; }
+  .mega-menu__featured-grid { display: flex; flex-direction: column; gap: 0.875rem; }
+  .mega-menu__featured-card { display: block; position: relative; text-decoration: none; border-radius: 10px; overflow: hidden; aspect-ratio: 16/7; background: #1a1a1a; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); transition: box-shadow 0.3s ease, transform 0.3s ease; }
   .mega-menu__featured-card:hover { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); transform: translateY(-2px); }
   .mega-menu__featured-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0) 100%); transition: background 0.3s ease; pointer-events: none; }
   .mega-menu__featured-card:hover::after { background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.05) 100%); }
@@ -630,7 +630,7 @@
   .mega-menu__featured-image img { width: 100%; height: 100%; object-fit: cover; object-position: center center; transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
   .mega-menu__featured-image--placeholder { display: flex; align-items: center; justify-content: center; background: #2a2a2a; }
   .mega-menu__featured-image--placeholder svg { width: 50%; height: 50%; opacity: 0.3; }
-  .mega-menu__featured-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.25rem; font-size: 0.875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: #ffffff; z-index: 1; line-height: 1.2; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); }
+  .mega-menu__featured-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 1rem 1.25rem; font-size: 0.8125rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.03em; color: #ffffff; z-index: 1; line-height: 1.2; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); }
   .mega-menu__overlay { position: fixed; inset: 0; top: calc(var(--notification-bar-height, 0px) + var(--header-height, 70px)); background: rgba(0, 0, 0, 0.3); opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; z-index: 998; pointer-events: none; }
   .header.is-scrolled ~ .mega-menu__overlay { top: var(--header-height, 70px); }
   .mega-menu__overlay.is-visible { opacity: 1; visibility: visible; pointer-events: auto; }
@@ -714,17 +714,17 @@
 
   @media (max-width: 1400px) { 
     .mega-menu__columns { grid-template-columns: repeat(4, 1fr); gap: 1rem 2rem; } 
-    .mega-menu__featured { width: 280px; padding-left: 2rem; }
+    .mega-menu__featured { width: 380px; padding-left: 2rem; }
   }
   @media (max-width: 1200px) { 
     .mega-menu__inner { padding: 2rem; } 
     .mega-menu__columns { grid-template-columns: repeat(3, 1fr); gap: 1rem 1.5rem; } 
-    .mega-menu__featured { width: 260px; } 
+    .mega-menu__featured { width: 340px; } 
     .mega-menu__content { gap: 2rem; } 
-    .mega-menu__featured-card { aspect-ratio: 16/10; }
+    .mega-menu__featured-card { aspect-ratio: 16/8; }
   }
   @media (max-width: 1100px) { 
-    .mega-menu__featured { width: 240px; } 
+    .mega-menu__featured { width: 300px; } 
     .mega-menu__featured-label { font-size: 0.75rem; padding: 0.75rem 0.875rem; } 
     .mega-menu__featured-card { aspect-ratio: 16/9; }
   }
