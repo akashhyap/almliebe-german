@@ -1,6 +1,6 @@
 <div class="section-background color-{{ section.settings.color_scheme }}"></div>
 
-<div class="section page-width-content color-{{ section.settings.color_scheme }}">
+<div class="container page-width-content color-{{ section.settings.color_scheme }}">
   <div
     class="
       spacing-style
@@ -16,7 +16,12 @@
         {{ page.title }}
       </h1>
     {% endif %}
+    {% if page.content != blank %}
+      <section class="page-content">
+        {{ page.content }}
+      </section>
+    {% endif %}
 
-    {% content_for 'blocks' %}
+   
   </div>
 </div>
