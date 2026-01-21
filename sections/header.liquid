@@ -68,86 +68,130 @@
             </a>
             
             {% if has_mega_menu %}
-              <div class="mega-menu" data-mega-menu="{{ link.title | handleize }}">
-                <div class="mega-menu__inner">
-                  <div class="mega-menu__content">
-                    <div class="mega-menu__columns">
-                      {% for child_link in link.links %}
-                        <div class="mega-menu__column">
-                          {% if child_link.links.size > 0 %}
-                            <h3 class="mega-menu__column-title">{{ child_link.title }}</h3>
-                          {% else %}
-                            <a href="{{ child_link.url }}" class="mega-menu__column-title mega-menu__column-title--link">
-                              {{ child_link.title }}
-                            </a>
-                          {% endif %}
-                          
-                          {% if child_link.links.size > 0 %}
-                            <ul class="mega-menu__links">
-                              {% for grandchild_link in child_link.links %}
-                                <li>
-                                  <a href="{{ grandchild_link.url }}" class="mega-menu__link">
-                                    {{ grandchild_link.title }}
-                                  </a>
-                                </li>
-                              {% endfor %}
-                              {% if child_link.url != '#' and child_link.url != '' %}
-                                <li>
-                                  <a href="{{ child_link.url }}" class="mega-menu__link mega-menu__link--view-all">
-                                    Alle anzeigen →
-                                  </a>
-                                </li>
-                              {% endif %}
-                            </ul>
-                          {% endif %}
-                        </div>
-                      {% endfor %}
-                    </div>
-                    
-                    {% assign menu_handle = link.title | handleize %}
-                    {% assign has_featured = false %}
-                    {% for block in section.blocks %}
-                      {% if block.type == 'featured_collection' and block.settings.menu_item == menu_handle %}
-                        {% assign has_featured = true %}
-                        {% break %}
+              {%- comment -%} Calculate menu density and check for featured cards {%- endcomment -%}
+              {% assign total_links = 0 %}
+              {% for child_link in link.links %}
+                {% assign total_links = total_links | plus: 1 %}
+                {% assign total_links = total_links | plus: child_link.links.size %}
+              {% endfor %}
+              
+              {% assign menu_handle = link.title | handleize %}
+              {% assign has_featured = false %}
+              {% for block in section.blocks %}
+                {% if block.type == 'featured_collection' and block.settings.menu_item == menu_handle %}
+                  {% assign has_featured = true %}
+                  {% break %}
+                {% endif %}
+              {% endfor %}
+              
+              {%- comment -%} Use simple dropdown if < 10 items AND no featured cards {%- endcomment -%}
+              {% assign use_simple_dropdown = false %}
+              {% if total_links < 10 and has_featured == false %}
+                {% assign use_simple_dropdown = true %}
+              {% endif %}
+              
+              {% if use_simple_dropdown %}
+                {%- comment -%} Simple Dropdown Menu {%- endcomment -%}
+                <div class="dropdown-menu" data-dropdown-menu="{{ menu_handle }}">
+                  <ul class="dropdown-menu__list">
+                    {% for child_link in link.links %}
+                      {% if child_link.links.size > 0 %}
+                        <li class="dropdown-menu__item dropdown-menu__item--has-children">
+                          <span class="dropdown-menu__label">{{ child_link.title }}</span>
+                          <ul class="dropdown-menu__sublist">
+                            {% for grandchild_link in child_link.links %}
+                              <li>
+                                <a href="{{ grandchild_link.url }}" class="dropdown-menu__link">
+                                  {{ grandchild_link.title }}
+                                </a>
+                              </li>
+                            {% endfor %}
+                          </ul>
+                        </li>
+                      {% else %}
+                        <li class="dropdown-menu__item">
+                          <a href="{{ child_link.url }}" class="dropdown-menu__link">
+                            {{ child_link.title }}
+                          </a>
+                        </li>
                       {% endif %}
                     {% endfor %}
-                    
-                    {% if has_featured %}
-                      <div class="mega-menu__featured">
-                        <h3 class="mega-menu__featured-title">EMPFOHLEN</h3>
-                        <div class="mega-menu__featured-grid">
-                          {% assign featured_count = 0 %}
-                          {% for block in section.blocks %}
-                            {% if block.type == 'featured_collection' and block.settings.menu_item == menu_handle and featured_count < 2 %}
-                              {% assign featured_count = featured_count | plus: 1 %}
-                              <a href="{{ block.settings.link }}" class="mega-menu__featured-card" {{ block.shopify_attributes }}>
-                                {% if block.settings.image != blank %}
-                                  <div class="mega-menu__featured-image">
-                                    <img 
-                                      src="{{ block.settings.image | image_url: width: 800 }}"
-                                      alt="{{ block.settings.title | escape }}"
-                                      width="400"
-                                      height="267"
-                                      loading="lazy"
-                                      style="object-position: {{ block.settings.image_position | default: 'center center' }};"
-                                    >
-                                  </div>
-                                {% else %}
-                                  <div class="mega-menu__featured-image mega-menu__featured-image--placeholder">
-                                    {{ 'collection-1' | placeholder_svg_tag }}
-                                  </div>
-                                {% endif %}
-                                <span class="mega-menu__featured-label">{{ block.settings.title }}</span>
+                  </ul>
+                </div>
+              {% else %}
+                {%- comment -%} Full Mega Menu {%- endcomment -%}
+                <div class="mega-menu" data-mega-menu="{{ menu_handle }}">
+                  <div class="mega-menu__inner">
+                    <div class="mega-menu__content">
+                      <div class="mega-menu__columns">
+                        {% for child_link in link.links %}
+                          <div class="mega-menu__column">
+                            {% if child_link.links.size > 0 %}
+                              <h3 class="mega-menu__column-title">{{ child_link.title }}</h3>
+                            {% else %}
+                              <a href="{{ child_link.url }}" class="mega-menu__column-title mega-menu__column-title--link">
+                                {{ child_link.title }}
                               </a>
                             {% endif %}
-                          {% endfor %}
-                        </div>
+                            
+                            {% if child_link.links.size > 0 %}
+                              <ul class="mega-menu__links">
+                                {% for grandchild_link in child_link.links %}
+                                  <li>
+                                    <a href="{{ grandchild_link.url }}" class="mega-menu__link">
+                                      {{ grandchild_link.title }}
+                                    </a>
+                                  </li>
+                                {% endfor %}
+                                {% if child_link.url != '#' and child_link.url != '' %}
+                                  <li>
+                                    <a href="{{ child_link.url }}" class="mega-menu__link mega-menu__link--view-all">
+                                      Alle anzeigen →
+                                    </a>
+                                  </li>
+                                {% endif %}
+                              </ul>
+                            {% endif %}
+                          </div>
+                        {% endfor %}
                       </div>
-                    {% endif %}
+                      
+                      {% if has_featured %}
+                        <div class="mega-menu__featured">
+                          <h3 class="mega-menu__featured-title">EMPFOHLEN</h3>
+                          <div class="mega-menu__featured-grid">
+                            {% assign featured_count = 0 %}
+                            {% for block in section.blocks %}
+                              {% if block.type == 'featured_collection' and block.settings.menu_item == menu_handle and featured_count < 2 %}
+                                {% assign featured_count = featured_count | plus: 1 %}
+                                <a href="{{ block.settings.link }}" class="mega-menu__featured-card" {{ block.shopify_attributes }}>
+                                  {% if block.settings.image != blank %}
+                                    <div class="mega-menu__featured-image">
+                                      <img 
+                                        src="{{ block.settings.image | image_url: width: 800 }}"
+                                        alt="{{ block.settings.title | escape }}"
+                                        width="400"
+                                        height="267"
+                                        loading="lazy"
+                                        style="object-position: {{ block.settings.image_position | default: 'center center' }};"
+                                      >
+                                    </div>
+                                  {% else %}
+                                    <div class="mega-menu__featured-image mega-menu__featured-image--placeholder">
+                                      {{ 'collection-1' | placeholder_svg_tag }}
+                                    </div>
+                                  {% endif %}
+                                  <span class="mega-menu__featured-label">{{ block.settings.title }}</span>
+                                </a>
+                              {% endif %}
+                            {% endfor %}
+                          </div>
+                        </div>
+                      {% endif %}
+                    </div>
                   </div>
                 </div>
-              </div>
+              {% endif %}
             {% endif %}
           </li>
         {% endfor %}
@@ -407,6 +451,10 @@
   @media (min-width: 1200px) { .nav-list { gap: 2.5rem; } }
 
   .nav-item { position: static; }
+  
+  /* Nav items with simple dropdowns need relative positioning */
+  .nav-item:has(.dropdown-menu),
+  .nav-item--has-dropdown { position: relative; }
 
   .nav-link {
     display: flex;
@@ -463,6 +511,85 @@
   .mega-menu__inner { max-width: 1400px; margin: 0 auto; padding: 2.5rem 3rem; }
   .mega-menu__content { display: flex; gap: 3rem; }
   .mega-menu__columns { flex: 1; display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem 2.5rem; align-content: start; }
+  
+  /* Simple Dropdown Menu */
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-10px);
+    min-width: 220px;
+    background: #FFFFFF;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+    z-index: 999;
+    padding: 0.5rem 0;
+  }
+  
+  .nav-item--has-megamenu.is-open .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+  
+  .dropdown-menu__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .dropdown-menu__item {
+    position: relative;
+  }
+  
+  .dropdown-menu__link {
+    display: block;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #374151;
+    text-decoration: none;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  
+  .dropdown-menu__link:hover {
+    background: #f9fafb;
+    color: #000000;
+  }
+  
+  .dropdown-menu__label {
+    display: block;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #9ca3af;
+  }
+  
+  .dropdown-menu__item--has-children .dropdown-menu__label {
+    padding-bottom: 0.25rem;
+  }
+  
+  .dropdown-menu__sublist {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0.375rem 0;
+  }
+  
+  .dropdown-menu__sublist .dropdown-menu__link {
+    padding-left: 1.25rem;
+    font-size: 0.8125rem;
+  }
+  
+  .dropdown-menu__item--has-children + .dropdown-menu__item {
+    border-top: 1px solid #f3f4f6;
+    margin-top: 0.375rem;
+    padding-top: 0.375rem;
+  }
   .mega-menu__column { min-width: 0; }
   .mega-menu__column-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #9ca3af; margin: 0 0 0.875rem; line-height: 1.3; }
   .mega-menu__column-title--link { font-size: 0.875rem; font-weight: 500; color: #1f2937; text-decoration: none; display: inline-block; transition: color 0.2s ease; margin: 0; padding: 0.5rem 0; letter-spacing: 0; text-transform: none; line-height: 1.4; position: relative; }
@@ -569,9 +696,22 @@
     visibility: hidden !important;
   }
 
-  @media (max-width: 1400px) { .mega-menu__columns { grid-template-columns: repeat(4, 1fr); gap: 1rem 2rem; } .mega-menu__featured { width: 280px; padding-left: 2rem; } }
-  @media (max-width: 1200px) { .mega-menu__inner { padding: 2rem; } .mega-menu__columns { grid-template-columns: repeat(3, 1fr); gap: 1rem 1.5rem; } .mega-menu__featured { width: 260px; } .mega-menu__content { gap: 2rem; } .mega-menu__featured-card { aspect-ratio: 16/10; } }
-  @media (max-width: 1100px) { .mega-menu__featured { width: 240px; } .mega-menu__featured-label { font-size: 0.75rem; padding: 0.75rem 0.875rem; } .mega-menu__featured-card { aspect-ratio: 16/9; } }
+  @media (max-width: 1400px) { 
+    .mega-menu__columns { grid-template-columns: repeat(4, 1fr); gap: 1rem 2rem; } 
+    .mega-menu__featured { width: 280px; padding-left: 2rem; }
+  }
+  @media (max-width: 1200px) { 
+    .mega-menu__inner { padding: 2rem; } 
+    .mega-menu__columns { grid-template-columns: repeat(3, 1fr); gap: 1rem 1.5rem; } 
+    .mega-menu__featured { width: 260px; } 
+    .mega-menu__content { gap: 2rem; } 
+    .mega-menu__featured-card { aspect-ratio: 16/10; }
+  }
+  @media (max-width: 1100px) { 
+    .mega-menu__featured { width: 240px; } 
+    .mega-menu__featured-label { font-size: 0.75rem; padding: 0.75rem 0.875rem; } 
+    .mega-menu__featured-card { aspect-ratio: 16/9; }
+  }
 </style>
 
 <script>
@@ -674,7 +814,7 @@
       handleScroll();
     }
 
-    // Mega menu
+    // Mega menu and dropdown handling
     var megaMenuItems = document.querySelectorAll('.nav-item--has-megamenu');
     var megaMenuOverlay = document.querySelector('[data-mega-menu-overlay]');
     var OPEN_DELAY = 80;
@@ -682,6 +822,17 @@
     var openTimeout = null;
     var closeTimeout = null;
     var currentOpenMenu = null;
+    
+    // Add class for dropdown items (fallback for browsers without :has() support)
+    megaMenuItems.forEach(function(item) {
+      if (item.querySelector('.dropdown-menu')) {
+        item.classList.add('nav-item--has-dropdown');
+      }
+    });
+    
+    function hasMegaMenu(item) {
+      return item.querySelector('.mega-menu') !== null;
+    }
     
     function openMegaMenu(item) {
       clearTimeout(closeTimeout);
@@ -691,7 +842,10 @@
       }
       openTimeout = setTimeout(function() {
         item.classList.add('is-open');
-        if (megaMenuOverlay) megaMenuOverlay.classList.add('is-visible');
+        // Only show overlay for actual mega menus, not simple dropdowns
+        if (megaMenuOverlay && hasMegaMenu(item)) {
+          megaMenuOverlay.classList.add('is-visible');
+        }
         currentOpenMenu = item;
       }, OPEN_DELAY);
     }
@@ -716,15 +870,18 @@
     
     megaMenuItems.forEach(function(item) {
       var megaMenu = item.querySelector('.mega-menu');
+      var dropdown = item.querySelector('.dropdown-menu');
+      var submenu = megaMenu || dropdown;
+      
       item.addEventListener('mouseenter', function() { openMegaMenu(item); });
       item.addEventListener('mouseleave', function(e) {
         var toElement = e.relatedTarget;
-        if (megaMenu && megaMenu.contains(toElement)) return;
+        if (submenu && submenu.contains(toElement)) return;
         closeMegaMenu(item);
       });
-      if (megaMenu) {
-        megaMenu.addEventListener('mouseenter', function() { clearTimeout(closeTimeout); });
-        megaMenu.addEventListener('mouseleave', function(e) {
+      if (submenu) {
+        submenu.addEventListener('mouseenter', function() { clearTimeout(closeTimeout); });
+        submenu.addEventListener('mouseleave', function(e) {
           var toElement = e.relatedTarget;
           if (item.contains(toElement)) return;
           closeMegaMenu(item);
@@ -782,7 +939,10 @@
             } else {
               closeAllMegaMenus();
               item.classList.add('is-open');
-              if (megaMenuOverlay) megaMenuOverlay.classList.add('is-visible');
+              // Only show overlay for actual mega menus
+              if (megaMenuOverlay && hasMegaMenu(item)) {
+                megaMenuOverlay.classList.add('is-visible');
+              }
             }
           }
         });
