@@ -87,26 +87,6 @@
               "link": "shopify://collections/berwin-wolff"
             }
           },
-          "featured_collection_df7fWJ": {
-            "type": "featured_collection",
-            "settings": {
-              "menu_item": "anlasse",
-              "image": "shopify://shop_images/gottseidank-herrenjanker-helmut-a003971-950-2.jpg",
-              "image_position": "center top",
-              "title": "Herren",
-              "link": "shopify://collections/herren"
-            }
-          },
-          "featured_collection_dxTnGX": {
-            "type": "featured_collection",
-            "settings": {
-              "menu_item": "anlasse",
-              "image": "shopify://shop_images/steiner-damenblazer-greifenberg-3.jpg",
-              "image_position": "center top",
-              "title": "Damen",
-              "link": "shopify://collections/damen"
-            }
-          },
           "featured_collection_r8NQWc": {
             "type": "featured_collection",
             "settings": {
@@ -151,8 +131,6 @@
         "block_order": [
           "featured_collection_D7PHWM",
           "featured_collection_h4HgGW",
-          "featured_collection_df7fWJ",
-          "featured_collection_dxTnGX",
           "featured_collection_r8NQWc",
           "featured_collection_bfVx3z",
           "featured_collection_fTc6Ci",
