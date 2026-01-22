@@ -1,0 +1,175 @@
+{% comment %}
+  POLICY PAGE TEMPLATE
+  Styled template for Shopify policy pages (Privacy, Terms, Refund, etc.)
+  Pulls content from Settings > Policies
+{% endcomment %}
+
+<section class="policy-page">
+  <div class="policy-page__container">
+    
+    <header class="policy-page__header">
+      <h1 class="policy-page__title">{{ policy.title }}</h1>
+    </header>
+
+    <div class="policy-page__content rte">
+      {{ policy.body }}
+    </div>
+
+  </div>
+</section>
+
+<style>
+  .policy-page {
+    padding: 3rem 0 4rem;
+    background-color: #ffffff;
+  }
+
+  @media (min-width: 768px) {
+    .policy-page {
+      padding: 4rem 0 5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .policy-page {
+      padding: 5rem 0 6rem;
+    }
+  }
+
+  .policy-page__container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .policy-page__container {
+      padding: 0 2rem;
+    }
+  }
+
+  /* Header */
+  .policy-page__header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .policy-page__title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: #111827;
+    margin: 0;
+  }
+
+  @media (min-width: 768px) {
+    .policy-page__title {
+      font-size: 2.25rem;
+    }
+  }
+
+  /* Content */
+  .policy-page__content {
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #374151;
+  }
+
+  @media (min-width: 768px) {
+    .policy-page__content {
+      font-size: 1.0625rem;
+    }
+  }
+
+  .policy-page__content h1,
+  .policy-page__content h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 2.5rem 0 1rem;
+  }
+
+  .policy-page__content h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 2rem 0 0.75rem;
+  }
+
+  .policy-page__content h4 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 1.5rem 0 0.5rem;
+  }
+
+  .policy-page__content p {
+    margin: 0 0 1.25rem;
+  }
+
+  .policy-page__content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .policy-page__content ul,
+  .policy-page__content ol {
+    margin: 1rem 0 1.5rem;
+    padding-left: 1.5rem;
+  }
+
+  .policy-page__content li {
+    margin-bottom: 0.5rem;
+  }
+
+  .policy-page__content a {
+    color: #111827;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color 0.2s ease;
+  }
+
+  .policy-page__content a:hover {
+    color: #4b5563;
+  }
+
+  .policy-page__content strong {
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .policy-page__content blockquote {
+    margin: 2rem 0;
+    padding: 1.5rem 2rem;
+    background: #f9fafb;
+    border-left: 4px solid #111827;
+    font-style: italic;
+    color: #4b5563;
+  }
+
+  .policy-page__content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+  }
+
+  .policy-page__content th,
+  .policy-page__content td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .policy-page__content th {
+    font-weight: 600;
+    color: #111827;
+    background: #f9fafb;
+  }
+
+  .policy-page__content hr {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 2rem 0;
+  }
+</style>
