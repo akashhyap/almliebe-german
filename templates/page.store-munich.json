@@ -1,38 +1,63 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "occasion-hero",
       "settings": {
+        "image": "shopify://shop_images/ALMLIEBE_CORTELLESI_0087.webp",
+        "image_position": "center",
+        "overlay_opacity": 40,
+        "banner_height": "large",
+        "subtitle": "",
+        "title": "",
+        "description": "",
+        "button_label": "",
+        "button_link": "",
+        "content_horizontal": "center",
+        "content_vertical": "center",
+        "text_color": "#ffffff"
       }
     },
     "content": {
       "type": "occasion-content",
       "settings": {
+        "anchor_id": "",
+        "content_width": "medium",
+        "text_alignment": "left",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "Trachten München:Neuer Almliebe Store in der Münchner Altstadt",
+        "content": "<p>2018 ist Almliebe umgezogen vom Glockenbachviertel in die Münchner City. Auf fast 200 Quadratmetern präsentiert das Familien-Unternehmen jetzt in einer Seitenstrasse vom Tal moderne Tracht und alpine Mode von namhaften Herstellern wie Gottseidank, Amsel, CocoVero, Anno Domini, Wenger, Grasegger, Hammerschmid und Ostarrichi.<br/><br/>Im coolen Industrie-Ambiente zeigen die Inhaberinnen Stefanie und Sonja Ragaller eine große Auswahl an <a href=\"https://www.almliebe.com/damen-tracht-und-mode/dirndl.html\">traditionellen Dirndl</a>, Hochzeitsdirndl, hochgeschlossene Modelle sowie Dirndl mit V-Ausschnitt. Hauptmarke und Aushängeschild ist das angesagte Label <a href=\"https://www.almliebe.com/gottseidank.html\">Gottseidank Tracht</a> München, aber auch junge Newcomer wie CocoVero und Amsel Dirndl München. Zur <strong>Almliebe Trachtenmode München</strong> gehört auch eine Riesenauswahl an Dirndlblusen, hochgeschlossen, mit Spitze oder gar wieder mit leichtem Puffärmel wie es Gottseidank Tracht München zeigt. Strickjanker von Astrifa, Gottseidank oder CocoVero sowie kurze Trachten-Blazer von Anno Domini oder Hammerschmid sind die perfekten Begleiter für <a href=\"https://www.almliebe.com/gottseidank/damen/dirndl.html\">Gottseidank Dirndl</a>. Neben Dirndl München zeigt Almliebe aber auch trachtige Outfits für den Alltag wie Trachtenröcke von der Rockmacherin mit passenden Mieder und Trachtenblusen. Halterlose Strümpfe, Haarschmuck, Dirndltaschen und Trachten Schuhe runden das Sortiment von Trachtenmode München ab.<br/><br/></p><h3>Almliebe: Top Auswahl an Trachtenmode in München</h3><p>Auch Männer werden bei <strong>Almliebe Trachtenmode München</strong> fündig. Hirschlederhosen von Meindl, Ostarrichi und Beckert sowie Lederhosen aus Ziegenleder finden sie ebenso wie Trachtenhemden mit Stehkragen von Gottseidank München, Arido oder Almliebe. Für festliche Anlässe gibt es eine große Auswahl an Trachtenmode München von Gilets bis hin zu traditionellen <a href=\"https://www.almliebe.com/herren-tracht-und-mode/sakkos-janker.html\">Trachten Jankern</a> vom Traditionsunternehmen Grasegger oder von Gottseidank Tracht München. Wer’s ein bisschen lässiger mag, der trägt zur kurzen Lederhose schmal geschnittene Strickjanker von Gottseiank oder lässige Trachten Hoodies von Liebling oder Wanderlust. Perfekt wird das Trachten Outfit mit Trachtensocken aus Merinowolle von Gottseidank und traditionellen Haferlschuhen von Dirndl&Bua und Meindl.<br/><br/>Kinder Trachten München gibt es auch im Almliebe Store. Kinder Lederhosen, Hemden, Strickjanker und Kinder Dirndl passen perfekt zur traditionellen Trachtenmode der Großen. Kleine Geschenke wie witzige Postkarten, Zirbenkissen, Reiseführer und bayerischer Gin runden das Sortiment ab.</p><p> </p><p><strong>Almliebe Store Münchner Altstadt</strong></p><p>Hochbrückenstrasse 10<br/>80331 München</p><p>Mail: <a href=\"mailto:info@almliebe.com\">info@almliebe.com</a><br/>Tel: <a href=\"tel:+498924217592\">089 / 242 175 92</a></p><p><strong>Öffnungszeiten:</strong></p><p>Montag: geschlossen<br/>Dienstag und Mittwoch: 11:00 – 18:00 Uhr<br/>Donnerstag und Freitag: 11:00 – 19:00 Uhr</p><p>Samstag: 11:00 - 18:00 Uhr</p><p><strong>Terminvereinbarung möglich unter </strong><a href=\"mailto:kundenservice%C3%A6almliebe.com\" target=\"_blank\"><strong>kundenservice@almliebe.com</strong></a></p>",
+        "iframe_code": "",
+        "iframe_aspect": "medium"
       }
     },
-    "products": {
-      "type": "occasion-products",
-      "blocks": {},
-      "block_order": [],
+    "occasion_content_L4PFKk": {
+      "type": "occasion-content",
       "settings": {
-      }
-    },
-    "banner": {
-      "type": "occasion-banner",
-      "settings": {
-      }
-    },
-    "text_image": {
-      "type": "occasion-text-image",
-      "settings": {
+        "anchor_id": "",
+        "content_width": "full",
+        "text_alignment": "left",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "",
+        "content": "",
+        "iframe_code": "<iframe class=\"map\" style=\"border: 0; min-height: 330px;\" src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d778.4551740121802!2d11.580047400253651!3d48.136646182702584!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x31308a78b1a6cf17!2sAlmliebe+Store+M%C3%BCnchen+City!5e0!3m2!1sde!2sde!4v1531990917169\" width=\"100%\" height=\"100%\" frameborder=\"0\" allowfullscreen=\"allowfullscreen\"></iframe>",
+        "iframe_aspect": "medium"
       }
     }
   },
   "order": [
     "hero",
     "content",
-    "products",
-    "banner",
-    "text_image"
+    "occasion_content_L4PFKk"
   ]
 }
