@@ -1,111 +1,38 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "hero": {
       "type": "occasion-hero",
       "settings": {
-        "image": "shopify://shop_images/unterseite_header_1930x882-stores.jpg",
-        "image_position": "center",
-        "overlay_opacity": 40,
-        "banner_height": "large",
-        "subtitle": "",
-        "title": "",
-        "description": "",
-        "button_label": "",
-        "button_link": "",
-        "content_horizontal": "center",
-        "content_vertical": "center",
-        "text_color": "#ffffff"
       }
     },
     "content": {
       "type": "occasion-content",
       "settings": {
-        "content_width": "medium",
-        "text_alignment": "center",
-        "background_color": "#ffffff",
-        "subtitle": "",
-        "title": "Trachtenmode in München & Pocking Die Almliebe Stores",
-        "content": "<p>Wir lieben das Produkt. Wir beraten Euch persönlich. Almliebe Feeling in unseren Läden.<br/>Wir hatten von Anfang an beides: einen Online-Shop, über den man 24/7 immer unsere ausgewählten Produkte beziehen kann.<br/>Aber auch stationäre Läden zuerst in Pocking, dann auch in München. Auf dem Foto hier seht ihr unsere Oma im Kaufhaus Ragaller in Pocking in den 40er Jahren. Seitdem hat sich einiges geändert. Geblieben ist die Leidenschaft unserer Familie für den Handel, für die Mode, für die Menschen, die zu uns kommen. In Pocking sowie in unserem großen Store in der Münchner Altstadt können wir Euch die ganze Almliebe-Welt und das Gefühl dahinter zeigen. Und natürlich Euch persönlich treffen.<br/>Es geht uns dabei um eine kompetente und ganz persönliche Beratung, aber auch darum die Almliebe-Kunden zu kennen, Eure Interessen und Eure Vorlieben. Denn unser Sortiment aus moderner Tracht, alpiner Mode und Wander Bekleidung stellen wir mit viel Liebe persönlich für Euch zusammen.</p>"
-      }
-    },
-    "text_image": {
-      "type": "occasion-text-image",
-      "settings": {
-        "layout": "image-first",
-        "background_color": "#ffffff",
-        "subtitle": "",
-        "title": "Trachten München",
-        "content": "<p>2018 ist Almliebe umgezogen vom Glockenbachviertel in die Münchner City. Auf fast 200 Quadratmetern präsentiert das Familien-Unternehmen jetzt in einer Seitenstrasse vom Tal moderne Tracht und alpine Mode von namhaften Herstellern wie Gottseidank, Amsel, CocoVero, Anno Domini, Wenger, Grasegger, Hammerschmid und Ostarrichi.<br/><br/><a href=\"#\" title=\"#\">Read More</a></p>",
-        "button_label": "",
-        "button_link": "",
-        "image": "shopify://shop_images/ALMLIEBE_CORTELLESI_0087.webp"
-      }
-    },
-    "occasion_text_image_br6CNQ": {
-      "type": "occasion-text-image",
-      "settings": {
-        "layout": "content-first",
-        "background_color": "#ffffff",
-        "subtitle": "",
-        "title": "Trachten Pocking",
-        "content": "<p>Das Herz bzw. der Ursprung von Almliebe liegt in Niederbayern, genauer gesagt in Pocking im Bäderdreieck. Hier im Modehaus Ragaller starteten wir 2012 mit dem Versand von hochwertiger Tracht in Pocking. Auf über 200 Quadratmeter verkaufen wir im Modehaus unserer Eltern seitdem auch stationär Tracht in Niederbayern für Männer und Frauen. <br/><br/><a href=\"#\" title=\"#\">Read More</a></p>",
-        "button_label": "",
-        "button_link": "",
-        "image": "shopify://shop_images/ALMLIEBE_CORTELLESI_0087.webp"
       }
     },
     "products": {
       "type": "occasion-products",
+      "blocks": {},
+      "block_order": [],
       "settings": {
-        "subtitle": "",
-        "title": "Passende Produkte",
-        "show_view_all": false,
-        "view_all_link": "",
-        "view_all_text": "Alle ansehen",
-        "use_collection": false,
-        "collection": "",
-        "products_limit": 8,
-        "show_vendor": true,
-        "background_color": "#ffffff"
       }
     },
     "banner": {
       "type": "occasion-banner",
       "settings": {
-        "use_image": true,
-        "image_position": "center",
-        "overlay_opacity": 40,
-        "background_color": "#111827",
-        "enable_parallax": false,
-        "banner_height": "medium",
-        "content_width": "medium",
-        "content_horizontal": "center",
-        "content_vertical": "center",
-        "subtitle": "",
-        "title": "",
-        "description": "",
-        "text_color": "#ffffff",
-        "button_label": "",
-        "button_link": "",
-        "button_style": "solid"
+      }
+    },
+    "text_image": {
+      "type": "occasion-text-image",
+      "settings": {
       }
     }
   },
   "order": [
     "hero",
     "content",
-    "text_image",
-    "occasion_text_image_br6CNQ",
     "products",
-    "banner"
+    "banner",
+    "text_image"
   ]
 }
