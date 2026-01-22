@@ -14,24 +14,6 @@
         Die von Ihnen gesuchte Seite existiert leider nicht mehr oder wurde verschoben.
       </p>
 
-      <div class="error-404__search">
-        <form action="{{ routes.search_url }}" method="get" class="error-404__search-form">
-          <input 
-            type="search" 
-            name="q" 
-            placeholder="Suche nach Produkten..." 
-            class="error-404__search-input"
-            aria-label="Suche"
-          >
-          <button type="submit" class="error-404__search-btn" aria-label="Suchen">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"></circle>
-              <path d="m21 21-4.3-4.3"></path>
-            </svg>
-          </button>
-        </form>
-      </div>
-
       <div class="error-404__links">
         <p class="error-404__links-title">Beliebte Kategorien</p>
         <div class="error-404__links-grid">
@@ -109,47 +91,6 @@
     color: #6b7280;
     line-height: 1.6;
     margin: 0 0 2rem;
-  }
-
-  /* Search */
-  .error-404__search {
-    margin-bottom: 2.5rem;
-  }
-
-  .error-404__search-form {
-    display: flex;
-    max-width: 400px;
-    margin: 0 auto;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    overflow: hidden;
-    background: #ffffff;
-  }
-
-  .error-404__search-input {
-    flex: 1;
-    padding: 0.875rem 1rem;
-    font-size: 1rem;
-    border: none;
-    outline: none;
-    background: transparent;
-  }
-
-  .error-404__search-input::placeholder {
-    color: #9ca3af;
-  }
-
-  .error-404__search-btn {
-    padding: 0.875rem 1rem;
-    background: #111827;
-    color: #ffffff;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-
-  .error-404__search-btn:hover {
-    background: #374151;
   }
 
   /* Category Links */
