@@ -1,0 +1,38 @@
+{
+  "sections": {
+    "hero": {
+      "type": "occasion-hero",
+      "settings": {
+      }
+    },
+    "content": {
+      "type": "occasion-content",
+      "settings": {
+      }
+    },
+    "products": {
+      "type": "occasion-products",
+      "blocks": {},
+      "block_order": [],
+      "settings": {
+      }
+    },
+    "banner": {
+      "type": "occasion-banner",
+      "settings": {
+      }
+    },
+    "text_image": {
+      "type": "occasion-text-image",
+      "settings": {
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "content",
+    "products",
+    "banner",
+    "text_image"
+  ]
+}

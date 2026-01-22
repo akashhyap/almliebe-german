@@ -4,7 +4,10 @@
   Admin can control all content elements from the editor
 {% endcomment %}
 
-<section class="occasion-content" style="background-color: {{ section.settings.background_color }};">
+<section 
+  class="occasion-content" 
+  style="background-color: {{ section.settings.background_color }};"
+  {% if section.settings.anchor_id != blank %}id="{{ section.settings.anchor_id | handle }}"{% endif %}>
   <div class="occasion-content__container occasion-content__container--{{ section.settings.content_width }}">
     
     {%- if section.settings.subtitle != blank or section.settings.title != blank -%}
@@ -35,6 +38,16 @@
 </section>
 
 <style>
+  /* Smooth scroll for anchor links */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Offset for sticky header */
+  .occasion-content[id] {
+    scroll-margin-top: 100px;
+  }
+
   .occasion-content {
     padding: 3rem 0;
   }
@@ -196,10 +209,42 @@
     color: #111827;
     text-decoration: underline;
     text-underline-offset: 2px;
+    transition: color 0.2s ease;
   }
   
   .occasion-content__body a:hover {
-    color: #000;
+    color: #4b5563;
+  }
+
+  /* Anchor links (links starting with #) */
+  .occasion-content__body a[href^="#"] {
+    text-decoration: none;
+    border-bottom: 1px dashed #6b7280;
+    padding-bottom: 1px;
+  }
+
+  .occasion-content__body a[href^="#"]:hover {
+    border-bottom-style: solid;
+    border-color: #111827;
+  }
+
+  /* Read More Link Style */
+  .occasion-content__body a.read-more,
+  .occasion-content__body p:last-of-type a:only-child {
+    display: inline-block;
+    margin-top: 1rem;
+    color: #000000;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-thickness: 2px;
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  .occasion-content__body a.read-more:hover,
+  .occasion-content__body p:last-of-type a:only-child:hover {
+    color: #000000;
+    text-decoration-color: #6b7280;
   }
   
   .occasion-content__body strong {
@@ -292,6 +337,12 @@
     {
       "type": "header",
       "content": "Layout"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Anchor ID",
+      "info": "Create a link to this section using #your-id (e.g. #standort)"
     },
     {
       "type": "select",
