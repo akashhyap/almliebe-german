@@ -11,30 +11,54 @@
   "sections": {
     "hero": {
       "type": "occasion-hero",
-      "settings": {}
+      "settings": {
+        "image": "shopify://shop_images/0792.jpg",
+        "image_position": "center",
+        "overlay_opacity": 40,
+        "banner_height": "large",
+        "subtitle": "",
+        "title": "",
+        "description": "",
+        "button_label": "",
+        "button_link": "",
+        "content_horizontal": "center",
+        "content_vertical": "center",
+        "text_color": "#ffffff"
+      }
     },
     "content": {
       "type": "occasion-content",
-      "settings": {}
+      "settings": {
+        "anchor_id": "",
+        "content_width": "medium",
+        "text_alignment": "left",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "Trachten Pocking:Almliebe Store in Pocking im Modehaus Ragaller",
+        "content": "<p>Das Herz bzw. der Ursprung von Almliebe liegt in Niederbayern, genauer gesagt in Pocking im Bäderdreieck. Hier im Modehaus Ragaller starteten wir 2012 mit dem Versand von <strong>hochwertiger Tracht in Pocking</strong>. Auf über 200 Quadratmeter verkaufen wir im Modehaus unserer Eltern seitdem auch stationär Tracht in Niederbayern für Männer und Frauen. Von traditionellen hochgeschlossenen Dirndln über Dirndlblusen und Strickjanker bis hin zu Trachtenblazern und Schuhen haben wir in Pocking alles an Trachtenmode im Sortiment was Frauen zurzeit suchen. Dazu gehört natürlich auch das angesagte <a href=\"https://www.almliebe.com/store-muenchen\">Münchner Trachtenmode</a>-Label <a href=\"https://www.almliebe.com/gottseidank.html\">Gottseidank</a>, das wir in Pocking von Anfang an anbieten, seit Gottseidank-Chef Jörg Hittenkofer das traditionelle Dirndl wieder en vogue gebracht hat. Zur Trachtenmode Pocking gehören aber auch andere bayerische Newcomer wie CocoVero und Amsel, Kinga Mathe und traditionelle Trachtenmarken wie Hammerschmid und Wenger. In Pocking erwartet Euch die größte Auswahl an <strong>hochwertiger Trachtenmode in Niederbayern</strong><br/><br/></p><h3>Almliebe: Top Auswahl an Trachtenmode in Pocking</h3><p>Auch die Männer werden hier fündig. Lederhosen gibt es in Pocking von den namhaften Anbietern Meindl, Beckert und Ostarrichi sowie Ledergott. Passend dazu findet man in Pocking auch schmale Trachtenhemden, eine große Auswahl an Gilets, Trachtensakkos, Strickjanker sowie Trachtenstrümpfe und Hüte. Neu in Niederbayern ist unser Almliebe-Outlet mit Schnäppchenpreise für Trachten-Klassiker. Günstige Trachtenmode aus vergangenen Saisons findet ihr hier ebenso wie hochwertige reduzierte Einzelstücke von der <a href=\"https://www.almliebe.com/herren-tracht-und-mode/lederhosen.html\">Lederhose</a> bis hin zum Trachtenrock.</p><p> </p><p><strong>Almliebe Store Pocking - im Modehaus Ragaller</strong></p><p>Tettenweiserstrasse 2<br/>94060 Pocking</p><p>Mail: <a href=\"mailto:kundenservice@almliebe.com\">kundenservice@almliebe.com</a><br/>Tel: <a href=\"tel:+498531916323\">08531 / 916 323</a></p><p><strong>Öffnungszeiten:</strong></p><p>Montag - Freitag: 10:00 - 18:00 Uhr<br/>Samstag: 10:00 - 14:00 Uhr<br/>Sonntags geschlossen</p>",
+        "iframe_code": "",
+        "iframe_aspect": "medium"
+      }
     },
-    "products": {
-      "type": "occasion-products",
-      "settings": {}
-    },
-    "banner": {
-      "type": "occasion-banner",
-      "settings": {}
-    },
-    "text_image": {
-      "type": "occasion-text-image",
-      "settings": {}
+    "occasion_content_hqz68L": {
+      "type": "occasion-content",
+      "name": "Occasion Content",
+      "settings": {
+        "anchor_id": "",
+        "content_width": "medium",
+        "text_alignment": "left",
+        "background_color": "#ffffff",
+        "subtitle": "",
+        "title": "",
+        "content": "",
+        "iframe_code": "<iframe class=\"map\" style=\"border: 0;\" src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2648.7116713357304!2d13.310991315658365!3d48.40447997924568!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4774451401455be3%3A0x2c542fc96c969abb!2sAlmliebe!5e0!3m2!1sde!2sde!4v1496998943743\" allowfullscreen=\"allowfullscreen\" width=\"100%\" height=\"100%\" frameborder=\"0\"></iframe>",
+        "iframe_aspect": "medium"
+      }
     }
   },
   "order": [
     "hero",
     "content",
-    "products",
-    "banner",
-    "text_image"
+    "occasion_content_hqz68L"
   ]
 }
