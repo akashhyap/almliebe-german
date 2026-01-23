@@ -339,7 +339,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const productData = {
       title: wishlistBtn.dataset.productTitle || '',
       image: wishlistBtn.dataset.productImage || '',
-      price: wishlistBtn.dataset.productPrice || '',
+      price: wishlistBtn.dataset.wishlistPrice || wishlistBtn.dataset.productPrice || '',
       vendor: wishlistBtn.dataset.productVendor || '',
       url: wishlistBtn.dataset.productUrl || ''
     };

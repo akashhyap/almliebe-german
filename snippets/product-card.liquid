@@ -169,7 +169,7 @@
       data-product-handle="{{ product.handle }}"
       data-product-title="{{ product.title | escape }}"
       data-product-image="{{ product.featured_image | image_url: width: 400 }}"
-      data-product-price="{{ product.price | money }}"
+      data-wishlist-price="{{ product.price | money }}"
       data-product-vendor="{{ product.vendor | escape }}"
       data-product-url="{{ product.url }}"
       aria-label="{{ 'products.product.add_to_wishlist' | t | default: 'Zur Wunschliste hinzufügen' }}"
