@@ -32,6 +32,8 @@
   "accessibility": {
     "skip_to_content": "Zum Inhalt springen",
     "close": "Schließen",
+    "previous": "Zurück",
+    "next": "Weiter",
     "previous_slide": "Vorheriges Bild",
     "next_slide": "Nächstes Bild",
     "loading": "Wird geladen...",
@@ -165,6 +167,7 @@
       "clear_all": "Alle Filter löschen",
       "clear": "Löschen",
       "apply": "Filter anwenden",
+      "category": "Kategorie",
       "price": "Preis",
       "color": "Farbe",
       "size": "Größe",

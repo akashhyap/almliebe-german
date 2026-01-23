@@ -168,12 +168,12 @@
           <div class="subcollection-cards__wrapper">
             {%- comment -%} Navigation Arrows - Inside wrapper for proper positioning {%- endcomment -%}
             <div class="subcollection-cards__nav">
-              <button type="button" class="subcollection-cards__nav-btn" data-subcollection-prev aria-label="Previous" disabled>
+              <button type="button" class="subcollection-cards__nav-btn" data-subcollection-prev aria-label="{{ 'accessibility.previous' | t }}" disabled>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="15 18 9 12 15 6"/>
                 </svg>
               </button>
-              <button type="button" class="subcollection-cards__nav-btn" data-subcollection-next aria-label="Next">
+              <button type="button" class="subcollection-cards__nav-btn" data-subcollection-next aria-label="{{ 'accessibility.next' | t }}">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="9 18 15 12 9 6"/>
                 </svg>
@@ -283,7 +283,7 @@
           <line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/>
           <line x1="17" y1="16" x2="23" y2="16"/>
         </svg>
-        <span>Filter & Sortieren</span>
+        <span>{{ 'collections.filtering.filter_and_sort' | t }}</span>
         {%- if total_active_filters > 0 -%}
           <span class="collection-mobile-bar__count">{{ total_active_filters }}</span>
         {%- endif -%}
@@ -298,13 +298,13 @@
         <div class="collection-filters__panel">
           {%- comment -%} Sidebar Header (Gymshark style) {%- endcomment -%}
           <div class="collection-filters__header">
-            <h2 class="collection-filters__title">FILTER & SORTIEREN</h2>
+            <h2 class="collection-filters__title">{{ 'collections.filtering.filter_and_sort' | t | upcase }}</h2>
             {%- if total_active_filters > 0 -%}
               <a href="{{ collection.url }}" class="collection-filters__clear-all">
                 {{ 'collections.filtering.clear_all' | t | default: 'Alle löschen' }}
               </a>
             {%- endif -%}
-            <button type="button" class="collection-filters__close" data-filter-close aria-label="Schließen">
+            <button type="button" class="collection-filters__close" data-filter-close aria-label="{{ 'accessibility.close' | t }}">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
               </svg>
@@ -348,7 +348,7 @@
           {%- comment -%} ===== SORT BY Section ===== {%- endcomment -%}
           <details class="filter-group filter-group--sort" open>
             <summary class="filter-group__header">
-              <span class="filter-group__title">SORTIEREN</span>
+              <span class="filter-group__title">{{ 'collections.sorting.title' | t | upcase }}</span>
               <svg class="filter-group__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="6 9 12 15 18 9"/>
               </svg>
@@ -360,28 +360,28 @@
                   <label class="sort-radio">
                     <input type="radio" name="sort_by_radio" value="price-ascending" data-sort-radio {% if sort_by == 'price-ascending' %}checked{% endif %}>
                     <span class="sort-radio__mark"></span>
-                    <span class="sort-radio__label">Preis: Niedrig bis Hoch</span>
+                    <span class="sort-radio__label">{{ 'collections.sorting.price_ascending' | t }}</span>
                   </label>
                 </li>
                 <li>
                   <label class="sort-radio">
                     <input type="radio" name="sort_by_radio" value="price-descending" data-sort-radio {% if sort_by == 'price-descending' %}checked{% endif %}>
                     <span class="sort-radio__mark"></span>
-                    <span class="sort-radio__label">Preis: Hoch bis Niedrig</span>
+                    <span class="sort-radio__label">{{ 'collections.sorting.price_descending' | t }}</span>
                   </label>
                 </li>
                 <li>
                   <label class="sort-radio">
                     <input type="radio" name="sort_by_radio" value="best-selling" data-sort-radio {% if sort_by == 'best-selling' %}checked{% endif %}>
                     <span class="sort-radio__mark"></span>
-                    <span class="sort-radio__label">Bestseller</span>
+                    <span class="sort-radio__label">{{ 'collections.sorting.best_selling' | t }}</span>
                   </label>
                 </li>
                 <li>
                   <label class="sort-radio">
                     <input type="radio" name="sort_by_radio" value="created-descending" data-sort-radio {% if sort_by == 'created-descending' %}checked{% endif %}>
                     <span class="sort-radio__mark"></span>
-                    <span class="sort-radio__label">Neueste</span>
+                    <span class="sort-radio__label">{{ 'collections.sorting.created_descending' | t }}</span>
                   </label>
                 </li>
               </ul>
@@ -392,7 +392,7 @@
           {%- if sidebar_menu.links.size > 0 -%}
             <details class="filter-group filter-group--kategorie">
               <summary class="filter-group__header">
-                <span class="filter-group__title">KATEGORIE</span>
+                <span class="filter-group__title">{{ 'collections.filtering.category' | t | upcase }}</span>
                 <svg class="filter-group__chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="6 9 12 15 18 9"/>
                 </svg>
