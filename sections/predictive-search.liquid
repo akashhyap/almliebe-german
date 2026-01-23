@@ -808,12 +808,15 @@
       id: product.id,
       handle: product.handle,
       title: product.title,
+      vendor: product.vendor,
+      price: product.price,
+      comparePrice: product.comparePrice,
       image: product.image,
       url: product.url
     });
     
-    // Keep only max items (6)
-    const trimmed = filtered.slice(0, MAX_RECENTLY_VIEWED);
+    // Keep only max items (10 for carousel)
+    const trimmed = filtered.slice(0, 10);
     saveRecentlyViewed(trimmed);
   }
   
@@ -859,8 +862,11 @@
             id: product.id,
             handle: product.handle,
             title: product.title,
+            vendor: product.vendor || '',
+            price: product.price || 0,
+            comparePrice: product.comparePrice || 0,
             image: product.featured_image || product.images?.[0] || '',
-            url: `/products/${product.handle}`
+            url: product.url || `/products/${product.handle}`
           });
         }
       } catch (e) {}
