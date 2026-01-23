@@ -17,12 +17,26 @@
     "search": {
       "title": "Suche",
       "placeholder": "Suchen...",
+      "placeholder_full": "Wonach suchen Sie heute?",
       "cancel": "Abbrechen",
       "recent": "Letzte Suchen",
       "popular": "Beliebte Suchen",
+      "trending": "Trendsuchen",
+      "recently_viewed": "Zuletzt angesehen",
+      "clear_history": "Löschen",
+      "suggestions": "Vorschläge",
+      "products": "Produkte",
       "no_results": "Keine Ergebnisse gefunden für",
+      "no_products": "Keine Produkte gefunden.",
       "try_again": "Versuchen Sie es mit anderen Suchbegriffen.",
-      "view_all": "Alle Ergebnisse anzeigen"
+      "view_all": "Alle Ergebnisse anzeigen",
+      "view_all_for": "Alle \"{{ query }}\" anzeigen",
+      "search_for": "Suchen nach \"{{ query }}\"",
+      "clear_search": "Suche löschen",
+      "close_search": "Suche schließen",
+      "percent_off": "{{ percent }}% RABATT",
+      "add_to_wishlist": "Zur Wunschliste hinzufügen",
+      "remove_from_wishlist": "Von Wunschliste entfernen"
     },
     "social": {
       "share": "Teilen",
