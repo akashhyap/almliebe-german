@@ -1,0 +1,758 @@
+{% comment %}
+  PRODUCT CARD - Gymshark-style hover size selector
+  
+  Usage: {% render 'product-card', product: product, lazy: true %}
+  
+  Features:
+  - Desktop: Hover reveals size grid at bottom
+  - Out of stock sizes shown with diagonal strikethrough
+  - Wishlist toggle button
+  - Sale/New/Low Stock badges
+  - Secondary image on hover
+{% endcomment %}
+
+{%- liquid
+  # Defaults
+  assign lazy = lazy | default: true
+  assign show_vendor = show_vendor | default: settings.show_vendor
+  assign show_secondary_image = true
+  assign card_index = card_index | default: forloop.index
+  
+  # Image handling
+  assign featured_image = product.featured_image
+  assign secondary_image = nil
+  if show_secondary_image and product.images.size > 1
+    assign secondary_image = product.images[1]
+  endif
+  
+  # Price calculations
+  assign current_variant = product.selected_or_first_available_variant
+  assign compare_price = current_variant.compare_at_price
+  assign price = current_variant.price
+  assign on_sale = false
+  if compare_price > price
+    assign on_sale = true
+    assign savings_percent = compare_price | minus: price | times: 100.0 | divided_by: compare_price | round
+  endif
+  
+  # Availability
+  assign available = product.available
+  
+  # Badge logic
+  assign show_sale_badge = false
+  assign show_new_badge = false
+  assign show_soldout_badge = false
+  assign show_lowstock_badge = false
+  
+  if product.available == false
+    assign show_soldout_badge = true
+  elsif product.compare_at_price > product.price
+    assign show_sale_badge = true
+  else
+    assign now_timestamp = 'now' | date: '%s' | plus: 0
+    assign product_timestamp = product.created_at | date: '%s' | plus: 0
+    assign age_seconds = now_timestamp | minus: product_timestamp
+    assign thirty_days = 2592000
+    if age_seconds < thirty_days
+      assign show_new_badge = true
+    endif
+  endif
+  
+  # Check low stock
+  if product.available
+    assign total_inventory = 0
+    for variant in product.variants
+      if variant.inventory_management and variant.inventory_quantity > 0
+        assign total_inventory = total_inventory | plus: variant.inventory_quantity
+      endif
+    endfor
+    if total_inventory > 0 and total_inventory <= 5
+      assign show_lowstock_badge = true
+    endif
+  endif
+  
+  # Size option detection
+  assign size_option_index = nil
+  assign size_option_name = nil
+  for option in product.options_with_values
+    assign option_name_lower = option.name | downcase
+    if option_name_lower == 'size' or option_name_lower == 'größe' or option_name_lower == 'groesse'
+      assign size_option_index = forloop.index0
+      assign size_option_name = option.name
+      break
+    endif
+  endfor
+  
+  # Determine if we should show size selector
+  # Show if: has size option OR is single variant (One Size)
+  assign has_sizes = false
+  assign is_one_size = false
+  
+  if size_option_index != nil
+    # Has size option - always show
+    assign has_sizes = true
+    # Check if only one size value
+    if product.options_by_name[size_option_name].values.size == 1
+      assign is_one_size = true
+    endif
+  elsif product.variants.size == 1 and product.has_only_default_variant
+    # Single variant with no options = One Size
+    assign has_sizes = true
+    assign is_one_size = true
+  endif
+-%}
+
+<div 
+  class="product-card{% if available == false %} product-card--sold-out{% endif %}{% if has_sizes %} product-card--has-sizes{% endif %}{% if secondary_image %} product-card--has-secondary{% endif %}" 
+  data-product-card 
+  data-product-id="{{ product.id }}"
+  data-product-url="{{ product.url }}"
+>
+  {%- comment -%} Image Container {%- endcomment -%}
+  <div class="product-card__media">
+    <a href="{{ product.url }}" class="product-card__link" aria-label="{{ product.title | escape }}">
+      {%- if featured_image -%}
+        <img
+          class="product-card__image product-card__image--primary"
+          src="{{ featured_image | image_url: width: 600 }}"
+          srcset="{{ featured_image | image_url: width: 300 }} 300w,
+                  {{ featured_image | image_url: width: 450 }} 450w,
+                  {{ featured_image | image_url: width: 600 }} 600w,
+                  {{ featured_image | image_url: width: 900 }} 900w"
+          sizes="(min-width: 1200px) 350px, (min-width: 768px) 33vw, 50vw"
+          alt="{{ featured_image.alt | escape | default: product.title }}"
+          width="600"
+          height="750"
+          {% if lazy and card_index > 6 %}loading="lazy"{% else %}loading="eager" fetchpriority="high"{% endif %}
+        >
+      {%- else -%}
+        <div class="product-card__placeholder">
+          {{ 'product-1' | placeholder_svg_tag: 'product-card__placeholder-svg' }}
+        </div>
+      {%- endif -%}
+      
+      {%- if secondary_image -%}
+        <img
+          class="product-card__image product-card__image--secondary"
+          src="{{ secondary_image | image_url: width: 600 }}"
+          srcset="{{ secondary_image | image_url: width: 300 }} 300w,
+                  {{ secondary_image | image_url: width: 600 }} 600w"
+          sizes="(min-width: 1200px) 350px, (min-width: 768px) 33vw, 50vw"
+          alt="{{ secondary_image.alt | escape | default: product.title }}"
+          width="600"
+          height="750"
+          loading="lazy"
+        >
+      {%- endif -%}
+    </a>
+    
+    {%- comment -%} Badges - positioned bottom-right, moves into size selector on hover {%- endcomment -%}
+    <div class="product-card__badges">
+      {%- if show_soldout_badge -%}
+        <span class="badge badge--soldout">{{ 'products.product.sold_out' | t | default: 'Ausverkauft' }}</span>
+      {%- elsif show_sale_badge -%}
+        <span class="badge badge--sale">-{{ savings_percent }}%</span>
+      {%- elsif show_new_badge -%}
+        <span class="badge badge--new">{{ 'products.product.new' | t | default: 'Neu' }}</span>
+      {%- endif -%}
+      
+      {%- if show_lowstock_badge and show_soldout_badge == false -%}
+        <span class="badge badge--lowstock">{{ 'products.product.low_stock' | t | default: 'Nur noch wenige' }}</span>
+      {%- endif -%}
+    </div>
+    
+    {%- comment -%} Wishlist Button {%- endcomment -%}
+    <button 
+      type="button" 
+      class="product-card__wishlist"
+      data-wishlist-toggle="{{ product.id }}"
+      data-product-handle="{{ product.handle }}"
+      data-product-title="{{ product.title | escape }}"
+      data-product-image="{{ product.featured_image | image_url: width: 400 }}"
+      data-product-price="{{ product.price | money }}"
+      data-product-vendor="{{ product.vendor | escape }}"
+      data-product-url="{{ product.url }}"
+      aria-label="{{ 'products.product.add_to_wishlist' | t | default: 'Zur Wunschliste hinzufügen' }}"
+    >
+      <svg class="icon-heart" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+    </button>
+    
+    {%- comment -%} Gymshark-style Size Selector (Desktop Hover) {%- endcomment -%}
+    {%- if has_sizes -%}
+      <div class="product-card__sizes" data-size-selector>
+        {%- comment -%} Badge inside size selector - top right {%- endcomment -%}
+        <div class="product-card__sizes-badge">
+          {%- if show_soldout_badge -%}
+            <span class="badge badge--soldout">{{ 'products.product.sold_out' | t | default: 'Ausverkauft' }}</span>
+          {%- elsif show_sale_badge -%}
+            <span class="badge badge--sale">-{{ savings_percent }}%</span>
+          {%- elsif show_new_badge -%}
+            <span class="badge badge--new">{{ 'products.product.new' | t | default: 'Neu' }}</span>
+          {%- elsif show_lowstock_badge -%}
+            <span class="badge badge--lowstock">{{ 'products.product.low_stock' | t | default: 'Nur noch wenige' }}</span>
+          {%- endif -%}
+        </div>
+        
+        {%- comment -%} Size Grid {%- endcomment -%}
+        <div class="product-card__sizes-grid{% if is_one_size %} product-card__sizes-grid--one-size{% endif %}">
+          {%- if is_one_size -%}
+            {%- comment -%} One Size - Show Add to Cart button {%- endcomment -%}
+            {%- assign one_size_variant = product.first_available_variant | default: product.variants.first -%}
+            <button 
+              type="button"
+              class="product-card__atc-btn{% unless product.available %} product-card__atc-btn--oos{% endunless %}"
+              data-size-add="{{ one_size_variant.id }}"
+              {% unless product.available %}disabled aria-disabled="true"{% endunless %}
+              aria-label="{% if product.available %}{{ 'products.product.add_to_cart' | t }}{% else %}{{ 'products.product.out_of_stock' | t }}{% endif %}"
+            >
+              {%- if product.available -%}
+                <svg class="product-card__atc-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                </svg>
+                <span>{{ 'products.product.add_to_cart' | t }}</span>
+              {%- else -%}
+                <span>{{ 'products.product.out_of_stock' | t }}</span>
+              {%- endif -%}
+            </button>
+          {%- else -%}
+            {%- comment -%} Regular sizes or single size from option {%- endcomment -%}
+            {%- assign displayed_sizes = '' -%}
+            {%- for variant in product.variants -%}
+              {%- assign size_value = variant.options[size_option_index] -%}
+              {%- unless displayed_sizes contains size_value -%}
+                {%- comment -%} Check if this size is available in any variant {%- endcomment -%}
+                {%- assign size_available = false -%}
+                {%- assign size_variant_id = nil -%}
+                {%- for v in product.variants -%}
+                  {%- if v.options[size_option_index] == size_value and v.available -%}
+                    {%- assign size_available = true -%}
+                    {%- assign size_variant_id = v.id -%}
+                    {%- break -%}
+                  {%- endif -%}
+                {%- endfor -%}
+                
+                <button 
+                  type="button"
+                  class="product-card__size-btn{% unless size_available %} product-card__size-btn--oos{% endunless %}"
+                  data-size-add="{{ size_variant_id | default: variant.id }}"
+                  {% unless size_available %}disabled aria-disabled="true"{% endunless %}
+                  aria-label="{{ size_value }}{% unless size_available %} - {{ 'products.product.sold_out' | t }}{% endunless %}"
+                >
+                  <span class="product-card__size-text">{{ size_value }}</span>
+                  {%- unless size_available -%}
+                    <span class="product-card__size-strike"></span>
+                  {%- endunless -%}
+                </button>
+                {%- assign displayed_sizes = displayed_sizes | append: size_value | append: ',' -%}
+              {%- endunless -%}
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} Product Info {%- endcomment -%}
+  <div class="product-card__info">
+    {%- if show_vendor and product.vendor != blank -%}
+      <p class="product-card__vendor">{{ product.vendor }}</p>
+    {%- endif -%}
+    
+    <h3 class="product-card__title">
+      <a href="{{ product.url }}">{{ product.title }}</a>
+    </h3>
+    
+    {%- comment -%} Price {%- endcomment -%}
+    <div class="product-card__price">
+      {%- if on_sale -%}
+        <span class="price__sale">{{ price | money }}</span>
+        <span class="price__compare">{{ compare_price | money }}</span>
+      {%- else -%}
+        <span class="price__regular">{{ price | money }}</span>
+      {%- endif -%}
+    </div>
+    
+    <span class="product-card__vat">inkl. MwSt.</span>
+  </div>
+</div>
+
+<style>
+  .product-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Media Container */
+  .product-card__media {
+    position: relative;
+    overflow: hidden;
+    background: #f8f8f8;
+  }
+
+  .product-card__media::before {
+    content: '';
+    display: block;
+    padding-top: 140%; /* Taller ratio to show more of full-length products */
+  }
+
+  .product-card__link {
+    position: absolute;
+    inset: 0;
+    display: block;
+  }
+
+  /* Images */
+  .product-card__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center center;
+    transition: opacity 0.3s ease;
+  }
+
+  .product-card__image--secondary {
+    opacity: 0;
+  }
+
+  /* Only swap images on hover if secondary image exists */
+  @media (min-width: 1024px) {
+    .product-card--has-secondary:hover .product-card__image--primary {
+      opacity: 0;
+    }
+    
+    .product-card--has-secondary:hover .product-card__image--secondary {
+      opacity: 1;
+    }
+  }
+
+  .product-card__placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f0f0;
+  }
+
+  .product-card__placeholder-svg {
+    width: 60%;
+    height: auto;
+    opacity: 0.3;
+  }
+
+  /* Badges - Bottom Right */
+  .product-card__badges {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.375rem;
+    z-index: 4;
+    transition: opacity 0.15s ease;
+  }
+  
+  /* Hide original badges when size selector appears on desktop hover */
+  @media (min-width: 1024px) {
+    .product-card--has-sizes:hover .product-card__badges {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
+  
+  /* Badge inside size selector - top right corner */
+  .product-card__sizes-badge {
+    position: absolute;
+    top: -2.25rem;
+    right: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+    z-index: 5;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .badge--sale {
+    background: #111827;
+    color: #ffffff;
+  }
+
+  .badge--new {
+    background: #111827;
+    color: #ffffff;
+  }
+
+  .badge--soldout {
+    background: #6b7280;
+    color: #ffffff;
+  }
+
+  .badge--lowstock {
+    background: #ffffff;
+    color: #111827;
+    border: 1px solid #e5e7eb;
+  }
+
+  /* Wishlist Button */
+  .product-card__wishlist {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .product-card__wishlist:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  .product-card__wishlist svg {
+    color: #374151;
+    transition: all 0.2s;
+  }
+
+  .product-card__wishlist.is-active svg {
+    fill: #ef4444;
+    stroke: #ef4444;
+  }
+
+  /* ========== GYMSHARK-STYLE SIZE SELECTOR ========== */
+  .product-card__sizes {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #f3f4f6;
+    padding: 0.75rem;
+    transform: translateY(100%);
+    opacity: 0;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+    z-index: 3;
+  }
+
+  @media (min-width: 1024px) {
+    .product-card--has-sizes:hover .product-card__sizes {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  .product-card__sizes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
+    gap: 0.5rem;
+  }
+  
+  /* One Size - centered content */
+  .product-card__sizes-grid--one-size {
+    display: flex;
+    justify-content: center;
+  }
+  
+  /* Add to Cart Button (One Size products) */
+  .product-card__atc-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.5rem;
+    background: #111827;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+  }
+  
+  .product-card__atc-btn:hover:not(:disabled) {
+    background: #000000;
+  }
+  
+  .product-card__atc-btn:active:not(:disabled) {
+    background: #1f2937;
+  }
+  
+  .product-card__atc-icon {
+    flex-shrink: 0;
+  }
+  
+  /* Out of Stock - Add to Cart */
+  .product-card__atc-btn--oos {
+    background: #e5e7eb;
+    color: #9ca3af;
+    cursor: not-allowed;
+  }
+  
+  /* Loading/Success states for ATC button */
+  .product-card__atc-btn.is-loading {
+    pointer-events: none;
+  }
+  
+  .product-card__atc-btn.is-loading span,
+  .product-card__atc-btn.is-loading svg {
+    opacity: 0;
+  }
+  
+  .product-card__atc-btn.is-loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+  
+  .product-card__atc-btn.is-added {
+    background: #059669;
+  }
+  
+  .product-card__atc-btn.is-added span::after {
+    content: ' ✓';
+  }
+
+  .product-card__size-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 0.5rem;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #111827;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    overflow: hidden;
+  }
+
+  .product-card__size-btn:hover:not(:disabled) {
+    border-color: #111827;
+  }
+
+  .product-card__size-btn:active:not(:disabled) {
+    background: #f9fafb;
+  }
+
+  .product-card__size-text {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Out of Stock - Diagonal Strikethrough */
+  .product-card__size-btn--oos {
+    cursor: not-allowed;
+    color: #9ca3af;
+    background: #f9fafb;
+    border-color: #e5e7eb;
+  }
+
+  .product-card__size-strike {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 140%;
+    height: 1px;
+    background: #d1d5db;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    pointer-events: none;
+  }
+
+  /* Mobile: Show sizes on tap (optional enhancement) */
+  @media (max-width: 1023px) {
+    .product-card__sizes {
+      display: none;
+    }
+  }
+
+  /* ========== PRODUCT INFO ========== */
+  .product-card__info {
+    padding: 0.875rem 0 0;
+  }
+
+  .product-card__vendor {
+    font-size: 0.6875rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 0.25rem;
+  }
+
+  .product-card__title {
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.4;
+    margin: 0 0 0.375rem;
+  }
+
+  .product-card__title a {
+    color: #111827;
+    text-decoration: none;
+  }
+
+  .product-card__title a:hover {
+    color: #6b7280;
+  }
+
+  /* Price */
+  .product-card__price {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .price__regular,
+  .price__sale {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .price__sale {
+    color: #dc2626;
+  }
+
+  .price__compare {
+    font-size: 0.8125rem;
+    color: #9ca3af;
+    text-decoration: line-through;
+  }
+
+  .product-card__vat {
+    font-size: 0.6875rem;
+    color: #9ca3af;
+  }
+
+  /* Sold Out State */
+  .product-card--sold-out .product-card__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.5);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Loading State for Size Buttons */
+  .product-card__size-btn.is-loading {
+    pointer-events: none;
+  }
+
+  .product-card__size-btn.is-loading .product-card__size-text {
+    opacity: 0;
+  }
+
+  .product-card__size-btn.is-loading::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 2px solid #e5e7eb;
+    border-top-color: #111827;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Success State */
+  .product-card__size-btn.is-added {
+    background: #111827 !important;
+    color: #ffffff !important;
+  }
+
+  .product-card__size-btn.is-added .product-card__size-text::after {
+    content: ' ✓';
+  }
+</style>
+
+<script>
+// Only run once, not per product card
+if (!window.productCardInitialized) {
+  window.productCardInitialized = true;
+  
+  document.addEventListener('click', async function(e) {
+    // Size button click - add to cart
+    const sizeBtn = e.target.closest('[data-size-add]');
+    if (sizeBtn && !sizeBtn.disabled) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const variantId = sizeBtn.dataset.sizeAdd;
+      if (!variantId) return;
+      
+      // Add loading state
+      sizeBtn.classList.add('is-loading');
+      
+      try {
+        const response = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: variantId,
+            quantity: 1
+          })
+        });
+        
+        if (response.ok) {
+          // Trigger cart events
+          document.dispatchEvent(new CustomEvent('cart:item-added'));
+          document.dispatchEvent(new CustomEvent('cart:updated'));
+          
+          // Show success state
+          sizeBtn.classList.remove('is-loading');
+          sizeBtn.classList.add('is-added');
+          
+          // Reset after delay
+          setTimeout(() => {
+            sizeBtn.classList.remove('is-added');
+          }, 1500);
+        } else {
+          throw new Error('Failed to add to cart');
+        }
+      } catch (error) {
+        console.error('Add to cart error:', error);
+        sizeBtn.classList.remove('is-loading');
+      }
+      return;
+    }
+  });
+}
+</script>
