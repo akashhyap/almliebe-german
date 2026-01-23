@@ -224,6 +224,21 @@
       "qualified": "Kostenloser Versand!",
       "remaining": "Nur noch {{ remaining }} bis zum kostenlosen Versand",
       "progress": "Kostenloser Versand ab {{ threshold }}"
+    },
+    "discount": {
+      "title": "Rabattcode",
+      "label": "Rabatt",
+      "placeholder": "Code eingeben",
+      "apply": "Anwenden",
+      "gift_card_note": "Geschenkkarten-Codes können an der Kasse eingelöst werden.",
+      "success": "Code \"{{ code }}\" wurde angewendet!",
+      "error_empty": "Bitte geben Sie einen Rabattcode ein.",
+      "error_invalid": "Ungültiger Rabattcode. Bitte überprüfen Sie Ihre Eingabe.",
+      "error_general": "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
+    },
+    "shipping": {
+      "free": "Kostenlos",
+      "calculated": "Wird berechnet"
     }
   },
   "customer": {

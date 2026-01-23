@@ -131,13 +131,13 @@
         
         {%- comment -%} Discount Code Section {%- endcomment -%}
         <div class="cart-drawer__discount" data-discount-section>
-          <h3 class="cart-drawer__discount-title">RABATTCODE</h3>
+          <h3 class="cart-drawer__discount-title">{{ 'cart.discount.title' | t }}</h3>
           <div class="cart-drawer__discount-form">
             <input 
               type="text" 
               class="cart-drawer__discount-input" 
               data-discount-input
-              placeholder="Code eingeben"
+              placeholder="{{ 'cart.discount.placeholder' | t }}"
               autocomplete="off"
               spellcheck="false"
             >
@@ -146,7 +146,7 @@
               class="cart-drawer__discount-btn"
               data-discount-apply
             >
-              ANWENDEN
+              {{ 'cart.discount.apply' | t | upcase }}
             </button>
           </div>
           
@@ -158,7 +158,7 @@
                 <line x1="7" y1="7" x2="7.01" y2="7"/>
               </svg>
               <span data-discount-code></span>
-              <button type="button" class="discount-tag__remove" data-discount-remove aria-label="Entfernen">
+              <button type="button" class="discount-tag__remove" data-discount-remove aria-label="{{ 'cart.general.remove' | t }}">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
@@ -189,7 +189,7 @@
               <line x1="12" y1="16" x2="12" y2="12"/>
               <line x1="12" y1="8" x2="12.01" y2="8"/>
             </svg>
-            Geschenkkarten-Codes können an der Kasse eingelöst werden.
+            {{ 'cart.discount.gift_card_note' | t }}
           </p>
         </div>
 
@@ -203,13 +203,13 @@
           
           {%- comment -%} Discount Row - Shows when discount applied {%- endcomment -%}
           <div class="cart-drawer__summary-row cart-drawer__summary-row--discount" data-discount-row style="display: none;">
-            <span>Rabatt</span>
+            <span>{{ 'cart.discount.label' | t }}</span>
             <span data-discount-amount>-€0,00</span>
           </div>
           
           <div class="cart-drawer__summary-row">
             <span>{{ 'cart.general.standard_shipping' | t | default: 'Standardversand' }}</span>
-            <span data-cart-shipping>{% if cart.total_price >= 9900 %}Kostenlos{% else %}Wird berechnet{% endif %}</span>
+            <span data-cart-shipping>{% if cart.total_price >= 9900 %}{{ 'cart.shipping.free' | t }}{% else %}{{ 'cart.shipping.calculated' | t }}{% endif %}</span>
           </div>
           <div class="cart-drawer__summary-row cart-drawer__summary-row--total">
             <span>{{ 'cart.general.total' | t | default: 'Gesamt' }}</span>
@@ -889,23 +889,26 @@ document.addEventListener('DOMContentLoaded', function() {
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
             <polyline points="22 4 12 14.01 9 11.01"/>
           </svg>
-          <span>Kostenloser Versand!</span>
+          <span>${window.almliebe?.strings?.freeShippingQualified || 'Kostenloser Versand!'}</span>
         `;
         progressMessage.classList.remove('is-incomplete');
       } else {
+        const remainingText = (window.almliebe?.strings?.freeShippingRemaining || 'Nur noch {{ remaining }} bis zum kostenlosen Versand').replace('{{ remaining }}', formatMoney(remaining));
         progressMessage.innerHTML = `
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
             <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
           </svg>
-          <span>Noch ${formatMoney(remaining)} bis zum kostenlosen Versand</span>
+          <span>${remainingText}</span>
         `;
         progressMessage.classList.add('is-incomplete');
       }
     }
     
     if (shippingEl) {
-      shippingEl.textContent = subtotalCents >= FREE_SHIPPING_THRESHOLD ? 'Kostenlos' : 'Wird berechnet';
+      shippingEl.textContent = subtotalCents >= FREE_SHIPPING_THRESHOLD 
+        ? (window.almliebe?.strings?.shippingFree || 'Kostenlos') 
+        : (window.almliebe?.strings?.shippingCalculated || 'Wird berechnet');
     }
   }
 
@@ -959,10 +962,10 @@ document.addEventListener('DOMContentLoaded', function() {
       // Also check total_discount
       else if (cart.total_discount > 0) {
         // Try to get discount code from line items
-        let discountTitle = 'Rabatt';
+        let discountTitle = window.almliebe?.strings?.discountLabel || 'Rabatt';
         cart.items.forEach(item => {
           if (item.discounts && item.discounts.length > 0) {
-            discountTitle = item.discounts[0].title || 'Rabatt';
+            discountTitle = item.discounts[0].title || (window.almliebe?.strings?.discountLabel || 'Rabatt');
           }
         });
         showAppliedDiscount(discountTitle, cart.total_discount);
@@ -978,7 +981,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const code = discountInput.value.trim().toUpperCase();
     
     if (!code) {
-      showDiscountError('Bitte geben Sie einen Rabattcode ein.');
+      showDiscountError(window.almliebe?.strings?.discountErrorEmpty || 'Bitte geben Sie einen Rabattcode ein.');
       discountInput.classList.add('is-error');
       return;
     }
@@ -1014,7 +1017,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Success!
         discountInput.value = '';
         discountInput.classList.add('is-success');
-        showDiscountSuccess(`Code "${code}" wurde angewendet!`);
+        const successMsg = (window.almliebe?.strings?.discountSuccess || 'Code "{{ code }}" wurde angewendet!').replace('{{ code }}', code);
+        showDiscountSuccess(successMsg);
         showAppliedDiscount(code, discountApplied.amount);
         
         // Refresh cart drawer to show updated totals
@@ -1022,12 +1026,12 @@ document.addEventListener('DOMContentLoaded', function() {
       } else {
         // Invalid code
         discountInput.classList.add('is-error');
-        showDiscountError('Ungültiger Rabattcode. Bitte überprüfen Sie Ihre Eingabe.');
+        showDiscountError(window.almliebe?.strings?.discountErrorInvalid || 'Ungültiger Rabattcode. Bitte überprüfen Sie Ihre Eingabe.');
       }
       
     } catch (error) {
       console.error('Discount error:', error);
-      showDiscountError('Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.');
+      showDiscountError(window.almliebe?.strings?.discountErrorGeneral || 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.');
       discountInput.classList.add('is-error');
     } finally {
       discountBtn.classList.remove('is-loading');
