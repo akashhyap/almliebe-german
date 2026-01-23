@@ -264,7 +264,13 @@
       "menu": "Menü",
       "cart": "Warenkorb",
       "search": "Suche",
-      "account": "Konto"
+      "account": "Konto",
+      "wishlist": "Wunschliste",
+      "back": "Zurück",
+      "open_menu": "Menü öffnen",
+      "close_menu": "Menü schließen",
+      "view_all_in": "Alle {{ category }} anzeigen",
+      "featured": "Empfohlen"
     },
     "footer": {
       "payment_methods": "Zahlungsmethoden",
