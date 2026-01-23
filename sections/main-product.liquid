@@ -1629,6 +1629,13 @@
     text-decoration: line-through;
   }
 
+  .rv-product-card__vat {
+    display: block;
+    font-size: 0.6875rem;
+    color: #9ca3af;
+    margin-top: 0.125rem;
+  }
+
   .section-title {
     font-size: 1.5rem;
     margin-bottom: 1.5rem;
@@ -2403,6 +2410,11 @@ document.addEventListener('DOMContentLoaded', function() {
   const rvPrevBtn = document.querySelector('[data-rv-prev]');
   const rvNextBtn = document.querySelector('[data-rv-next]');
   
+  // Translation strings
+  const rvStrings = {
+    vatIncluded: {{ 'products.product.vat_included' | t | json }}
+  };
+  
   function getRecentlyViewed() {
     try {
       return JSON.parse(localStorage.getItem(RECENTLY_VIEWED_KEY) || '[]');
@@ -2422,7 +2434,18 @@ document.addEventListener('DOMContentLoaded', function() {
       new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(cents / 100);
   }
   
-  function renderRecentlyViewed() {
+  // Fetch fresh product data from Shopify API
+  async function fetchProductData(handle) {
+    try {
+      const response = await fetch(`/products/${handle}.js`);
+      if (!response.ok) return null;
+      return await response.json();
+    } catch (e) {
+      return null;
+    }
+  }
+  
+  async function renderRecentlyViewed() {
     if (!recentlyViewedSection || !recentlyViewedTrack) return;
     
     const items = getRecentlyViewed();
@@ -2438,35 +2461,53 @@ document.addEventListener('DOMContentLoaded', function() {
     // Show max 10 items for carousel
     const displayItems = filteredItems.slice(0, 10);
     
-    recentlyViewedTrack.innerHTML = displayItems.map(item => {
-      const hasComparePrice = item.comparePrice && item.comparePrice > item.price;
+    // Fetch fresh product data for all items
+    const productPromises = displayItems.map(item => fetchProductData(item.handle));
+    const products = await Promise.all(productPromises);
+    
+    // Filter out failed fetches
+    const validProducts = products.filter(p => p !== null);
+    
+    if (validProducts.length === 0) {
+      recentlyViewedSection.style.display = 'none';
+      return;
+    }
+    
+    recentlyViewedTrack.innerHTML = validProducts.map(product => {
+      const hasComparePrice = product.compare_at_price && product.compare_at_price > product.price;
+      const imageUrl = product.featured_image ? 
+        product.featured_image.replace(/\.([^.]+)$/, '_600x800.$1') : 
+        '';
       
       return `
         <div class="recently-viewed__slide">
           <div class="rv-product-card">
-            <a href="${item.url}" class="rv-product-card__image-link">
+            <a href="/products/${product.handle}" class="rv-product-card__image-link">
               <div class="rv-product-card__image-wrapper">
-                <img 
-                  src="${item.image}" 
-                  alt="${escapeHtml(item.title)}"
-                  class="rv-product-card__image"
-                  loading="lazy"
-                  width="300"
-                  height="400"
-                >
+                ${imageUrl ? `
+                  <img 
+                    src="${imageUrl}" 
+                    alt="${escapeHtml(product.title)}"
+                    class="rv-product-card__image"
+                    loading="lazy"
+                    width="600"
+                    height="800"
+                  >
+                ` : ''}
               </div>
             </a>
             <div class="rv-product-card__info">
-              ${item.vendor ? `<p class="rv-product-card__vendor">${escapeHtml(item.vendor)}</p>` : ''}
+              ${product.vendor ? `<p class="rv-product-card__vendor">${escapeHtml(product.vendor)}</p>` : ''}
               <h3 class="rv-product-card__title">
-                <a href="${item.url}">${escapeHtml(item.title)}</a>
+                <a href="/products/${product.handle}">${escapeHtml(product.title)}</a>
               </h3>
               <div class="rv-product-card__price">
                 <span class="rv-product-card__price-current${hasComparePrice ? ' rv-product-card__price-current--sale' : ''}">
-                  ${formatMoney(item.price)}
+                  ${formatMoney(product.price)}
                 </span>
-                ${hasComparePrice ? `<span class="rv-product-card__price-compare">${formatMoney(item.comparePrice)}</span>` : ''}
+                ${hasComparePrice ? `<span class="rv-product-card__price-compare">${formatMoney(product.compare_at_price)}</span>` : ''}
               </div>
+              <span class="rv-product-card__vat">${rvStrings.vatIncluded}</span>
             </div>
           </div>
         </div>
