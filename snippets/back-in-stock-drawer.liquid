@@ -9,18 +9,18 @@
 <div class="stock-alert-drawer" data-stock-alert-drawer>
   <div class="stock-alert-drawer__overlay" data-stock-alert-close></div>
   <div class="stock-alert-drawer__content">
-    <button class="stock-alert-drawer__close" data-stock-alert-close aria-label="Schließen">
+    <button class="stock-alert-drawer__close" data-stock-alert-close aria-label="{{ 'accessibility.close' | t }}">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
       </svg>
     </button>
     
     <div class="stock-alert-drawer__header">
-      <h2 class="stock-alert-drawer__title">BENACHRICHTIGUNG</h2>
+      <h2 class="stock-alert-drawer__title">{{ 'back_in_stock.title' | t | upcase }}</h2>
     </div>
     
     <div class="stock-alert-drawer__body">
-      <p class="stock-alert-drawer__subtitle">Größe auswählen</p>
+      <p class="stock-alert-drawer__subtitle">{{ 'back_in_stock.select_size' | t }}</p>
       
       <div class="stock-alert-drawer__product" data-stock-alert-product>
         <div class="stock-alert-drawer__product-image">
@@ -42,19 +42,19 @@
         <input type="hidden" name="variant_title" data-stock-alert-variant-title>
         
         <label class="stock-alert-drawer__label">
-          E-Mail eingeben, wir benachrichtigen Sie
+          {{ 'back_in_stock.email_label' | t }}
         </label>
         <input 
           type="email" 
           name="email" 
           class="stock-alert-drawer__input" 
-          placeholder="Ihre E-Mail-Adresse eingeben"
+          placeholder="{{ 'back_in_stock.email_placeholder' | t }}"
           required
           data-stock-alert-email
         >
         
         <button type="submit" class="stock-alert-drawer__submit btn btn--primary btn--full">
-          <span data-stock-alert-submit-text>ANMELDEN</span>
+          <span data-stock-alert-submit-text>{{ 'back_in_stock.submit' | t | upcase }}</span>
           <span class="stock-alert-drawer__submit-loading" hidden>
             <span class="spinner spinner--small"></span>
           </span>
@@ -66,8 +66,8 @@
           <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
           <polyline points="22 4 12 14.01 9 11.01"/>
         </svg>
-        <h3>Erfolgreich angemeldet!</h3>
-        <p>Wir benachrichtigen Sie, sobald dieser Artikel wieder verfügbar ist.</p>
+        <h3>{{ 'back_in_stock.success_title' | t }}</h3>
+        <p>{{ 'back_in_stock.success_text' | t }}</p>
       </div>
     </div>
   </div>
@@ -471,7 +471,7 @@
       
     } catch (error) {
       console.error('Stock alert error:', error);
-      alert('Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.');
+      alert(window.almliebe?.strings?.backInStockError || 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.');
     } finally {
       submitText.hidden = false;
       submitLoading.hidden = true;

@@ -40,6 +40,16 @@
     "decrease_quantity": "Menge verringern",
     "increase_quantity": "Menge erhöhen"
   },
+  "back_in_stock": {
+    "title": "Benachrichtigung",
+    "select_size": "Größe auswählen",
+    "email_label": "E-Mail eingeben, wir benachrichtigen Sie",
+    "email_placeholder": "Ihre E-Mail-Adresse eingeben",
+    "submit": "Anmelden",
+    "success_title": "Erfolgreich angemeldet!",
+    "success_text": "Wir benachrichtigen Sie, sobald dieser Artikel wieder verfügbar ist.",
+    "error": "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
+  },
   "products": {
     "product": {
       "add_to_cart": "In den Warenkorb",
