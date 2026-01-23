@@ -205,15 +205,15 @@
               class="product-card__atc-btn{% unless product.available %} product-card__atc-btn--oos{% endunless %}"
               data-size-add="{{ one_size_variant.id }}"
               {% unless product.available %}disabled aria-disabled="true"{% endunless %}
-              aria-label="{% if product.available %}In den Warenkorb{% else %}Nicht auf Lager{% endif %}"
+              aria-label="{% if product.available %}{{ 'products.product.add_to_cart' | t }}{% else %}{{ 'products.product.out_of_stock' | t }}{% endif %}"
             >
               {%- if product.available -%}
                 <svg class="product-card__atc-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
                 </svg>
-                <span>In den Warenkorb</span>
+                <span>{{ 'products.product.add_to_cart' | t }}</span>
               {%- else -%}
-                <span>Nicht auf Lager</span>
+                <span>{{ 'products.product.out_of_stock' | t }}</span>
               {%- endif -%}
             </button>
           {%- else -%}
@@ -238,7 +238,7 @@
                   class="product-card__size-btn{% unless size_available %} product-card__size-btn--oos{% endunless %}"
                   data-size-add="{{ size_variant_id | default: variant.id }}"
                   {% unless size_available %}disabled aria-disabled="true"{% endunless %}
-                  aria-label="{{ size_value }}{% unless size_available %} - Ausverkauft{% endunless %}"
+                  aria-label="{{ size_value }}{% unless size_available %} - {{ 'products.product.sold_out' | t }}{% endunless %}"
                 >
                   <span class="product-card__size-text">{{ size_value }}</span>
                   {%- unless size_available -%}
