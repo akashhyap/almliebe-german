@@ -8,7 +8,7 @@
 
 <div class="wishlist-page">
   <div class="container">
-    <h1 class="wishlist-page__title">Wunschliste</h1>
+    <h1 class="wishlist-page__title">{{ 'wishlist.title' | t }}</h1>
     
     <div class="wishlist-page__content">
       {%- comment -%} Empty State {%- endcomment -%}
@@ -16,9 +16,9 @@
         <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
           <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
         </svg>
-        <h2>Ihre Wunschliste ist leer</h2>
-        <p>Speichern Sie Ihre Lieblingsartikel, indem Sie auf das Herz-Symbol klicken.</p>
-        <a href="/collections/all" class="btn btn--primary">Jetzt einkaufen</a>
+        <h2>{{ 'wishlist.empty_title' | t }}</h2>
+        <p>{{ 'wishlist.empty_text' | t }}</p>
+        <a href="/collections/all" class="btn btn--primary">{{ 'wishlist.shop_now' | t }}</a>
       </div>
       
       {%- comment -%} Wishlist Grid {%- endcomment -%}
@@ -225,13 +225,16 @@ function renderWishlist() {
   grid.style.display = 'grid';
   empty.style.display = 'none';
   
+  const removeLabel = window.almliebe?.strings?.wishlistRemove || 'Entfernen';
+  const productFallback = window.almliebe?.strings?.wishlistProductFallback || 'Produkt';
+  
   grid.innerHTML = items.map(item => `
     <div class="wishlist-item" data-wishlist-item="${item.id}">
       <button 
         type="button" 
         class="wishlist-item__remove" 
         data-remove-wishlist="${item.id}"
-        aria-label="Entfernen"
+        aria-label="${removeLabel}"
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -240,13 +243,13 @@ function renderWishlist() {
       </button>
       <div class="wishlist-item__image">
         <a href="${item.url || '/products/' + item.handle}">
-          <img src="${item.image || 'https://placehold.co/400x500?text=No+Image'}" alt="${item.title || 'Produkt'}" loading="lazy">
+          <img src="${item.image || 'https://placehold.co/400x500?text=No+Image'}" alt="${item.title || productFallback}" loading="lazy">
         </a>
       </div>
       <div class="wishlist-item__info">
         ${item.vendor ? `<p class="wishlist-item__vendor">${item.vendor}</p>` : ''}
         <h3 class="wishlist-item__title">
-          <a href="${item.url || '/products/' + item.handle}">${item.title || 'Produkt'}</a>
+          <a href="${item.url || '/products/' + item.handle}">${item.title || productFallback}</a>
         </h3>
         ${item.price ? `<p class="wishlist-item__price">${item.price}</p>` : ''}
       </div>

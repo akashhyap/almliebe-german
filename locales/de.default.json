@@ -292,6 +292,14 @@
       "copyright": "Alle Rechte vorbehalten"
     }
   },
+  "wishlist": {
+    "title": "Wunschliste",
+    "empty_title": "Ihre Wunschliste ist leer",
+    "empty_text": "Speichern Sie Ihre Lieblingsartikel, indem Sie auf das Herz-Symbol klicken.",
+    "shop_now": "Jetzt einkaufen",
+    "remove": "Entfernen",
+    "product_fallback": "Produkt"
+  },
   "gift_cards": {
     "issued": {
       "title": "Ihr Geschenkgutschein",
