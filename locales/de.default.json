@@ -122,7 +122,8 @@
       "country_of_origin": "Herkunftsland",
       "added": "✓ Hinzugefügt",
       "error_select_variant": "Fehler - Variante wählen",
-      "error_try_again": "Fehler - Bitte erneut versuchen"
+      "error_try_again": "Fehler - Bitte erneut versuchen",
+      "out_of_stock": "Ausverkauft"
     },
     "size_guide": {
       "title": "Größentabelle",
