@@ -13,7 +13,7 @@
       "type": "image-banner",
       "settings": {
         "image": "shopify://shop_images/20260121-d_2x_3d0a6bd8-fbc0-4ad0-a1c3-65369f8b9ff8.webp",
-        "banner_height": "medium",
+        "banner_height": "large",
         "heading": "",
         "text": "",
         "text_alignment": "center",
