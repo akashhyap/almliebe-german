@@ -226,11 +226,9 @@
         </a>
         
         <div class="cart-drawer__payment-icons">
-          <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/visa.sxIq5Dot.svg" alt="Visa" height="24">
-          <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/mastercard.1c4_lyMp.svg" alt="Mastercard" height="24">
-          <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/amex.Csr7hRoy.svg" alt="Amex" height="24">
-          <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/paypal.CyTEpVgk.svg" alt="PayPal" height="24">
-          <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/apple-pay.C8USXC27.svg" alt="Apple Pay" height="24">
+          {%- for type in shop.enabled_payment_types -%}
+            {{ type | payment_type_svg_tag: class: 'payment-icon' }}
+          {%- endfor -%}
         </div>
       </div>
     {%- endif -%}
@@ -811,7 +809,7 @@
     padding: 0 1.5rem 1.5rem;
   }
 
-  .cart-drawer__payment-icons img {
+  .cart-drawer__payment-icons .payment-icon {
     height: 24px;
     width: auto;
   }
