@@ -377,6 +377,10 @@
     gap: 1rem;
     padding: 1.25rem 1.5rem;
     border-bottom: 1px solid #f3f4f6;
+    max-height: 200px;
+    transform: translateX(0);
+    opacity: 1;
+    transition: all 0.3s ease-out;
   }
 
   .cart-drawer__item-image {
@@ -433,10 +437,54 @@
     color: #9ca3af;
     padding: 0;
     transition: color 0.2s;
+    position: relative;
   }
 
   .cart-drawer__item-remove:hover {
     color: #111827;
+  }
+
+  /* Loading state for remove button */
+  .cart-drawer__item-remove.is-loading {
+    pointer-events: none;
+  }
+
+  .cart-drawer__item-remove.is-loading svg {
+    opacity: 0;
+  }
+
+  .cart-drawer__item-remove.is-loading::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border: 2px solid #e5e7eb;
+    border-top-color: #111827;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+
+  /* Removing state for cart item - slide out animation */
+  .cart-drawer__item.is-removing {
+    opacity: 0;
+    transform: translateX(100%);
+    max-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: all 0.3s ease-out;
+  }
+
+  /* Updating state (for quantity changes) */
+  .cart-drawer__item.is-updating {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
   }
 
   .cart-drawer__item-variant {
@@ -1158,6 +1206,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (quantity > 1) {
       quantity--;
       valueEl.textContent = quantity;
+      item.classList.add('is-updating');
       await updateCartItem(key, quantity);
     }
   });
@@ -1177,6 +1226,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     quantity++;
     valueEl.textContent = quantity;
+    item.classList.add('is-updating');
     await updateCartItem(key, quantity);
   });
 
@@ -1189,7 +1239,30 @@ document.addEventListener('DOMContentLoaded', function() {
     e.stopPropagation();
 
     const key = btn.getAttribute('data-cart-item-remove');
-    await updateCartItem(key, 0);
+    const item = btn.closest('.cart-drawer__item');
+    
+    // Add loading states immediately
+    btn.classList.add('is-loading');
+    if (item) {
+      item.classList.add('is-removing');
+      
+      // Optimistically update header cart count
+      const countBadges = document.querySelectorAll('[data-cart-count]');
+      countBadges.forEach(badge => {
+        const currentCount = parseInt(badge.textContent) || 0;
+        if (currentCount > 0) {
+          badge.textContent = currentCount - 1;
+          if (currentCount - 1 === 0) {
+            badge.classList.add('is-hidden');
+          }
+        }
+      });
+    }
+    
+    // Wait for animation then update
+    setTimeout(async () => {
+      await updateCartItem(key, 0);
+    }, 300);
   });
 
   // Update cart item
