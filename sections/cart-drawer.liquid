@@ -377,10 +377,22 @@
     gap: 1rem;
     padding: 1.25rem 1.5rem;
     border-bottom: 1px solid #f3f4f6;
-    max-height: 200px;
-    transform: translateX(0);
     opacity: 1;
-    transition: all 0.3s ease-out;
+    transform: scale(1);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  /* Updating state (for quantity changes) */
+  .cart-drawer__item.is-updating {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* Removing state - clean professional fade */
+  .cart-drawer__item.is-removing {
+    opacity: 0;
+    transform: scale(0.97);
+    pointer-events: none;
   }
 
   .cart-drawer__item-image {
@@ -462,25 +474,6 @@
     border-top-color: #111827;
     border-radius: 50%;
     animation: spin 0.6s linear infinite;
-  }
-
-  /* Removing state for cart item - slide out animation */
-  .cart-drawer__item.is-removing {
-    opacity: 0;
-    transform: translateX(100%);
-    max-height: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    margin-bottom: 0;
-    overflow: hidden;
-    pointer-events: none;
-    transition: all 0.3s ease-out;
-  }
-
-  /* Updating state (for quantity changes) */
-  .cart-drawer__item.is-updating {
-    opacity: 0.6;
-    pointer-events: none;
   }
 
   @keyframes spin {
@@ -1241,9 +1234,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const key = btn.getAttribute('data-cart-item-remove');
     const item = btn.closest('.cart-drawer__item');
     
-    // Add loading states immediately
-    btn.classList.add('is-loading');
     if (item) {
+      // Add removing state for fade animation
       item.classList.add('is-removing');
       
       // Optimistically update header cart count
@@ -1257,12 +1249,14 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         }
       });
-    }
-    
-    // Wait for animation then update
-    setTimeout(async () => {
+      
+      // Wait for fade animation, then update cart
+      setTimeout(async () => {
+        await updateCartItem(key, 0);
+      }, 250);
+    } else {
       await updateCartItem(key, 0);
-    }, 300);
+    }
   });
 
   // Update cart item
