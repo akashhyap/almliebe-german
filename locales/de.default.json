@@ -93,7 +93,10 @@
       "composition": "Zusammensetzung",
       "fit": "Passform",
       "model_info": "Model trägt Größe",
-      "country_of_origin": "Herkunftsland"
+      "country_of_origin": "Herkunftsland",
+      "added": "✓ Hinzugefügt",
+      "error_select_variant": "Fehler - Variante wählen",
+      "error_try_again": "Fehler - Bitte erneut versuchen"
     },
     "size_guide": {
       "title": "Größentabelle",

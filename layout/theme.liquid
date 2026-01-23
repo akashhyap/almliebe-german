@@ -257,7 +257,10 @@
         itemAdded: {{ 'cart.general.item_added' | t | json }},
         viewCart: {{ 'cart.general.view_cart' | t | json }},
         freeShipping: {{ 'cart.general.free_shipping_unlocked' | t | json }},
-        shippingRemaining: {{ 'cart.general.shipping_remaining' | t | json }}
+        shippingRemaining: {{ 'cart.general.shipping_remaining' | t | json }},
+        added: {{ 'products.product.added' | t | json }},
+        errorSelectVariant: {{ 'products.product.error_select_variant' | t | json }},
+        errorTryAgain: {{ 'products.product.error_try_again' | t | json }}
       }
     };
   </script>
@@ -354,7 +357,7 @@
     </script>
   {% endif %}
   
-  
+  {% render 'cart-drawer' %}
   {% render 'back-in-stock-drawer' %}
   {% render 'wishlist' %}
   {% render 'predictive-search' %}

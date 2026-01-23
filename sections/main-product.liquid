@@ -1995,10 +1995,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (addToCartBtn && addToCartText) {
               if (variant.available) {
                 addToCartBtn.disabled = false;
-                addToCartText.textContent = 'IN DEN WARENKORB';
+                addToCartText.textContent = window.almliebe?.strings?.addToCart || 'In den Warenkorb';
               } else {
                 addToCartBtn.disabled = true;
-                addToCartText.textContent = 'AUSVERKAUFT';
+                addToCartText.textContent = window.almliebe?.strings?.soldOut || 'Ausverkauft';
               }
             }
 
@@ -2098,7 +2098,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('No variant ID found');
         if (submitText) {
           submitText.hidden = false;
-          submitText.textContent = 'FEHLER - VARIANTE WÄHLEN';
+          submitText.textContent = window.almliebe?.strings?.errorSelectVariant || 'Fehler - Variante wählen';
         }
         if (submitLoading) submitLoading.hidden = true;
         if (submitBtn) submitBtn.disabled = false;
@@ -2132,14 +2132,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show success state briefly
         if (submitText) {
           submitText.hidden = false;
-          submitText.textContent = '✓ HINZUGEFÜGT';
+          submitText.textContent = window.almliebe?.strings?.added || '✓ Hinzugefügt';
         }
         if (submitLoading) submitLoading.hidden = true;
         
         // Reset button after 2 seconds
         setTimeout(() => {
           if (submitText) {
-            submitText.textContent = 'IN DEN WARENKORB';
+            submitText.textContent = window.almliebe?.strings?.addToCart || 'In den Warenkorb';
           }
           if (submitBtn) submitBtn.disabled = false;
         }, 2000);
@@ -2150,14 +2150,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show error state
         if (submitText) {
           submitText.hidden = false;
-          submitText.textContent = 'FEHLER - BITTE ERNEUT VERSUCHEN';
+          submitText.textContent = window.almliebe?.strings?.errorTryAgain || 'Fehler - Bitte erneut versuchen';
         }
         if (submitLoading) submitLoading.hidden = true;
         
         // Reset after 3 seconds
         setTimeout(() => {
           if (submitText) {
-            submitText.textContent = 'IN DEN WARENKORB';
+            submitText.textContent = window.almliebe?.strings?.addToCart || 'In den Warenkorb';
           }
           if (submitBtn) submitBtn.disabled = false;
         }, 3000);
