@@ -60,102 +60,7 @@
         <div class="featured-collection__track" data-slider-track>
           {%- for product in collection.products limit: products_to_show -%}
             <div class="featured-collection__slide">
-              <div class="fc-product-card">
-                {%- comment -%} Image Container {%- endcomment -%}
-                <a href="{{ product.url }}" class="fc-product-card__image-link">
-                  <div class="fc-product-card__image">
-                    {%- if product.featured_media -%}
-                      <img 
-                        src="{{ product.featured_media | image_url: width: 600 }}"
-                        alt="{{ product.title | escape }}"
-                        width="300"
-                        height="400"
-                        loading="lazy"
-                      >
-                      {%- if product.media.size > 1 -%}
-                        <img 
-                          class="fc-product-card__image-hover"
-                          src="{{ product.media[1] | image_url: width: 600 }}"
-                          alt="{{ product.title | escape }}"
-                          width="300"
-                          height="400"
-                          loading="lazy"
-                        >
-                      {%- endif -%}
-                    {%- else -%}
-                      <div class="fc-product-card__placeholder">
-                        {{ 'product-1' | placeholder_svg_tag }}
-                      </div>
-                    {%- endif -%}
-                    
-                    {%- comment -%} Badges {%- endcomment -%}
-                    <div class="fc-product-card__badges">
-                      {%- if product.available == false -%}
-                        <span class="fc-product-card__badge fc-product-card__badge--soldout">Ausverkauft</span>
-                      {%- elsif product.created_at > 'now' | date: '%s' | minus: 2592000 | date: '%Y-%m-%dT%H:%M:%S' -%}
-                        <span class="fc-product-card__badge fc-product-card__badge--new">NEU</span>
-                      {%- endif -%}
-                      
-                      {%- if product.compare_at_price > product.price -%}
-                        {%- assign discount = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}
-                        <span class="fc-product-card__badge fc-product-card__badge--sale">-{{ discount }}%</span>
-                      {%- endif -%}
-                    </div>
-                    
-                    {%- comment -%} Wishlist Button {%- endcomment -%}
-                    <button 
-                      type="button" 
-                      class="fc-product-card__wishlist"
-                      data-wishlist-toggle="{{ product.id }}"
-                      data-product-handle="{{ product.handle }}"
-                      data-product-title="{{ product.title | escape }}"
-                      data-product-image="{{ product.featured_image | image_url: width: 400 }}"
-                      data-product-price="{{ product.price | money }}"
-                      data-product-url="{{ product.url }}"
-                      aria-label="Zur Wunschliste hinzufügen"
-                    >
-                      <svg class="icon-heart" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                      </svg>
-                    </button>
-                  </div>
-                </a>
-                
-                {%- comment -%} Product Info {%- endcomment -%}
-                <div class="fc-product-card__info">
-                  <a href="{{ product.url }}" class="fc-product-card__title">
-                    {{ product.title }}
-                  </a>
-                  
-                  {%- comment -%} Optional: Product Type or Vendor {%- endcomment -%}
-                  {%- if section.settings.show_vendor and product.vendor != blank -%}
-                    <p class="fc-product-card__vendor">{{ product.vendor }}</p>
-                  {%- endif -%}
-                  
-                  {%- comment -%} Color variants indicator {%- endcomment -%}
-                  {%- assign color_count = 0 -%}
-                  {%- for option in product.options_with_values -%}
-                    {%- assign option_name_lower = option.name | downcase -%}
-                    {%- if option_name_lower == 'color' or option_name_lower == 'colour' or option_name_lower == 'farbe' -%}
-                      {%- assign color_count = option.values.size -%}
-                      {%- break -%}
-                    {%- endif -%}
-                  {%- endfor -%}
-                  {%- if color_count > 1 -%}
-                    <p class="fc-product-card__colors">{{ color_count }} Farben</p>
-                  {%- endif -%}
-                  
-                  {%- comment -%} Price {%- endcomment -%}
-                  <div class="fc-product-card__price">
-                    {%- if product.compare_at_price > product.price -%}
-                      <span class="fc-product-card__price-sale">{{ product.price | money }}</span>
-                      <span class="fc-product-card__price-compare">{{ product.compare_at_price | money }}</span>
-                    {%- else -%}
-                      <span class="fc-product-card__price-regular">{{ product.price | money }}</span>
-                    {%- endif -%}
-                  </div>
-                </div>
-              </div>
+              {%- render 'product-card', product: product, lazy: true, show_vendor: section.settings.show_vendor -%}
             </div>
           {%- endfor -%}
         </div>
@@ -330,6 +235,11 @@
     .featured-collection__slide {
       flex: 0 0 calc(20% - 0.8rem);
     }
+  }
+
+  /* Product card within featured collection - ensure proper sizing */
+  .featured-collection__slide .product-card {
+    height: 100%;
   }
   
   /* Product Card */

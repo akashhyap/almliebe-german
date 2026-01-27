@@ -85,97 +85,7 @@
             {%- assign product = block.settings.product -%}
             {%- if product != blank -%}
               <div class="new-arrivals-section__item" {{ block.shopify_attributes }}>
-                <div class="na-product-card">
-                  {%- comment -%} Image Container {%- endcomment -%}
-                  <a href="{{ product.url }}" class="na-product-card__image-link">
-                    <div class="na-product-card__image">
-                      {%- if product.featured_media -%}
-                        <img 
-                          src="{{ product.featured_media | image_url: width: 600 }}"
-                          alt="{{ product.title | escape }}"
-                          width="300"
-                          height="400"
-                          loading="lazy"
-                        >
-                        {%- if product.media.size > 1 -%}
-                          <img 
-                            class="na-product-card__image-hover"
-                            src="{{ product.media[1] | image_url: width: 600 }}"
-                            alt="{{ product.title | escape }}"
-                            width="300"
-                            height="400"
-                            loading="lazy"
-                          >
-                        {%- endif -%}
-                      {%- else -%}
-                        <div class="na-product-card__placeholder">
-                          {{ 'product-1' | placeholder_svg_tag }}
-                        </div>
-                      {%- endif -%}
-                      
-                      {%- comment -%} Badges {%- endcomment -%}
-                      <div class="na-product-card__badges">
-                        {%- if product.available == false -%}
-                          <span class="na-product-card__badge na-product-card__badge--soldout">Ausverkauft</span>
-                        {%- else -%}
-                          {%- assign total_inventory = 0 -%}
-                          {%- for variant in product.variants -%}
-                            {%- if variant.inventory_management and variant.inventory_quantity > 0 -%}
-                              {%- assign total_inventory = total_inventory | plus: variant.inventory_quantity -%}
-                            {%- endif -%}
-                          {%- endfor -%}
-                          {%- if total_inventory > 0 and total_inventory <= 5 -%}
-                            <span class="na-product-card__badge na-product-card__badge--low">Nur noch wenige</span>
-                          {%- endif -%}
-                        {%- endif -%}
-                        
-                        {%- if product.compare_at_price > product.price -%}
-                          {%- assign discount = product.compare_at_price | minus: product.price | times: 100.0 | divided_by: product.compare_at_price | round -%}
-                          <span class="na-product-card__badge na-product-card__badge--sale">-{{ discount }}%</span>
-                        {%- endif -%}
-                      </div>
-                      
-                      {%- comment -%} Wishlist Button {%- endcomment -%}
-                      <button 
-                        type="button" 
-                        class="na-product-card__wishlist"
-                        data-wishlist-toggle="{{ product.id }}"
-                        data-product-handle="{{ product.handle }}"
-                        data-product-title="{{ product.title | escape }}"
-                        data-product-image="{{ product.featured_image | image_url: width: 400 }}"
-                        data-product-price="{{ product.price | money }}"
-                        data-product-url="{{ product.url }}"
-                        aria-label="Zur Wunschliste hinzufügen"
-                      >
-                        <svg class="icon-heart" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                        </svg>
-                      </button>
-                    </div>
-                  </a>
-                  
-                  {%- comment -%} Product Info - LEFT ALIGNED {%- endcomment -%}
-                  <div class="na-product-card__info">
-                    {%- if show_vendor and product.vendor != blank -%}
-                      <p class="na-product-card__vendor">{{ product.vendor }}</p>
-                    {%- endif -%}
-                    
-                    <a href="{{ product.url }}" class="na-product-card__title">
-                      {{ product.title }}
-                    </a>
-                    
-                    <div class="na-product-card__price">
-                      {%- if product.compare_at_price > product.price -%}
-                        <span class="na-product-card__price-sale">{{ product.price | money }}</span>
-                        <span class="na-product-card__price-compare">{{ product.compare_at_price | money }}</span>
-                      {%- else -%}
-                        <span class="na-product-card__price-regular">{{ product.price | money }}</span>
-                      {%- endif -%}
-                    </div>
-                    
-                    <p class="na-product-card__tax">inkl. MwSt.</p>
-                  </div>
-                </div>
+                {%- render 'product-card', product: product, lazy: true, show_vendor: show_vendor -%}
               </div>
             {%- endif -%}
           {%- endfor -%}
@@ -469,6 +379,11 @@
     .new-arrivals-section__track--desktop-grid .new-arrivals-section__item {
       flex: none;
     }
+  }
+
+  /* Product card within new arrivals - ensure proper sizing */
+  .new-arrivals-section__item .product-card {
+    height: 100%;
   }
   
   /* ========== PRODUCT CARD ========== */
