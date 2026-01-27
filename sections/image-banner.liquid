@@ -1,5 +1,12 @@
 <div class="image-banner-wrapper{% if section.settings.banner_width == 'container' %} image-banner-wrapper--container{% endif %}">
-  <div class="image-banner image-banner--{{ section.settings.banner_height }} image-banner--{{ section.settings.text_alignment }}" style="--text-color: {{ section.settings.text_color }};">
+  {%- liquid
+    if section.settings.image != blank
+      assign img_aspect = section.settings.image.aspect_ratio | default: 2.5
+    else
+      assign img_aspect = 2.5
+    endif
+  -%}
+  <div class="image-banner image-banner--{{ section.settings.banner_height }} image-banner--{{ section.settings.text_alignment }}" style="--text-color: {{ section.settings.text_color }}; --img-aspect: {{ img_aspect }};">
     {% if section.settings.image != blank %}
       <div class="image-banner__media">
         {%- if section.settings.image_mobile != blank -%}
@@ -165,49 +172,18 @@
   }
 
   /* ===========================================
-     AUTO MODE - Full image, constrained to 85vh max
-     No cropping, scales to fit viewport
+     AUTO MODE - Uses actual image aspect ratio
+     Capped at 85vh max height
      =========================================== */
   .image-banner.image-banner--auto {
-    aspect-ratio: unset !important;
+    /* Use actual image aspect ratio from Liquid */
+    aspect-ratio: var(--img-aspect, 2.5);
     max-height: 85vh;
-  }
-
-  /* Media fills the constrained container */
-  .image-banner.image-banner--auto .image-banner__media {
-    position: relative !important;
-    inset: unset !important;
-    display: flex;
-    justify-content: center;
-    max-height: 85vh;
-  }
-
-  /* Image scales to fit, no cropping */
-  .image-banner.image-banner--auto .image-banner__img {
-    width: 100% !important;
-    height: auto !important;
-    max-height: 85vh !important;
-    object-fit: contain !important;
-  }
-
-  /* Wrapper overlays the image */
-  .image-banner.image-banner--auto .image-banner__wrapper {
-    position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    width: calc(100% - 4rem) !important;
   }
 
   @media (max-width: 767px) {
-    .image-banner.image-banner--auto .image-banner__wrapper {
-      width: calc(100% - 2rem) !important;
-    }
-    
-    .image-banner.image-banner--auto,
-    .image-banner.image-banner--auto .image-banner__media,
-    .image-banner.image-banner--auto .image-banner__img {
-      max-height: 60vh !important;
+    .image-banner.image-banner--auto {
+      max-height: 70vh;
     }
   }
 
@@ -361,7 +337,7 @@
       "options": [
         {
           "value": "auto",
-          "label": "Auto (Full Image, max 85vh)"
+          "label": "Auto (Image Ratio, max 85vh)"
         },
         {
           "value": "small",
