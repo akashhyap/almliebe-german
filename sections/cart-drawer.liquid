@@ -1,7 +1,10 @@
 {% comment %}
-  CART DRAWER - Gymshark Style
-  Clean slide-out cart from the right with discount code support
-  Fixed: Event handling conflicts with Dawn theme JS
+  CART DRAWER - Inventory-Aware Quantity Controls
+  
+  Features:
+  - Disables + button when variant stock limit is reached
+  - Tracks inventory per variant
+  - Shows stock limit message when max reached
 {% endcomment %}
 
 <div class="cart-drawer" data-cart-drawer aria-hidden="true">
@@ -37,7 +40,37 @@
       {%- if cart.item_count > 0 -%}
         <ul class="cart-drawer__items">
           {%- for item in cart.items -%}
-            <li class="cart-drawer__item" data-cart-item data-line="{{ forloop.index }}" data-key="{{ item.key }}">
+            {%- comment -%} Get inventory quantity for this variant {%- endcomment -%}
+            {%- assign variant_inventory = item.variant.inventory_quantity -%}
+            {%- assign inventory_policy = item.variant.inventory_policy -%}
+            {%- assign inventory_management = item.variant.inventory_management -%}
+            
+            {%- comment -%} 
+              Determine max quantity:
+              - If inventory not tracked OR policy is 'continue', allow 9999
+              - Otherwise use actual inventory
+            {%- endcomment -%}
+            {%- if inventory_management == blank or inventory_management == null or inventory_policy == 'continue' -%}
+              {%- assign max_quantity = 9999 -%}
+            {%- else -%}
+              {%- assign max_quantity = variant_inventory -%}
+            {%- endif -%}
+            
+            {%- comment -%} Check if at max quantity {%- endcomment -%}
+            {%- assign at_max = false -%}
+            {%- if item.quantity >= max_quantity -%}
+              {%- assign at_max = true -%}
+            {%- endif -%}
+            
+            <li 
+              class="cart-drawer__item" 
+              data-cart-drawer-item 
+              data-line="{{ forloop.index }}" 
+              data-key="{{ item.key }}"
+              data-variant-id="{{ item.variant_id }}"
+              data-max-quantity="{{ max_quantity }}"
+              data-current-quantity="{{ item.quantity }}"
+            >
               {%- comment -%} Product Image {%- endcomment -%}
               <a href="{{ item.url }}" class="cart-drawer__item-image">
                 {%- if item.image -%}
@@ -62,7 +95,8 @@
                   <button 
                     type="button" 
                     class="cart-drawer__item-remove"
-                    data-cart-drawer-remove="{{ item.key }}"
+                    data-cart-drawer-remove
+                    data-line="{{ forloop.index }}"
                     aria-label="{{ 'cart.general.remove' | t | default: 'Entfernen' }}"
                   >
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -88,21 +122,32 @@
                     {%- endif -%}
                   </div>
 
-                  {%- comment -%} Gymshark-style quantity: just − number + {%- endcomment -%}
-                  <div class="cart-drawer__item-quantity">
-                    <button 
-                      type="button" 
-                      class="cart-drawer__qty-btn"
-                      data-cart-drawer-qty-minus="{{ item.key }}"
-                      aria-label="Weniger"
-                    >−</button>
-                    <span class="cart-drawer__qty-value" data-cart-drawer-qty-value="{{ item.key }}">{{ item.quantity }}</span>
-                    <button 
-                      type="button" 
-                      class="cart-drawer__qty-btn"
-                      data-cart-drawer-qty-plus="{{ item.key }}"
-                      aria-label="Mehr"
-                    >+</button>
+                  <div class="cart-drawer__quantity-wrapper">
+                    {%- comment -%} Stock limit message {%- endcomment -%}
+                    {%- if at_max and max_quantity < 9999 -%}
+                      <span class="cart-drawer__stock-limit" data-stock-limit>Max: {{ max_quantity }}</span>
+                    {%- else -%}
+                      <span class="cart-drawer__stock-limit" data-stock-limit style="display: none;"></span>
+                    {%- endif -%}
+                    
+                    <div class="cart-drawer__item-quantity">
+                      <button 
+                        type="button" 
+                        class="cart-drawer__qty-btn cart-drawer__qty-btn--minus"
+                        data-cart-drawer-minus
+                        data-line="{{ forloop.index }}"
+                        aria-label="Menge verringern"
+                      >−</button>
+                      <span class="cart-drawer__qty-value" data-cart-drawer-qty>{{ item.quantity }}</span>
+                      <button 
+                        type="button" 
+                        class="cart-drawer__qty-btn cart-drawer__qty-btn--plus{% if at_max %} is-disabled{% endif %}"
+                        data-cart-drawer-plus
+                        data-line="{{ forloop.index }}"
+                        aria-label="Menge erhöhen"
+                        {% if at_max %}disabled aria-disabled="true"{% endif %}
+                      >+</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -129,84 +174,14 @@
     {%- comment -%} Footer {%- endcomment -%}
     {%- if cart.item_count > 0 -%}
       <div class="cart-drawer__footer">
-        
-        {%- comment -%} Discount Code Section {%- endcomment -%}
-        <div class="cart-drawer__discount" data-discount-section>
-          <h3 class="cart-drawer__discount-title">{{ 'cart.discount.title' | t }}</h3>
-          <div class="cart-drawer__discount-form">
-            <input 
-              type="text" 
-              class="cart-drawer__discount-input" 
-              data-discount-input
-              placeholder="{{ 'cart.discount.placeholder' | t }}"
-              autocomplete="off"
-              spellcheck="false"
-            >
-            <button 
-              type="button" 
-              class="cart-drawer__discount-btn"
-              data-discount-apply
-            >
-              {{ 'cart.discount.apply' | t | upcase }}
-            </button>
-          </div>
-          
-          {%- comment -%} Applied Discounts {%- endcomment -%}
-          <div class="cart-drawer__discount-applied" data-discount-applied style="display: none;">
-            <div class="discount-tag" data-discount-tag>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
-                <line x1="7" y1="7" x2="7.01" y2="7"/>
-              </svg>
-              <span data-discount-code></span>
-              <button type="button" class="discount-tag__remove" data-discount-remove aria-label="{{ 'cart.general.remove' | t }}">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-              </button>
-            </div>
-          </div>
-          
-          {%- comment -%} Messages {%- endcomment -%}
-          <p class="cart-drawer__discount-message cart-drawer__discount-message--success" data-discount-success style="display: none;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-              <polyline points="22 4 12 14.01 9 11.01"/>
-            </svg>
-            <span data-discount-success-text></span>
-          </p>
-          <p class="cart-drawer__discount-message cart-drawer__discount-message--error" data-discount-error style="display: none;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="15" y1="9" x2="9" y2="15"/>
-              <line x1="9" y1="9" x2="15" y2="15"/>
-            </svg>
-            <span data-discount-error-text></span>
-          </p>
-          
-          <p class="cart-drawer__discount-note">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="12" y1="16" x2="12" y2="12"/>
-              <line x1="12" y1="8" x2="12.01" y2="8"/>
-            </svg>
-            {{ 'cart.discount.gift_card_note' | t }}
-          </p>
-        </div>
-
         {%- comment -%} Order Summary {%- endcomment -%}
         <div class="cart-drawer__summary">
-          <h3 class="cart-drawer__summary-title">{{ 'cart.general.order_summary' | t | default: 'BESTELLÜBERSICHT' }}</h3>
           <div class="cart-drawer__summary-row">
             <span>{{ 'cart.general.subtotal' | t | default: 'Zwischensumme' }}</span>
             <span data-cart-subtotal>{{ cart.total_price | money }}</span>
           </div>
-          <div class="cart-drawer__summary-row" data-discount-row style="display: none;">
-            <span>{{ 'cart.discount.discount' | t | default: 'Rabatt' }}</span>
-            <span data-cart-discount>-€0,00</span>
-          </div>
           <div class="cart-drawer__summary-row">
-            <span>{{ 'cart.general.shipping' | t | default: 'Standardversand' }}</span>
+            <span>{{ 'cart.general.shipping' | t | default: 'Versand' }}</span>
             <span data-cart-shipping>{{ 'cart.free_shipping.free' | t | default: 'Kostenlos' }}</span>
           </div>
           <div class="cart-drawer__summary-row cart-drawer__summary-row--total">
@@ -229,7 +204,6 @@
           <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/mastercard.1c4_lyMp.svg" alt="Mastercard" width="38" height="24">
           <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/amex.Csr7hRoy.svg" alt="Amex" width="38" height="24">
           <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/paypal.CyTEpVgk.svg" alt="PayPal" width="38" height="24">
-          <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/apple-pay.C8USXC27.svg" alt="Apple Pay" width="38" height="24">
         </div>
       </div>
     {%- endif -%}
@@ -238,22 +212,27 @@
 
 <script>
 /**
- * Cart Drawer Controller
+ * Cart Drawer - Inventory-Aware Quantity Controls
  * 
- * IMPORTANT: Uses unique data attributes (data-cart-drawer-*) to prevent
- * conflicts with Dawn theme's built-in cart handling which uses generic
- * attributes like data-quantity-minus, data-cart-item-remove, etc.
+ * Features:
+ * - Disables + button when variant stock limit reached
+ * - Uses line-based cart updates (more reliable than key)
+ * - Prevents Shopify's core JS from interfering via capture phase
  */
 (function() {
   'use strict';
   
   const drawer = document.querySelector('[data-cart-drawer]');
-  if (!drawer) return;
+  if (!drawer) {
+    console.error('[CartDrawer] Drawer element not found');
+    return;
+  }
   
   const FREE_SHIPPING_THRESHOLD = 5000; // €50 in cents
+  let isUpdating = false;
   
   // ===========================================
-  // DRAWER OPEN/CLOSE
+  // OPEN / CLOSE
   // ===========================================
   
   function openCartDrawer() {
@@ -269,13 +248,15 @@
     document.body.style.overflow = '';
   }
   
-  // Global function for external access
   window.openCartDrawer = openCartDrawer;
   window.closeCartDrawer = closeCartDrawer;
   
   // Close buttons
-  drawer.querySelectorAll('[data-cart-drawer-close]').forEach(btn => {
-    btn.addEventListener('click', closeCartDrawer);
+  drawer.querySelectorAll('[data-cart-drawer-close]').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      closeCartDrawer();
+    });
   });
   
   // Escape key
@@ -291,15 +272,15 @@
   
   async function updateShippingProgress() {
     try {
-      const cartData = await fetch('/cart.js').then(r => r.json());
-      const totalCents = cartData.total_price;
+      var cartData = await fetch('/cart.js').then(function(r) { return r.json(); });
+      var totalCents = cartData.total_price;
       
-      const progressFill = drawer.querySelector('[data-shipping-fill]');
-      const progressMessage = drawer.querySelector('[data-shipping-message]');
-      const shippingEl = drawer.querySelector('[data-cart-shipping]');
+      var progressFill = drawer.querySelector('[data-shipping-fill]');
+      var progressMessage = drawer.querySelector('[data-shipping-message]');
+      var shippingEl = drawer.querySelector('[data-cart-shipping]');
       
-      const progress = Math.min((totalCents / FREE_SHIPPING_THRESHOLD) * 100, 100);
-      const remaining = FREE_SHIPPING_THRESHOLD - totalCents;
+      var progress = Math.min((totalCents / FREE_SHIPPING_THRESHOLD) * 100, 100);
+      var remaining = FREE_SHIPPING_THRESHOLD - totalCents;
       
       if (progressFill) {
         progressFill.style.width = progress + '%';
@@ -308,398 +289,286 @@
       
       if (progressMessage) {
         if (totalCents >= FREE_SHIPPING_THRESHOLD) {
-          progressMessage.innerHTML = `
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-              <polyline points="22 4 12 14.01 9 11.01"/>
-            </svg>
-            <span>Kostenloser Versand!</span>
-          `;
+          progressMessage.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span>Kostenloser Versand!</span>';
           progressMessage.classList.remove('shipping-progress__message--incomplete');
           if (shippingEl) shippingEl.textContent = 'Kostenlos';
         } else {
-          const formattedRemaining = new Intl.NumberFormat('de-DE', { 
-            style: 'currency', 
-            currency: 'EUR' 
-          }).format(remaining / 100);
-          
-          progressMessage.innerHTML = `
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
-              <circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
-            </svg>
-            <span>Noch ${formattedRemaining} bis zum kostenlosen Versand</span>
-          `;
+          var formattedRemaining = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(remaining / 100);
+          progressMessage.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><span>Noch ' + formattedRemaining + ' bis zum kostenlosen Versand</span>';
           progressMessage.classList.add('shipping-progress__message--incomplete');
           if (shippingEl) shippingEl.textContent = 'Wird berechnet';
         }
       }
     } catch (error) {
-      console.error('[CartDrawer] Error updating shipping progress:', error);
+      console.error('[CartDrawer] Shipping progress error:', error);
     }
   }
   
   // ===========================================
-  // DISCOUNT CODE HANDLING
+  // QUANTITY CONTROLS - CAPTURE PHASE
   // ===========================================
   
-  function initDiscountSection() {
-    const applyBtn = drawer.querySelector('[data-discount-apply]');
-    const input = drawer.querySelector('[data-discount-input]');
-    const removeBtn = drawer.querySelector('[data-discount-remove]');
+  // MINUS button
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-cart-drawer-minus]');
+    if (!btn) return;
     
-    if (applyBtn) {
-      applyBtn.addEventListener('click', applyDiscount);
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    
+    if (isUpdating) return;
+    
+    var line = parseInt(btn.getAttribute('data-line'));
+    var item = btn.closest('[data-cart-drawer-item]');
+    var qtyEl = item.querySelector('[data-cart-drawer-qty]');
+    var currentQty = parseInt(qtyEl.textContent);
+    
+    console.log('[CartDrawer] MINUS clicked - Line:', line, 'Current:', currentQty);
+    
+    var newQty = currentQty - 1;
+    
+    if (newQty >= 0) {
+      qtyEl.textContent = newQty;
+      item.classList.add('is-updating');
+      
+      if (newQty === 0) {
+        item.classList.add('is-removing');
+      }
+      
+      // Enable plus button since we're decreasing
+      var plusBtn = item.querySelector('[data-cart-drawer-plus]');
+      if (plusBtn) {
+        plusBtn.disabled = false;
+        plusBtn.classList.remove('is-disabled');
+        plusBtn.removeAttribute('aria-disabled');
+      }
+      
+      // Hide stock limit message
+      var stockLimit = item.querySelector('[data-stock-limit]');
+      if (stockLimit) {
+        stockLimit.style.display = 'none';
+      }
+      
+      updateCart(line, newQty, item);
     }
+  }, true);
+  
+  // PLUS button
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-cart-drawer-plus]');
+    if (!btn) return;
     
-    if (input) {
-      input.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          applyDiscount();
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    
+    if (isUpdating) return;
+    if (btn.disabled) return;
+    
+    var line = parseInt(btn.getAttribute('data-line'));
+    var item = btn.closest('[data-cart-drawer-item]');
+    var qtyEl = item.querySelector('[data-cart-drawer-qty]');
+    var currentQty = parseInt(qtyEl.textContent);
+    var maxQty = parseInt(item.getAttribute('data-max-quantity')) || 9999;
+    
+    console.log('[CartDrawer] PLUS clicked - Line:', line, 'Current:', currentQty, 'Max:', maxQty);
+    
+    var newQty = currentQty + 1;
+    
+    // Check if we can increase
+    if (newQty <= maxQty) {
+      qtyEl.textContent = newQty;
+      item.classList.add('is-updating');
+      item.setAttribute('data-current-quantity', newQty);
+      
+      // Check if we've reached max
+      if (newQty >= maxQty) {
+        btn.disabled = true;
+        btn.classList.add('is-disabled');
+        btn.setAttribute('aria-disabled', 'true');
+        
+        // Show stock limit message
+        var stockLimit = item.querySelector('[data-stock-limit]');
+        if (stockLimit) {
+          stockLimit.textContent = 'Max: ' + maxQty;
+          stockLimit.style.display = 'block';
         }
-      });
+      }
+      
+      updateCart(line, newQty, item);
     }
-    
-    if (removeBtn) {
-      removeBtn.addEventListener('click', removeDiscount);
-    }
-  }
+  }, true);
   
-  async function applyDiscount() {
-    const input = drawer.querySelector('[data-discount-input]');
-    const code = input?.value?.trim();
-    
-    if (!code) return;
-    
-    hideDiscountMessages();
-    
-    try {
-      // Store discount code in cookie for checkout
-      document.cookie = `discount_code=${encodeURIComponent(code)};path=/;max-age=3600`;
-      
-      // Try to apply via redirect method (works for most discount codes)
-      const testResponse = await fetch(`/discount/${encodeURIComponent(code)}`, {
-        method: 'GET',
-        redirect: 'manual'
-      });
-      
-      // Show success UI
-      const appliedEl = drawer.querySelector('[data-discount-applied]');
-      const codeEl = drawer.querySelector('[data-discount-code]');
-      const discountRow = drawer.querySelector('[data-discount-row]');
-      
-      if (appliedEl) appliedEl.style.display = 'flex';
-      if (codeEl) codeEl.textContent = code.toUpperCase();
-      if (discountRow) discountRow.style.display = 'flex';
-      if (input) input.value = '';
-      
-      showDiscountSuccess('Rabattcode angewendet!');
-      
-      // Refresh cart to get updated totals
-      await refreshDrawer();
-      
-    } catch (error) {
-      console.error('[CartDrawer] Error applying discount:', error);
-      showDiscountError('Rabattcode konnte nicht angewendet werden.');
-    }
-  }
-  
-  async function removeDiscount() {
-    try {
-      // Clear the discount cookie
-      document.cookie = 'discount_code=;path=/;max-age=0';
-      
-      // Make a request to clear discount
-      await fetch('/checkout', {
-        method: 'GET',
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-      });
-      
-      const appliedEl = drawer.querySelector('[data-discount-applied]');
-      const discountRow = drawer.querySelector('[data-discount-row]');
-      
-      if (appliedEl) appliedEl.style.display = 'none';
-      if (discountRow) discountRow.style.display = 'none';
-      
-      hideDiscountMessages();
-      await refreshDrawer();
-      
-    } catch (error) {
-      console.error('[CartDrawer] Error removing discount:', error);
-    }
-  }
-  
-  function showDiscountSuccess(message) {
-    const successEl = drawer.querySelector('[data-discount-success]');
-    const textEl = drawer.querySelector('[data-discount-success-text]');
-    if (successEl && textEl) {
-      textEl.textContent = message;
-      successEl.style.display = 'flex';
-    }
-  }
-  
-  function showDiscountError(message) {
-    const errorEl = drawer.querySelector('[data-discount-error]');
-    const textEl = drawer.querySelector('[data-discount-error-text]');
-    if (errorEl && textEl) {
-      textEl.textContent = message;
-      errorEl.style.display = 'flex';
-    }
-  }
-  
-  function hideDiscountMessages() {
-    const successEl = drawer.querySelector('[data-discount-success]');
-    const errorEl = drawer.querySelector('[data-discount-error]');
-    if (successEl) successEl.style.display = 'none';
-    if (errorEl) errorEl.style.display = 'none';
-  }
-  
-  // ===========================================
-  // QUANTITY HANDLING - CAPTURE PHASE
-  // Using capture phase + stopImmediatePropagation to prevent
-  // Dawn theme's handlers from interfering
-  // ===========================================
-  
-  // Quantity MINUS handler
-  drawer.addEventListener('click', async function(e) {
-    const btn = e.target.closest('[data-cart-drawer-qty-minus]');
+  // REMOVE button
+  document.addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-cart-drawer-remove]');
     if (!btn) return;
     
     e.preventDefault();
     e.stopPropagation();
     e.stopImmediatePropagation();
     
-    const key = btn.getAttribute('data-cart-drawer-qty-minus');
-    if (!key) {
-      console.error('[CartDrawer] No key found for minus button');
-      return;
-    }
+    if (isUpdating) return;
     
-    const item = btn.closest('.cart-drawer__item');
-    const valueEl = item?.querySelector('.cart-drawer__qty-value');
-    let quantity = parseInt(valueEl?.textContent || '1');
+    var line = parseInt(btn.getAttribute('data-line'));
+    var item = btn.closest('[data-cart-drawer-item]');
     
-    console.log('[CartDrawer] Minus clicked - Key:', key, 'Current qty:', quantity);
-    
-    if (quantity > 1) {
-      quantity--;
-      if (valueEl) valueEl.textContent = quantity;
-      if (item) item.classList.add('is-updating');
-      await updateCartItem(key, quantity);
-    } else if (quantity === 1) {
-      // Remove item when decreasing from 1
-      if (item) item.classList.add('is-removing');
-      await updateCartItem(key, 0);
-    }
-  }, true); // true = capture phase
-  
-  // Quantity PLUS handler
-  drawer.addEventListener('click', async function(e) {
-    const btn = e.target.closest('[data-cart-drawer-qty-plus]');
-    if (!btn) return;
-    
-    e.preventDefault();
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-    
-    const key = btn.getAttribute('data-cart-drawer-qty-plus');
-    if (!key) {
-      console.error('[CartDrawer] No key found for plus button');
-      return;
-    }
-    
-    const item = btn.closest('.cart-drawer__item');
-    const valueEl = item?.querySelector('.cart-drawer__qty-value');
-    let quantity = parseInt(valueEl?.textContent || '1');
-    
-    console.log('[CartDrawer] Plus clicked - Key:', key, 'Current qty:', quantity);
-    
-    quantity++;
-    if (valueEl) valueEl.textContent = quantity;
-    if (item) item.classList.add('is-updating');
-    await updateCartItem(key, quantity);
-  }, true); // true = capture phase
-  
-  // REMOVE item handler
-  drawer.addEventListener('click', async function(e) {
-    const btn = e.target.closest('[data-cart-drawer-remove]');
-    if (!btn) return;
-    
-    e.preventDefault();
-    e.stopPropagation();
-    e.stopImmediatePropagation();
-    
-    const key = btn.getAttribute('data-cart-drawer-remove');
-    if (!key) {
-      console.error('[CartDrawer] No key found for remove button');
-      return;
-    }
-    
-    console.log('[CartDrawer] Remove clicked - Key:', key);
-    
-    const item = btn.closest('.cart-drawer__item');
+    console.log('[CartDrawer] REMOVE clicked - Line:', line);
     
     if (item) {
       item.classList.add('is-removing');
-      
-      // Optimistically update header cart count
-      const countBadges = document.querySelectorAll('[data-cart-count]');
-      countBadges.forEach(badge => {
-        const currentCount = parseInt(badge.textContent) || 0;
-        if (currentCount > 0) {
-          badge.textContent = currentCount - 1;
-          if (currentCount - 1 === 0) {
-            badge.classList.add('is-hidden');
-          }
-        }
-      });
-      
-      // Wait for fade animation, then update cart
-      setTimeout(async () => {
-        await updateCartItem(key, 0);
-      }, 250);
-    } else {
-      await updateCartItem(key, 0);
     }
-  }, true); // true = capture phase
+    
+    updateCart(line, 0, item);
+  }, true);
   
   // ===========================================
-  // CART API FUNCTIONS
+  // CART API
   // ===========================================
   
-  async function updateCartItem(key, quantity) {
-    console.log('[CartDrawer] updateCartItem called - Key:', key, 'Quantity:', quantity);
+  async function updateCart(line, quantity, itemEl) {
+    console.log('[CartDrawer] updateCart - Line:', line, 'Quantity:', quantity);
+    
+    isUpdating = true;
     
     try {
-      const response = await fetch('/cart/change.js', {
+      var response = await fetch('/cart/change.js', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
         body: JSON.stringify({ 
-          id: key, 
+          line: line, 
           quantity: quantity 
         })
       });
       
+      var data = await response.json();
+      
       console.log('[CartDrawer] Response status:', response.status);
       
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('[CartDrawer] Error response:', errorText);
+        console.error('[CartDrawer] Error:', data.message || data.description);
         
-        // If 422, the key might be stale - refresh the drawer
+        // If inventory error, refresh to get correct state
         if (response.status === 422) {
-          console.warn('[CartDrawer] 422 error - key may be stale, refreshing drawer');
           await refreshDrawer();
         }
         return;
       }
       
-      const cart = await response.json();
-      console.log('[CartDrawer] Cart updated successfully, item count:', cart.item_count);
-      
+      // Success - refresh drawer
       await refreshDrawer();
-      document.dispatchEvent(new CustomEvent('cart:updated', { detail: cart }));
+      
+      // Update header cart count
+      updateHeaderCartCount(data.item_count);
+      
+      // Dispatch event
+      document.dispatchEvent(new CustomEvent('cart:updated', { detail: data }));
       
     } catch (error) {
-      console.error('[CartDrawer] Error updating cart:', error);
-      // Try to refresh anyway to sync state
+      console.error('[CartDrawer] Update error:', error);
       await refreshDrawer();
+    } finally {
+      isUpdating = false;
     }
   }
   
+  // ===========================================
+  // REFRESH DRAWER
+  // ===========================================
+  
   async function refreshDrawer() {
+    console.log('[CartDrawer] Refreshing...');
+    
     try {
-      const response = await fetch('/?section_id=cart-drawer');
-      const html = await response.text();
+      var response = await fetch('/?section_id=cart-drawer');
+      var html = await response.text();
       
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(html, 'text/html');
       
       // Update content
-      const newContent = doc.querySelector('[data-cart-drawer-content]');
-      const currentContent = drawer.querySelector('[data-cart-drawer-content]');
+      var newContent = doc.querySelector('[data-cart-drawer-content]');
+      var currentContent = drawer.querySelector('[data-cart-drawer-content]');
       
       if (newContent && currentContent) {
         currentContent.innerHTML = newContent.innerHTML;
       }
       
       // Update footer
-      const newFooter = doc.querySelector('.cart-drawer__footer');
-      const currentFooter = drawer.querySelector('.cart-drawer__footer');
+      var newFooter = doc.querySelector('.cart-drawer__footer');
+      var currentFooter = drawer.querySelector('.cart-drawer__footer');
       
       if (newFooter && currentFooter) {
         currentFooter.outerHTML = newFooter.outerHTML;
-        initDiscountSection();
       } else if (newFooter && !currentFooter) {
         drawer.querySelector('.cart-drawer__inner').appendChild(newFooter.cloneNode(true));
-        initDiscountSection();
       } else if (!newFooter && currentFooter) {
         currentFooter.remove();
       }
       
-      // Update cart count in header
-      const cartData = await fetch('/cart.js').then(r => r.json());
-      document.querySelectorAll('[data-cart-count]').forEach(el => {
-        el.textContent = cartData.item_count;
-        if (el.classList.contains('is-hidden') && cartData.item_count > 0) {
-          el.classList.remove('is-hidden');
-        } else if (cartData.item_count === 0) {
-          el.classList.add('is-hidden');
-        }
-      });
+      // Update header cart count
+      var cartData = await fetch('/cart.js').then(function(r) { return r.json(); });
+      updateHeaderCartCount(cartData.item_count);
       
       updateShippingProgress();
       
+      console.log('[CartDrawer] Refresh complete');
+      
     } catch (error) {
-      console.error('[CartDrawer] Error refreshing cart:', error);
+      console.error('[CartDrawer] Refresh error:', error);
     }
   }
   
   // ===========================================
-  // CART ICON TRIGGER SETUP
+  // HEADER CART COUNT
   // ===========================================
   
-  function setupCartIconTriggers() {
-    const cartSelectors = [
-      '[data-cart-trigger]',
-      'a[href="/cart"]',
-      '.header__cart',
-      '.cart-icon-bubble'
-    ];
-    
-    cartSelectors.forEach(selector => {
-      document.querySelectorAll(selector).forEach(el => {
-        if (el.closest('[data-cart-drawer]')) return;
-        
-        el.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          openCartDrawer();
-        }, true); // capture phase
-      });
+  function updateHeaderCartCount(count) {
+    document.querySelectorAll('[data-cart-count]').forEach(function(el) {
+      el.textContent = count;
+      if (el.classList.contains('is-hidden') && count > 0) {
+        el.classList.remove('is-hidden');
+      } else if (count === 0) {
+        el.classList.add('is-hidden');
+      }
     });
   }
   
   // ===========================================
-  // INITIALIZATION
+  // CART ICON TRIGGER
+  // ===========================================
+  
+  function setupCartTrigger() {
+    var cartBtn = document.getElementById('almliebe-cart-btn');
+    if (cartBtn) {
+      cartBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        openCartDrawer();
+      }, true);
+    }
+    
+    // Also handle any [data-cart-trigger] elements
+    document.querySelectorAll('[data-cart-trigger]').forEach(function(el) {
+      el.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        openCartDrawer();
+      }, true);
+    });
+  }
+  
+  // ===========================================
+  // INIT
   // ===========================================
   
   function init() {
-    setupCartIconTriggers();
-    initDiscountSection();
+    setupCartTrigger();
     
-    // Listen for cart updates from product pages
-    document.addEventListener('cart:updated', function() {
-      if (drawer.classList.contains('is-active')) {
-        refreshDrawer();
-      }
-    });
-    
-    // Open drawer after add to cart
     document.addEventListener('cart:item-added', function() {
       openCartDrawer();
     });
@@ -716,9 +585,9 @@
 </script>
 
 <style>
-  /* ========================================
-     CART DRAWER - CORE STYLES
-     ======================================== */
+  /* ===========================================
+     CART DRAWER STYLES
+     =========================================== */
   
   .cart-drawer {
     position: fixed;
@@ -1002,7 +871,22 @@
     margin-left: 0.5rem;
   }
   
-  /* Quantity Controls - Gymshark Style */
+  /* Quantity Wrapper */
+  .cart-drawer__quantity-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+  }
+  
+  /* Stock Limit Message */
+  .cart-drawer__stock-limit {
+    font-size: 0.6875rem;
+    color: #dc2626;
+    font-weight: 500;
+  }
+  
+  /* Quantity Controls */
   .cart-drawer__item-quantity {
     display: flex;
     align-items: center;
@@ -1023,16 +907,27 @@
     cursor: pointer;
     font-size: 1rem;
     color: #374151;
-    transition: background 0.15s, color 0.15s;
+    transition: background 0.15s, color 0.15s, opacity 0.15s;
+    -webkit-user-select: none;
+    user-select: none;
   }
   
-  .cart-drawer__qty-btn:hover {
+  .cart-drawer__qty-btn:hover:not(:disabled):not(.is-disabled) {
     background: #f3f4f6;
     color: #111827;
   }
   
-  .cart-drawer__qty-btn:active {
+  .cart-drawer__qty-btn:active:not(:disabled):not(.is-disabled) {
     background: #e5e7eb;
+  }
+  
+  /* Disabled state for + button */
+  .cart-drawer__qty-btn:disabled,
+  .cart-drawer__qty-btn.is-disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: #f9fafb;
+    color: #9ca3af;
   }
   
   .cart-drawer__qty-value {
@@ -1054,127 +949,9 @@
     background: #ffffff;
   }
   
-  /* Discount Section */
-  .cart-drawer__discount {
-    margin-bottom: 1rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid #e5e7eb;
-  }
-  
-  .cart-drawer__discount-title {
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    color: #374151;
-    margin: 0 0 0.75rem;
-  }
-  
-  .cart-drawer__discount-form {
-    display: flex;
-    gap: 0.5rem;
-  }
-  
-  .cart-drawer__discount-input {
-    flex: 1;
-    padding: 0.625rem 0.75rem;
-    border: 1px solid #e5e7eb;
-    border-radius: 4px;
-    font-size: 0.875rem;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  
-  .cart-drawer__discount-input:focus {
-    border-color: #111827;
-  }
-  
-  .cart-drawer__discount-btn {
-    padding: 0.625rem 1rem;
-    background: #111827;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    cursor: pointer;
-    transition: background 0.2s;
-    white-space: nowrap;
-  }
-  
-  .cart-drawer__discount-btn:hover {
-    background: #000000;
-  }
-  
-  .cart-drawer__discount-applied {
-    margin-top: 0.75rem;
-  }
-  
-  .discount-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.375rem 0.75rem;
-    background: #ecfdf5;
-    color: #059669;
-    border-radius: 4px;
-    font-size: 0.8125rem;
-    font-weight: 500;
-  }
-  
-  .discount-tag__remove {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    color: #059669;
-    opacity: 0.7;
-    transition: opacity 0.2s;
-  }
-  
-  .discount-tag__remove:hover {
-    opacity: 1;
-  }
-  
-  .cart-drawer__discount-message {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin: 0.75rem 0 0;
-    font-size: 0.8125rem;
-  }
-  
-  .cart-drawer__discount-message--success {
-    color: #059669;
-  }
-  
-  .cart-drawer__discount-message--error {
-    color: #dc2626;
-  }
-  
-  .cart-drawer__discount-note {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin: 0.75rem 0 0;
-    font-size: 0.75rem;
-    color: #6b7280;
-  }
-  
   /* Summary */
   .cart-drawer__summary {
     margin-bottom: 1rem;
-  }
-  
-  .cart-drawer__summary-title {
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    color: #374151;
-    margin: 0 0 0.75rem;
   }
   
   .cart-drawer__summary-row {
@@ -1231,7 +1008,7 @@
     width: auto;
   }
   
-  /* Mobile Responsive */
+  /* Mobile */
   @media (max-width: 480px) {
     .cart-drawer__inner {
       max-width: 100%;
