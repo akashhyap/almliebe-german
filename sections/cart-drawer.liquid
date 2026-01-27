@@ -20,19 +20,21 @@
       </button>
     </div>
 
-    {%- comment -%} Free Shipping Progress {%- endcomment -%}
-    <div class="cart-drawer__shipping-progress" data-shipping-progress>
-      <div class="shipping-progress__message" data-shipping-message>
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-          <polyline points="22 4 12 14.01 9 11.01"/>
-        </svg>
-        <span>{{ 'cart.free_shipping.qualified' | t | default: 'Kostenloser Versand!' }}</span>
+    {%- comment -%} Free Shipping Progress - Only show when cart has items {%- endcomment -%}
+    {%- if cart.item_count > 0 -%}
+      <div class="cart-drawer__shipping-progress" data-shipping-progress>
+        <div class="shipping-progress__message" data-shipping-message>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+          </svg>
+          <span>{{ 'cart.free_shipping.qualified' | t | default: 'Kostenloser Versand!' }}</span>
+        </div>
+        <div class="shipping-progress__bar">
+          <div class="shipping-progress__fill" data-shipping-fill style="width: 100%"></div>
+        </div>
       </div>
-      <div class="shipping-progress__bar">
-        <div class="shipping-progress__fill" data-shipping-fill style="width: 100%"></div>
-      </div>
-    </div>
+    {%- endif -%}
 
     {%- comment -%} Cart Content {%- endcomment -%}
     <div class="cart-drawer__content" data-cart-drawer-content>
