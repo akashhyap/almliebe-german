@@ -71,7 +71,7 @@
 
   /* Container mode - add border radius */
   .image-banner-wrapper--container .image-banner {
-    border-radius: 15px;
+    border-radius: 8px;
     overflow: hidden;
   }
 
@@ -86,6 +86,10 @@
   }
 
   /* Height Options */
+  .image-banner--auto {
+    aspect-ratio: auto;
+  }
+
   .image-banner--small {
     aspect-ratio: 10 / 3;
   }
@@ -106,6 +110,10 @@
   @media (max-width: 767px) {
     .image-banner {
       aspect-ratio: 16 / 9;
+    }
+
+    .image-banner--auto {
+      aspect-ratio: auto;
     }
 
     .image-banner--small {
@@ -132,10 +140,28 @@
     z-index: 0;
   }
 
+  /* Auto mode - image is static, not absolute */
+  .image-banner--auto .image-banner__media {
+    position: relative;
+  }
+
+  .image-banner--auto .image-banner__wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
   .image-banner__img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  /* Auto mode - show full image without cropping */
+  .image-banner--auto .image-banner__img {
+    height: auto;
+    object-fit: contain;
   }
 
   .image-banner__overlay {
@@ -287,6 +313,10 @@
       "label": "Banner Height",
       "options": [
         {
+          "value": "auto",
+          "label": "Auto (Image Ratio)"
+        },
+        {
           "value": "small",
           "label": "Small (400px)"
         },
@@ -303,7 +333,7 @@
           "label": "Full Screen"
         }
       ],
-      "default": "medium"
+      "default": "auto"
     },
     {
       "type": "header",
@@ -398,7 +428,7 @@
         "heading": "Welcome to Almliebe",
         "text": "Discover authentic Bavarian fashion",
         "button_label": "Shop Now",
-        "banner_height": "medium",
+        "banner_height": "auto",
         "banner_width": "full"
       }
     }
