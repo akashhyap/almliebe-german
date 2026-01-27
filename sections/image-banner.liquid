@@ -1,55 +1,80 @@
-<div class="image-banner image-banner--{{ section.settings.banner_height }} image-banner--{{ section.settings.text_alignment }}" style="--text-color: {{ section.settings.text_color }};">
-  {% if section.settings.image != blank %}
-    <div class="image-banner__media">
-      {%- if section.settings.image_mobile != blank -%}
-        <img
-          src="{{ section.settings.image | image_url: width: 1600 }}"
-          alt="{{ section.settings.image.alt | escape }}"
-          width="1600"
-          height="auto"
-          loading="eager"
-          class="image-banner__img hidden-mobile"
-        >
-        <img
-          src="{{ section.settings.image_mobile | image_url: width: 800 }}"
-          alt="{{ section.settings.image_mobile.alt | escape }}"
-          width="800"
-          height="auto"
-          loading="eager"
-          class="image-banner__img hidden-desktop"
-        >
-      {%- else -%}
-        <img
-          src="{{ section.settings.image | image_url: width: 1600 }}"
-          alt="{{ section.settings.image.alt | escape }}"
-          width="1600"
-          height="auto"
-          loading="eager"
-          class="image-banner__img"
-        >
-      {%- endif -%}
-      <div class="image-banner__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
-    </div>
-  {% endif %}
+<div class="image-banner-wrapper{% if section.settings.banner_width == 'container' %} image-banner-wrapper--container{% endif %}">
+  <div class="image-banner image-banner--{{ section.settings.banner_height }} image-banner--{{ section.settings.text_alignment }}" style="--text-color: {{ section.settings.text_color }};">
+    {% if section.settings.image != blank %}
+      <div class="image-banner__media">
+        {%- if section.settings.image_mobile != blank -%}
+          <img
+            src="{{ section.settings.image | image_url: width: 1600 }}"
+            alt="{{ section.settings.image.alt | escape }}"
+            width="1600"
+            height="auto"
+            loading="eager"
+            class="image-banner__img hidden-mobile"
+          >
+          <img
+            src="{{ section.settings.image_mobile | image_url: width: 800 }}"
+            alt="{{ section.settings.image_mobile.alt | escape }}"
+            width="800"
+            height="auto"
+            loading="eager"
+            class="image-banner__img hidden-desktop"
+          >
+        {%- else -%}
+          <img
+            src="{{ section.settings.image | image_url: width: 1600 }}"
+            alt="{{ section.settings.image.alt | escape }}"
+            width="1600"
+            height="auto"
+            loading="eager"
+            class="image-banner__img"
+          >
+        {%- endif -%}
+        <div class="image-banner__overlay" style="opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+      </div>
+    {% endif %}
 
-  <div class="image-banner__wrapper">
-    <div class="image-banner__content">
-      {% if section.settings.heading != blank %}
-        <h1 class="image-banner__heading">{{ section.settings.heading }}</h1>
-      {% endif %}
-      {% if section.settings.text != blank %}
-        <p class="image-banner__text">{{ section.settings.text }}</p>
-      {% endif %}
-      {% if section.settings.button_label != blank and section.settings.button_link != blank %}
-        <a href="{{ section.settings.button_link }}" class="btn btn--{{ section.settings.button_style }} btn--large">
-          {{ section.settings.button_label }}
-        </a>
-      {% endif %}
+    <div class="image-banner__wrapper">
+      <div class="image-banner__content">
+        {% if section.settings.heading != blank %}
+          <h1 class="image-banner__heading">{{ section.settings.heading }}</h1>
+        {% endif %}
+        {% if section.settings.text != blank %}
+          <p class="image-banner__text">{{ section.settings.text }}</p>
+        {% endif %}
+        {% if section.settings.button_label != blank and section.settings.button_link != blank %}
+          <a href="{{ section.settings.button_link }}" class="btn btn--{{ section.settings.button_style }} btn--large">
+            {{ section.settings.button_label }}
+          </a>
+        {% endif %}
+      </div>
     </div>
   </div>
 </div>
 
 <style>
+  /* Wrapper - controls full width vs container */
+  .image-banner-wrapper {
+    width: 100%;
+  }
+
+  .image-banner-wrapper--container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .image-banner-wrapper--container {
+      padding: 0 2rem;
+    }
+  }
+
+  /* Container mode - add border radius */
+  .image-banner-wrapper--container .image-banner {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
   .image-banner {
     position: relative;
     display: flex;
@@ -242,6 +267,22 @@
     },
     {
       "type": "select",
+      "id": "banner_width",
+      "label": "Banner Width",
+      "options": [
+        {
+          "value": "full",
+          "label": "Full Width"
+        },
+        {
+          "value": "container",
+          "label": "Container (1600px)"
+        }
+      ],
+      "default": "full"
+    },
+    {
+      "type": "select",
       "id": "banner_height",
       "label": "Banner Height",
       "options": [
@@ -357,7 +398,8 @@
         "heading": "Welcome to Almliebe",
         "text": "Discover authentic Bavarian fashion",
         "button_label": "Shop Now",
-        "banner_height": "medium"
+        "banner_height": "medium",
+        "banner_width": "full"
       }
     }
   ]
