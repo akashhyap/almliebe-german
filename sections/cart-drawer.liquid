@@ -159,7 +159,7 @@
           </div>
           <div class="cart-drawer__summary-row">
             <span>{{ 'cart.general.shipping' | t | default: 'Versand' }}</span>
-            <span data-cart-shipping>{{ 'cart.free_shipping.free' | t | default: 'Kostenlos' }}</span>
+            <span data-cart-shipping>{{ 'cart.shipping.free' | t | default: 'Kostenlos' }}</span>
           </div>
           <div class="cart-drawer__summary-row cart-drawer__summary-row--total">
             <span>{{ 'cart.general.total' | t | default: 'Gesamt' }}</span>
@@ -244,7 +244,7 @@
     
     if (progressFill) {
       progressFill.style.width = progress + '%';
-      progressFill.style.background = totalCents >= FREE_SHIPPING_THRESHOLD ? '#059669' : '#111827';
+      progressFill.style.background = '#111827';
     }
     
     if (progressMessage) {
@@ -493,6 +493,20 @@
       var parser = new DOMParser();
       var doc = parser.parseFromString(html, 'text/html');
       
+      // Update shipping progress
+      var newShipping = doc.querySelector('[data-shipping-progress]');
+      var currentShipping = drawer.querySelector('[data-shipping-progress]');
+      var header = drawer.querySelector('.cart-drawer__header');
+      
+      if (newShipping && currentShipping) {
+        currentShipping.outerHTML = newShipping.outerHTML;
+      } else if (newShipping && !currentShipping && header) {
+        header.insertAdjacentHTML('afterend', newShipping.outerHTML);
+      } else if (!newShipping && currentShipping) {
+        currentShipping.remove();
+      }
+      
+      // Update content
       var newContent = doc.querySelector('[data-cart-drawer-content]');
       var currentContent = drawer.querySelector('[data-cart-drawer-content]');
       
@@ -500,6 +514,7 @@
         currentContent.innerHTML = newContent.innerHTML;
       }
       
+      // Update footer
       var newFooter = doc.querySelector('.cart-drawer__footer');
       var currentFooter = drawer.querySelector('.cart-drawer__footer');
       
@@ -669,12 +684,12 @@
     gap: 0.5rem;
     font-size: 0.875rem;
     font-weight: 500;
-    color: #059669;
+    color: #374151;
     margin-bottom: 0.5rem;
   }
   
   .shipping-progress__message svg {
-    stroke: #059669;
+    stroke: #374151;
     flex-shrink: 0;
   }
   
@@ -695,7 +710,7 @@
   
   .shipping-progress__fill {
     height: 100%;
-    background: #059669;
+    background: #111827;
     border-radius: 2px;
     transition: width 0.3s ease;
   }
