@@ -1,54 +1,36 @@
 {% comment %}
-  WISHLIST - Advanced Custom Solution with Account Sync
+  WISHLIST - Custom Solution with Account Sync
   
   Features:
   - Guest: localStorage storage
   - Logged in: Customer metafield storage (synced across devices)
   - Auto-merge on login
   - No app required
-  
-  Setup Required:
-  1. Create customer metafield definition: custom.wishlist (JSON)
-  2. Deploy PHP API to Cloudways
-  3. Configure App Proxy in Shopify
-  4. Include this snippet in theme.liquid before </body>
 {% endcomment %}
 
 <script>
 window.AlmliebeWishlist = (function() {
   const STORAGE_KEY = 'almliebe_wishlist';
   const API_ENDPOINT = '/apps/wishlist';
-  const DEBUG = true; // Set to false in production
-  
-  function log(...args) {
-    if (DEBUG) console.log('[Wishlist]', ...args);
-  }
   
   // Check if customer is logged in
   const isLoggedIn = {{ customer | default: false | json }} !== false;
   const customerId = {{ customer.id | default: 'null' }};
-  
-  log('Init - Logged in:', isLoggedIn, 'Customer ID:', customerId);
   
   // Customer's saved wishlist from metafield (loaded with page)
   let accountItems = [];
   {%- if customer and customer.metafields.custom.wishlist -%}
     try {
       accountItems = JSON.parse({{ customer.metafields.custom.wishlist | json }}) || [];
-      log('Loaded from metafield:', accountItems);
     } catch (e) {
-      log('Failed to parse metafield:', e);
       accountItems = [];
     }
-  {%- else -%}
-    log('No metafield data found');
   {%- endif -%}
   
   // Get items from localStorage
   function getLocalItems() {
     try {
-      const items = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-      return items;
+      return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
     } catch (e) {
       return [];
     }
@@ -57,30 +39,21 @@ window.AlmliebeWishlist = (function() {
   // Save items to localStorage
   function saveLocalItems(items) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    log('Saved to localStorage:', items.length, 'items');
   }
   
   // Clear localStorage
   function clearLocalItems() {
     localStorage.removeItem(STORAGE_KEY);
-    log('Cleared localStorage');
   }
   
   // Save items to customer metafield via API
   async function saveToAccount(items) {
-    if (!isLoggedIn) {
-      log('Not logged in, skipping account save');
-      return false;
-    }
-    
-    log('Saving to account via API...', items.length, 'items');
+    if (!isLoggedIn) return false;
     
     try {
       const response = await fetch(API_ENDPOINT, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           action: 'save',
           customer_id: customerId,
@@ -88,36 +61,25 @@ window.AlmliebeWishlist = (function() {
         })
       });
       
-      log('API Response status:', response.status);
-      
       const data = await response.json();
-      log('API Response data:', data);
       
       if (data.success) {
-        accountItems = items; // Update local cache
-        log('Account save successful');
+        accountItems = items;
         return true;
       }
-      
-      log('API returned success: false', data.error || '');
       return false;
     } catch (e) {
-      console.error('[Wishlist] API save failed:', e);
       return false;
     }
   }
   
-  // Get all items (combines localStorage and account for logged-in users)
+  // Get all items
   function getItems() {
     if (isLoggedIn) {
-      // For logged-in users, prefer account items but fallback to localStorage
-      // This handles the case where API save failed
       const local = getLocalItems();
       if (accountItems.length > 0) {
         return accountItems;
       } else if (local.length > 0) {
-        // Account is empty but localStorage has items - use localStorage
-        // (merge probably hasn't happened yet or failed)
         return local;
       }
       return [];
@@ -127,17 +89,10 @@ window.AlmliebeWishlist = (function() {
   
   // Save items (to both localStorage and account if logged in)
   async function saveItems(items) {
-    // Always save to localStorage as backup/cache
     saveLocalItems(items);
     
-    // If logged in, also save to account
     if (isLoggedIn) {
-      const saved = await saveToAccount(items);
-      if (saved) {
-        log('Saved to both localStorage and account');
-      } else {
-        log('Account save failed, items preserved in localStorage');
-      }
+      await saveToAccount(items);
     }
     
     updateCount();
@@ -161,7 +116,6 @@ window.AlmliebeWishlist = (function() {
         addedAt: Date.now()
       });
       saveItems(items);
-      log('Added product:', productId);
     }
     return items;
   }
@@ -171,7 +125,6 @@ window.AlmliebeWishlist = (function() {
     let items = getItems();
     items = items.filter(item => item.id != productId);
     saveItems(items);
-    log('Removed product:', productId);
     return items;
   }
   
@@ -200,7 +153,6 @@ window.AlmliebeWishlist = (function() {
   // Update header count badge
   function updateCount() {
     const count = getCount();
-    log('Updating count badge:', count);
     const badges = document.querySelectorAll('[data-wishlist-count]');
     
     badges.forEach(badge => {
@@ -218,13 +170,8 @@ window.AlmliebeWishlist = (function() {
     if (!isLoggedIn) return;
     
     const localItems = getLocalItems();
-    log('Merge check - Local items:', localItems.length, 'Account items:', accountItems.length);
     
-    // If no local items, nothing to merge
-    if (localItems.length === 0) {
-      log('No local items to merge');
-      return;
-    }
+    if (localItems.length === 0) return;
     
     // Merge: combine account items with local items (avoiding duplicates)
     const merged = [...accountItems];
@@ -234,52 +181,22 @@ window.AlmliebeWishlist = (function() {
       if (!merged.some(item => item.id == localItem.id)) {
         merged.push(localItem);
         hasNewItems = true;
-        log('Merging item:', localItem.id, localItem.title);
       }
     });
     
     if (hasNewItems) {
-      log('Attempting to save merged wishlist:', merged.length, 'items');
       const saved = await saveToAccount(merged);
-      
       if (saved) {
         accountItems = merged;
-        clearLocalItems(); // Only clear localStorage after successful save
-        log('Merge complete - cleared localStorage');
-      } else {
-        // API failed - keep localStorage items so they're not lost!
-        log('Merge failed - keeping localStorage items');
+        clearLocalItems();
       }
     } else {
-      // All items already exist in account, safe to clear localStorage
-      log('All items already in account, clearing localStorage');
       clearLocalItems();
-    }
-  }
-  
-  // Test API connection
-  async function testAPI() {
-    log('Testing API connection...');
-    try {
-      const response = await fetch(API_ENDPOINT + '?action=status');
-      const data = await response.json();
-      log('API Status:', data);
-      return data;
-    } catch (e) {
-      console.error('[Wishlist] API test failed:', e);
-      return { error: e.message };
     }
   }
   
   // Initialize all wishlist buttons
   async function init() {
-    log('Initializing wishlist...');
-    
-    // Test API first (in debug mode)
-    if (DEBUG) {
-      await testAPI();
-    }
-    
     // Merge wishlists if logged in
     if (isLoggedIn) {
       await mergeWishlists();
@@ -296,7 +213,6 @@ window.AlmliebeWishlist = (function() {
     });
     
     updateCount();
-    log('Initialization complete. Total items:', getCount());
   }
   
   // Public API
@@ -311,9 +227,7 @@ window.AlmliebeWishlist = (function() {
     init,
     isLoggedIn,
     saveItems,
-    clearLocalItems,
-    testAPI,
-    debug: () => ({ isLoggedIn, customerId, accountItems, localItems: getLocalItems() })
+    clearLocalItems
   };
 })();
 
@@ -386,7 +300,6 @@ document.addEventListener('shopify:section:load', () => window.AlmliebeWishlist.
 <style>
   /* ===========================================
      PRODUCT CARD WISHLIST BUTTON
-     Smaller size, dark color instead of red
      =========================================== */
   
   .wishlist-btn,
@@ -462,7 +375,6 @@ document.addEventListener('shopify:section:load', () => window.AlmliebeWishlist.
      WISHLIST COUNT BADGES
      =========================================== */
   
-  /* Header count badge - matches cart badge exactly */
   [data-wishlist-count] {
     position: absolute;
     top: 4px;
@@ -480,12 +392,10 @@ document.addEventListener('shopify:section:load', () => window.AlmliebeWishlist.
     border-radius: 9px;
   }
   
-  /* Hide badge when empty */
   [data-wishlist-count].is-hidden {
     display: none;
   }
   
-  /* Mobile wishlist count in mobile menu */
   .mobile-nav-wishlist-count {
     margin-left: auto;
     min-width: 20px;
