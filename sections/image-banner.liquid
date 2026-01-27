@@ -165,25 +165,29 @@
   }
 
   /* ===========================================
-     AUTO MODE - Image determines height
-     No cropping, full image visible
+     AUTO MODE - Full image, constrained to 85vh max
+     No cropping, scales to fit viewport
      =========================================== */
   .image-banner.image-banner--auto {
-    /* No fixed aspect ratio - image drives height */
     aspect-ratio: unset !important;
+    max-height: 85vh;
   }
 
-  /* Media becomes flow element, not absolute */
+  /* Media fills the constrained container */
   .image-banner.image-banner--auto .image-banner__media {
     position: relative !important;
     inset: unset !important;
+    display: flex;
+    justify-content: center;
+    max-height: 85vh;
   }
 
-  /* Image displays at natural ratio */
+  /* Image scales to fit, no cropping */
   .image-banner.image-banner--auto .image-banner__img {
     width: 100% !important;
     height: auto !important;
-    object-fit: unset !important;
+    max-height: 85vh !important;
+    object-fit: contain !important;
   }
 
   /* Wrapper overlays the image */
@@ -198,6 +202,12 @@
   @media (max-width: 767px) {
     .image-banner.image-banner--auto .image-banner__wrapper {
       width: calc(100% - 2rem) !important;
+    }
+    
+    .image-banner.image-banner--auto,
+    .image-banner.image-banner--auto .image-banner__media,
+    .image-banner.image-banner--auto .image-banner__img {
+      max-height: 60vh !important;
     }
   }
 
@@ -351,7 +361,7 @@
       "options": [
         {
           "value": "auto",
-          "label": "Auto (Full Image)"
+          "label": "Auto (Full Image, max 85vh)"
         },
         {
           "value": "small",
