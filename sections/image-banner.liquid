@@ -1,30 +1,30 @@
 <div class="image-banner-wrapper{% if section.settings.banner_width == 'container' %} image-banner-wrapper--container{% endif %}">
   <div class="image-banner image-banner--{{ section.settings.banner_height }} image-banner--{{ section.settings.text_alignment }}" style="--text-color: {{ section.settings.text_color }};">
     {% if section.settings.image != blank %}
-      <div class="image-banner__media 001">
+      <div class="image-banner__media">
         {%- if section.settings.image_mobile != blank -%}
           <img
-            src="{{ section.settings.image | image_url: width: 1600 }}"
+            src="{{ section.settings.image | image_url: width: 1920 }}"
             alt="{{ section.settings.image.alt | escape }}"
-            width="1600"
-            height="auto"
+            width="{{ section.settings.image.width }}"
+            height="{{ section.settings.image.height }}"
             loading="eager"
             class="image-banner__img hidden-mobile"
           >
           <img
             src="{{ section.settings.image_mobile | image_url: width: 800 }}"
             alt="{{ section.settings.image_mobile.alt | escape }}"
-            width="800"
-            height="auto"
+            width="{{ section.settings.image_mobile.width }}"
+            height="{{ section.settings.image_mobile.height }}"
             loading="eager"
             class="image-banner__img hidden-desktop"
           >
         {%- else -%}
           <img
-            src="{{ section.settings.image | image_url: width: 1600 }}"
+            src="{{ section.settings.image | image_url: width: 1920 }}"
             alt="{{ section.settings.image.alt | escape }}"
-            width="1600"
-            height="auto"
+            width="{{ section.settings.image.width }}"
+            height="{{ section.settings.image.height }}"
             loading="eager"
             class="image-banner__img"
           >
@@ -52,7 +52,9 @@
 </div>
 
 <style>
-  /* Wrapper - controls full width vs container */
+  /* ===========================================
+     WRAPPER - Full Width vs Container
+     =========================================== */
   .image-banner-wrapper {
     width: 100%;
   }
@@ -69,99 +71,36 @@
     }
   }
 
-  /* Container mode - add border radius */
   .image-banner-wrapper--container .image-banner {
     border-radius: 8px;
     overflow: hidden;
   }
 
+  /* ===========================================
+     BASE BANNER - Fixed aspect ratios (default)
+     =========================================== */
   .image-banner {
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    aspect-ratio: 8 / 3;
     width: 100%;
   }
 
-  /* Height Options */
-  .image-banner--auto {
-    aspect-ratio: auto;
-  }
-
-  .image-banner--small {
-    aspect-ratio: 10 / 3;
-  }
-
-  .image-banner--medium {
-    aspect-ratio: 8 / 3;
-  }
-
-  .image-banner--large {
-    aspect-ratio: 6 / 3;
-  }
-
-  .image-banner--fullscreen {
-    aspect-ratio: auto;
-    min-height: calc(100vh - var(--header-height) - var(--announcement-height));
-  }
-
-  @media (max-width: 767px) {
-    .image-banner {
-      aspect-ratio: 16 / 9;
-    }
-
-    .image-banner--auto {
-      aspect-ratio: auto;
-    }
-
-    .image-banner--small {
-      aspect-ratio: 16 / 9;
-    }
-    
-    .image-banner--medium {
-      aspect-ratio: 16 / 9;
-    }
-
-    .image-banner--large {
-      aspect-ratio: 4 / 3;
-    }
-
-    .image-banner--fullscreen {
-      aspect-ratio: auto;
-      min-height: calc(100vh - var(--header-height-mobile) - var(--announcement-height));
-    }
-  }
-
+  /* Default media - absolute positioned, covers container */
   .image-banner__media {
     position: absolute;
     inset: 0;
     z-index: 0;
   }
 
-  /* Auto mode - image is static, not absolute */
-  .image-banner--auto .image-banner__media {
-    position: relative;
-  }
-
-  .image-banner--auto .image-banner__wrapper {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-
+  /* Default image - covers and crops */
   .image-banner__img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-
-  /* Auto mode - show full image without cropping */
-  .image-banner--auto .image-banner__img {
-    height: auto;
-    object-fit: contain;
+    display: block;
   }
 
   .image-banner__overlay {
@@ -171,11 +110,12 @@
     z-index: 1;
   }
 
+  /* Default wrapper - centered on top of image */
   .image-banner__wrapper {
     position: relative;
     z-index: 2;
     width: 100%;
-    max-width: var(--page-width);
+    max-width: var(--page-width, 1400px);
     margin: 0 auto;
     padding: 0 2rem;
   }
@@ -190,7 +130,80 @@
     max-width: 800px;
   }
 
-  /* Text Alignment */
+  /* ===========================================
+     HEIGHT OPTIONS - Fixed aspect ratios
+     =========================================== */
+  .image-banner--small {
+    aspect-ratio: 10 / 3;
+  }
+
+  .image-banner--medium {
+    aspect-ratio: 8 / 3;
+  }
+
+  .image-banner--large {
+    aspect-ratio: 6 / 3;
+  }
+
+  .image-banner--fullscreen {
+    min-height: calc(100vh - var(--header-height, 80px) - var(--announcement-height, 40px));
+  }
+
+  @media (max-width: 767px) {
+    .image-banner--small,
+    .image-banner--medium {
+      aspect-ratio: 16 / 9;
+    }
+
+    .image-banner--large {
+      aspect-ratio: 4 / 3;
+    }
+
+    .image-banner--fullscreen {
+      min-height: calc(100vh - var(--header-height-mobile, 60px) - var(--announcement-height, 40px));
+    }
+  }
+
+  /* ===========================================
+     AUTO MODE - Image determines height
+     No cropping, full image visible
+     =========================================== */
+  .image-banner.image-banner--auto {
+    /* No fixed aspect ratio - image drives height */
+    aspect-ratio: unset !important;
+  }
+
+  /* Media becomes flow element, not absolute */
+  .image-banner.image-banner--auto .image-banner__media {
+    position: relative !important;
+    inset: unset !important;
+  }
+
+  /* Image displays at natural ratio */
+  .image-banner.image-banner--auto .image-banner__img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: unset !important;
+  }
+
+  /* Wrapper overlays the image */
+  .image-banner.image-banner--auto .image-banner__wrapper {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: calc(100% - 4rem) !important;
+  }
+
+  @media (max-width: 767px) {
+    .image-banner.image-banner--auto .image-banner__wrapper {
+      width: calc(100% - 2rem) !important;
+    }
+  }
+
+  /* ===========================================
+     TEXT ALIGNMENT
+     =========================================== */
   .image-banner--left .image-banner__content {
     margin-left: 0;
     margin-right: auto;
@@ -209,6 +222,9 @@
     text-align: right;
   }
 
+  /* ===========================================
+     TYPOGRAPHY
+     =========================================== */
   .image-banner__heading {
     font-family: 'Poppins', sans-serif;
     font-size: clamp(2rem, 5vw, 3.5rem);
@@ -229,8 +245,10 @@
     text-shadow: 0 2px 12px rgba(0,0,0,0.3);
   }
 
-  /* Button Styles */
-  .btn {
+  /* ===========================================
+     BUTTONS
+     =========================================== */
+  .image-banner .btn {
     display: inline-block;
     padding: 1rem 2.5rem;
     font-family: 'Poppins', sans-serif;
@@ -240,36 +258,55 @@
     letter-spacing: 0.5px;
     text-decoration: none;
     border-radius: 2px;
-    transition: all var(--duration-short);
+    transition: all 0.2s ease;
     cursor: pointer;
     border: 2px solid transparent;
   }
 
-  .btn--large {
+  .image-banner .btn--large {
     padding: 1.25rem 3rem;
     font-size: 1rem;
   }
 
-  .btn--primary {
+  .image-banner .btn--primary {
     background: #000000;
     color: #FFFFFF;
     border-color: #000000;
   }
 
-  .btn--primary:hover {
+  .image-banner .btn--primary:hover {
     background: #333333;
     border-color: #333333;
   }
 
-  .btn--secondary {
+  .image-banner .btn--secondary {
     background: transparent;
     color: var(--text-color);
     border-color: var(--text-color);
   }
 
-  .btn--secondary:hover {
+  .image-banner .btn--secondary:hover {
     background: var(--text-color);
     color: #000000;
+  }
+
+  /* ===========================================
+     RESPONSIVE VISIBILITY
+     =========================================== */
+  .hidden-mobile {
+    display: block;
+  }
+  .hidden-desktop {
+    display: none;
+  }
+
+  @media (max-width: 767px) {
+    .hidden-mobile {
+      display: none;
+    }
+    .hidden-desktop {
+      display: block;
+    }
   }
 </style>
 
@@ -314,19 +351,19 @@
       "options": [
         {
           "value": "auto",
-          "label": "Auto (Image Ratio)"
+          "label": "Auto (Full Image)"
         },
         {
           "value": "small",
-          "label": "Small (400px)"
+          "label": "Small"
         },
         {
           "value": "medium",
-          "label": "Medium (500px)"
+          "label": "Medium"
         },
         {
           "value": "large",
-          "label": "Large (600px)"
+          "label": "Large"
         },
         {
           "value": "fullscreen",
