@@ -1,10 +1,9 @@
 {% comment %}
-  CART DRAWER - Inventory-Aware Quantity Controls
-  
-  Features:
-  - Disables + button when variant stock limit is reached
-  - Tracks inventory per variant
-  - Shows stock limit message when max reached
+  CART DRAWER - Polished UX
+  - Smooth quantity transitions
+  - Button press feedback
+  - Proper delete collapse animation
+  - Inventory-aware (disables + at stock limit)
 {% endcomment %}
 
 <div class="cart-drawer" data-cart-drawer aria-hidden="true">
@@ -40,23 +39,16 @@
       {%- if cart.item_count > 0 -%}
         <ul class="cart-drawer__items">
           {%- for item in cart.items -%}
-            {%- comment -%} Get inventory quantity for this variant {%- endcomment -%}
             {%- assign variant_inventory = item.variant.inventory_quantity -%}
             {%- assign inventory_policy = item.variant.inventory_policy -%}
             {%- assign inventory_management = item.variant.inventory_management -%}
             
-            {%- comment -%} 
-              Determine max quantity:
-              - If inventory not tracked OR policy is 'continue', allow 9999
-              - Otherwise use actual inventory
-            {%- endcomment -%}
             {%- if inventory_management == blank or inventory_management == null or inventory_policy == 'continue' -%}
               {%- assign max_quantity = 9999 -%}
             {%- else -%}
               {%- assign max_quantity = variant_inventory -%}
             {%- endif -%}
             
-            {%- comment -%} Check if at max quantity {%- endcomment -%}
             {%- assign at_max = false -%}
             {%- if item.quantity >= max_quantity -%}
               {%- assign at_max = true -%}
@@ -69,9 +61,7 @@
               data-key="{{ item.key }}"
               data-variant-id="{{ item.variant_id }}"
               data-max-quantity="{{ max_quantity }}"
-              data-current-quantity="{{ item.quantity }}"
             >
-              {%- comment -%} Product Image {%- endcomment -%}
               <a href="{{ item.url }}" class="cart-drawer__item-image">
                 {%- if item.image -%}
                   <img
@@ -86,7 +76,6 @@
                 {%- endif -%}
               </a>
 
-              {%- comment -%} Product Details {%- endcomment -%}
               <div class="cart-drawer__item-details">
                 <div class="cart-drawer__item-header">
                   <a href="{{ item.url }}" class="cart-drawer__item-title">
@@ -106,14 +95,12 @@
                   </button>
                 </div>
 
-                {%- comment -%} Variant Info {%- endcomment -%}
                 {%- unless item.product.has_only_default_variant -%}
                   <p class="cart-drawer__item-variant">{{ item.variant.title }}</p>
                 {%- endunless -%}
 
-                {%- comment -%} Price & Quantity {%- endcomment -%}
                 <div class="cart-drawer__item-footer">
-                  <div class="cart-drawer__item-price">
+                  <div class="cart-drawer__item-price" data-item-price>
                     {%- if item.original_line_price != item.final_line_price -%}
                       <span class="cart-drawer__price-sale">{{ item.final_line_price | money }}</span>
                       <span class="cart-drawer__price-compare">{{ item.original_line_price | money }}</span>
@@ -122,32 +109,23 @@
                     {%- endif -%}
                   </div>
 
-                  <div class="cart-drawer__quantity-wrapper">
-                    {%- comment -%} Stock limit message {%- endcomment -%}
-                    {%- if at_max and max_quantity < 9999 -%}
-                      <span class="cart-drawer__stock-limit" data-stock-limit>Max: {{ max_quantity }}</span>
-                    {%- else -%}
-                      <span class="cart-drawer__stock-limit" data-stock-limit style="display: none;"></span>
-                    {%- endif -%}
-                    
-                    <div class="cart-drawer__item-quantity">
-                      <button 
-                        type="button" 
-                        class="cart-drawer__qty-btn cart-drawer__qty-btn--minus"
-                        data-cart-drawer-minus
-                        data-line="{{ forloop.index }}"
-                        aria-label="Menge verringern"
-                      >−</button>
-                      <span class="cart-drawer__qty-value" data-cart-drawer-qty>{{ item.quantity }}</span>
-                      <button 
-                        type="button" 
-                        class="cart-drawer__qty-btn cart-drawer__qty-btn--plus{% if at_max %} is-disabled{% endif %}"
-                        data-cart-drawer-plus
-                        data-line="{{ forloop.index }}"
-                        aria-label="Menge erhöhen"
-                        {% if at_max %}disabled aria-disabled="true"{% endif %}
-                      >+</button>
-                    </div>
+                  <div class="cart-drawer__item-quantity">
+                    <button 
+                      type="button" 
+                      class="cart-drawer__qty-btn cart-drawer__qty-btn--minus"
+                      data-cart-drawer-minus
+                      data-line="{{ forloop.index }}"
+                      aria-label="Menge verringern"
+                    >−</button>
+                    <span class="cart-drawer__qty-value" data-cart-drawer-qty>{{ item.quantity }}</span>
+                    <button 
+                      type="button" 
+                      class="cart-drawer__qty-btn cart-drawer__qty-btn--plus{% if at_max %} is-disabled{% endif %}"
+                      data-cart-drawer-plus
+                      data-line="{{ forloop.index }}"
+                      aria-label="Menge erhöhen"
+                      {% if at_max %}disabled{% endif %}
+                    >+</button>
                   </div>
                 </div>
               </div>
@@ -156,7 +134,6 @@
         </ul>
 
       {%- else -%}
-        {%- comment -%} Empty Cart {%- endcomment -%}
         <div class="cart-drawer__empty">
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
             <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
@@ -171,10 +148,8 @@
       {%- endif -%}
     </div>
 
-    {%- comment -%} Footer {%- endcomment -%}
     {%- if cart.item_count > 0 -%}
       <div class="cart-drawer__footer">
-        {%- comment -%} Order Summary {%- endcomment -%}
         <div class="cart-drawer__summary">
           <div class="cart-drawer__summary-row">
             <span>{{ 'cart.general.subtotal' | t | default: 'Zwischensumme' }}</span>
@@ -198,7 +173,6 @@
           {{ 'cart.general.checkout_securely' | t | default: 'SICHER ZUR KASSE' }}
         </a>
         
-        {%- comment -%} Payment Icons {%- endcomment -%}
         <div class="cart-drawer__payment-icons">
           <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/visa.sxIq5Dot.svg" alt="Visa" width="38" height="24">
           <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/c1.en/assets/mastercard.1c4_lyMp.svg" alt="Mastercard" width="38" height="24">
@@ -211,35 +185,25 @@
 </div>
 
 <script>
-/**
- * Cart Drawer - Inventory-Aware Quantity Controls
- * 
- * Features:
- * - Disables + button when variant stock limit reached
- * - Uses line-based cart updates (more reliable than key)
- * - Prevents Shopify's core JS from interfering via capture phase
- */
 (function() {
   'use strict';
   
-  const drawer = document.querySelector('[data-cart-drawer]');
-  if (!drawer) {
-    console.error('[CartDrawer] Drawer element not found');
-    return;
-  }
+  var drawer = document.querySelector('[data-cart-drawer]');
+  if (!drawer) return;
   
-  const FREE_SHIPPING_THRESHOLD = 5000; // €50 in cents
-  let isUpdating = false;
+  var FREE_SHIPPING_THRESHOLD = 5000;
+  var isUpdating = false;
+  var pendingUpdate = null;
   
   // ===========================================
   // OPEN / CLOSE
   // ===========================================
   
-  function openCartDrawer() {
+  async function openCartDrawer() {
     drawer.classList.add('is-active');
     drawer.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
-    updateShippingProgress();
+    await refreshDrawer();
   }
   
   function closeCartDrawer() {
@@ -251,7 +215,6 @@
   window.openCartDrawer = openCartDrawer;
   window.closeCartDrawer = closeCartDrawer;
   
-  // Close buttons
   drawer.querySelectorAll('[data-cart-drawer-close]').forEach(function(btn) {
     btn.addEventListener('click', function(e) {
       e.preventDefault();
@@ -259,7 +222,6 @@
     });
   });
   
-  // Escape key
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape' && drawer.classList.contains('is-active')) {
       closeCartDrawer();
@@ -270,42 +232,35 @@
   // SHIPPING PROGRESS
   // ===========================================
   
-  async function updateShippingProgress() {
-    try {
-      var cartData = await fetch('/cart.js').then(function(r) { return r.json(); });
-      var totalCents = cartData.total_price;
-      
-      var progressFill = drawer.querySelector('[data-shipping-fill]');
-      var progressMessage = drawer.querySelector('[data-shipping-message]');
-      var shippingEl = drawer.querySelector('[data-cart-shipping]');
-      
-      var progress = Math.min((totalCents / FREE_SHIPPING_THRESHOLD) * 100, 100);
-      var remaining = FREE_SHIPPING_THRESHOLD - totalCents;
-      
-      if (progressFill) {
-        progressFill.style.width = progress + '%';
-        progressFill.style.background = totalCents >= FREE_SHIPPING_THRESHOLD ? '#059669' : '#111827';
+  function updateShippingProgress(totalCents) {
+    var progressFill = drawer.querySelector('[data-shipping-fill]');
+    var progressMessage = drawer.querySelector('[data-shipping-message]');
+    var shippingEl = drawer.querySelector('[data-cart-shipping]');
+    
+    var progress = Math.min((totalCents / FREE_SHIPPING_THRESHOLD) * 100, 100);
+    var remaining = FREE_SHIPPING_THRESHOLD - totalCents;
+    
+    if (progressFill) {
+      progressFill.style.width = progress + '%';
+      progressFill.style.background = totalCents >= FREE_SHIPPING_THRESHOLD ? '#059669' : '#111827';
+    }
+    
+    if (progressMessage) {
+      if (totalCents >= FREE_SHIPPING_THRESHOLD) {
+        progressMessage.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span>Kostenloser Versand!</span>';
+        progressMessage.classList.remove('shipping-progress__message--incomplete');
+        if (shippingEl) shippingEl.textContent = 'Kostenlos';
+      } else {
+        var formattedRemaining = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(remaining / 100);
+        progressMessage.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><span>Noch ' + formattedRemaining + ' bis zum kostenlosen Versand</span>';
+        progressMessage.classList.add('shipping-progress__message--incomplete');
+        if (shippingEl) shippingEl.textContent = 'Wird berechnet';
       }
-      
-      if (progressMessage) {
-        if (totalCents >= FREE_SHIPPING_THRESHOLD) {
-          progressMessage.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span>Kostenloser Versand!</span>';
-          progressMessage.classList.remove('shipping-progress__message--incomplete');
-          if (shippingEl) shippingEl.textContent = 'Kostenlos';
-        } else {
-          var formattedRemaining = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(remaining / 100);
-          progressMessage.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg><span>Noch ' + formattedRemaining + ' bis zum kostenlosen Versand</span>';
-          progressMessage.classList.add('shipping-progress__message--incomplete');
-          if (shippingEl) shippingEl.textContent = 'Wird berechnet';
-        }
-      }
-    } catch (error) {
-      console.error('[CartDrawer] Shipping progress error:', error);
     }
   }
   
   // ===========================================
-  // QUANTITY CONTROLS - CAPTURE PHASE
+  // QUANTITY CONTROLS
   // ===========================================
   
   // MINUS button
@@ -323,33 +278,34 @@
     var item = btn.closest('[data-cart-drawer-item]');
     var qtyEl = item.querySelector('[data-cart-drawer-qty]');
     var currentQty = parseInt(qtyEl.textContent);
-    
-    console.log('[CartDrawer] MINUS clicked - Line:', line, 'Current:', currentQty);
-    
     var newQty = currentQty - 1;
     
-    if (newQty >= 0) {
+    if (newQty < 0) return;
+    
+    // Immediate visual feedback
+    btn.classList.add('is-pressed');
+    setTimeout(function() { btn.classList.remove('is-pressed'); }, 150);
+    
+    // Update quantity display with animation
+    qtyEl.classList.add('is-changing');
+    setTimeout(function() {
       qtyEl.textContent = newQty;
-      item.classList.add('is-updating');
-      
-      if (newQty === 0) {
-        item.classList.add('is-removing');
-      }
-      
-      // Enable plus button since we're decreasing
-      var plusBtn = item.querySelector('[data-cart-drawer-plus]');
-      if (plusBtn) {
-        plusBtn.disabled = false;
-        plusBtn.classList.remove('is-disabled');
-        plusBtn.removeAttribute('aria-disabled');
-      }
-      
-      // Hide stock limit message
-      var stockLimit = item.querySelector('[data-stock-limit]');
-      if (stockLimit) {
-        stockLimit.style.display = 'none';
-      }
-      
+      qtyEl.classList.remove('is-changing');
+    }, 100);
+    
+    // Re-enable plus button
+    var plusBtn = item.querySelector('[data-cart-drawer-plus]');
+    if (plusBtn) {
+      plusBtn.disabled = false;
+      plusBtn.classList.remove('is-disabled');
+    }
+    
+    if (newQty === 0) {
+      // Delete animation
+      removeItemWithAnimation(item, line);
+    } else {
+      // Update cart
+      item.classList.add('is-loading');
       updateCart(line, newQty, item);
     }
   }, true);
@@ -363,41 +319,37 @@
     e.stopPropagation();
     e.stopImmediatePropagation();
     
-    if (isUpdating) return;
-    if (btn.disabled) return;
+    if (isUpdating || btn.disabled) return;
     
     var line = parseInt(btn.getAttribute('data-line'));
     var item = btn.closest('[data-cart-drawer-item]');
     var qtyEl = item.querySelector('[data-cart-drawer-qty]');
     var currentQty = parseInt(qtyEl.textContent);
     var maxQty = parseInt(item.getAttribute('data-max-quantity')) || 9999;
-    
-    console.log('[CartDrawer] PLUS clicked - Line:', line, 'Current:', currentQty, 'Max:', maxQty);
-    
     var newQty = currentQty + 1;
     
-    // Check if we can increase
-    if (newQty <= maxQty) {
+    if (newQty > maxQty) return;
+    
+    // Immediate visual feedback
+    btn.classList.add('is-pressed');
+    setTimeout(function() { btn.classList.remove('is-pressed'); }, 150);
+    
+    // Update quantity display with animation
+    qtyEl.classList.add('is-changing');
+    setTimeout(function() {
       qtyEl.textContent = newQty;
-      item.classList.add('is-updating');
-      item.setAttribute('data-current-quantity', newQty);
-      
-      // Check if we've reached max
-      if (newQty >= maxQty) {
-        btn.disabled = true;
-        btn.classList.add('is-disabled');
-        btn.setAttribute('aria-disabled', 'true');
-        
-        // Show stock limit message
-        var stockLimit = item.querySelector('[data-stock-limit]');
-        if (stockLimit) {
-          stockLimit.textContent = 'Max: ' + maxQty;
-          stockLimit.style.display = 'block';
-        }
-      }
-      
-      updateCart(line, newQty, item);
+      qtyEl.classList.remove('is-changing');
+    }, 100);
+    
+    // Disable plus if at max
+    if (newQty >= maxQty) {
+      btn.disabled = true;
+      btn.classList.add('is-disabled');
     }
+    
+    // Update cart
+    item.classList.add('is-loading');
+    updateCart(line, newQty, item);
   }, true);
   
   // REMOVE button
@@ -414,22 +366,39 @@
     var line = parseInt(btn.getAttribute('data-line'));
     var item = btn.closest('[data-cart-drawer-item]');
     
-    console.log('[CartDrawer] REMOVE clicked - Line:', line);
+    // Immediate visual feedback
+    btn.classList.add('is-pressed');
     
-    if (item) {
-      item.classList.add('is-removing');
-    }
-    
-    updateCart(line, 0, item);
+    removeItemWithAnimation(item, line);
   }, true);
+  
+  // ===========================================
+  // REMOVE WITH ANIMATION
+  // ===========================================
+  
+  function removeItemWithAnimation(item, line) {
+    // Get current height for smooth collapse
+    var itemHeight = item.offsetHeight;
+    item.style.height = itemHeight + 'px';
+    
+    // Force reflow
+    item.offsetHeight;
+    
+    // Start animation
+    item.classList.add('is-removing');
+    item.style.height = '0px';
+    
+    // Wait for animation to complete, then update cart
+    setTimeout(function() {
+      updateCart(line, 0, item, true);
+    }, 350);
+  }
   
   // ===========================================
   // CART API
   // ===========================================
   
-  async function updateCart(line, quantity, itemEl) {
-    console.log('[CartDrawer] updateCart - Line:', line, 'Quantity:', quantity);
-    
+  async function updateCart(line, quantity, itemEl, skipRefreshAnimation) {
     isUpdating = true;
     
     try {
@@ -439,33 +408,35 @@
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify({ 
-          line: line, 
-          quantity: quantity 
-        })
+        body: JSON.stringify({ line: line, quantity: quantity })
       });
       
       var data = await response.json();
       
-      console.log('[CartDrawer] Response status:', response.status);
-      
       if (!response.ok) {
-        console.error('[CartDrawer] Error:', data.message || data.description);
-        
-        // If inventory error, refresh to get correct state
-        if (response.status === 422) {
-          await refreshDrawer();
-        }
+        console.error('[CartDrawer] Error:', data.message);
+        // Revert on error
+        await refreshDrawer();
         return;
       }
       
-      // Success - refresh drawer
-      await refreshDrawer();
-      
-      // Update header cart count
+      // Update header count immediately
       updateHeaderCartCount(data.item_count);
       
-      // Dispatch event
+      // Update totals immediately
+      updateTotals(data);
+      
+      // For quantity changes, just update the price and remove loading state
+      if (quantity > 0 && itemEl) {
+        itemEl.classList.remove('is-loading');
+        // Price will be updated on next refresh or we can calculate it
+      }
+      
+      // For removals or if we need full refresh
+      if (quantity === 0 || !itemEl) {
+        await refreshDrawer();
+      }
+      
       document.dispatchEvent(new CustomEvent('cart:updated', { detail: data }));
       
     } catch (error) {
@@ -477,12 +448,42 @@
   }
   
   // ===========================================
+  // UPDATE TOTALS
+  // ===========================================
+  
+  function updateTotals(cartData) {
+    var subtotalEl = drawer.querySelector('[data-cart-subtotal]');
+    var totalEl = drawer.querySelector('[data-cart-total]');
+    
+    var formattedTotal = new Intl.NumberFormat('de-DE', { 
+      style: 'currency', 
+      currency: 'EUR' 
+    }).format(cartData.total_price / 100);
+    
+    if (subtotalEl) {
+      subtotalEl.classList.add('is-updating');
+      setTimeout(function() {
+        subtotalEl.textContent = formattedTotal;
+        subtotalEl.classList.remove('is-updating');
+      }, 150);
+    }
+    
+    if (totalEl) {
+      totalEl.classList.add('is-updating');
+      setTimeout(function() {
+        totalEl.textContent = formattedTotal;
+        totalEl.classList.remove('is-updating');
+      }, 150);
+    }
+    
+    updateShippingProgress(cartData.total_price);
+  }
+  
+  // ===========================================
   // REFRESH DRAWER
   // ===========================================
   
   async function refreshDrawer() {
-    console.log('[CartDrawer] Refreshing...');
-    
     try {
       var response = await fetch('/?section_id=cart-drawer');
       var html = await response.text();
@@ -490,7 +491,6 @@
       var parser = new DOMParser();
       var doc = parser.parseFromString(html, 'text/html');
       
-      // Update content
       var newContent = doc.querySelector('[data-cart-drawer-content]');
       var currentContent = drawer.querySelector('[data-cart-drawer-content]');
       
@@ -498,7 +498,6 @@
         currentContent.innerHTML = newContent.innerHTML;
       }
       
-      // Update footer
       var newFooter = doc.querySelector('.cart-drawer__footer');
       var currentFooter = drawer.querySelector('.cart-drawer__footer');
       
@@ -510,13 +509,9 @@
         currentFooter.remove();
       }
       
-      // Update header cart count
       var cartData = await fetch('/cart.js').then(function(r) { return r.json(); });
       updateHeaderCartCount(cartData.item_count);
-      
-      updateShippingProgress();
-      
-      console.log('[CartDrawer] Refresh complete');
+      updateShippingProgress(cartData.total_price);
       
     } catch (error) {
       console.error('[CartDrawer] Refresh error:', error);
@@ -539,10 +534,10 @@
   }
   
   // ===========================================
-  // CART ICON TRIGGER
+  // CART TRIGGERS
   // ===========================================
   
-  function setupCartTrigger() {
+  function setupCartTriggers() {
     var cartBtn = document.getElementById('almliebe-cart-btn');
     if (cartBtn) {
       cartBtn.addEventListener('click', function(e) {
@@ -552,7 +547,6 @@
       }, true);
     }
     
-    // Also handle any [data-cart-trigger] elements
     document.querySelectorAll('[data-cart-trigger]').forEach(function(el) {
       el.addEventListener('click', function(e) {
         e.preventDefault();
@@ -567,13 +561,11 @@
   // ===========================================
   
   function init() {
-    setupCartTrigger();
+    setupCartTriggers();
     
     document.addEventListener('cart:item-added', function() {
       openCartDrawer();
     });
-    
-    console.log('[CartDrawer] Initialized');
   }
   
   if (document.readyState === 'loading') {
@@ -585,10 +577,6 @@
 </script>
 
 <style>
-  /* ===========================================
-     CART DRAWER STYLES
-     =========================================== */
-  
   .cart-drawer {
     position: fixed;
     inset: 0;
@@ -634,7 +622,6 @@
     transform: translateX(0);
   }
   
-  /* Header */
   .cart-drawer__header {
     display: flex;
     align-items: center;
@@ -668,7 +655,6 @@
     color: #000000;
   }
   
-  /* Shipping Progress */
   .cart-drawer__shipping-progress {
     padding: 1rem 1.5rem;
     background: #f9fafb;
@@ -712,14 +698,12 @@
     transition: width 0.3s ease;
   }
   
-  /* Content */
   .cart-drawer__content {
     flex: 1;
     overflow-y: auto;
     padding: 0;
   }
   
-  /* Empty State */
   .cart-drawer__empty {
     display: flex;
     flex-direction: column;
@@ -757,29 +741,49 @@
     color: #ffffff;
   }
   
-  /* Items */
   .cart-drawer__items {
     list-style: none;
     margin: 0;
     padding: 0;
   }
   
+  /* Item with smooth height transition for removal */
   .cart-drawer__item {
     display: flex;
     gap: 1rem;
     padding: 1rem 1.5rem;
     border-bottom: 1px solid #e5e7eb;
-    transition: opacity 0.25s ease, transform 0.25s ease;
+    overflow: hidden;
+    transition: height 0.3s ease, opacity 0.2s ease, padding 0.3s ease;
   }
   
-  .cart-drawer__item.is-updating {
-    opacity: 0.5;
-    pointer-events: none;
+  /* Subtle loading state - doesn't block interaction */
+  .cart-drawer__item.is-loading {
+    position: relative;
   }
   
+  .cart-drawer__item.is-loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #111827, transparent);
+    animation: loading-slide 1s ease-in-out infinite;
+  }
+  
+  @keyframes loading-slide {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  
+  /* Removal animation - fade + collapse */
   .cart-drawer__item.is-removing {
     opacity: 0;
-    transform: translateX(20px);
+    padding-top: 0;
+    padding-bottom: 0;
+    border-bottom-color: transparent;
   }
   
   .cart-drawer__item-image {
@@ -833,11 +837,15 @@
     cursor: pointer;
     color: #9ca3af;
     flex-shrink: 0;
-    transition: color 0.2s;
+    transition: color 0.15s, transform 0.1s;
   }
   
   .cart-drawer__item-remove:hover {
     color: #ef4444;
+  }
+  
+  .cart-drawer__item-remove.is-pressed {
+    transform: scale(0.9);
   }
   
   .cart-drawer__item-variant {
@@ -858,6 +866,7 @@
     font-size: 0.875rem;
     font-weight: 600;
     color: #111827;
+    transition: opacity 0.15s ease;
   }
   
   .cart-drawer__price-sale {
@@ -871,22 +880,6 @@
     margin-left: 0.5rem;
   }
   
-  /* Quantity Wrapper */
-  .cart-drawer__quantity-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 0.25rem;
-  }
-  
-  /* Stock Limit Message */
-  .cart-drawer__stock-limit {
-    font-size: 0.6875rem;
-    color: #dc2626;
-    font-weight: 500;
-  }
-  
-  /* Quantity Controls */
   .cart-drawer__item-quantity {
     display: flex;
     align-items: center;
@@ -907,7 +900,7 @@
     cursor: pointer;
     font-size: 1rem;
     color: #374151;
-    transition: background 0.15s, color 0.15s, opacity 0.15s;
+    transition: background 0.1s, color 0.1s, transform 0.1s;
     -webkit-user-select: none;
     user-select: none;
   }
@@ -917,11 +910,12 @@
     color: #111827;
   }
   
-  .cart-drawer__qty-btn:active:not(:disabled):not(.is-disabled) {
+  /* Button press feedback */
+  .cart-drawer__qty-btn.is-pressed {
     background: #e5e7eb;
+    transform: scale(0.95);
   }
   
-  /* Disabled state for + button */
   .cart-drawer__qty-btn:disabled,
   .cart-drawer__qty-btn.is-disabled {
     opacity: 0.4;
@@ -930,6 +924,7 @@
     color: #9ca3af;
   }
   
+  /* Quantity value with change animation */
   .cart-drawer__qty-value {
     width: 32px;
     text-align: center;
@@ -939,9 +934,14 @@
     border-left: 1px solid #e5e7eb;
     border-right: 1px solid #e5e7eb;
     line-height: 32px;
+    transition: opacity 0.1s ease, transform 0.1s ease;
   }
   
-  /* Footer */
+  .cart-drawer__qty-value.is-changing {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  
   .cart-drawer__footer {
     padding: 1.25rem 1.5rem;
     border-top: 1px solid #e5e7eb;
@@ -949,7 +949,6 @@
     background: #ffffff;
   }
   
-  /* Summary */
   .cart-drawer__summary {
     margin-bottom: 1rem;
   }
@@ -962,6 +961,14 @@
     margin-bottom: 0.5rem;
   }
   
+  .cart-drawer__summary-row span:last-child {
+    transition: opacity 0.15s ease;
+  }
+  
+  .cart-drawer__summary-row span.is-updating {
+    opacity: 0.5;
+  }
+  
   .cart-drawer__summary-row--total {
     font-weight: 700;
     color: #111827;
@@ -971,7 +978,6 @@
     margin-bottom: 0;
   }
   
-  /* Checkout Button */
   .cart-drawer__checkout-btn {
     display: flex;
     align-items: center;
@@ -994,7 +1000,6 @@
     color: #ffffff;
   }
   
-  /* Payment Icons */
   .cart-drawer__payment-icons {
     display: flex;
     justify-content: center;
@@ -1008,7 +1013,6 @@
     width: auto;
   }
   
-  /* Mobile */
   @media (max-width: 480px) {
     .cart-drawer__inner {
       max-width: 100%;
