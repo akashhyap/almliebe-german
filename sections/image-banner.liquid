@@ -1,7 +1,7 @@
 <div class="image-banner-wrapper{% if section.settings.banner_width == 'container' %} image-banner-wrapper--container{% endif %}">
   <div class="image-banner image-banner--{{ section.settings.banner_height }} image-banner--{{ section.settings.text_alignment }}" style="--text-color: {{ section.settings.text_color }};">
     {% if section.settings.image != blank %}
-      <div class="image-banner__media">
+      <div class="image-banner__media 001">
         {%- if section.settings.image_mobile != blank -%}
           <img
             src="{{ section.settings.image | image_url: width: 1600 }}"
